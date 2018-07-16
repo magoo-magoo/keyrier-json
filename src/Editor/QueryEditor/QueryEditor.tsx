@@ -5,6 +5,7 @@ class QueryEditor extends React.Component {
     return (
       <div className="QueryEditor">
         <p>Type your query: </p>
+        <textarea name="textarea" placeholder="Query" rows={10} cols={50}/>
       </div>
     );
   }
