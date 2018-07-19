@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Keyrier JSON",
+  "name": "Query JSON easily",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,19 +1,30 @@
-import * as React from 'react';
-import './Editor.css';
-import Output from './Output/Output';
-import QueryEditor from './QueryEditor/QueryEditor';
-import SourceEditor from './SourceEditor/SourceEditor';
+import * as React from "react";
+import { Col, Row } from "reactstrap";
+import "./Editor.css";
+import Output from "./Output/Output";
+import QueryEditor from "./QueryEditor/QueryEditor";
+import SourceEditor from "./SourceEditor/SourceEditor";
 
 class Editor extends React.Component {
   public render() {
     return (
       <div className="Editor">
-        <h1>
-          Paste your JSON and Query it.
-        </h1>
-        <SourceEditor/>
-        <QueryEditor/>
-        <Output/>
+        <h1>Paste your JSON and Query it.</h1>
+        <Col sm={12}>
+          <Row>
+            <Col sm={6}>
+              <SourceEditor />
+            </Col>
+            <Col sm={6}>
+              <QueryEditor />
+              <Row>
+                <Col>
+                  <Output />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Col>
       </div>
     );
   }
