@@ -1,10 +1,11 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Input } from "reactstrap";
-import { updateQuery } from "../../Actions";
+import { IActionResultValue, updateQuery } from "../../Actions";
+import { IAppState } from "../../State";
 
 interface IProps {
-  onChange: any;
+  onChange: (e: string) => IActionResultValue<string>;
   queryText: string;
 }
 
@@ -24,14 +25,14 @@ class QueryEditor extends React.Component<IProps> {
       </div>
     );
   }
-  private handleOnChange = (event: any) =>
+  private handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     this.props.onChange(event.target.value);
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: IAppState) => ({
   queryText: state.rootReducer.query.text
 });
-
+ 
 export default connect(
   mapStateToProps,
   { onChange: updateQuery }

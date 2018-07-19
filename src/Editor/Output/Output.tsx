@@ -1,7 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { IAppState } from "../../State";
 
-class Output extends React.Component<{ output: string }> {
+interface IProps {
+  output: string;
+}
+
+class Output extends React.Component<IProps> {
   constructor(props: { output: string }) {
     super(props);
     this.state = {
@@ -12,15 +17,17 @@ class Output extends React.Component<{ output: string }> {
     return (
       <div className="Output">
         <p>Output: </p>
-        <pre><code>{this.props.output}</code></pre>
+        <pre>
+          <code>{this.props.output}</code>
+        </pre>
       </div>
     );
   }
 }
-const mapStateToProps = (state: any) => 
-{
-  return ({
-  output: state.rootReducer.output.text
-})};
+const mapStateToProps = (state: IAppState) => {
+  return {
+    output: state.rootReducer.output.text
+  };
+};
 
 export default connect(mapStateToProps)(Output);

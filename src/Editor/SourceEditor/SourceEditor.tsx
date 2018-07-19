@@ -2,11 +2,12 @@ import * as React from "react";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Input } from 'reactstrap';
-import { formatSourceText, updateSource } from "../../Actions";
+import { formatSourceText, IActionResult, IActionResultValue, updateSource } from "../../Actions";
+import { IAppState } from "../../State";
 
 interface IProps {
-  onChange: any;
-  formatText: any;
+  onChange: (val: string) => IActionResultValue<string>;
+  formatText: () => IActionResult;
   sourceText: string
 }
 
@@ -29,14 +30,13 @@ class SourceEditor extends Component<IProps> {
     );
   }
 
-  private handleOnChange = (event: any) =>
+  private handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     this.props.onChange(event.target.value);
 
-    private handleOnFormatClick = (event: any) =>
-    this.props.formatText();    
+    private handleOnFormatClick = () => this.props.formatText();    
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: IAppState) => ({
   sourceText: state.rootReducer.source.text
 });
 

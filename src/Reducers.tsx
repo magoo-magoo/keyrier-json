@@ -1,18 +1,18 @@
-import { AnyAction, combineReducers } from "redux";
-import * as actions from "./Actions";
-import { IQueryState, ISourceState, IState } from "./State";
+import { combineReducers } from "redux";
+import { IActionResult, IActionResultValue } from "./Actions";
+import { IQueryState, IRootState, ISourceState } from "./State";
 import * as defaultValues from "./values";
 
-const initialState: IState = {
+const initialState: IRootState = {
   output: { text: "" },
   query: { text: "data.colors" },
   source: { text: JSON.stringify(defaultValues.colors) }
 };
 
 const rootReducer = (
-  rootState: IState = initialState,
-  action: AnyAction
-): IState => {
+  rootState: IRootState = initialState,
+  action: IActionResultValue<string>
+): IRootState => {
   const newState = {
     ...rootState,
     query: query(rootState.query, action),
@@ -22,14 +22,14 @@ const rootReducer = (
   return { ...newState, output: output(newState, action) };
 };
 
-const source = (state: ISourceState, action: AnyAction) => {
+const source = (state: ISourceState, action: IActionResultValue<string>) => {
   switch (action.type) {
-    case actions.UPDATE_SOURCE:
+    case "UPDATE_SOURCE":
       return {
         ...state,
         text: action.text as string
       };
-    case actions.FORMAT_SOURCE_TEXT:
+    case "FORMAT_SOURCE_TEXT":
       return {
         ...state,
         text: jsonBeautify(state.text)
@@ -79,9 +79,9 @@ const jsonParseSafe = (str: string) => {
   return "";
 };
 
-const query = (state: IQueryState, action: AnyAction) => {
+const query = (state: IQueryState, action: IActionResultValue<string>) => {
   switch (action.type) {
-    case actions.UPDATE_QUERY:
+    case "UPDATE_QUERY":
       return {
         ...state,
         text: action.text as string
@@ -91,7 +91,7 @@ const query = (state: IQueryState, action: AnyAction) => {
   }
 };
 
-const output = (state: IState, action: AnyAction) => {
+const output = (state: IRootState, action: IActionResult) => {
   return {
     ...state.output,
     text: jsonBeautify(outputText(state.source.text, state.query.text))
@@ -106,7 +106,9 @@ const outputText = (sourceString: string, queryString: string): string => {
 
   try {
     const code = `
-    const data = eval(${sourceString}) //JSON.parse('${JSON.stringify(jsonParseSafe(sourceString))}');
+    const data = eval(${sourceString}) //JSON.parse('${JSON.stringify(
+      jsonParseSafe(sourceString)
+    )}');
     console.log('PARSE SUCCESS', data)
     JSON.stringify(${queryString})
     `;
