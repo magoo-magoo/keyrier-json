@@ -10,21 +10,17 @@ class Editor extends React.Component {
     return (
       <div className="Editor">
         <h1>Paste your JSON and Query it.</h1>
-        <Col sm={12}>
-          <Row>
-            <Col sm={6}>
-              <SourceEditor />
-            </Col>
-            <Col sm={6}>
-              <QueryEditor />
-              <Row>
-                <Col>
-                  <Output />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Col>
+        <Row>
+          <Col sm={12}>
+            <SourceEditor />
+          </Col>
+          <Col sm={6}>
+            <QueryEditor />
+          </Col>
+          <Col sm={6}>
+            <Output />
+          </Col>
+        </Row>
       </div>
     );
   }

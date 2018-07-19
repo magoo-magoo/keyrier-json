@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { Jumbotron } from "reactstrap";
 import { IAppState } from "../../State";
 
 interface IProps {
@@ -16,10 +17,12 @@ class Output extends React.Component<IProps> {
   public render() {
     return (
       <div className="Output">
-        <p>Output: </p>
-        <pre>
-          <code>{this.props.output}</code>
-        </pre>
+        <Jumbotron>
+          <h3>Output: </h3>
+          <pre>
+            <code className="jxson">{this.props.output}</code>
+          </pre>
+        </Jumbotron>
       </div>
     );
   }

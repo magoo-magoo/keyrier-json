@@ -14,8 +14,8 @@ export const updateSource = (source: string): IActionResultValue<string> => ({
   text: source,
   type: "UPDATE_SOURCE"
 });
-export const formatSourceText = (source: string): IActionResult => ({
-  type: "FORMAT_SOURCE_TEXT"
+export const formatSourceText = (): IActionResult => ({
+    type: "FORMAT_SOURCE_TEXT"
 });
 
 export const updateQuery = (query: string): IActionResultValue<string> => ({

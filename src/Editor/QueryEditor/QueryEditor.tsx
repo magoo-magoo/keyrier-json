@@ -13,7 +13,7 @@ class QueryEditor extends React.Component<IProps> {
   public render() {
     return (
       <div className="QueryEditor">
-        <p>Type your query: </p>
+        <h3>Type your query: </h3>
         <Input
           name="textarea"
           type="textarea"

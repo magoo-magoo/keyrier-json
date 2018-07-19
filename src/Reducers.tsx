@@ -1,13 +1,6 @@
 import { combineReducers } from "redux";
-import { IActionResult, IActionResultValue } from "./Actions";
-import { IQueryState, IRootState, ISourceState } from "./State";
-import * as defaultValues from "./values";
-
-const initialState: IRootState = {
-  output: { text: "" },
-  query: { text: "data.colors" },
-  source: { text: JSON.stringify(defaultValues.colors) }
-};
+import { IActionResultValue } from "./Actions";
+import { initialState, IQueryState, IRootState, ISourceState } from "./State";
 
 const rootReducer = (
   rootState: IRootState = initialState,
@@ -19,7 +12,7 @@ const rootReducer = (
     source: source(rootState.source, action)
   };
 
-  return { ...newState, output: output(newState, action) };
+  return { ...newState, output: output(newState) };
 };
 
 const source = (state: ISourceState, action: IActionResultValue<string>) => {
@@ -44,7 +37,7 @@ const jsonBeautify = (str: string) => {
     return "";
   }
   try {
-    const ret = JSON.stringify(jsonParseSafe(str), null, 1);
+    const ret = JSON.stringify(jsonParseSafe(str), null, 2);
     return ret;
   } catch (error) {
     // tslint:disable-next-line:no-console
@@ -91,7 +84,7 @@ const query = (state: IQueryState, action: IActionResultValue<string>) => {
   }
 };
 
-const output = (state: IRootState, action: IActionResult) => {
+const output = (state: IRootState) => {
   return {
     ...state.output,
     text: jsonBeautify(outputText(state.source.text, state.query.text))
@@ -99,7 +92,6 @@ const output = (state: IRootState, action: IActionResult) => {
 };
 
 const outputText = (sourceString: string, queryString: string): string => {
-  // tslint:disable-next-line:no-debugger
   if (!sourceString || sourceString.trim() === "") {
     return "";
   }
