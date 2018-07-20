@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { IActionResultValue } from "./Actions";
+import { IActionResult, IActionResultValue } from "./Actions";
 import { jsonBeautify, jsonParseSafe } from "./helpers/string";
 import {
   initialState,
@@ -39,14 +39,12 @@ const source = (state: ISourceState, action: IActionResultValue<string>) => {
   }
 };
 
-
-
 const query = (state: IQueryState, action: IActionResultValue<string>) => {
   switch (action.type) {
     case "UPDATE_QUERY":
       return {
         ...state,
-        text: action.text as string
+        text: action.text
       };
     default:
       return state;
@@ -57,6 +55,7 @@ const output = (state: IRootState) => {
   const newOutputState = outputText(state.source.text, state.query.text);
   return {
     ...state.output,
+    errorMessage: newOutputState.errorMessage,
     isArray: newOutputState.isArray,
     text: jsonBeautify(newOutputState.text)
   };
@@ -75,26 +74,35 @@ const outputText = (
     const data = eval(${sourceString}) //JSON.parse('${JSON.stringify(
       jsonParseSafe(sourceString)
     )}');
-    console.log('PARSE SUCCESS', data)
+
     JSON.stringify(${queryString})
     `;
-    // tslint:disable-next-line:no-console
-    console.log(code);
     // tslint:disable-next-line:no-eval
     const evaluatedQuery = eval(code);
     const type = typeof evaluatedQuery;
     if (type !== "string") {
       return { isArray: false, text: "" };
     }
-    return { isArray: Array.isArray(jsonParseSafe(evaluatedQuery)), text: evaluatedQuery };
+    return {
+      isArray: Array.isArray(jsonParseSafe(evaluatedQuery)),
+      text: evaluatedQuery
+    };
   } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.log(error.message);
-    return { isArray: false, text: "" };
+    return { errorMessage: error.message, isArray: false, text: "" };
   }
 };
 
+const rootReducerReset = (
+  state: IRootState,
+  action: IActionResultValue<string>
+) => {
+  if (action.type === "RESET_EDITOR") {
+    state = initialState;
+  }
+  return rootReducer(state, action);
+};
+
 const rootReducers = combineReducers({
-  rootReducer
+  rootReducer: rootReducerReset
 });
 export default rootReducers;

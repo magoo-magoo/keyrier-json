@@ -11,6 +11,7 @@ export interface ISourceState {
 export interface IOupoutState {
   text: string;
   isArray: boolean;
+  errorMessage?: string;
 }
 
 export interface IRootState {

@@ -5,6 +5,7 @@ export type UPDATE_SOURCE = "UPDATE_SOURCE";
 export type UPDATE_QUERY = "UPDATE_QUERY";
 export type EVALUATE_CODE = "EVALUATE_CODE";
 export type FORMAT_SOURCE_TEXT = "FORMAT_SOURCE_TEXT";
+export type RESET_EDITOR = "RESET_EDITOR";
 
 /*
  * action creators
@@ -15,12 +16,16 @@ export const updateSource = (source: string): IActionResultValue<string> => ({
   type: "UPDATE_SOURCE"
 });
 export const formatSourceText = (): IActionResult => ({
-    type: "FORMAT_SOURCE_TEXT"
+  type: "FORMAT_SOURCE_TEXT"
 });
 
 export const updateQuery = (query: string): IActionResultValue<string> => ({
   text: query,
   type: "UPDATE_QUERY"
+});
+
+export const resetEditor = (): IActionResult => ({
+  type: "RESET_EDITOR"
 });
 
 export interface IActionResultValue<T> {
@@ -38,4 +43,5 @@ type actionType =
   | UPDATE_SOURCE
   | UPDATE_QUERY
   | EVALUATE_CODE
-  | FORMAT_SOURCE_TEXT;
+  | FORMAT_SOURCE_TEXT
+  | RESET_EDITOR;

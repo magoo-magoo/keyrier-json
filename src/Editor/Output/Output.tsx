@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { Button, Col, Row } from "reactstrap";
+import { Alert, Button, Col, Row } from "reactstrap";
 import { jsonParseSafe } from "../../helpers/string";
 import { IAppState } from "../../State";
 import OutputTable from "./OutputTable";
@@ -8,6 +8,7 @@ import OutputTable from "./OutputTable";
 interface IProps {
   output: string;
   isArray: boolean;
+  errorMessage?: string;
 }
 
 interface IState {
@@ -32,6 +33,13 @@ class Output extends React.Component<IProps, IState> {
             <h5>Output:</h5>
           </Col>
         </Row>
+        <div hidden={!this.props.errorMessage}>
+        <Row>
+          <Col>
+            <Alert color="danger">{this.props.errorMessage}</Alert>
+          </Col>
+        </Row>
+        </div>
         <Row>
           <Col>
             <Button
@@ -65,6 +73,7 @@ class Output extends React.Component<IProps, IState> {
 }
 const mapStateToProps = (state: IAppState): IProps => {
   return {
+    errorMessage: state.rootReducer.output.errorMessage,
     isArray: state.rootReducer.output.isArray,
     output: state.rootReducer.output.text
   };

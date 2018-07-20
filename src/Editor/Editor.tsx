@@ -1,15 +1,28 @@
 import * as React from "react";
-import { Col, Row } from "reactstrap";
+import { connect } from "react-redux";
+import { Button, Col, Row } from "reactstrap";
+import { IActionResult, resetEditor } from "src/Actions";
 import "./Editor.css";
 import Output from "./Output/Output";
 import QueryEditor from "./QueryEditor/QueryEditor";
 import SourceEditor from "./SourceEditor/SourceEditor";
 
-class Editor extends React.Component {
+interface IProps {
+  onReset: () => IActionResult;
+}
+
+class Editor extends React.Component<IProps> {
   public render() {
     return (
       <div className="Editor">
         <h1>Paste your JSON and Query it.</h1>
+        <Row>
+          <Col>
+            <Button className="float-right" color="warning" onClick={this.handleOnResetClick}>
+              Reset
+            </Button>
+          </Col>
+        </Row>
         <Row>
           <Col>
             <SourceEditor />
@@ -20,7 +33,7 @@ class Editor extends React.Component {
           <Col>
             <QueryEditor />
           </Col>
-        </Row> 
+        </Row>
         <hr />
         <Row>
           <Col>
@@ -30,6 +43,15 @@ class Editor extends React.Component {
       </div>
     );
   }
+
+  private handleOnResetClick = () => {
+    this.props.onReset();
+  };
 }
 
-export default Editor;
+const mapStateToProps = () => ({});
+
+export default connect(
+  mapStateToProps,
+  { onReset: resetEditor }
+)(Editor);

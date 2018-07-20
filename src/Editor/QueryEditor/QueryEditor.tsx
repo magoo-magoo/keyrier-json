@@ -20,7 +20,7 @@ class QueryEditor extends React.Component<IProps> {
           name="textarea"
           type="textarea"
           onChange={this.handleOnChange}
-          defaultValue={this.props.queryText}
+          value={this.props.queryText}
           placeholder="Query"
           rows={5}
         />
