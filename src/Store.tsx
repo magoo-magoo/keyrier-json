@@ -1,8 +1,13 @@
 import { createStore } from "redux";
 import rootReducers from "./Reducers";
-import { initialState } from "./State";
+import { initialState, IRootState } from "./State";
 
-const savedStateString = localStorage.getItem("keyrier-json.app.state");
+const persistStore = (rootState: IRootState) =>
+  localStorage.setItem("keyrier-json.app.state", JSON.stringify(rootState));
+
+const loadStore = () => localStorage.getItem("keyrier-json.app.state");
+
+const savedStateString = loadStore();
 let preloadState = initialState;
 if (savedStateString) {
   preloadState = JSON.parse(savedStateString);
@@ -16,10 +21,7 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  localStorage.setItem(
-    "keyrier-json.app.state",
-    JSON.stringify(store.getState().rootReducer)
-  );
+  persistStore(store.getState().rootReducer);
 });
 
 export default store;
