@@ -1,7 +1,16 @@
 import "./App.css";
 
 import * as React from "react";
-import { Col, Container, Row } from "reactstrap";
+import {
+  Col,
+  Container,
+  Nav,
+  Navbar,
+  NavbarBrand,
+  NavItem,
+  NavLink,
+  Row
+} from "reactstrap";
 
 import Editor from "./Editor/Editor";
 
@@ -9,11 +18,16 @@ class App extends React.Component {
   public render() {
     return (
       <Container className="App">
-        <Row className="App-header">
-          <Col>
-            <h1 className="App-title">Keyrier JSON</h1>
-          </Col>
-        </Row>
+        <Navbar color="dark" dark={true} expand="md">
+          <NavbarBrand href="/">Keyrier JSON</NavbarBrand>
+          <Nav className="ml-auto" navbar={true}>
+            <NavItem>
+              <NavLink href="https://github.com/magoo-magoo/keyrier-json">
+                GitHub
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </Navbar>
         <Row>
           <Col>
             <Editor />

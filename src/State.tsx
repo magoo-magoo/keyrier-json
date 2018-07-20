@@ -10,6 +10,7 @@ export interface ISourceState {
 
 export interface IOupoutState {
   text: string;
+  isArray: boolean;
 }
 
 export interface IRootState {
@@ -24,7 +25,7 @@ export interface IAppState {
 
 
 export const initialState: IRootState = {
-    output: { text: "" },
+    output: { text: "", isArray: false },
     query: {
       text: `data
     .filter(user => user.gender === 'female')

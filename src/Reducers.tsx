@@ -1,6 +1,13 @@
 import { combineReducers } from "redux";
 import { IActionResultValue } from "./Actions";
-import { initialState, IQueryState, IRootState, ISourceState } from "./State";
+import { jsonBeautify, jsonParseSafe } from "./helpers/string";
+import {
+  initialState,
+  IOupoutState,
+  IQueryState,
+  IRootState,
+  ISourceState
+} from "./State";
 
 const rootReducer = (
   rootState: IRootState = initialState,
@@ -32,45 +39,7 @@ const source = (state: ISourceState, action: IActionResultValue<string>) => {
   }
 };
 
-const jsonBeautify = (str: string) => {
-  if (!str || str.trim() === "") {
-    return "";
-  }
-  try {
-    const ret = JSON.stringify(jsonParseSafe(str), null, 2);
-    return ret;
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.log("jsonBeautify", error.message, str);
-  }
-  return "";
-};
 
-const jsonParseSafe = (str: string) => {
-  if (!str || str.trim() === "") {
-    return "";
-  }
-  try {
-    const ret = JSON.parse(
-      str
-        .replace(/\\n/g, "\\n")
-        .replace(/\\'/g, "\\'")
-        .replace(/\\"/g, '\\"')
-        .replace(/\\&/g, "\\&")
-        .replace(/\\r/g, "\\r")
-        .replace(/\\t/g, "\\t")
-        .replace(/\\b/g, "\\b")
-        .replace(/\\f/g, "\\f")
-        .replace(/[\u0000-\u0019]+/g, "")
-    );
-    return ret;
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.log("jsonParseSafe", error.message, str);
-  }
-
-  return "";
-};
 
 const query = (state: IQueryState, action: IActionResultValue<string>) => {
   switch (action.type) {
@@ -85,15 +54,20 @@ const query = (state: IQueryState, action: IActionResultValue<string>) => {
 };
 
 const output = (state: IRootState) => {
+  const newOutputState = outputText(state.source.text, state.query.text);
   return {
     ...state.output,
-    text: jsonBeautify(outputText(state.source.text, state.query.text))
+    isArray: newOutputState.isArray,
+    text: jsonBeautify(newOutputState.text)
   };
 };
 
-const outputText = (sourceString: string, queryString: string): string => {
+const outputText = (
+  sourceString: string,
+  queryString: string
+): IOupoutState => {
   if (!sourceString || sourceString.trim() === "") {
-    return "";
+    return { isArray: false, text: "" };
   }
 
   try {
@@ -110,13 +84,13 @@ const outputText = (sourceString: string, queryString: string): string => {
     const evaluatedQuery = eval(code);
     const type = typeof evaluatedQuery;
     if (type !== "string") {
-      return "";
+      return { isArray: false, text: "" };
     }
-    return evaluatedQuery;
+    return { isArray: Array.isArray(jsonParseSafe(evaluatedQuery)), text: evaluatedQuery };
   } catch (error) {
     // tslint:disable-next-line:no-console
     console.log(error.message);
-    return "";
+    return { isArray: false, text: "" };
   }
 };
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { Input } from "reactstrap";
+import { CardBody, CardText, CardTitle, Input } from "reactstrap";
 import { IActionResultValue, updateQuery } from "../../Actions";
 import { IAppState } from "../../State";
 
@@ -13,7 +13,9 @@ class QueryEditor extends React.Component<IProps> {
   public render() {
     return (
       <div className="QueryEditor">
-        <h3>Type your query: </h3>
+       <CardBody>
+          <CardTitle>Type your query:</CardTitle>
+          <CardText>
         <Input
           name="textarea"
           type="textarea"
@@ -22,6 +24,8 @@ class QueryEditor extends React.Component<IProps> {
           placeholder="Query"
           rows={5}
         />
+        </CardText>
+        </CardBody>
       </div>
     );
   }

@@ -11,13 +11,19 @@ class Editor extends React.Component {
       <div className="Editor">
         <h1>Paste your JSON and Query it.</h1>
         <Row>
-          <Col sm={12}>
+          <Col>
             <SourceEditor />
           </Col>
-          <Col sm={6}>
+        </Row>
+        <hr />
+        <Row>
+          <Col>
             <QueryEditor />
           </Col>
-          <Col sm={6}>
+        </Row> 
+        <hr />
+        <Row>
+          <Col>
             <Output />
           </Col>
         </Row>
