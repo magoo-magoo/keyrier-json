@@ -1,13 +1,18 @@
 import React from "react";
 import ReactTable from "react-table";
+import { customToString } from "../../helpers/string";
 
-interface IProps {
-  data: any[];
+interface IProps<T> {
+  data: T[];
 }
 
-class OutputTable extends React.Component<IProps> {
+class OutputTable<T> extends React.Component<IProps<T>> {
   public render() {
-    if (!this.props.data || !Array.isArray(this.props.data)) {
+    if (
+      !this.props.data ||
+      !Array.isArray(this.props.data) ||
+      this.props.data.length === 0
+    ) {
       return <div />;
     }
     const keyMap = new Map<any, any>();
@@ -26,22 +31,19 @@ class OutputTable extends React.Component<IProps> {
 
     const columns = keys.filter(key => typeof key === "string").map(key => {
       return {
-        Cell: (props: any) => {
-          if (Array.isArray(props.value)) {
-            return JSON.stringify(props.value);
-          }
-          return <span>{props.value.toString()}</span>;
-        },
+        Aggregated: (row: any) => row.value,
+        Cell: (props: any) => customToString(props.value),
         Header: key,
-        accessor: key
+        accessor: key,
       };
     });
     return (
-      <ReactTable
+      <ReactTable className="highlight"
         data={this.props.data}
-        defaultPageSize={5}
+        defaultPageSize={10}
         columns={columns}
         filterable={true}
+        pivotBy={[]}
       />
     );
   }

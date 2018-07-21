@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Alert, Button, Col, Row } from "reactstrap";
-import { jsonParseSafe } from "../../helpers/string";
+import { jsonParseSafe } from "../../helpers/json";
 import { IAppState } from "../../State";
 import OutputTable from "./OutputTable";
 
@@ -19,7 +19,7 @@ class Output extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      shouldShowAsTable: false
+      shouldShowAsTable: true
     };
   }
 

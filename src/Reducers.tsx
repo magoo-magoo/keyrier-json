@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import { IActionResult, IActionResultValue } from "./Actions";
-import { jsonBeautify, jsonParseSafe } from "./helpers/string";
+import { ActionValue } from "./Actions";
+import { jsonBeautify, jsonParseSafe } from "./helpers/json";
 import {
   initialState,
   IOupoutState,
@@ -11,7 +11,7 @@ import {
 
 const rootReducer = (
   rootState: IRootState = initialState,
-  action: IActionResultValue<string>
+  action: ActionValue<string>
 ): IRootState => {
   const newState = {
     ...rootState,
@@ -22,29 +22,24 @@ const rootReducer = (
   return { ...newState, output: output(newState) };
 };
 
-const source = (state: ISourceState, action: IActionResultValue<string>) => {
+const source = (state: ISourceState, action: ActionValue<string>) => {
   switch (action.type) {
     case "UPDATE_SOURCE":
       return {
         ...state,
-        text: action.text as string
-      };
-    case "FORMAT_SOURCE_TEXT":
-      return {
-        ...state,
-        text: jsonBeautify(state.text)
+        text: jsonBeautify(action.value)
       };
     default:
       return state;
   }
 };
 
-const query = (state: IQueryState, action: IActionResultValue<string>) => {
+const query = (state: IQueryState, action: ActionValue<string>) => {
   switch (action.type) {
     case "UPDATE_QUERY":
       return {
         ...state,
-        text: action.text
+        text: action.value
       };
     default:
       return state;
@@ -92,10 +87,7 @@ const outputText = (
   }
 };
 
-const rootReducerReset = (
-  state: IRootState,
-  action: IActionResultValue<string>
-) => {
+const rootReducerReset = (state: IRootState, action: ActionValue<string>) => {
   if (action.type === "RESET_EDITOR") {
     state = initialState;
   }

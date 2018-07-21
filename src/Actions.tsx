@@ -4,44 +4,48 @@
 export type UPDATE_SOURCE = "UPDATE_SOURCE";
 export type UPDATE_QUERY = "UPDATE_QUERY";
 export type EVALUATE_CODE = "EVALUATE_CODE";
-export type FORMAT_SOURCE_TEXT = "FORMAT_SOURCE_TEXT";
 export type RESET_EDITOR = "RESET_EDITOR";
-
-/*
- * action creators
- */
-
-export const updateSource = (source: string): IActionResultValue<string> => ({
-  text: source,
-  type: "UPDATE_SOURCE"
-});
-export const formatSourceText = (): IActionResult => ({
-  type: "FORMAT_SOURCE_TEXT"
-});
-
-export const updateQuery = (query: string): IActionResultValue<string> => ({
-  text: query,
-  type: "UPDATE_QUERY"
-});
-
-export const resetEditor = (): IActionResult => ({
-  type: "RESET_EDITOR"
-});
-
-export interface IActionResultValue<T> {
-  text: T;
-  type: actionType;
-}
-
-export interface IActionResult {
-  type: actionType;
-}
-
-export type Action = IActionResult | IActionResultValue<string>;
 
 type actionType =
   | UPDATE_SOURCE
   | UPDATE_QUERY
   | EVALUATE_CODE
-  | FORMAT_SOURCE_TEXT
   | RESET_EDITOR;
+
+/*
+ * action creators
+ */
+
+export const updateSource = (source: string): IActionValue<string> => ({
+  type: "UPDATE_SOURCE",
+  value: source
+});
+
+export const updateQuery = (query: string): IActionValue<string> => ({
+  type: "UPDATE_QUERY",
+  value: query
+});
+
+export const resetEditor = (): IAction => ({
+  type: "RESET_EDITOR"
+});
+
+interface IActionValue<T> {
+  value: T;
+  type: actionType;
+}
+
+interface IAction {
+  type: actionType;
+}
+
+export type t = IActionValue<void>;
+
+export let a: Action = {type: 'EVALUATE_CODE'};
+
+
+export let v: ActionValue<number> = {  type: "EVALUATE_CODE", value: 42 };
+
+
+export type Action = Readonly<IAction>;
+export type ActionValue<T> = Readonly<IActionValue<T>>;

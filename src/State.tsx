@@ -1,4 +1,5 @@
 import { persons } from "./data/persons";
+import { jsonBeautify } from "./helpers/json";
 
 export interface IQueryState {
   text: string;
@@ -31,8 +32,8 @@ export const initialState: IRootState = {
       text: `data
     .filter(user => user.gender === 'female')
     .filter(user => user.age > 30)
-    .map(user => { return { name: user.name, age:user.age} })`
+    `
     },
-    source: { text: JSON.stringify(persons) }
+    source: { text:jsonBeautify(JSON.stringify(persons)) }
   };
   

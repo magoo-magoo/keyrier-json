@@ -1,11 +1,17 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { CardBody, CardText, CardTitle, Input } from "reactstrap";
-import { IActionResultValue, updateQuery } from "../../Actions";
+import { Input } from "reactstrap";
+import { ActionValue, updateQuery } from "../../Actions";
 import { IAppState } from "../../State";
 
+import AceEditor from "react-ace";
+// tslint:disable-next-line:ordered-imports
+import "brace/theme/monokai";
+// tslint:disable-next-line:ordered-imports
+import "brace/mode/javascript";
+
 interface IProps {
-  onChange: (e: string) => IActionResultValue<string>;
+  onChange: (e: string) => ActionValue<string>;
   queryText: string;
 }
 
@@ -13,24 +19,45 @@ class QueryEditor extends React.Component<IProps> {
   public render() {
     return (
       <div className="QueryEditor">
-       <CardBody>
-          <CardTitle>Type your query:</CardTitle>
-          <CardText>
-        <Input
+       <div>
+          <h5>Type your query:</h5>
+        {/* <Input
           name="textarea"
           type="textarea"
           onChange={this.handleOnChange}
           value={this.props.queryText}
           placeholder="Query"
           rows={5}
+        /> */}
+           <AceEditor
+          mode="javascript"
+          theme="monokai"
+          name="blah2"
+          onChange={this.handleOnChange}
+          fontSize={18}
+          showPrintMargin={true}
+          showGutter={true}
+          highlightActiveLine={true}
+          value={this.props.queryText}
+          minLines={5}
+          maxLines={25}
+          setOptions={{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true,
+            showLineNumbers: true,
+            tabSize: 2
+          }}
+          width={'100%'}
+
         />
-        </CardText>
-        </CardBody>
+
+        </div>
       </div>
     );
   }
-  private handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    this.props.onChange(event.target.value);
+  private handleOnChange = (content: string) =>
+    this.props.onChange(content);
 }
 
 const mapStateToProps = (state: IAppState) => ({

@@ -1,18 +1,18 @@
 import * as React from "react";
 import { Component } from "react";
+
 import { connect } from "react-redux";
-import { Button, CardBody, CardText, CardTitle, Input } from "reactstrap";
-import {
-  formatSourceText,
-  IActionResult,
-  IActionResultValue,
-  updateSource
-} from "../../Actions";
+import { ActionValue, updateSource } from "../../Actions";
 import { IAppState } from "../../State";
 
+import AceEditor from "react-ace";
+// tslint:disable-next-line:ordered-imports
+import "brace/theme/monokai";
+// tslint:disable-next-line:ordered-imports
+import "brace/mode/json";
+
 interface IProps {
-  onChange: (val: string) => IActionResultValue<string>;
-  formatText: () => IActionResult;
+  onChange: (val: string) => ActionValue<string>;
   sourceText: string;
 }
 
@@ -20,30 +20,34 @@ class SourceEditor extends Component<IProps> {
   public render() {
     return (
       <div className="SourceEditor">
-        <CardBody>
-          <CardTitle>paste your JSON:</CardTitle>
-          <CardText>
-            <Input
-              name="textarea"
-              type="textarea"
-              placeholder="JSON"
-              rows={10}
-              onChange={this.handleOnChange}
-              value={this.props.sourceText}
-            />
-          </CardText>
-          <Button color="primary" onClick={this.handleOnFormatClick} size="lg" block={true}>
-            format
-          </Button>
-        </CardBody>
+        <h5>paste your JSON:</h5>
+        <AceEditor
+          mode="json"
+          theme="monokai"
+          name="blah2"
+          onChange={this.handleOnChange}
+          fontSize={18}
+          showPrintMargin={true}
+          showGutter={true}
+          highlightActiveLine={true}
+          value={this.props.sourceText}
+          minLines={10}
+          maxLines={20}
+          setOptions={{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true,
+            showLineNumbers: true,
+            tabSize: 2
+          }}
+          width={"100%"}
+        />
       </div>
     );
   }
 
-  private handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    this.props.onChange(event.target.value);
+  private handleOnChange = (content: string) => this.props.onChange(content);
 
-  private handleOnFormatClick = () => this.props.formatText();
 }
 
 const mapStateToProps = (state: IAppState) => ({
@@ -52,5 +56,5 @@ const mapStateToProps = (state: IAppState) => ({
 
 export default connect(
   mapStateToProps,
-  { onChange: updateSource, formatText: formatSourceText }
+  { onChange: updateSource }
 )(SourceEditor);

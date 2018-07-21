@@ -1,14 +1,14 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Button, Col, Row } from "reactstrap";
-import { IActionResult, resetEditor } from "src/Actions";
+import { Action, resetEditor } from "src/Actions";
 import "./Editor.css";
 import Output from "./Output/Output";
 import QueryEditor from "./QueryEditor/QueryEditor";
 import SourceEditor from "./SourceEditor/SourceEditor";
 
 interface IProps {
-  onReset: () => IActionResult;
+  onReset: () => Action;
 }
 
 class Editor extends React.Component<IProps> {
