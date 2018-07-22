@@ -38,7 +38,7 @@ class OutputTable<T> extends React.Component<IProps<T>> {
       };
     });
     return (
-      <ReactTable className="highlight"
+      <ReactTable className="-highlight"
         data={this.props.data}
         defaultPageSize={10}
         columns={columns}
