@@ -34,8 +34,6 @@ class SourceEditor extends Component<IProps> {
           minLines={10}
           maxLines={20}
           wrapEnabled={false}
-          enableBasicAutocompletion={true}
-          enableLiveAutocompletion={true}
           setOptions={{
             enableSnippets: true,
             showLineNumbers: true,
