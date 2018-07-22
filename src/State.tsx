@@ -34,6 +34,7 @@ export const initialState: IRootState = {
       .get('results')
       .filter({gender: 'male'})
       .map(d => _.pick(d, ['age', 'balance','name', 'eyeColor', 'gender', 'isActive', 'tags[0]']))
+      .sortBy('balance')
     `
     },
     source: { text:jsonBeautify(JSON.stringify(persons)) }
