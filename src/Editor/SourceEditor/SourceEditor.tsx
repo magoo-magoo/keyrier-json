@@ -27,13 +27,14 @@ class SourceEditor extends Component<IProps> {
           name="sourceAceEditor"
           onChange={this.handleOnChange}
           fontSize={18}
+          cursorStart={1}
           showPrintMargin={true}
           showGutter={true}
           highlightActiveLine={true}
           value={this.props.sourceText}
           minLines={10}
           maxLines={20}
-          wrapEnabled={false}
+          wrapEnabled={true}
           setOptions={{
             enableSnippets: true,
             showLineNumbers: true,

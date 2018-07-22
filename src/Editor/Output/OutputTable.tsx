@@ -27,25 +27,31 @@ class OutputTable<T> extends React.Component<IProps<T>, IState> {
     const keyMap = new Map<any, any>();
 
     this.props.data
-      .filter(d => d && !Object.is(d, {}))
+      .filter(d => d)
+      .filter(d => typeof d === "object")
+      .filter(d => !Object.is(d, {}))
+      .filter(d => !Array.isArray(d))
       .map(d => Object.keys(d))
       .forEach(keysToAdd => {
         keysToAdd.forEach(key => (keyMap[key] = key));
       });
     const keys = Object.keys(keyMap).sort();
-
     if (keys.length <= 0) {
       return <div />;
     }
 
-    const columns = keys.filter(key => typeof key === "string").map(key => {
-      return {
-        Aggregated: (row: any) => row.value,
-        Cell: (props: any) => customToString(props.value),
-        Header: key,
-        accessor: key
-      };
-    });
+    const columns = keys
+      .filter(key => key)
+      .filter(key => typeof key === "string")
+      .filter(key => key.trim() !== "")
+      .map(key => {
+        return {
+          Aggregated: (row: any) => row.value,
+          Cell: (props: any) => customToString(props.value),
+          Header: key,
+          accessor: key
+        };
+      });
 
     return (
       <div>
@@ -64,6 +70,7 @@ class OutputTable<T> extends React.Component<IProps<T>, IState> {
           </Col>
           <Col sm={10}>
             <ReactTable
+              noDataText="Oh Noes!"
               className="-highlight"
               data={this.props.data}
               defaultPageSize={10}

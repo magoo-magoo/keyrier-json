@@ -29,7 +29,7 @@ class QueryEditor extends React.Component<IProps> {
             fontSize={18}
             highlightActiveLine={true}
             value={this.props.queryText}
-            minLines={5}
+            minLines={10}
             maxLines={25}
             setOptions={{
               enableBasicAutocompletion: true,

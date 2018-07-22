@@ -29,9 +29,11 @@ export interface IAppState {
 export const initialState: IRootState = {
     output: { text: "", isArray: false },
     query: {
-      text: `data
-    .filter(user => user.gender === 'female')
-    .filter(user => user.age > 30)
+      text: `
+      _.chain(data)
+      .get('results')
+      .filter({gender: 'male'})
+      .map(d => _.pick(d, ['age', 'balance','name', 'eyeColor', 'gender', 'isActive', 'tags[0]']))
     `
     },
     source: { text:jsonBeautify(JSON.stringify(persons)) }

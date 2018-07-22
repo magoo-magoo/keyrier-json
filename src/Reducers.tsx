@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import { ActionValue } from "./Actions";
+import { codeEvaluation } from "./helpers/code";
 import { jsonBeautify, jsonParseSafe } from "./helpers/json";
 import {
   initialState,
@@ -60,31 +61,15 @@ const outputText = (
   sourceString: string,
   queryString: string
 ): IOupoutState => {
-  if (!sourceString || sourceString.trim() === "") {
+  const result = codeEvaluation(sourceString, queryString);
+  if (result === null) {
     return { isArray: false, text: "" };
   }
-
-  try {
-    const code = `
-    const data = eval(${sourceString}) //JSON.parse('${JSON.stringify(
-      jsonParseSafe(sourceString)
-    )}');
-
-    JSON.stringify(${queryString})
-    `;
-    // tslint:disable-next-line:no-eval
-    const evaluatedQuery = eval(code);
-    const type = typeof evaluatedQuery;
-    if (type !== "string") {
-      return { isArray: false, text: "" };
-    }
-    return {
-      isArray: Array.isArray(jsonParseSafe(evaluatedQuery)),
-      text: evaluatedQuery
-    };
-  } catch (error) {
-    return { errorMessage: error.message, isArray: false, text: "" };
+  if (result instanceof Error) {
+    return { isArray: false, text: "", errorMessage: result.message };
   }
+
+  return { text: result, isArray: Array.isArray(jsonParseSafe(result)) };
 };
 
 const rootReducerReset = (state: IRootState, action: ActionValue<string>) => {
