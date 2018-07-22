@@ -58,7 +58,7 @@ class OutputTable<T> extends React.Component<IProps<T>, IState> {
               id="groupingSelect"
               onChange={this.handleGroupingSelectChange}
             >
-              <option key={undefined} />
+              <option key={"column..."}>column...</option>
               {keys.map(key => <option key={key}>{key}</option>)}
             </Input>
           </Col>
@@ -77,8 +77,12 @@ class OutputTable<T> extends React.Component<IProps<T>, IState> {
     );
   }
 
-  private readonly handleGroupingSelectChange = (e: any) => {
-    this.setState({ groupBy: e.target.value ? [e.target.value] : [] });
+  private readonly handleGroupingSelectChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    this.setState({
+      groupBy: e.target.value === "column..." ? [] : [e.target.value]
+    });
   };
 }
 
