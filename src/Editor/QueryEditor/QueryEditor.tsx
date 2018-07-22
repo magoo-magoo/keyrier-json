@@ -32,11 +32,9 @@ class QueryEditor extends React.Component<IProps> {
            <AceEditor
           mode="javascript"
           theme="monokai"
-          name="blah2"
+          name="queryAceEditor"
           onChange={this.handleOnChange}
           fontSize={18}
-          showPrintMargin={true}
-          showGutter={true}
           highlightActiveLine={true}
           value={this.props.queryText}
           minLines={5}

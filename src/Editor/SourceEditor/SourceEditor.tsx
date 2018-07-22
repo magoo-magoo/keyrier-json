@@ -24,7 +24,7 @@ class SourceEditor extends Component<IProps> {
         <AceEditor
           mode="json"
           theme="monokai"
-          name="blah2"
+          name="sourceAceEditor"
           onChange={this.handleOnChange}
           fontSize={18}
           showPrintMargin={true}
@@ -33,9 +33,10 @@ class SourceEditor extends Component<IProps> {
           value={this.props.sourceText}
           minLines={10}
           maxLines={20}
+          wrapEnabled={false}
+          enableBasicAutocompletion={true}
+          enableLiveAutocompletion={true}
           setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
             enableSnippets: true,
             showLineNumbers: true,
             tabSize: 2

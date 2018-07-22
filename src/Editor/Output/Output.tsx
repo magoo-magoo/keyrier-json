@@ -5,6 +5,12 @@ import { jsonParseSafe } from "../../helpers/json";
 import { IAppState } from "../../State";
 import OutputTable from "./OutputTable";
 
+import AceEditor from "react-ace";
+// tslint:disable-next-line:ordered-imports
+import "brace/theme/github";
+// tslint:disable-next-line:ordered-imports
+import "brace/mode/json";
+
 interface IProps {
   output: string;
   isArray: boolean;
@@ -34,11 +40,11 @@ class Output extends React.Component<IProps, IState> {
           </Col>
         </Row>
         <div hidden={!this.props.errorMessage}>
-        <Row>
-          <Col>
-            <Alert color="danger">{this.props.errorMessage}</Alert>
-          </Col>
-        </Row>
+          <Row>
+            <Col>
+              <Alert color="danger">{this.props.errorMessage}</Alert>
+            </Col>
+          </Row>
         </div>
         <Row>
           <Col>
@@ -53,9 +59,30 @@ class Output extends React.Component<IProps, IState> {
             </Button>
           </Col>
         </Row>
-        <Row>
+        <Row hidden={shouldShowAsTable}>
           <Col>
-            <code hidden={shouldShowAsTable}>{this.props.output}</code>
+            <AceEditor
+              mode="json"
+              theme="github"
+              name="outputAceEditor"
+              fontSize={18}
+              showPrintMargin={true}
+              showGutter={true}
+              highlightActiveLine={true}
+              value={this.props.output}
+              minLines={10}
+              maxLines={100}
+              wrapEnabled={false}
+              readOnly={true}
+              enableBasicAutocompletion={true}
+              enableLiveAutocompletion={true}
+              setOptions={{
+                enableSnippets: true,
+                showLineNumbers: true,
+                tabSize: 2
+              }}
+              width={"100%"}
+            />
           </Col>
         </Row>
         <div hidden={!shouldShowAsTable}>
