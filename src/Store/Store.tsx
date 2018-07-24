@@ -10,8 +10,9 @@ const persistStore = (rootState: IRootState) => {
 
 const loadStore = () => {
   if (window.localStorage !== undefined) {
-    localStorage.getItem("keyrier-json.app.state");
+    return localStorage.getItem("keyrier-json.app.state");
   }
+  return null;
 };
 
 const savedStateString = loadStore();
