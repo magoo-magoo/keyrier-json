@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - 6
 
-
 cache:
   yarn: true
   directories:
@@ -13,11 +12,9 @@ script:
   - yarn test -- --coverage
   - sonar-scanner
 
-
 addons:
   sonarcloud:
     organization: "magoo-magoo-github"
-
 
 deploy:
   provider: pages
@@ -25,4 +22,4 @@ deploy:
   github-token: $GITHUB_TOKEN
   keep-history: true
   on:
-    branch: gh-pages
+    branch: master
