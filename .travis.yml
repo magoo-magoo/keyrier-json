@@ -5,5 +5,4 @@ cache: yarn
 
 script:
   - yarn run build
-  - yarn test
-  - yarn run deploy
+  - yarn test -- --coverage
