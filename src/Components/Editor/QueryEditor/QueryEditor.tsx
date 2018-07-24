@@ -1,13 +1,16 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { ActionValue, updateQuery } from "../../Actions";
-import { IAppState } from "../../State";
 
+// Order matter for Ace editor
+// tslint:disable-next-line:ordered-imports
 import AceEditor from "react-ace";
 // tslint:disable-next-line:ordered-imports
-import "brace/theme/monokai";
-// tslint:disable-next-line:ordered-imports
 import "brace/mode/javascript";
+// tslint:disable-next-line:ordered-imports
+import "brace/theme/monokai";
+
+import { ActionValue, updateQuery } from "../../../Actions/Actions";
+import { IAppState } from "../../../State/State";
 
 interface IProps {
   onChange: (e: string) => ActionValue<string>;

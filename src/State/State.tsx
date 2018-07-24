@@ -1,5 +1,5 @@
-import { persons } from "./data/persons";
-import { jsonBeautify } from "./helpers/json";
+import { persons } from "../data/persons";
+import { jsonBeautify } from "../helpers/json";
 
 export interface IQueryState {
   text: string;

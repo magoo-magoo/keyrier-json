@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
-import { ActionValue } from "./Actions";
-import { codeEvaluation } from "./helpers/code";
-import { jsonBeautify, jsonParseSafe } from "./helpers/json";
+import { ActionValue } from "../Actions/Actions";
+import { codeEvaluation } from "../helpers/code";
+import { jsonBeautify, jsonParseSafe } from "../helpers/json";
 import {
   initialState,
   IOupoutState,
   IQueryState,
   IRootState,
   ISourceState
-} from "./State";
+} from "../State/State";
 
 const rootReducer = (
   rootState: IRootState = initialState,

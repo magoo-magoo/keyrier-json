@@ -1,7 +1,7 @@
 import React from "react";
 import ReactTable from "react-table";
 import { Col, Input, Label, Row } from "reactstrap";
-import { customToString } from "../../helpers/string";
+import { customToString } from "../../../helpers/string";
 
 interface IProps<T> {
   data: T[];

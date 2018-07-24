@@ -44,5 +44,16 @@
     "react-test-renderer": "^16.4.1",
     "redux-devtools": "^3.4.1",
     "typescript": "^2.9.2"
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 30,
+        "functions": 30,
+        "lines": 30,
+        "statements": 30
+      }
+    },
+    "coverageReporters": ["json", "lcov", "text"]
   }
 }

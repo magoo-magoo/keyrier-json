@@ -1,6 +1,6 @@
 import { createStore } from "redux";
-import rootReducers from "./Reducers";
-import { initialState, IRootState } from "./State";
+import rootReducers from "./Reducers/Reducers";
+import { initialState, IRootState } from "./State/State";
 
 const persistStore = (rootState: IRootState) => {
   if (window.localStorage) {

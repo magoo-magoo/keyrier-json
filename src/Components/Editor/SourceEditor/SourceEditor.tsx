@@ -1,15 +1,16 @@
 import * as React from "react";
 import { Component } from "react";
-
 import { connect } from "react-redux";
-import { ActionValue, updateSource } from "../../Actions";
-import { IAppState } from "../../State";
 
+// Order matter for Ace editor
 import AceEditor from "react-ace";
 // tslint:disable-next-line:ordered-imports
 import "brace/theme/monokai";
 // tslint:disable-next-line:ordered-imports
 import "brace/mode/json";
+
+import { ActionValue, updateSource } from "../../../Actions/Actions";
+import { IAppState } from "../../../State/State";
 
 interface IProps {
   onChange: (val: string) => ActionValue<string>;
