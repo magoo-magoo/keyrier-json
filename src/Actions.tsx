@@ -46,6 +46,5 @@ export let a: Action = {type: 'EVALUATE_CODE'};
 
 export let v: ActionValue<number> = {  type: "EVALUATE_CODE", value: 42 };
 
-
 export type Action = Readonly<IAction>;
 export type ActionValue<T> = Readonly<IActionValue<T>>;

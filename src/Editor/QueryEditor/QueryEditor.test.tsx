@@ -1,11 +1,12 @@
+import { shallow } from "enzyme";
 import * as React from "react";
-import * as ReactDOM from "react-dom";
-import QueryEditor from "./QueryEditor";
+import { QueryEditor } from "./QueryEditor";
+
+const onChangeMock = (e: string) => ({} as any)
 
 describe("QueryEditor", () => {
+
   it("renders without crashing", () => {
-    const div = document.createElement("div");
-    ReactDOM.render(<QueryEditor />, div);
-    ReactDOM.unmountComponentAtNode(div);
+    shallow(<QueryEditor onChange={onChangeMock} queryText={''} />);
   });
 });

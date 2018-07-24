@@ -16,7 +16,7 @@ interface IProps {
   sourceText: string;
 }
 
-class SourceEditor extends Component<IProps> {
+export class SourceEditor extends Component<IProps> {
   public render() {
     return (
       <div className="SourceEditor">
@@ -36,10 +36,10 @@ class SourceEditor extends Component<IProps> {
           maxLines={20}
           wrapEnabled={true}
           setOptions={{
-            enableSnippets: true,
             showLineNumbers: true,
             tabSize: 2
           }}
+          editorProps={{ $blockScrolling: Infinity }}
           width={"100%"}
         />
       </div>
@@ -47,7 +47,6 @@ class SourceEditor extends Component<IProps> {
   }
 
   private handleOnChange = (content: string) => this.props.onChange(content);
-
 }
 
 const mapStateToProps = (state: IAppState) => ({

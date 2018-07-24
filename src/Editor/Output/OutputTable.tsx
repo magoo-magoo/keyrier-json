@@ -10,7 +10,7 @@ interface IState {
   groupBy: string[];
 }
 
-class OutputTable<T> extends React.Component<IProps<T>, IState> {
+export class OutputTable<T> extends React.Component<IProps<T>, IState> {
   public constructor(props: IProps<T>) {
     super(props);
     this.state = { groupBy: [] };

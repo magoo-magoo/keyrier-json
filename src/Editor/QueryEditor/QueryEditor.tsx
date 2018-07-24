@@ -5,7 +5,6 @@ import { IAppState } from "../../State";
 
 import AceEditor from "react-ace";
 // tslint:disable-next-line:ordered-imports
-import "brace/ext/language_tools";
 import "brace/theme/monokai";
 // tslint:disable-next-line:ordered-imports
 import "brace/mode/javascript";
@@ -15,7 +14,7 @@ interface IProps {
   queryText: string;
 }
 
-class QueryEditor extends React.Component<IProps> {
+export class QueryEditor extends React.Component<IProps> {
   public render() {
     return (
       <div className="QueryEditor">
@@ -31,10 +30,8 @@ class QueryEditor extends React.Component<IProps> {
             value={this.props.queryText}
             minLines={10}
             maxLines={25}
+            editorProps={{ $blockScrolling: Infinity }}
             setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
               showLineNumbers: true,
               tabSize: 2
             }}

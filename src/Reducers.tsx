@@ -12,7 +12,7 @@ import {
 
 const rootReducer = (
   rootState: IRootState = initialState,
-  action: ActionValue<string>
+  action: ActionValue<any>
 ): IRootState => {
   const newState = {
     ...rootState,

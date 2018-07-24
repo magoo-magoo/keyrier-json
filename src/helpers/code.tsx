@@ -1,5 +1,4 @@
-import * as lodash from 'lodash';
-import { jsonParseSafe } from "./json";
+import lodash from 'lodash';
 
 export const codeEvaluation = (
     sourceString: string,

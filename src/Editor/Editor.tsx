@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Button, Col, Row } from "reactstrap";
-import { Action, resetEditor } from "src/Actions";
+import { Action, resetEditor } from "../Actions";
 import "./Editor.css";
 import Output from "./Output/Output";
 import QueryEditor from "./QueryEditor/QueryEditor";
@@ -11,7 +11,7 @@ interface IProps {
   onReset: () => Action;
 }
 
-class Editor extends React.Component<IProps> {
+export class Editor extends React.Component<IProps> {
   public render() {
     return (
       <div className="Editor">

@@ -1,6 +1,5 @@
 export const jsonBeautify = (str: string) => {
-  
-    if (!str || str.trim() === "") {
+  if (!str || str.trim() === "") {
     return "";
   }
 
@@ -19,8 +18,7 @@ export const jsonBeautify = (str: string) => {
 };
 
 export const jsonParseSafe = (str: string) => {
-  
-    if (!str || str.trim() === "") {
+  if (!str || str.trim() === "") {
     return "";
   }
 
@@ -38,9 +36,6 @@ export const jsonParseSafe = (str: string) => {
   try {
     return JSON.parse(safeStr);
   } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.log("jsonParseSafe", error.message);
+    return str;
   }
-
-  return str;
 };

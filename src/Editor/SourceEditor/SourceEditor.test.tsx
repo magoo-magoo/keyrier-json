@@ -1,13 +1,11 @@
+import { shallow } from "enzyme";
 import * as React from "react";
-import * as ReactDOM from "react-dom";
-import SourceEditor from "./SourceEditor";
+import { SourceEditor } from "./SourceEditor";
 
-describe('SourceEditor', () => {
-    it('renders without crashing', () => {
-        const div = document.createElement('div');
-        ReactDOM.render(<SourceEditor />, div);
-        ReactDOM.unmountComponentAtNode(div);
-      });
+const onChangeMock = (e: string) => ({} as any);
+
+describe("SourceEditor", () => {
+  it("renders without crashing", () => {
+    shallow(<SourceEditor onChange={onChangeMock} sourceText={""} />);
+  });
 });
-
-  

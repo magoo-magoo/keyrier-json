@@ -6,10 +6,13 @@ export const customToString = (obj: any): string => {
   if (typeof obj === "object") {
     return JSON.stringify(obj);
   }
-  if (typeof obj === 'undefined') {
-    return '';
+  if (typeof obj === "undefined") {
+    return "";
   }
-  if (typeof obj === 'boolean') {
+  if (typeof obj === "boolean") {
+    return obj.toString();
+  }
+  if (obj) {
     return obj.toString();
   }
 

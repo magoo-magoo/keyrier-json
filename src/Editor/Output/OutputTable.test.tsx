@@ -1,9 +1,9 @@
 import { shallow } from "enzyme";
 import * as React from "react";
-import { Output } from "./Output";
+import { OutputTable } from "./OutputTable";
 
 describe("Output", () => {
   it("renders without crashing", () => {
-    shallow(<Output isArray={false} output={""} />);
+    shallow(<OutputTable data={[]} />);
   });
 });

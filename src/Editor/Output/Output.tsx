@@ -21,7 +21,7 @@ interface IState {
   shouldShowAsTable: boolean;
 }
 
-class Output extends React.Component<IProps, IState> {
+export class Output extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -74,10 +74,8 @@ class Output extends React.Component<IProps, IState> {
               maxLines={100}
               wrapEnabled={false}
               readOnly={true}
-              enableBasicAutocompletion={true}
-              enableLiveAutocompletion={true}
+              editorProps={{ $blockScrolling: Infinity }}
               setOptions={{
-                enableSnippets: true,
                 showLineNumbers: true,
                 tabSize: 2
               }}
