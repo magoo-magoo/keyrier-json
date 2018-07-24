@@ -1,9 +1,20 @@
 language: node_js
 node_js:
   - 6
-cache: yarn
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
 
 script:
   - yarn run build
   - yarn test -- --coverage
-  - yarn run deploy
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: true
+  on:
+    branch: gh-pages
