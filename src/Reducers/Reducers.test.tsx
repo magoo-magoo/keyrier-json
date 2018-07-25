@@ -38,7 +38,10 @@ describe("Reducers", () => {
   it("update source action should update", () => {
     const state = { text: "initial" };
 
-    const result = source(state, { value: "new value", type: "UPDATE_SOURCE" });
+    const result = source(state, {
+      type: "UPDATE_SOURCE_TEXT",
+      value: "new value"
+    });
 
     expect(result).toEqual({ text: "new value" });
   });

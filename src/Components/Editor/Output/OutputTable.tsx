@@ -56,8 +56,8 @@ export class OutputTable<T> extends React.Component<IProps<T>, IState> {
     return (
       <div>
         <Row>
-          <Col>
-            <Label for="exampleSelect">Grouping</Label>
+          <Col sm={2}>
+            <Label for="exampleSelect">Group by:</Label>
             <Input
               type="select"
               name="select"

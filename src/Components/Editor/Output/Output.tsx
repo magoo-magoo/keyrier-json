@@ -37,19 +37,19 @@ export class Output extends React.Component<IProps, IState> {
     return (
       <div>
         <Row>
-          <Col>
+          <Col sm={{ size: 10, offset: 2 }}>
             <h5>Output:</h5>
           </Col>
         </Row>
         <div hidden={!this.props.errorMessage}>
           <Row>
-            <Col>
+            <Col sm={{ size: 10, offset: 2 }}>
               <Alert color="danger">{this.props.errorMessage}</Alert>
             </Col>
           </Row>
         </div>
         <Row>
-          <Col>
+          <Col sm={{ size: 10, offset: 2 }}>
             <Button
               color="link"
               hidden={!this.props.isArray}
@@ -62,7 +62,7 @@ export class Output extends React.Component<IProps, IState> {
           </Col>
         </Row>
         <Row hidden={shouldShowAsTable}>
-          <Col>
+          <Col sm={{ size: 10, offset: 2 }}>
             <AceEditor
               mode="json"
               theme="github"

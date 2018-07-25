@@ -22,21 +22,19 @@ export interface IRootState {
 }
 
 export interface IAppState {
-    rootReducer : IRootState;
+  rootReducer: IRootState;
 }
 
-
 export const initialState: IRootState = {
-    output: { text: "", isArray: false },
-    query: {
-      text: `
-      _.chain(data)
-      .get('results')
-      .filter({gender: 'male'})
-      .map(d => _.pick(d, ['age', 'balance','name', 'eyeColor', 'gender', 'isActive', 'tags[0]']))
-      .sortBy('balance')
+  output: { text: "", isArray: false },
+  query: {
+    text: `
+_.chain(data)
+  .get('results')
+  .filter({gender: 'male'})
+  .map(d => _.pick(d, ['age', 'balance','name', 'eyeColor', 'gender', 'isActive', 'tags[0]']))
+  .sortBy('balance')
     `
-    },
-    source: { text:jsonBeautify(JSON.stringify(persons)) }
-  };
-  
+  },
+  source: { text: jsonBeautify(JSON.stringify(persons)) }
+};

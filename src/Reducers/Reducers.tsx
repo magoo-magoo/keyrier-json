@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { ActionValue } from "../Actions/Actions";
+import { ActionValue, updateSourceFile } from "../Actions/Actions";
 import { codeEvaluation } from "../helpers/code";
 import { jsonParseSafe } from "../helpers/json";
 import {
@@ -23,13 +23,28 @@ export const rootReducer = (
   return { ...newState, output: output(newState) };
 };
 
-export const source = (state: ISourceState, action: ActionValue<string>) => {
+export const sourceText = (
+  state: ISourceState,
+  action: ActionValue<string>
+) => ({
+  ...state,
+  text: action.value
+});
+
+export const sourceFile = (
+  state: ISourceState,
+  action: ActionValue<string>
+) => ({
+  ...state,
+  text: action.value
+});
+
+export const source = (state: ISourceState, action: ActionValue<any>) => {
   switch (action.type) {
-    case "UPDATE_SOURCE":
-      return {
-        ...state,
-        text: action.value
-      };
+    case "UPDATE_SOURCE_TEXT":
+      return sourceText(state, action);
+    case "UPDATE_SOURCE_FILE":
+      return sourceFile(state, action);
     default:
       return state;
   }

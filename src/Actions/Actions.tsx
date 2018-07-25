@@ -1,13 +1,15 @@
 /*
  * action types
  */
-export type UPDATE_SOURCE = "UPDATE_SOURCE";
+export type UPDATE_SOURCE_TEXT = "UPDATE_SOURCE_TEXT";
+export type UPDATE_SOURCE_FILE = "UPDATE_SOURCE_FILE";
 export type UPDATE_QUERY = "UPDATE_QUERY";
 export type EVALUATE_CODE = "EVALUATE_CODE";
 export type RESET_EDITOR = "RESET_EDITOR";
 
 export type actionType =
-  | UPDATE_SOURCE
+  | UPDATE_SOURCE_TEXT
+  | UPDATE_SOURCE_FILE
   | UPDATE_QUERY
   | EVALUATE_CODE
   | RESET_EDITOR;
@@ -17,8 +19,14 @@ export type actionType =
  */
 
 export const updateSource = (source: string): IActionValue<string> => ({
-  type: "UPDATE_SOURCE",
+  type: "UPDATE_SOURCE_TEXT",
   value: source
+});
+export const updateSourceFile = (
+  sourceFileContent: string
+): IActionValue<string> => ({
+  type: "UPDATE_SOURCE_FILE",
+  value: sourceFileContent
 });
 
 export const updateQuery = (query: string): IActionValue<string> => ({
@@ -41,10 +49,9 @@ interface IAction {
 
 export type t = IActionValue<void>;
 
-export let a: Action = {type: 'EVALUATE_CODE'};
+export let a: Action = { type: "EVALUATE_CODE" };
 
-
-export let v: ActionValue<number> = {  type: "EVALUATE_CODE", value: 42 };
+export let v: ActionValue<number> = { type: "EVALUATE_CODE", value: 42 };
 
 export type Action = Readonly<IAction>;
 export type ActionValue<T> = Readonly<IActionValue<T>>;

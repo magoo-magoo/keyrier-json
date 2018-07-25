@@ -1,36 +1,33 @@
-import lodash from 'lodash';
+import lodash from "lodash";
 
 export const codeEvaluation = (
-    sourceString: string,
-    queryString: string
-  ): string | null | Error => {
-    if (!sourceString || sourceString.trim() === "") {
-      return null;
-    }
-  
-    if (!queryString || queryString.trim() === "") {
-      return null;
-    }
-    try {
+  sourceString: string,
+  queryString: string
+): string | null | Error => {
+  if (!sourceString || sourceString.trim() === "") {
+    return null;
+  }
 
-      (window as any)._ = lodash;
-      const code = `
-      const data = eval(${sourceString})
-  
-      JSON.stringify(${queryString})
+  if (!queryString || queryString.trim() === "") {
+    return null;
+  }
+
+  try {
+    (window as any)._ = lodash;
+    const code = `
+      
+        const data = eval(${sourceString})
+        JSON.stringify(${queryString})
       `;
-      // tslint:disable-next-line:no-eval
-      const evaluatedQuery = eval(code);
-      const type = typeof evaluatedQuery;
-      if (type !== "string") {
-        return null;
-      }
-      return evaluatedQuery as string;
-    } catch (error) {
-      return error;
+    const evaluatedQuery = eval.apply(null, [code]); // DANGEROUS
+    const type = typeof evaluatedQuery;
+    if (type !== "string") {
+      return null;
     }
-    finally {
-      (window as any)._ = undefined;
-    }
-  };
-  
+    return evaluatedQuery as string;
+  } catch (error) {
+    return error;
+  } finally {
+    (window as any)._ = undefined;
+  }
+};

@@ -18,7 +18,11 @@ export class Editor extends React.Component<IProps> {
         <h1>Paste your JSON and Query it.</h1>
         <Row>
           <Col>
-            <Button className="float-right" color="warning" onClick={this.handleOnResetClick}>
+            <Button
+              className="float-right"
+              color="warning"
+              onClick={this.handleOnResetClick}
+            >
               Reset
             </Button>
           </Col>
@@ -28,13 +32,11 @@ export class Editor extends React.Component<IProps> {
             <SourceEditor />
           </Col>
         </Row>
-        <hr />
         <Row>
           <Col>
             <QueryEditor />
           </Col>
         </Row>
-        <hr />
         <Row>
           <Col>
             <Output />
