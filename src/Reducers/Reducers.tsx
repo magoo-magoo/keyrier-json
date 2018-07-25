@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { ActionValue } from "../Actions/Actions";
 import { codeEvaluation } from "../helpers/code";
-import { jsonBeautify, jsonParseSafe } from "../helpers/json";
+import { jsonParseSafe } from "../helpers/json";
 import {
   initialState,
   IOupoutState,
@@ -10,7 +10,7 @@ import {
   ISourceState
 } from "../State/State";
 
-const rootReducer = (
+export const rootReducer = (
   rootState: IRootState = initialState,
   action: ActionValue<any>
 ): IRootState => {
@@ -23,19 +23,19 @@ const rootReducer = (
   return { ...newState, output: output(newState) };
 };
 
-const source = (state: ISourceState, action: ActionValue<string>) => {
+export const source = (state: ISourceState, action: ActionValue<string>) => {
   switch (action.type) {
     case "UPDATE_SOURCE":
       return {
         ...state,
-        text: jsonBeautify(action.value)
+        text: action.value
       };
     default:
       return state;
   }
 };
 
-const query = (state: IQueryState, action: ActionValue<string>) => {
+export const query = (state: IQueryState, action: ActionValue<string>) => {
   switch (action.type) {
     case "UPDATE_QUERY":
       return {
@@ -47,17 +47,17 @@ const query = (state: IQueryState, action: ActionValue<string>) => {
   }
 };
 
-const output = (state: IRootState) => {
+export const output = (state: IRootState) => {
   const newOutputState = outputText(state.source.text, state.query.text);
   return {
     ...state.output,
     errorMessage: newOutputState.errorMessage,
     isArray: newOutputState.isArray,
-    text: jsonBeautify(newOutputState.text)
+    text: newOutputState.text
   };
 };
 
-const outputText = (
+export const outputText = (
   sourceString: string,
   queryString: string
 ): IOupoutState => {
@@ -72,7 +72,10 @@ const outputText = (
   return { text: result, isArray: Array.isArray(jsonParseSafe(result)) };
 };
 
-const rootReducerReset = (state: IRootState, action: ActionValue<string>) => {
+export const rootReducerReset = (
+  state: IRootState,
+  action: ActionValue<any>
+) => {
   if (action.type === "RESET_EDITOR") {
     state = initialState;
   }

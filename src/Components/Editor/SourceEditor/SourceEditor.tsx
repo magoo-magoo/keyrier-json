@@ -10,6 +10,7 @@ import "brace/theme/monokai";
 import "brace/mode/json";
 
 import { ActionValue, updateSource } from "../../../Actions/Actions";
+import { jsonBeautify } from "../../../helpers/json";
 import { IAppState } from "../../../State/State";
 
 interface IProps {
@@ -32,7 +33,7 @@ export class SourceEditor extends Component<IProps> {
           showPrintMargin={true}
           showGutter={true}
           highlightActiveLine={true}
-          value={this.props.sourceText}
+          value={jsonBeautify(this.props.sourceText)}
           minLines={10}
           maxLines={20}
           wrapEnabled={true}

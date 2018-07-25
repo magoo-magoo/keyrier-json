@@ -1,6 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Alert, Button, Col, Row } from "reactstrap";
+import { jsonBeautify, jsonParseSafe } from "../../../helpers/json";
 import OutputTable from "./OutputTable";
 
 // Order matter for Ace editor
@@ -10,7 +11,6 @@ import AceEditor from "react-ace";
 import "brace/mode/json";
 // tslint:disable-next-line:ordered-imports
 import "brace/theme/github";
-import { jsonParseSafe } from "../../../helpers/json";
 import { IAppState } from "../../../State/State";
 
 interface IProps {
@@ -71,7 +71,7 @@ export class Output extends React.Component<IProps, IState> {
               showPrintMargin={true}
               showGutter={true}
               highlightActiveLine={true}
-              value={this.props.output}
+              value={jsonBeautify(this.props.output)}
               minLines={10}
               maxLines={100}
               wrapEnabled={false}

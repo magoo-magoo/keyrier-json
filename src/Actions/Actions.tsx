@@ -6,7 +6,7 @@ export type UPDATE_QUERY = "UPDATE_QUERY";
 export type EVALUATE_CODE = "EVALUATE_CODE";
 export type RESET_EDITOR = "RESET_EDITOR";
 
-type actionType =
+export type actionType =
   | UPDATE_SOURCE
   | UPDATE_QUERY
   | EVALUATE_CODE

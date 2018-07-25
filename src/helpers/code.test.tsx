@@ -13,7 +13,7 @@ describe("code helpers", () => {
 
   it("should returns an error with bad code", () => {
     const result = codeEvaluation('{"a": 1}', 'data.');
-    expect(result instanceof Error).toBeTruthy();
+    expect(result).toBeInstanceOf(Error);
   });
 
   it("should eval code with lodash", () => {
