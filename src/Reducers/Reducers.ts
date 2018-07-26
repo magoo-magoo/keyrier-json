@@ -1,18 +1,12 @@
 import { combineReducers } from "redux";
-import { ActionValue, updateSourceFile } from "../Actions/Actions";
+import { Action,  IUpdateSource } from "../Actions/Actions";
 import { codeEvaluation } from "../helpers/code";
 import { jsonParseSafe } from "../helpers/json";
-import {
-  initialState,
-  IOupoutState,
-  IQueryState,
-  IRootState,
-  ISourceState
-} from "../State/State";
+import { initialState, IOupoutState, IQueryState, IRootState, ISourceState } from "../State/State";
 
 export const rootReducer = (
-  rootState: IRootState = initialState,
-  action: ActionValue<any>
+  rootState: Readonly<IRootState> = initialState,
+  action: Action
 ): IRootState => {
   const newState = {
     ...rootState,
@@ -24,45 +18,35 @@ export const rootReducer = (
 };
 
 export const sourceText = (
-  state: ISourceState,
-  action: ActionValue<string>
+  state: Readonly<ISourceState>,
+  action: IUpdateSource
 ) => ({
   ...state,
-  text: action.value
+  text: action.source
 });
 
-export const sourceFile = (
-  state: ISourceState,
-  action: ActionValue<string>
-) => ({
-  ...state,
-  text: action.value
-});
-
-export const source = (state: ISourceState, action: ActionValue<any>) => {
+export const source = (state: Readonly<ISourceState>, action: Action) => {
   switch (action.type) {
     case "UPDATE_SOURCE_TEXT":
       return sourceText(state, action);
-    case "UPDATE_SOURCE_FILE":
-      return sourceFile(state, action);
     default:
       return state;
   }
 };
 
-export const query = (state: IQueryState, action: ActionValue<string>) => {
+export const query = (state: Readonly<IQueryState>, action: Action) => {
   switch (action.type) {
     case "UPDATE_QUERY":
       return {
         ...state,
-        text: action.value
+        text: action.query
       };
     default:
       return state;
   }
 };
 
-export const output = (state: IRootState) => {
+export const output = (state: Readonly<IRootState>) => {
   const newOutputState = outputText(state.source.text, state.query.text);
   return {
     ...state.output,
@@ -88,8 +72,8 @@ export const outputText = (
 };
 
 export const rootReducerReset = (
-  state: IRootState,
-  action: ActionValue<any>
+  state: Readonly<IRootState>,
+  action: Action
 ) => {
   if (action.type === "RESET_EDITOR") {
     state = initialState;

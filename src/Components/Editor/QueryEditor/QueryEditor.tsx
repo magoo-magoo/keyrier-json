@@ -10,53 +10,50 @@ import "brace/mode/javascript";
 import "brace/theme/monokai";
 
 import { Col, Row } from "reactstrap";
-import { ActionValue, updateQuery } from "../../../Actions/Actions";
+import { IUpdateQueryAction, updateQuery } from "../../../Actions/Actions";
 import { IAppState } from "../../../State/State";
 
 interface IProps {
-  onChange: (e: string) => ActionValue<string>;
+  onChange: (e: string) => IUpdateQueryAction;
   queryText: string;
 }
 
-export class QueryEditor extends React.Component<IProps> {
-  public render() {
-    return (
-      <div className="QueryEditor">
-        <div>
-          <Row>
-            <Col sm={{ size: 10, offset: 2 }}>
-              <h5>Type your query:</h5>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={{ size: 10, offset: 2 }}>
-              <AceEditor
-                mode="javascript"
-                theme="monokai"
-                name="queryAceEditor"
-                onChange={this.handleOnChange}
-                fontSize={18}
-                highlightActiveLine={true}
-                value={this.props.queryText}
-                minLines={10}
-                maxLines={25}
-                editorProps={{ $blockScrolling: Infinity }}
-                setOptions={{
-                  showLineNumbers: true,
-                  tabSize: 2
-                }}
-                width={"100%"}
-              />
-            </Col>
-          </Row>
-        </div>
+export const QueryEditor: React.SFC<IProps> = (props: IProps) => {
+  return (
+    <div className="QueryEditor">
+      <div>
+        <Row>
+          <Col sm={{ size: 10, offset: 2 }}>
+            <h5>Type your query:</h5>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{ size: 10, offset: 2 }}>
+            <AceEditor
+              mode="javascript"
+              theme="monokai"
+              name="queryAceEditor"
+              onChange={props.onChange}
+              fontSize={18}
+              highlightActiveLine={true}
+              value={props.queryText}
+              minLines={10}
+              maxLines={25}
+              editorProps={{ $blockScrolling: Infinity }}
+              setOptions={{
+                showLineNumbers: true,
+                tabSize: 2
+              }}
+              width={"100%"}
+            />
+          </Col>
+        </Row>
       </div>
-    );
-  }
-  private handleOnChange = (content: string) => this.props.onChange(content);
-}
+    </div>
+  );
+};
 
-const mapStateToProps = (state: IAppState) => ({
+const mapStateToProps = (state: Readonly<IAppState>) => ({
   queryText: state.rootReducer.query.text
 });
 

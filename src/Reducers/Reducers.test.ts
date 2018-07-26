@@ -18,8 +18,7 @@ describe("Reducers", () => {
       source: { text: "fake s" }
     };
     const results = rootReducerReset(state, {
-      type: "RESET_EDITOR",
-      value: undefined
+      type: "RESET_EDITOR"
     });
 
     expect(results.query).toEqual(initialState.query);
@@ -30,7 +29,7 @@ describe("Reducers", () => {
   it("update query action should update", () => {
     const state = { text: "initial" };
 
-    const result = query(state, { value: "new value", type: "UPDATE_QUERY" });
+    const result = query(state, { query: "new value", type: "UPDATE_QUERY" });
 
     expect(result).toEqual({ text: "new value" });
   });
@@ -39,8 +38,8 @@ describe("Reducers", () => {
     const state = { text: "initial" };
 
     const result = source(state, {
-      type: "UPDATE_SOURCE_TEXT",
-      value: "new value"
+      source: "new value",
+      type: "UPDATE_SOURCE_TEXT"
     });
 
     expect(result).toEqual({ text: "new value" });

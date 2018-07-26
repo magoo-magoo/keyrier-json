@@ -2,27 +2,33 @@ import React from "react";
 import { Component } from "react";
 import { connect } from "react-redux";
 import {
+  Button,
   ButtonDropdown,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Label
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader
 } from "reactstrap";
-import { ActionValue, updateSourceFile } from "../../../Actions/Actions";
+import { IUpdateSource, updateSource } from "../../../Actions/Actions";
 import { IAppState } from "../../../State/State";
 
 interface IProps {
-  onFileContentReady: (fileContent: string) => ActionValue<string>;
+  onFileContentReady: (fileContent: string) => IUpdateSource;
 }
 
 interface IState {
   toggleDropdownIsOpen: boolean;
+  modal: boolean;
 }
 
 export class ImportMenu extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    this.state = { toggleDropdownIsOpen: false };
+    this.state = { toggleDropdownIsOpen: false, modal: false };
   }
 
   public render() {
@@ -46,9 +52,21 @@ export class ImportMenu extends Component<IProps, IState> {
                 onChange={this.onFileChange}
               />
             </Label>
-            <DropdownItem disabled={true}>HTTP request</DropdownItem>
+            <DropdownItem onClick={this.openModal}>HTTP request</DropdownItem>
           </DropdownMenu>
         </ButtonDropdown>
+        <Modal isOpen={this.state.modal} toggle={this.openModal}>
+          <ModalHeader toggle={this.openModal}>Modal title</ModalHeader>
+          <ModalBody>HTTP Request GUI</ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.openModal}>
+              Do Something
+            </Button>{" "}
+            <Button color="secondary" onClick={this.openModal}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }
@@ -57,6 +75,11 @@ export class ImportMenu extends Component<IProps, IState> {
     this.setState({
       ...this.state,
       toggleDropdownIsOpen: !this.state.toggleDropdownIsOpen
+    });
+  private openModal = () =>
+    this.setState({
+      ...this.state,
+      modal: !this.state.modal
     });
 
   private onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,11 +93,11 @@ export class ImportMenu extends Component<IProps, IState> {
   };
 }
 
-const mapStateToProps = (state: IAppState) => ({
+const mapStateToProps = (state: Readonly<IAppState>) => ({
   sourceText: state.rootReducer.source.text
 });
 
 export default connect(
   mapStateToProps,
-  { onFileContentReady: updateSourceFile }
+  { onFileContentReady: updateSource }
 )(ImportMenu);

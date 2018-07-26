@@ -34,6 +34,46 @@ export class Output extends React.Component<IProps, IState> {
   public render() {
     const shouldShowAsTable =
       this.props.isArray && this.state.shouldShowAsTable;
+
+    let display = <div />;
+
+    if (!shouldShowAsTable) {
+      display = (
+        <Row>
+          <Col sm={{ size: 10, offset: 2 }}>
+            <AceEditor
+              mode="json"
+              theme="github"
+              name="outputAceEditor"
+              fontSize={18}
+              showPrintMargin={true}
+              showGutter={true}
+              highlightActiveLine={true}
+              value={jsonBeautify(this.props.output)}
+              minLines={10}
+              maxLines={100}
+              wrapEnabled={false}
+              readOnly={true}
+              editorProps={{ $blockScrolling: Infinity }}
+              setOptions={{
+                showLineNumbers: true,
+                tabSize: 2
+              }}
+              width={"100%"}
+            />
+          </Col>
+        </Row>
+      );
+    } else {
+      display = (
+        <div>
+          <OutputTable
+            data={shouldShowAsTable ? jsonParseSafe(this.props.output) : []}
+          />
+        </div>
+      );
+    }
+
     return (
       <div>
         <Row>
@@ -61,35 +101,7 @@ export class Output extends React.Component<IProps, IState> {
             </Button>
           </Col>
         </Row>
-        <Row hidden={shouldShowAsTable}>
-          <Col sm={{ size: 10, offset: 2 }}>
-            <AceEditor
-              mode="json"
-              theme="github"
-              name="outputAceEditor"
-              fontSize={18}
-              showPrintMargin={true}
-              showGutter={true}
-              highlightActiveLine={true}
-              value={jsonBeautify(this.props.output)}
-              minLines={10}
-              maxLines={100}
-              wrapEnabled={false}
-              readOnly={true}
-              editorProps={{ $blockScrolling: Infinity }}
-              setOptions={{
-                showLineNumbers: true,
-                tabSize: 2
-              }}
-              width={"100%"}
-            />
-          </Col>
-        </Row>
-        <div hidden={!shouldShowAsTable}>
-          <OutputTable
-            data={shouldShowAsTable ? jsonParseSafe(this.props.output) : []}
-          />
-        </div>
+        {display}
       </div>
     );
   }
@@ -98,7 +110,7 @@ export class Output extends React.Component<IProps, IState> {
     this.setState({ shouldShowAsTable: !this.state.shouldShowAsTable });
   };
 }
-const mapStateToProps = (state: IAppState): IProps => {
+const mapStateToProps = (state: Readonly<IAppState>): IProps => {
   return {
     errorMessage: state.rootReducer.output.errorMessage,
     isArray: state.rootReducer.output.isArray,
