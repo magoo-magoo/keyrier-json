@@ -18,8 +18,9 @@ addons:
 
 deploy:
   provider: pages
+  local-dir: build
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
-  keep-history: true
+  keep-history: false
   on:
     branch: master
