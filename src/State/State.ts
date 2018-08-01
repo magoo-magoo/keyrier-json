@@ -1,31 +1,31 @@
 import { persons } from "../data/persons";
 import { jsonBeautify } from "../helpers/json";
 
-export interface IQueryState {
+export interface QueryState {
   text: string;
 }
 
-export interface ISourceState {
+export interface SourceState {
   text: string;
 }
 
-export interface IOupoutState {
+export interface OupoutState {
   text: string;
   isArray: boolean;
   errorMessage?: string;
 }
 
-export interface IRootState {
-  source: ISourceState;
-  query: IQueryState;
-  output: IOupoutState;
+export interface RootState {
+  source: SourceState;
+  query: QueryState;
+  output: OupoutState;
 }
 
-export interface IAppState {
-  rootReducer: IRootState;
+export interface AppState {
+  rootReducer: RootState;
 }
 
-export const initialState: IRootState = {
+export const initialState: RootState = {
   output: { text: "", isArray: false },
   query: {
     text: `
@@ -34,7 +34,7 @@ _.chain(data)
   .filter({gender: 'male'})
   .map(d => _.pick(d, ['age', 'balance','name', 'eyeColor', 'gender', 'isActive', 'tags[0]']))
   .sortBy('balance')
-    `
+    `,
   },
-  source: { text: jsonBeautify(JSON.stringify(persons)) }
+  source: { text: JSON.stringify(persons) },
 };

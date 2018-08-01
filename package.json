@@ -46,7 +46,7 @@
     "typescript": "2.9.2"
   },
   "jest": {
-    "collectCoverageFrom" : [
+    "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/data/*.{ts,tsx}",
       "!src/registerServiceWorker.ts",
@@ -55,11 +55,14 @@
     "coverageThreshold": {
       "global": {
         "branches": 60,
-        "functions": 60,
         "lines": 60,
         "statements": 60
       }
     },
-    "coverageReporters": ["json", "lcov", "text"]
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text"
+    ]
   }
 }

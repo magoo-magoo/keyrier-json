@@ -7,7 +7,7 @@ import {
   Navbar,
   NavbarBrand,
   NavItem,
-  NavLink
+  NavLink,
 } from "reactstrap";
 
 import Editor from "./Editor/Editor";

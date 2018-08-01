@@ -10,15 +10,15 @@ import "brace/mode/javascript";
 import "brace/theme/monokai";
 
 import { Col, Row } from "reactstrap";
-import { IUpdateQueryAction, updateQuery } from "../../../Actions/Actions";
-import { IAppState } from "../../../State/State";
+import { UpdateQueryAction, updateQuery } from "../../../Actions/actions";
+import { AppState } from "../../../State/State";
 
-interface IProps {
-  onChange: (e: string) => IUpdateQueryAction;
+interface Props {
+  onChange: (e: string) => UpdateQueryAction;
   queryText: string;
 }
 
-export const QueryEditor: React.SFC<IProps> = (props: IProps) => {
+export const QueryEditor: React.SFC<Props> = (props: Props) => {
   return (
     <div className="QueryEditor">
       <div>
@@ -42,7 +42,7 @@ export const QueryEditor: React.SFC<IProps> = (props: IProps) => {
               editorProps={{ $blockScrolling: Infinity }}
               setOptions={{
                 showLineNumbers: true,
-                tabSize: 2
+                tabSize: 2,
               }}
               width={"100%"}
             />
@@ -53,11 +53,11 @@ export const QueryEditor: React.SFC<IProps> = (props: IProps) => {
   );
 };
 
-const mapStateToProps = (state: Readonly<IAppState>) => ({
-  queryText: state.rootReducer.query.text
+const mapStateToProps = (state: Readonly<AppState>) => ({
+  queryText: state.rootReducer.query.text,
 });
 
 export default connect(
   mapStateToProps,
-  { onChange: updateQuery }
+  { onChange: updateQuery },
 )(QueryEditor);

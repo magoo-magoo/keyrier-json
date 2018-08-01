@@ -9,17 +9,17 @@ import "brace/theme/monokai";
 import "brace/mode/json";
 
 import { Col, Row } from "reactstrap";
-import { IUpdateSource, updateSource } from "../../../Actions/Actions";
+import { UpdateSource, updateSource } from "../../../Actions/actions";
 import { jsonBeautify } from "../../../helpers/json";
-import { IAppState } from "../../../State/State";
+import { AppState } from "../../../State/State";
 import ImportMenu from "./ImportMenu";
 
-interface IProps {
-  onChange: (val: string) => IUpdateSource;
+interface Props {
+  onChange: (val: string) => UpdateSource;
   sourceText: string;
 }
 
-export const SourceEditor = (props: IProps) => (
+export const SourceEditor = (props: Props) => (
   <div className="SourceEditor">
     <Row>
       <Col sm={{ size: 10, offset: 2 }}>
@@ -47,7 +47,7 @@ export const SourceEditor = (props: IProps) => (
           wrapEnabled={true}
           setOptions={{
             showLineNumbers: true,
-            tabSize: 2
+            tabSize: 2,
           }}
           editorProps={{ $blockScrolling: Infinity }}
           width={"100%"}
@@ -57,11 +57,11 @@ export const SourceEditor = (props: IProps) => (
   </div>
 );
 
-const mapStateToProps = (state: Readonly<IAppState>) => ({
-  sourceText: state.rootReducer.source.text
+const mapStateToProps = (state: Readonly<AppState>) => ({
+  sourceText: state.rootReducer.source.text,
 });
 
 export default connect(
   mapStateToProps,
-  { onChange: updateSource }
+  { onChange: updateSource },
 )(SourceEditor);

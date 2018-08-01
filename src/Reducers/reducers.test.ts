@@ -3,8 +3,8 @@ import rootReducers, {
   output,
   query,
   rootReducerReset,
-  source
-} from "./Reducers";
+  source,
+} from "./reducers";
 
 describe("Reducers", () => {
   it("rootReducers should run without crashing", () => {
@@ -15,10 +15,10 @@ describe("Reducers", () => {
     const state = {
       output: { text: "fake o", isArray: false },
       query: { text: "fake q" },
-      source: { text: "fake s" }
+      source: { text: "fake s" },
     };
     const results = rootReducerReset(state, {
-      type: "RESET_EDITOR"
+      type: "RESET_EDITOR",
     });
 
     expect(results.query).toEqual(initialState.query);
@@ -39,7 +39,7 @@ describe("Reducers", () => {
 
     const result = source(state, {
       source: "new value",
-      type: "UPDATE_SOURCE_TEXT"
+      type: "UPDATE_SOURCE_TEXT",
     });
 
     expect(result).toEqual({ text: "new value" });
@@ -49,7 +49,7 @@ describe("Reducers", () => {
     const state = {
       output: { text: "{}", isArray: false },
       query: { text: "data.value" },
-      source: { text: '{"value": "test"}' }
+      source: { text: '{"value": "test"}' },
     };
 
     const result = output(state);

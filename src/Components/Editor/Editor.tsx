@@ -1,17 +1,17 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Button, Col, Row } from "reactstrap";
-import { Action, IResetEditor, resetEditor } from "../../Actions/Actions";
+import { Action, ResetEditor, resetEditor } from "../../Actions/actions";
 import "./Editor.css";
 import Output from "./Output/Output";
 import QueryEditor from "./QueryEditor/QueryEditor";
 import SourceEditor from "./SourceEditor/SourceEditor";
 
-interface IProps {
-  onReset: () => IResetEditor;
+interface Props {
+  onReset: () => ResetEditor;
 }
 
-export const Editor = (props: IProps) => (
+export const Editor = (props: Props) => (
   <div className="Editor">
     <h1>Paste your JSON and Query it.</h1>
     <Row>
@@ -43,5 +43,5 @@ const mapStateToProps = () => ({});
 
 export default connect(
   mapStateToProps,
-  { onReset: resetEditor }
+  { onReset: resetEditor },
 )(Editor);

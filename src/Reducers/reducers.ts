@@ -1,31 +1,31 @@
 import { combineReducers } from "redux";
-import { Action,  IUpdateSource } from "../Actions/Actions";
+import { Action,  UpdateSource } from "../Actions/actions";
 import { codeEvaluation } from "../helpers/code";
 import { jsonParseSafe } from "../helpers/json";
-import { initialState, IOupoutState, IQueryState, IRootState, ISourceState } from "../State/State";
+import { initialState, OupoutState, QueryState, RootState, SourceState } from "../State/State";
 
 export const rootReducer = (
-  rootState: Readonly<IRootState> = initialState,
-  action: Action
-): IRootState => {
+  rootState: Readonly<RootState> = initialState,
+  action: Action,
+): RootState => {
   const newState = {
     ...rootState,
     query: query(rootState.query, action),
-    source: source(rootState.source, action)
+    source: source(rootState.source, action),
   };
 
-  return { ...newState, output: output(newState) };
+  return {...newState, output: output(newState)};
 };
 
 export const sourceText = (
-  state: Readonly<ISourceState>,
-  action: IUpdateSource
+  state: Readonly<SourceState>,
+  action: UpdateSource,
 ) => ({
   ...state,
-  text: action.source
+  text: action.source,
 });
 
-export const source = (state: Readonly<ISourceState>, action: Action) => {
+export const source = (state: Readonly<SourceState>, action: Action) => {
   switch (action.type) {
     case "UPDATE_SOURCE_TEXT":
       return sourceText(state, action);
@@ -34,32 +34,32 @@ export const source = (state: Readonly<ISourceState>, action: Action) => {
   }
 };
 
-export const query = (state: Readonly<IQueryState>, action: Action) => {
+export const query = (state: Readonly<QueryState>, action: Action) => {
   switch (action.type) {
     case "UPDATE_QUERY":
       return {
         ...state,
-        text: action.query
+        text: action.query,
       };
     default:
       return state;
   }
 };
 
-export const output = (state: Readonly<IRootState>) => {
+export const output = (state: Readonly<RootState>) => {
   const newOutputState = outputText(state.source.text, state.query.text);
   return {
     ...state.output,
     errorMessage: newOutputState.errorMessage,
     isArray: newOutputState.isArray,
-    text: newOutputState.text
+    text: newOutputState.text,
   };
 };
 
 export const outputText = (
   sourceString: string,
-  queryString: string
-): IOupoutState => {
+  queryString: string,
+): OupoutState => {
   const result = codeEvaluation(sourceString, queryString);
   if (result === null) {
     return { isArray: false, text: "" };
@@ -72,8 +72,8 @@ export const outputText = (
 };
 
 export const rootReducerReset = (
-  state: Readonly<IRootState>,
-  action: Action
+  state: Readonly<RootState>,
+  action: Action,
 ) => {
   if (action.type === "RESET_EDITOR") {
     state = initialState;
@@ -82,6 +82,6 @@ export const rootReducerReset = (
 };
 
 const rootReducers = combineReducers({
-  rootReducer: rootReducerReset
+  rootReducer: rootReducerReset,
 });
 export default rootReducers;

@@ -1,8 +1,8 @@
 import { createStore } from "redux";
-import rootReducers from "../Reducers/Reducers";
-import { initialState, IRootState } from "../State/State";
+import rootReducers from "../Reducers/reducers";
+import { initialState, RootState } from "../State/State";
 
-const persistStore = (rootState: IRootState) => {
+const persistStore = (rootState: RootState) => {
   if (window.localStorage) {
     localStorage.setItem("keyrier-json.app.state", JSON.stringify(rootState));
   }
@@ -25,7 +25,7 @@ const store = createStore(
   rootReducers,
   { rootReducer: preloadState },
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
 );
 
 store.subscribe(() => {

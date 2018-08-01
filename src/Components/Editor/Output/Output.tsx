@@ -11,23 +11,23 @@ import AceEditor from "react-ace";
 import "brace/mode/json";
 // tslint:disable-next-line:ordered-imports
 import "brace/theme/github";
-import { IAppState } from "../../../State/State";
+import { AppState } from "../../../State/State";
 
-interface IProps {
+interface Props {
   output: string;
   isArray: boolean;
   errorMessage?: string;
 }
 
-interface IState {
+interface State {
   shouldShowAsTable: boolean;
 }
 
-export class Output extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class Output extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      shouldShowAsTable: true
+      shouldShowAsTable: true,
     };
   }
 
@@ -57,7 +57,7 @@ export class Output extends React.Component<IProps, IState> {
               editorProps={{ $blockScrolling: Infinity }}
               setOptions={{
                 showLineNumbers: true,
-                tabSize: 2
+                tabSize: 2,
               }}
               width={"100%"}
             />
@@ -110,11 +110,11 @@ export class Output extends React.Component<IProps, IState> {
     this.setState({ shouldShowAsTable: !this.state.shouldShowAsTable });
   };
 }
-const mapStateToProps = (state: Readonly<IAppState>): IProps => {
+const mapStateToProps = (state: Readonly<AppState>): Props => {
   return {
     errorMessage: state.rootReducer.output.errorMessage,
     isArray: state.rootReducer.output.isArray,
-    output: state.rootReducer.output.text
+    output: state.rootReducer.output.text,
   };
 };
 

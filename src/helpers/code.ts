@@ -2,7 +2,7 @@ import lodash from "lodash";
 
 export const codeEvaluation = (
   sourceString: string,
-  queryString: string
+  queryString: string,
 ): string | null | Error => {
   if (!sourceString || sourceString.trim() === "") {
     return null;

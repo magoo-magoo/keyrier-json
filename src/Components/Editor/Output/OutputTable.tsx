@@ -3,15 +3,15 @@ import ReactTable from "react-table";
 import { Col, Input, Label, Row } from "reactstrap";
 import { customToString } from "../../../helpers/string";
 
-interface IProps<T> {
+interface Props<T> {
   data: T[];
 }
-interface IState {
+interface State {
   groupBy: string[];
 }
 
-export class OutputTable<T> extends React.Component<IProps<T>, IState> {
-  public constructor(props: IProps<T>) {
+export class OutputTable<T> extends React.Component<Props<T>, State> {
+  public constructor(props: Props<T>) {
     super(props);
     this.state = { groupBy: [] };
   }
@@ -49,7 +49,7 @@ export class OutputTable<T> extends React.Component<IProps<T>, IState> {
           Aggregated: (row: any) => row.value,
           Cell: (props: any) => customToString(props.value),
           Header: key,
-          accessor: key
+          accessor: key,
         };
       });
 
@@ -85,10 +85,10 @@ export class OutputTable<T> extends React.Component<IProps<T>, IState> {
   }
 
   private readonly handleGroupingSelectChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     this.setState({
-      groupBy: e.target.value === "column..." ? [] : [e.target.value]
+      groupBy: e.target.value === "column..." ? [] : [e.target.value],
     });
   };
 }
