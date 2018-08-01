@@ -86,7 +86,10 @@ export class ImportMenu extends Component<Props, State> {
     if (e.target.files && e.target.files.length > 0) {
       const fileReader = new FileReader();
       fileReader.onload = () => {
-        this.props.onFileContentReady(fileReader.result);
+        if (fileReader.result) {
+          this.props.onFileContentReady(fileReader.result.toString());
+        }
+        this.props.onFileContentReady('');
       };
       fileReader.readAsText(e.target.files[0]);
     }
