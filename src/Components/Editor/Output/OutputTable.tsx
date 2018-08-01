@@ -35,7 +35,7 @@ export class OutputTable<T> extends React.Component<Props<T>, State> {
       .forEach(keysToAdd => {
         keysToAdd.forEach(key => (keyMap[key] = key));
       });
-    const keys = Object.keys(keyMap).sort();
+    const keys = Object.keys(keyMap);
     if (keys.length <= 0) {
       return <div />;
     }
@@ -44,6 +44,7 @@ export class OutputTable<T> extends React.Component<Props<T>, State> {
       .filter(key => key)
       .filter(key => typeof key === "string")
       .filter(key => key.trim() !== "")
+      .sort((a, b)=> a.toLowerCase().localeCompare(b.toLowerCase()))
       .map(key => {
         return {
           Aggregated: (row: any) => row.value,
