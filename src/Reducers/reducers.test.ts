@@ -3,7 +3,7 @@ import rootReducers, {
   output,
   query,
   rootReducerReset,
-  source,
+  source
 } from "./reducers";
 
 describe("Reducers", () => {
@@ -13,12 +13,12 @@ describe("Reducers", () => {
 
   it("rootReducers should reset", () => {
     const state = {
-      output: { text: "fake o", isArray: false },
+      output: { text: "fake o", isArray: false, array: [] },
       query: { text: "fake q" },
-      source: { text: "fake s" },
+      source: { text: "fake s" }
     };
     const results = rootReducerReset(state, {
-      type: "RESET_EDITOR",
+      type: "RESET_EDITOR"
     });
 
     expect(results.query).toEqual(initialState.query);
@@ -39,7 +39,7 @@ describe("Reducers", () => {
 
     const result = source(state, {
       source: "new value",
-      type: "UPDATE_SOURCE_TEXT",
+      type: "UPDATE_SOURCE_TEXT"
     });
 
     expect(result).toEqual({ text: "new value" });
@@ -47,12 +47,12 @@ describe("Reducers", () => {
 
   it("output ", () => {
     const state = {
-      output: { text: "{}", isArray: false },
+      output: { text: "{}", isArray: false, array: [] },
       query: { text: "data.value" },
-      source: { text: '{"value": "test"}' },
+      source: { text: '{"value": "test"}' }
     };
 
-    const result = output(state);
+    const result = output(state.source.text, state.query.text);
 
     expect(result.text).toEqual('"test"');
     expect(result.isArray).toEqual(false);

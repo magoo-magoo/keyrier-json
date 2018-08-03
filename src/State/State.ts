@@ -11,6 +11,7 @@ export interface SourceState {
 
 export interface OupoutState {
   text: string;
+  array: Array<{}>;
   isArray: boolean;
   errorMessage?: string;
 }
@@ -26,7 +27,7 @@ export interface AppState {
 }
 
 export const initialState: RootState = {
-  output: { text: "", isArray: false },
+  output: { text: "", isArray: false, array: [{ initiale: 44 }] },
   query: {
     text: `
 _.chain(data)
@@ -34,7 +35,7 @@ _.chain(data)
   .filter({gender: 'male'})
   .map(d => _.pick(d, ['age', 'balance','name', 'eyeColor', 'gender', 'isActive', 'tags[0]']))
   .sortBy('balance')
-    `,
+    `
   },
-  source: { text: JSON.stringify(persons) },
+  source: { text: JSON.stringify(persons) }
 };

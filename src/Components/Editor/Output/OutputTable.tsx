@@ -14,9 +14,11 @@ import {
 } from "reactstrap";
 import { customToString, containsIgnoreCase } from "../../../helpers/string";
 import "./OutputTable.css";
+import { connect } from "react-redux";
+import { AppState } from "src/State/State";
 
 interface Props<T> {
-  data: T[];
+  data: Array<{}>;
 }
 interface State {
   groupBy: string[];
@@ -148,4 +150,10 @@ export class OutputTable<T> extends React.Component<Props<T>, State> {
   };
 }
 
-export default OutputTable;
+const mapStateToProps = (state: Readonly<AppState>): Props<{}> => {
+  return ({
+    data: state.rootReducer.output.array,
+  });
+};
+
+export default connect(mapStateToProps)(OutputTable);
