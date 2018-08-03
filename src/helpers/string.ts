@@ -18,3 +18,15 @@ export const customToString = (obj: any): string => {
 
   return obj;
 };
+
+export const containsIgnoreCase = (str: string, part: string) => {
+  if (!str || !part) {
+    return false;
+  }
+  if (str.toLocaleLowerCase().includes(part.toLocaleLowerCase())) {
+    return true;
+  }
+
+
+  return false;
+};
