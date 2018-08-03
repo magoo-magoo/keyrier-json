@@ -20,13 +20,13 @@ interface Props<T> {
 }
 interface State {
   groupBy: string[];
-  modal: boolean;
+  isModalOpen: boolean;
 }
 
 export class OutputTable<T> extends React.Component<Props<T>, State> {
   public constructor(props: Props<T>) {
     super(props);
-    this.state = { groupBy: [], modal: false };
+    this.state = { groupBy: [], isModalOpen: false };
   }
 
   public render() {
@@ -82,18 +82,38 @@ export class OutputTable<T> extends React.Component<Props<T>, State> {
         defaultFilterMethod={defaultFilterMethod}
       />
     );
+
+    const groupBySelection = (
+      <Fragment>
+        <Label for="exampleSelect">Group by:</Label>
+        <Input
+          type="select"
+          name="select"
+          id="groupingSelect"
+          onChange={this.handleGroupingSelectChange}
+        >
+          <option key={"column..."}>column...</option>
+          {keys.map(key => <option key={key}>{key}</option>)}
+        </Input>
+      </Fragment>
+    );
     return (
       <Fragment>
         <Modal
-          isOpen={this.state.modal}
+          isOpen={this.state.isModalOpen}
           modalTransition={{ timeout: 700 }}
           backdropTransition={{ timeout: 1300 }}
-          toggle={this.toggle}
+          toggle={this.toggleModal}
         >
-          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
-          <ModalBody>{table}</ModalBody>
+          <ModalHeader toggle={this.toggleModal}>Table view</ModalHeader>
+          <ModalBody>
+            <Row>
+              <Col sm={2}>{groupBySelection}</Col>
+              <Col sm={12}>{table}</Col>
+            </Row>
+          </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={this.toggle}>
+            <Button color="secondary" onClick={this.toggleModal}>
               Close
             </Button>
           </ModalFooter>
@@ -101,21 +121,10 @@ export class OutputTable<T> extends React.Component<Props<T>, State> {
         <div>
           <Row>
             <Col sm={2}>
+              <Row>{groupBySelection}</Row>
               <Row>
-                <Label for="exampleSelect">Group by:</Label>
-                <Input
-                  type="select"
-                  name="select"
-                  id="groupingSelect"
-                  onChange={this.handleGroupingSelectChange}
-                >
-                  <option key={"column..."}>column...</option>
-                  {keys.map(key => <option key={key}>{key}</option>)}
-                </Input>
-              </Row>
-              <Row>
-                <Button color="danger" onClick={this.toggle}>
-                  Expand
+                <Button color="primary" block={true} onClick={this.toggleModal}>
+                  Fullscreen
                 </Button>
               </Row>
             </Col>
@@ -126,8 +135,9 @@ export class OutputTable<T> extends React.Component<Props<T>, State> {
     );
   }
 
-  private readonly toggle = () =>
-    this.setState({ ...this.state, modal: !this.state.modal });
+  private readonly toggleModal = () =>
+    this.setState({ ...this.state, isModalOpen: !this.state.isModalOpen });
+
   private readonly handleGroupingSelectChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
