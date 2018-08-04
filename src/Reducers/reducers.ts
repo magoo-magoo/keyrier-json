@@ -7,7 +7,8 @@ import {
   OupoutState,
   QueryState,
   RootState,
-  SourceState
+  SourceState,
+  OupoutTableState
 } from "../State/State";
 
 export const rootReducer = (
@@ -20,7 +21,15 @@ export const rootReducer = (
     source: source(rootState.source, action)
   };
 
-  return { ...newState, output: output(newState.source.text, newState.query.text) };
+  return {
+    ...newState,
+    output: output(
+      rootState.output,
+      newState.source.text,
+      newState.query.text,
+      action
+    )
+  };
 };
 
 export const sourceText = (
@@ -52,26 +61,117 @@ export const query = (state: Readonly<QueryState>, action: Action) => {
   }
 };
 
-export const output = (
+export const outputTable = (
+  state: Readonly<OupoutTableState>,
+  action: Action
+) => {
+  switch (action.type) {
+    case "UPDATE_TABLE_COLUMNS":
+      // tslint:disable-next-line:no-debugger
+      debugger;
+      return { ...state, columns: action.columns };
+    default:
+      return state;
+  }
+};
+
+export const computeOutput = (
+  previousState: Readonly<OupoutState>,
   sourceString: string,
-  queryString: string
+  queryString: string,
+  action: Action
 ): OupoutState => {
   const text = codeEvaluation(sourceString, queryString);
   if (text === null) {
-    return { isArray: false, text: "", array: [{ a: 1 }] };
+    return {
+      text: "",
+      table: {
+        array: [],
+        isArray: false,
+        isModalOpen: false,
+        displayedColumns: [],
+        columns: []
+      }
+    };
   }
   if (text instanceof Error) {
     return {
-      isArray: false,
       text: "",
       errorMessage: text.message,
-      array: [{ b: 2 }]
+      table: {
+        isArray: false,
+        array: [],
+        isModalOpen: false,
+        displayedColumns: [],
+        columns: []
+      }
     };
   }
-
-  const array = jsonParseSafe(text);
+  let displayedColumns = new Array<string>();
+  const array: Array<{}> = jsonParseSafe(text);
   const isArray = Array.isArray(array);
-  return { text, isArray, array: isArray ? array : [] };
+  if (isArray) {
+    const keyMap = new Map<any, any>();
+    array
+      .filter(d => d)
+      .filter(d => typeof d === "object")
+      .filter(d => !Object.is(d, {}))
+      .filter(d => !Array.isArray(d))
+      .map(d => Object.keys(d))
+      .forEach(keysToAdd => {
+        keysToAdd.forEach(key => (keyMap[key] = key));
+      });
+    displayedColumns = Object.keys(keyMap)
+      .filter(key => key)
+      .filter(key => typeof key === "string")
+      .filter(key => key.trim() !== "")
+      .sort((ax, b) => ax.toLowerCase().localeCompare(b.toLowerCase()));
+  }
+  const isModalOpen =
+    action.type === "TOGGLE_OUTPUT_TABLE_MODAL"
+      ? !previousState.table.isModalOpen
+      : previousState.table.isModalOpen;
+  return {
+    text,
+    table: {
+      array: isArray ? array : [],
+      isArray,
+      isModalOpen,
+      displayedColumns,
+      columns: displayedColumns
+    }
+  };
+};
+
+export const output = (
+  previousState: OupoutState,
+  sourceString: string,
+  queryString: string,
+  action: Action
+): OupoutState => {
+  switch (action.type) {
+    case "@@INIT":
+    case "EVALUATE_CODE":
+    case "RESET_EDITOR":
+    case "UPDATE_QUERY":
+    case "UPDATE_SOURCE_TEXT":
+      return computeOutput(previousState, sourceString, queryString, action);
+    case "TOGGLE_OUTPUT_TABLE_MODAL":
+      return {
+        ...previousState,
+        table: {
+          ...previousState.table,
+          isModalOpen: !previousState.table.isModalOpen
+        }
+      };
+    case "UPDATE_TABLE_COLUMNS":
+      return {
+        ...previousState,
+        table: { ...previousState.table, displayedColumns: action.columns }
+      };
+    default:
+      return previousState;
+  }
 };
 
 export const rootReducerReset = (

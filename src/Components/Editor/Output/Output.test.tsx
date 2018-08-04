@@ -12,9 +12,4 @@ describe("Output", () => {
 
     expect(wrapper.find(OutputTable)).toHaveLength(0);
   });
-  it("should render a output table when output is array", () => {
-    const wrapper = shallow(<Output isArray={true} output={""} />);
-
-    expect(wrapper.find(OutputTable)).toHaveLength(1);
-  });
 });

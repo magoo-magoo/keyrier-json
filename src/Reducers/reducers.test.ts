@@ -13,7 +13,10 @@ describe("Reducers", () => {
 
   it("rootReducers should reset", () => {
     const state = {
-      output: { text: "fake o", isArray: false, array: [] },
+      output: {
+        text: "fake o",
+        table: { array: [], isArray: false, isModalOpen: false, displayedColumns: [], columns:[] }
+      },
       query: { text: "fake q" },
       source: { text: "fake s" }
     };
@@ -47,15 +50,20 @@ describe("Reducers", () => {
 
   it("output ", () => {
     const state = {
-      output: { text: "{}", isArray: false, array: [] },
+      output: {
+        text: "{}",
+        table: { array: [], isArray: false, isModalOpen: false, displayedColumns: [], columns:[] }
+      },
       query: { text: "data.value" },
       source: { text: '{"value": "test"}' }
     };
 
-    const result = output(state.source.text, state.query.text);
+    const result = output(state.output, state.source.text, state.query.text, {
+      type: 'EVALUATE_CODE'
+    });
 
     expect(result.text).toEqual('"test"');
-    expect(result.isArray).toEqual(false);
+    expect(result.table.isArray).toEqual(false);
     expect(result.errorMessage).toBeUndefined();
   });
 });

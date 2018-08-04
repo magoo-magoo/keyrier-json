@@ -137,7 +137,7 @@ export class Output extends React.Component<Props, State> {
 const mapStateToProps = (state: Readonly<AppState>): Props => {
   return {
     errorMessage: state.rootReducer.output.errorMessage,
-    isArray: state.rootReducer.output.isArray,
+    isArray: state.rootReducer.output.table.isArray,
     output: state.rootReducer.output.text
   };
 };

@@ -11,9 +11,16 @@ export interface SourceState {
 
 export interface OupoutState {
   text: string;
+  errorMessage?: string;
+  table: OupoutTableState;
+}
+
+export interface OupoutTableState {
   array: Array<{}>;
   isArray: boolean;
-  errorMessage?: string;
+  isModalOpen: boolean;
+  displayedColumns: string[];
+  columns: string[];
 }
 
 export interface RootState {
@@ -27,7 +34,10 @@ export interface AppState {
 }
 
 export const initialState: RootState = {
-  output: { text: "", isArray: false, array: [{ initiale: 44 }] },
+  output: {
+    text: "",
+    table: { array: [], isArray: false, isModalOpen: false, displayedColumns:[], columns: [] }
+  },
   query: {
     text: `
 _.chain(data)

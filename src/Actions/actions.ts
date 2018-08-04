@@ -32,10 +32,31 @@ export const evaluateCode = (): EvaluateCode => ({
   type: "EVALUATE_CODE"
 });
 
-export let a: Action = { type: "EVALUATE_CODE" };
+export interface ToggleOutputTableModal {
+  type: "TOGGLE_OUTPUT_TABLE_MODAL";
+}
+export const toggleOutputTableModal = (): ToggleOutputTableModal => ({
+  type: "TOGGLE_OUTPUT_TABLE_MODAL"
+});
+
+export interface UpdateTableColumns {
+  type: "UPDATE_TABLE_COLUMNS";
+  columns: string[];
+}
+export const updateTableColumns = (columns: string[]): UpdateTableColumns => ({
+  columns,
+  type: "UPDATE_TABLE_COLUMNS"
+});
+
+export interface ReduxInitAction {
+  type: "@@INIT";
+}
 
 export type Action =
   | Readonly<EvaluateCode>
   | Readonly<ResetEditor>
   | Readonly<UpdateQueryAction>
+  | Readonly<ToggleOutputTableModal>
+  | Readonly<UpdateTableColumns>
+  | Readonly<ReduxInitAction>
   | Readonly<UpdateSource>;
