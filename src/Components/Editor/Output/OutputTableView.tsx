@@ -11,6 +11,7 @@ import {
   UpdateTableColumns
 } from "../../../Actions/actions";
 import Label from "reactstrap/lib/Label";
+import * as XLSX from 'xlsx';
 
 interface Props {
   data: Array<{}>;
