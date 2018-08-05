@@ -2,7 +2,6 @@
   "name": "keyrier-json",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://magoo-magoo.github.io/keyrier-json",
   "dependencies": {
     "bootstrap": "4.1.3",
     "classnames": "2.2.6",
