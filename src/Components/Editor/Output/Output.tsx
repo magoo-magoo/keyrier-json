@@ -29,19 +29,25 @@ interface Props {
 }
 
 interface State {
-  activeTab: string;
+  activeTab: tabType;
 }
+
+type tabType = "RawJson" |"Table";
 
 export class Output extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      activeTab:  this.props.isArray ? "2" : "1"
+      activeTab: this.props.isArray ? "Table" : "RawJson"
     };
   }
 
+  public componentDidUpdate() {
+    if (!this.props.isArray && this.state.activeTab === "Table") {
+      this.setState({ ...this.state, activeTab: "RawJson" });
+    }
+  }
   public render() {
-
     const display = (
       <Fragment>
         <Row>
@@ -50,11 +56,11 @@ export class Output extends React.Component<Props, State> {
               <NavItem>
                 <NavLink
                   className={classNames({
-                    active: this.state.activeTab === "1"
+                    active: !this.props.isArray || this.state.activeTab === "RawJson"
                   })}
                   // tslint:disable-next-line:jsx-no-lambda
                   onClick={() => {
-                    this.toggleTab("1");
+                    this.toggleTab("RawJson");
                   }}
                 >
                   Raw JSON view
@@ -63,11 +69,11 @@ export class Output extends React.Component<Props, State> {
               <NavItem hidden={!this.props.isArray}>
                 <NavLink
                   className={classNames({
-                    active: this.state.activeTab === "2"
+                    active: this.state.activeTab === "Table"
                   })}
                   // tslint:disable-next-line:jsx-no-lambda
                   onClick={() => {
-                    this.toggleTab("2");
+                    this.toggleTab("Table");
                   }}
                 >
                   Table view
@@ -77,7 +83,7 @@ export class Output extends React.Component<Props, State> {
           </Col>
         </Row>
         <TabContent activeTab={this.state.activeTab}>
-          <TabPane tabId="1">
+          <TabPane tabId="RawJson">
             <Row>
               <Col sm={{ size: 10, offset: 2 }}>
                 <AceEditor
@@ -103,9 +109,8 @@ export class Output extends React.Component<Props, State> {
               </Col>
             </Row>
           </TabPane>
-          <TabPane tabId="2">
-            <OutputTable
-            />
+          <TabPane tabId="Table">
+            <OutputTable />
           </TabPane>
         </TabContent>
       </Fragment>
@@ -130,7 +135,7 @@ export class Output extends React.Component<Props, State> {
     );
   }
 
-  private toggleTab = (tab: string) => {
+  private toggleTab = (tab: tabType) => {
     this.setState({ ...this.state, activeTab: tab });
   };
 }

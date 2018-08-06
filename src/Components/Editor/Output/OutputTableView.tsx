@@ -10,8 +10,7 @@ import {
   updateTableColumns,
   UpdateTableColumns
 } from "../../../Actions/actions";
-import Label from "reactstrap/lib/Label";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 
 interface Props {
   data: Array<{}>;
@@ -79,42 +78,37 @@ export class OutputTableView extends React.Component<Props, State> {
             color="primary"
             onClick={this.toggleCollapseOptions}
           >
-            {this.state.optionsCollapsed ? 'Hide advanced options': 'Advanced options'}
+            {this.state.optionsCollapsed
+              ? "Hide advanced options"
+              : "Advanced options"}
           </Button>
           <Collapse isOpen={this.state.optionsCollapsed}>
-            <Row>
-              <Col>
-                <Input
-                  type="select"
-                  name="select"
-                  id="groupingSelect"
-                  onChange={this.handleGroupingSelectChange}
-                >
-                  <option key={"Group by..."}>Group by...</option>
-                  {this.props.displayedColumns.map(key => (
-                    <option key={key}>{key}</option>
-                  ))}
-                </Input>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Row>
-                  <Col>
-                    <Label>Columns: </Label>
-                    <Select
-                      options={columnOptions}
-                      value={this.props.displayedColumns.map(k => ({
-                        value: k,
-                        label: k
-                      }))}
-                      isMulti={true}
-                      onChange={this.handleColumnChange}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+            <Input
+              type="select"
+              name="select"
+              id="groupingSelect"
+              onChange={this.handleGroupingSelectChange}
+            >
+              <option key={"Group by..."}>Group by...</option>
+              {this.props.displayedColumns.map(key => (
+                <option key={key}>{key}</option>
+              ))}
+            </Input>
+            <Button
+              color={"success"}
+              onClick={this.handleOnclickOnExportToExcel}
+            >
+              Export to Excel (.xlsx)
+            </Button>
+            <Select
+              options={columnOptions}
+              value={this.props.displayedColumns.map(k => ({
+                value: k,
+                label: k
+              }))}
+              isMulti={true}
+              onChange={this.handleColumnChange}
+            />
           </Collapse>
           {table}
         </Col>
@@ -125,11 +119,14 @@ export class OutputTableView extends React.Component<Props, State> {
   private readonly handleColumnChange = (a: Array<{ value: string }>) => {
     const newValues = a.map(c => c.value);
     if (this.state.groupBy.length !== 0) {
-      this.state.groupBy.forEach( groupBy => {
+      this.state.groupBy.forEach(groupBy => {
         if (a.map(t => t.value).indexOf(groupBy) === -1) {
-          this.setState({...this.state, groupBy: this.state.groupBy.filter(gb=> gb!== groupBy)});
+          this.setState({
+            ...this.state,
+            groupBy: this.state.groupBy.filter(gb => gb !== groupBy)
+          });
         }
-      })
+      });
     }
     this.props.onColumnsChange(newValues);
   };
@@ -154,6 +151,14 @@ export class OutputTableView extends React.Component<Props, State> {
       this.props.displayedColumns.indexOf(groupBy) !== -1
       ? []
       : [groupBy];
+  };
+
+  private readonly handleOnclickOnExportToExcel = () => {
+    const workBook = XLSX.utils.book_new();
+    const workSheet = XLSX.utils.json_to_sheet(this.props.data);
+    XLSX.utils.book_append_sheet(workBook, workSheet, "keyrier-json");
+
+    XLSX.writeFile(workBook, "export.xlsx");
   };
 }
 
