@@ -15,7 +15,14 @@ describe("Reducers", () => {
     const state = {
       output: {
         text: "fake o",
-        table: { array: [], isArray: false, isModalOpen: false, displayedColumns: [], columns:[] }
+        table: {
+          array: [],
+          isArray: false,
+          isModalOpen: false,
+          displayedColumns: [],
+          columns: [],
+          groupBy: []
+        }
       },
       query: { text: "fake q" },
       source: { text: "fake s" }
@@ -52,14 +59,21 @@ describe("Reducers", () => {
     const state = {
       output: {
         text: "{}",
-        table: { array: [], isArray: false, isModalOpen: false, displayedColumns: [], columns:[] }
+        table: {
+          array: [],
+          isArray: false,
+          isModalOpen: false,
+          displayedColumns: [],
+          columns: [],
+          groupBy: []
+        }
       },
       query: { text: "data.value" },
       source: { text: '{"value": "test"}' }
     };
 
     const result = output(state.output, state.source.text, state.query.text, {
-      type: 'EVALUATE_CODE'
+      type: "EVALUATE_CODE"
     });
 
     expect(result.text).toEqual('"test"');

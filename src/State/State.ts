@@ -12,7 +12,7 @@ export interface SourceState {
 export interface OupoutState {
   text: string;
   errorMessage?: string;
-  table: OupoutTableState;
+  table: Readonly<OupoutTableState>;
 }
 
 export interface OupoutTableState {
@@ -21,22 +21,30 @@ export interface OupoutTableState {
   isModalOpen: boolean;
   displayedColumns: string[];
   columns: string[];
+  groupBy: string[];
 }
 
 export interface RootState {
-  source: SourceState;
-  query: QueryState;
-  output: OupoutState;
+  source: Readonly<SourceState>;
+  query: Readonly<QueryState>;
+  output: Readonly<OupoutState>;
 }
 
 export interface AppState {
-  rootReducer: RootState;
+  rootReducer: Readonly<RootState>;
 }
 
-export const initialState: RootState = {
+export const initialState: Readonly<RootState> = {
   output: {
     text: "",
-    table: { array: [], isArray: false, isModalOpen: false, displayedColumns:[], columns: [] }
+    table: {
+      array: [],
+      isArray: false,
+      isModalOpen: false,
+      displayedColumns: [],
+      columns: [],
+      groupBy: []
+    }
   },
   query: {
     text: `

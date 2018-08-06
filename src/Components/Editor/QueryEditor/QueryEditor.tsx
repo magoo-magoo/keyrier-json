@@ -18,7 +18,7 @@ interface Props {
   queryText: string;
 }
 
-export const QueryEditor: React.SFC<Props> = (props: Props) => {
+export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
   return (
     <div className="QueryEditor">
       <div>
@@ -33,16 +33,16 @@ export const QueryEditor: React.SFC<Props> = (props: Props) => {
               mode="javascript"
               theme="monokai"
               name="queryAceEditor"
-              onChange={props.onChange}
+              onChange={onChange}
               fontSize={18}
               highlightActiveLine={true}
-              value={props.queryText}
+              value={queryText}
               minLines={10}
               maxLines={25}
               editorProps={{ $blockScrolling: Infinity }}
               setOptions={{
                 showLineNumbers: true,
-                tabSize: 2,
+                tabSize: 2
               }}
               width={"100%"}
             />
@@ -54,10 +54,10 @@ export const QueryEditor: React.SFC<Props> = (props: Props) => {
 };
 
 const mapStateToProps = (state: Readonly<AppState>) => ({
-  queryText: state.rootReducer.query.text,
+  queryText: state.rootReducer.query.text
 });
 
 export default connect(
   mapStateToProps,
-  { onChange: updateQuery },
+  { onChange: updateQuery }
 )(QueryEditor);

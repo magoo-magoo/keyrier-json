@@ -47,6 +47,14 @@ export const updateTableColumns = (columns: string[]): UpdateTableColumns => ({
   columns,
   type: "UPDATE_TABLE_COLUMNS"
 });
+export interface UpdateTableGroupBy {
+  type: "UPDATE_TABLE_GROUP_BY";
+  groupBy: string[];
+}
+export const updateTableGroupBy = (groupBy: string[]): UpdateTableGroupBy => ({
+  groupBy,
+  type: "UPDATE_TABLE_GROUP_BY"
+});
 
 export interface ReduxInitAction {
   type: "@@INIT";
@@ -59,4 +67,5 @@ export type Action =
   | Readonly<ToggleOutputTableModal>
   | Readonly<UpdateTableColumns>
   | Readonly<ReduxInitAction>
+  | Readonly<UpdateTableGroupBy>
   | Readonly<UpdateSource>;

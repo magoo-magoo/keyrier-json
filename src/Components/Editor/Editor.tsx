@@ -11,12 +11,12 @@ interface Props {
   onReset: () => ResetEditor;
 }
 
-export const Editor = (props: Props) => (
+export const Editor: React.SFC<Props> = ({ onReset }) => (
   <div className="Editor">
     <h1>Paste your JSON and Query it.</h1>
     <Row>
       <Col>
-        <Button className="float-right" color="warning" onClick={props.onReset}>
+        <Button className="float-right" color="warning" onClick={onReset}>
           Reset
         </Button>
       </Col>
@@ -43,5 +43,5 @@ const mapStateToProps = () => ({});
 
 export default connect(
   mapStateToProps,
-  { onReset: resetEditor },
+  { onReset: resetEditor }
 )(Editor);

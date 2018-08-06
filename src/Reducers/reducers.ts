@@ -21,14 +21,18 @@ export const rootReducer = (
     source: source(rootState.source, action)
   };
 
+  const newOutputState = output(
+    newState.output,
+    newState.source.text,
+    newState.query.text,
+    action
+  );
   return {
     ...newState,
-    output: output(
-      rootState.output,
-      newState.source.text,
-      newState.query.text,
-      action
-    )
+    output: {
+      ...newOutputState,
+      table: table(newOutputState.table, action)
+    }
   };
 };
 
@@ -90,7 +94,8 @@ export const computeOutput = (
         isArray: false,
         isModalOpen: false,
         displayedColumns: [],
-        columns: []
+        columns: [],
+        groupBy: []
       }
     };
   }
@@ -103,7 +108,8 @@ export const computeOutput = (
         array: [],
         isModalOpen: false,
         displayedColumns: [],
-        columns: []
+        columns: [],
+        groupBy: []
       }
     };
   }
@@ -138,7 +144,8 @@ export const computeOutput = (
       isArray,
       isModalOpen,
       displayedColumns,
-      columns: displayedColumns
+      columns: displayedColumns,
+      groupBy: []
     }
   };
 };
@@ -164,13 +171,32 @@ export const output = (
           isModalOpen: !previousState.table.isModalOpen
         }
       };
-    case "UPDATE_TABLE_COLUMNS":
-      return {
-        ...previousState,
-        table: { ...previousState.table, displayedColumns: action.columns }
-      };
     default:
       return previousState;
+  }
+};
+
+export const table = (state: OupoutTableState, action: Action) => {
+  switch (action.type) {
+    case "UPDATE_TABLE_COLUMNS":
+      let groupByList = state.groupBy;
+      groupByList.forEach(groupBy => {
+        if (action.columns.indexOf(groupBy) === -1) {
+          groupByList = groupByList.filter(
+            gb => action.columns.indexOf(gb) !== -1
+          );
+        }
+      });
+      return { ...state, displayedColumns: action.columns, groupBy: groupByList };
+    case "UPDATE_TABLE_GROUP_BY":
+      return {
+        ...state,
+        groupBy: action.groupBy
+          .filter(gb => state.displayedColumns.indexOf(gb) !== -1)
+          .filter(gb => gb !== "Group by...")
+      };
+    default:
+      return state;
   }
 };
 

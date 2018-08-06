@@ -19,7 +19,7 @@ interface Props {
   sourceText: string;
 }
 
-export const SourceEditor = (props: Props) => (
+export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
   <div className="SourceEditor">
     <Row>
       <Col sm={{ size: 10, offset: 2 }}>
@@ -35,19 +35,19 @@ export const SourceEditor = (props: Props) => (
           mode="json"
           theme="monokai"
           name="sourceAceEditor"
-          onChange={props.onChange}
+          onChange={onChange}
           fontSize={18}
           cursorStart={1}
           showPrintMargin={true}
           showGutter={true}
           highlightActiveLine={true}
-          value={jsonBeautify(props.sourceText)}
+          value={jsonBeautify(sourceText)}
           minLines={10}
           maxLines={20}
           wrapEnabled={true}
           setOptions={{
             showLineNumbers: true,
-            tabSize: 2,
+            tabSize: 2
           }}
           editorProps={{ $blockScrolling: Infinity }}
           width={"100%"}
@@ -58,10 +58,10 @@ export const SourceEditor = (props: Props) => (
 );
 
 const mapStateToProps = (state: Readonly<AppState>) => ({
-  sourceText: state.rootReducer.source.text,
+  sourceText: state.rootReducer.source.text
 });
 
 export default connect(
   mapStateToProps,
-  { onChange: updateSource },
+  { onChange: updateSource }
 )(SourceEditor);
