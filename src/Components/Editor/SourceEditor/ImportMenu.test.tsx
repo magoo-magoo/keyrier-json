@@ -10,8 +10,8 @@ describe("ImportMenu", () => {
 
   it("should load file content", async () => {
     const probe = { called: false };
-    const promise = new Promise<{ called: boolean }>((resolve) => {
-      setTimeout(() =>resolve(probe), 1000);
+    const promise = new Promise<{ called: boolean }>(resolve => {
+      setTimeout(() => resolve(probe), 1000);
     });
 
     const onChangeMock = () => {
@@ -23,9 +23,10 @@ describe("ImportMenu", () => {
       <ImportMenu onFileContentReady={onChangeMock} />
     );
 
+    const blob = new Blob(["File content"], { type: "text/html" });
     importMenu
       .find("#sourceFile")
-      .simulate("change", { target: { files: [new Blob()] } });
+      .simulate("change", { target: { files: [blob] } });
 
     const result = await promise;
     expect(result.called).toBeTruthy();
