@@ -21,6 +21,7 @@ import classNames from "classnames";
 import AceEditor from "react-ace";
 import "brace/mode/json";
 import "brace/theme/github";
+import { getOutputErrorMessage, getOutputIsArray, getOutputText } from "../../../Store/selectors";
 
 interface Props {
   output: string;
@@ -141,9 +142,9 @@ export class Output extends React.Component<Props, State> {
 }
 const mapStateToProps = (state: Readonly<AppState>): Props => {
   return {
-    errorMessage: state.rootReducer.output.errorMessage,
-    isArray: state.rootReducer.output.table.isArray,
-    output: state.rootReducer.output.text
+    errorMessage: getOutputErrorMessage(state),
+    isArray: getOutputIsArray(state),
+    output: getOutputText(state)
   };
 };
 

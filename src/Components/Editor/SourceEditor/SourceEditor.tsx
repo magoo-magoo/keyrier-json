@@ -45,10 +45,13 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
           minLines={10}
           maxLines={20}
           wrapEnabled={true}
-          setOptions={{
-            showLineNumbers: true,
-            tabSize: 2
-          }}
+          // debounceChangePeriod={2000}
+
+          setOptions={
+            {
+              showLineNumbers: true,
+            }
+          }
           editorProps={{ $blockScrolling: Infinity }}
           width={"100%"}
         />

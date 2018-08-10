@@ -1,4 +1,9 @@
-import { combineReducers } from "redux";
+import {
+  combineReducers,
+  Store,
+  Dispatch,
+  Reducer
+} from "redux";
 import { Action, UpdateSource } from "../Actions/actions";
 import { codeEvaluation } from "../helpers/code";
 import { jsonParseSafe } from "../helpers/json";
@@ -10,6 +15,7 @@ import {
   SourceState,
   OupoutTableState
 } from "../State/State";
+import { nameof } from "../helpers/utils";
 
 export const rootReducer = (
   rootState: Readonly<RootState> = initialState,
@@ -34,6 +40,19 @@ export const rootReducer = (
       table: table(newOutputState.table, action)
     }
   };
+};
+
+    // tslint:disable:no-console
+export const crashReporter = (rootReducerFn: Reducer<RootState>, state: RootState,action: Action) : RootState=> {
+  try {
+    return rootReducerFn(state, action);
+  } catch (error) {
+    console.group();
+    console.error("Error ! ", error);
+    console.log('state', state)
+    console.groupEnd();
+    return { ...state, error };
+  }
 };
 
 export const sourceText = (
@@ -71,8 +90,6 @@ export const outputTable = (
 ) => {
   switch (action.type) {
     case "UPDATE_TABLE_COLUMNS":
-      // tslint:disable-next-line:no-debugger
-      debugger;
       return { ...state, columns: action.columns };
     default:
       return state;
@@ -113,6 +130,7 @@ export const computeOutput = (
       }
     };
   }
+
   let displayedColumns = new Array<string>();
   const array: Array<{}> = jsonParseSafe(text);
   const isArray = Array.isArray(array);
@@ -132,6 +150,12 @@ export const computeOutput = (
       .filter(key => typeof key === "string")
       .filter(key => key.trim() !== "")
       .sort((ax, b) => ax.toLowerCase().localeCompare(b.toLowerCase()));
+
+    for (let i = 0; i < array.length; ++i) {
+      if (!array[i]) {
+        array[i] = {};
+      }
+    }
   }
   const isModalOpen =
     action.type === "TOGGLE_OUTPUT_TABLE_MODAL"
@@ -187,7 +211,11 @@ export const table = (state: OupoutTableState, action: Action) => {
           );
         }
       });
-      return { ...state, displayedColumns: action.columns, groupBy: groupByList };
+      return {
+        ...state,
+        displayedColumns: action.columns,
+        groupBy: groupByList
+      };
     case "UPDATE_TABLE_GROUP_BY":
       return {
         ...state,
@@ -209,7 +237,6 @@ export const rootReducerReset = (
   }
   return rootReducer(state, action);
 };
-
 const rootReducers = combineReducers({
   rootReducer: rootReducerReset
 });

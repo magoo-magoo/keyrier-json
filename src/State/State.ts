@@ -2,36 +2,37 @@ import { persons } from "../data/persons";
 import { jsonBeautify } from "../helpers/json";
 
 export interface QueryState {
-  text: string;
+  readonly text: string;
 }
 
 export interface SourceState {
-  text: string;
+  readonly text: string;
 }
 
 export interface OupoutState {
-  text: string;
-  errorMessage?: string;
-  table: Readonly<OupoutTableState>;
+  readonly text: string;
+  readonly errorMessage?: string;
+  readonly table: Readonly<OupoutTableState>;
 }
 
 export interface OupoutTableState {
-  array: Array<{}>;
-  isArray: boolean;
-  isModalOpen: boolean;
-  displayedColumns: string[];
-  columns: string[];
-  groupBy: string[];
+  readonly array: Array<{}>;
+  readonly isArray: boolean;
+  readonly isModalOpen: boolean;
+  readonly displayedColumns: string[];
+  readonly columns: string[];
+  readonly groupBy: string[];
 }
 
 export interface RootState {
-  source: Readonly<SourceState>;
-  query: Readonly<QueryState>;
-  output: Readonly<OupoutState>;
+  readonly source: Readonly<SourceState>;
+  readonly query: Readonly<QueryState>;
+  readonly output: Readonly<OupoutState>;
+  readonly error?: Error;
 }
 
 export interface AppState {
-  rootReducer: Readonly<RootState>;
+  readonly rootReducer: Readonly<RootState>;
 }
 
 export const initialState: Readonly<RootState> = {

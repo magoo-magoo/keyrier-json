@@ -7,9 +7,6 @@ import rootReducers, {
 } from "./reducers";
 
 describe("Reducers", () => {
-  it("rootReducers should run without crashing", () => {
-    const results = rootReducers(undefined, { type: "" });
-  });
 
   it("rootReducers should reset", () => {
     const state = {

@@ -17,6 +17,7 @@ import {
   toggleOutputTableModal,
   ToggleOutputTableModal
 } from "../../../Actions/actions";
+import { getisOutputTableModalOpen, getOutputTableData } from "../../../Store/selectors";
 
 interface Props {
   toggleModal: () => ToggleOutputTableModal;
@@ -61,8 +62,8 @@ export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
 };
 
 const mapStateToProps = (state: Readonly<AppState>) => ({
-  data: state.rootReducer.output.table.array,
-  isModalOpen: state.rootReducer.output.table.isModalOpen
+  data: getOutputTableData(state),
+  isModalOpen: getisOutputTableModalOpen(state)
 });
 
 export default connect(

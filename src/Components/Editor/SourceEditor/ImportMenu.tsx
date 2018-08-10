@@ -11,7 +11,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,
+  ModalHeader
 } from "reactstrap";
 import { UpdateSource, updateSource } from "../../../Actions/actions";
 import { AppState } from "../../../State/State";
@@ -74,12 +74,12 @@ export class ImportMenu extends Component<Props, State> {
   private toggleImportDropdown = () =>
     this.setState({
       ...this.state,
-      toggleDropdownIsOpen: !this.state.toggleDropdownIsOpen,
+      toggleDropdownIsOpen: !this.state.toggleDropdownIsOpen
     });
   private toggleModal = () =>
     this.setState({
       ...this.state,
-      modal: !this.state.modal,
+      modal: !this.state.modal
     });
 
   private onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,6 @@ export class ImportMenu extends Component<Props, State> {
         if (fileReader.result) {
           this.props.onFileContentReady(fileReader.result.toString());
         }
-        this.props.onFileContentReady('');
       };
       fileReader.readAsText(e.target.files[0]);
     }
@@ -97,10 +96,10 @@ export class ImportMenu extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Readonly<AppState>) => ({
-  sourceText: state.rootReducer.source.text,
+  sourceText: state.rootReducer.source.text
 });
 
 export default connect(
   mapStateToProps,
-  { onFileContentReady: updateSource },
+  { onFileContentReady: updateSource }
 )(ImportMenu);

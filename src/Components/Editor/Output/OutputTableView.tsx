@@ -27,14 +27,15 @@ export const OutputTableView: React.SFC<Props> = ({
   }
 
   const tableColumnConfig = displayedColumns.map<Column>(key => ({
-    Aggregated: (row: any) => row.value,
-    Cell: (cellProps: any) => customToString(cellProps.value),
+    Aggregated: (row: any) => row ? row.value : '',
+    Cell: (cellProps: any) => cellProps ? customToString(cellProps.value): '',
     Header: key,
     accessor: key,
-    className: "text-center"
+    className: "text-center",
+    
   }));
 
-  const defaultFilterMethod = (filter: Filter, row: any) =>
+  const defaultFilterMethod = (filter: Filter, row: any) => filter && row && 
     containsIgnoreCase(customToString(row[filter.id]), filter.value);
 
   return (
