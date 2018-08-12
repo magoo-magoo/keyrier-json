@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Input, Row, Collapse, Button } from "reactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
-import { AppState } from "src/State/State";
+import { AppState, itemType } from "src/State/State";
 import Select from "react-select";
 import {
   updateTableColumns,
@@ -13,7 +13,7 @@ import {
 import * as XLSX from "xlsx";
 
 interface Props {
-  data: Array<{}>;
+  data: itemType[];
   displayedColumns: string[];
   groupBy: string[];
   columns: string[];

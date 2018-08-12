@@ -1,3 +1,5 @@
+import { logError } from "./logger";
+
 export const jsonBeautify = (str: string) => {
   if (!str || str.trim() === "") {
     return "";
@@ -11,8 +13,7 @@ export const jsonBeautify = (str: string) => {
   try {
     return JSON.stringify(parsed, null, 2);
   } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.error("jsonBeautify", error.message, str);
+    logError(error, str);
   }
   return str;
 };

@@ -1,10 +1,10 @@
-import { initialState } from "../State/State";
-import rootReducers, {
+import {
   output,
   query,
   rootReducerReset,
   source
 } from "./reducers";
+import { getInitialState } from "../State/State";
 
 describe("Reducers", () => {
 
@@ -28,9 +28,8 @@ describe("Reducers", () => {
       type: "RESET_EDITOR"
     });
 
-    expect(results.query).toEqual(initialState.query);
-    expect(results.source).toEqual(initialState.source);
-    expect(results.output).not.toEqual(initialState.output);
+    expect(results.query).toEqual(getInitialState().query);
+    expect(results.source).toEqual(getInitialState().source);
   });
 
   it("update query action should update", () => {

@@ -1,24 +1,20 @@
-import {
-  combineReducers,
-  Store,
-  Dispatch,
-  Reducer
-} from "redux";
+import { combineReducers, Store, Dispatch, Reducer } from "redux";
 import { Action, UpdateSource } from "../Actions/actions";
 import { codeEvaluation } from "../helpers/code";
 import { jsonParseSafe } from "../helpers/json";
 import {
-  initialState,
   OupoutState,
   QueryState,
   RootState,
   SourceState,
-  OupoutTableState
+  OupoutTableState,
+  getInitialState,
+  itemType
 } from "../State/State";
-import { nameof } from "../helpers/utils";
+import { logError, logWarning } from "../helpers/logger";
 
 export const rootReducer = (
-  rootState: Readonly<RootState> = initialState,
+  rootState: Readonly<RootState> = getInitialState(),
   action: Action
 ): RootState => {
   const newState = {
@@ -42,15 +38,17 @@ export const rootReducer = (
   };
 };
 
-    // tslint:disable:no-console
-export const crashReporter = (rootReducerFn: Reducer<RootState>, state: RootState,action: Action) : RootState=> {
+export const crashReporter = (
+  rootReducerFn: Reducer<RootState>,
+  state: RootState,
+  action: Action
+): RootState => {
   try {
     return rootReducerFn(state, action);
   } catch (error) {
-    console.group();
-    console.error("Error ! ", error);
-    console.log('state', state)
-    console.groupEnd();
+    logError(error, state);
+    logWarning("You may need to clear local storage !!!");
+
     return { ...state, error };
   }
 };
@@ -132,7 +130,7 @@ export const computeOutput = (
   }
 
   let displayedColumns = new Array<string>();
-  const array: Array<{}> = jsonParseSafe(text);
+  const array: itemType[] = jsonParseSafe(text);
   const isArray = Array.isArray(array);
   if (isArray) {
     const keyMap = new Map<any, any>();
@@ -141,7 +139,7 @@ export const computeOutput = (
       .filter(d => typeof d === "object")
       .filter(d => !Object.is(d, {}))
       .filter(d => !Array.isArray(d))
-      .map(d => Object.keys(d))
+      .map(d => (d ? Object.keys(d) : []))
       .forEach(keysToAdd => {
         keysToAdd.forEach(key => (keyMap[key] = key));
       });
@@ -151,11 +149,11 @@ export const computeOutput = (
       .filter(key => key.trim() !== "")
       .sort((ax, b) => ax.toLowerCase().localeCompare(b.toLowerCase()));
 
-    for (let i = 0; i < array.length; ++i) {
-      if (!array[i]) {
-        array[i] = {};
-      }
-    }
+    // for (let i = 0; i < array.length; ++i) {
+    //   if (!array[i]) {
+    //     array[i] = {};
+    //   }
+    // }
   }
   const isModalOpen =
     action.type === "TOGGLE_OUTPUT_TABLE_MODAL"
@@ -233,7 +231,7 @@ export const rootReducerReset = (
   action: Action
 ) => {
   if (action.type === "RESET_EDITOR") {
-    state = initialState;
+    return rootReducer({ ...getInitialState() }, action);
   }
   return rootReducer(state, action);
 };

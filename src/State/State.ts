@@ -1,5 +1,4 @@
 import { persons } from "../data/persons";
-import { jsonBeautify } from "../helpers/json";
 
 export interface QueryState {
   readonly text: string;
@@ -15,8 +14,17 @@ export interface OupoutState {
   readonly table: Readonly<OupoutTableState>;
 }
 
+export type itemType =
+  | null
+  | undefined
+  | string
+  | boolean
+  | number
+  | never
+  | any;
+
 export interface OupoutTableState {
-  readonly array: Array<{}>;
+  readonly array: Readonly<itemType[]>;
   readonly isArray: boolean;
   readonly isModalOpen: boolean;
   readonly displayedColumns: string[];
@@ -35,7 +43,7 @@ export interface AppState {
   readonly rootReducer: Readonly<RootState>;
 }
 
-export const initialState: Readonly<RootState> = {
+const initialState: Readonly<RootState> = {
   output: {
     text: "",
     table: {
@@ -58,3 +66,5 @@ _.chain(data)
   },
   source: { text: JSON.stringify(persons) }
 };
+
+export const getInitialState = () => initialState;

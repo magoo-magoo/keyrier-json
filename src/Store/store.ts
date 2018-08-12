@@ -1,7 +1,8 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import rootReducers, { crashReporter } from "../Reducers/reducers";
-import { initialState, RootState } from "../State/State";
-import { mergeWith } from "lodash";
+import { createStore, compose } from "redux";
+import rootReducers from "../Reducers/reducers";
+import { RootState, getInitialState } from "../State/State";
+import { merge } from "lodash";
+import { logError } from "../helpers/logger";
 
 const persistStore = (rootState: RootState) => {
   if (window.localStorage) {
@@ -16,30 +17,17 @@ const loadStore = () => {
   return null;
 };
 
-let preloadState = initialState;
+let preloadState = getInitialState();
 
-const customizer = (
-  value: any,
-  srcValue: any,
-  key: string,
-  object: any,
-  source: any
-) => {
-  if (Array.isArray(value)) {
-    return srcValue;
-  }
-  return undefined;
-};
 
 try {
   const savedStateString = loadStore();
   if (savedStateString) {
     preloadState = JSON.parse(savedStateString);
+    preloadState = merge({}, getInitialState(), preloadState);
   }
-  preloadState = mergeWith(initialState, preloadState, customizer);
 } catch (error) {
-  // tslint:disable-next-line:no-console
-  console.error("State Load", error);
+  logError(error);
 }
 
 const composeEnhancers =
