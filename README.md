@@ -5,7 +5,7 @@
 [![technical debt](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=sqale_index)](https://sonarcloud.io/dashboard?id=keyrier-json)
 [![coverage](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=coverage)](https://sonarcloud.io/dashboard?id=keyrier-json)
 
-## [Live demo](https://magoo-magoo.github.io/keyrier-json)
+## [Live demo](https://magoo-magoo.github.io/keyrier-json) and [here](https://keyrier.netlify.com)
 
 A web application to perfom query on JSON object. Built in react/redux.
 

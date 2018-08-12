@@ -148,12 +148,6 @@ export const computeOutput = (
       .filter(key => typeof key === "string")
       .filter(key => key.trim() !== "")
       .sort((ax, b) => ax.toLowerCase().localeCompare(b.toLowerCase()));
-
-    // for (let i = 0; i < array.length; ++i) {
-    //   if (!array[i]) {
-    //     array[i] = {};
-    //   }
-    // }
   }
   const isModalOpen =
     action.type === "TOGGLE_OUTPUT_TABLE_MODAL"

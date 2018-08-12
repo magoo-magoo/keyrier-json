@@ -52,7 +52,7 @@ export const OutputTableView: React.SFC<Props> = ({
           <ReactTable
             noDataText="Oh Noes!"
             className="-highlight"
-            data={data}
+            data={data.map(e => (e ? e : {}))}
             defaultPageSize={20}
             columns={tableColumnConfig}
             filterable={true}
