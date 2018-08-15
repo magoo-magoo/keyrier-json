@@ -17,7 +17,7 @@
     "react-table": "6.8.6",
     "reactstrap": "6.3.1",
     "redux": "4.0.0",
-    "xlsx": "0.13.3"
+    "xlsx": "0.13.4"
   },
   "scripts": {
     "start": "react-scripts-ts start",
