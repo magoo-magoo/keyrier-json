@@ -45,7 +45,7 @@
     "enzyme": "3.4.1",
     "enzyme-adapter-react-16": "1.2.0",
     "gh-pages": "1.2.0",
-    "react-scripts": "1.1.4",
+    "react-scripts": "1.1.5",
     "react-test-renderer": "16.4.2",
     "redux-devtools": "3.4.1",
     "typescript": "3.0.1"
