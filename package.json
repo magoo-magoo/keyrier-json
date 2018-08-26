@@ -16,7 +16,7 @@
     "react-scripts-ts": "2.17.0",
     "react-select": "2.0.0",
     "react-table": "6.8.6",
-    "reactstrap": "6.3.1",
+    "reactstrap": "6.4.0",
     "redux": "4.0.0",
     "xlsx": "0.13.4"
   },
