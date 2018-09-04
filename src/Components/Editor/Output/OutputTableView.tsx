@@ -1,14 +1,11 @@
-import React, { Fragment } from "react";
+import * as React from "react";
+import { Fragment } from "react";
 import ReactTable, { Column, Filter } from "react-table";
 import { Col, Row } from "reactstrap";
 import { customToString, containsIgnoreCase } from "../../../helpers/string";
 import "./OutputTable.css";
 import { connect } from "react-redux";
 import { AppState, itemType } from "src/State/State";
-import {
-  UpdateTableColumns,
-  UpdateTableGroupBy
-} from "../../../Actions/actions";
 import TableAdvancedOptions from "./TableAdvancedOptions";
 
 interface Props {

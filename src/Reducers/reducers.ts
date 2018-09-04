@@ -1,4 +1,4 @@
-import { combineReducers, Store, Dispatch, Reducer } from "redux";
+import { combineReducers, Reducer } from "redux";
 import { Action, UpdateSource } from "../Actions/actions";
 import { codeEvaluation } from "../helpers/code";
 import { jsonParseSafe } from "../helpers/json";
@@ -93,7 +93,9 @@ export const outputTable = (
       return state;
   }
 };
-
+interface Map<T> {
+  [key: string]: T;
+}
 export const computeOutput = (
   previousState: Readonly<OupoutState>,
   sourceString: string,
@@ -129,11 +131,12 @@ export const computeOutput = (
     };
   }
 
+  
   let displayedColumns = new Array<string>();
   const array: itemType[] = jsonParseSafe(text);
   const isArray = Array.isArray(array);
   if (isArray) {
-    const keyMap = new Map<any, any>();
+    const keyMap: Map<string> = {};
     array
       .filter(d => d)
       .filter(d => typeof d === "object")
@@ -141,7 +144,7 @@ export const computeOutput = (
       .filter(d => !Array.isArray(d))
       .map(d => (d ? Object.keys(d) : []))
       .forEach(keysToAdd => {
-        keysToAdd.forEach(key => (keyMap[key] = key));
+        keysToAdd.forEach(key => (keyMap[key]= key));
       });
     displayedColumns = Object.keys(keyMap)
       .filter(key => key)

@@ -10,18 +10,15 @@ import {
   TabContent,
   TabPane
 } from "reactstrap";
-import { jsonBeautify, jsonParseSafe } from "../../../helpers/json";
+import { jsonBeautify } from "../../../helpers/json";
 import OutputTable from "./OutputTable";
 import { AppState } from "../../../State/State";
 import { Fragment } from "react";
 
 import classNames from "classnames";
 
-// Order matter for Ace editor
-import AceEditor from "react-ace";
-import "brace/mode/json";
-import "brace/theme/github";
 import { getOutputErrorMessage, getOutputIsArray, getOutputText } from "../../../Store/selectors";
+import { LoadableAce } from "../AceEditor";
 
 interface Props {
   output: string;
@@ -87,7 +84,7 @@ export class Output extends React.Component<Props, State> {
           <TabPane tabId="RawJson">
             <Row>
               <Col sm={{ size: 10, offset: 2 }}>
-                <AceEditor
+                <LoadableAce
                   mode="json"
                   theme="github"
                   name="outputAceEditor"

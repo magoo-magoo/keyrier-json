@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Col, Input, Row, Collapse, Button } from "reactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
@@ -10,7 +10,6 @@ import {
   UpdateTableGroupBy,
   updateTableGroupBy
 } from "../../../Actions/actions";
-import * as XLSX from "xlsx";
 
 interface Props {
   data: itemType[];
@@ -98,12 +97,12 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
       optionsCollapsed: !this.state.optionsCollapsed
     });
 
-  private readonly handleOnclickOnExportToExcel = () => {
-    const workBook = XLSX.utils.book_new();
-    const workSheet = XLSX.utils.json_to_sheet(this.props.data);
-    XLSX.utils.book_append_sheet(workBook, workSheet, "keyrier-json");
-
-    XLSX.writeFile(workBook, "export.xlsx");
+  private readonly handleOnclickOnExportToExcel = async () => {
+      const xlsx = await import(/* webpackChunkName: "xlsx.js" */"xlsx");
+      const workBook = xlsx.utils.book_new();
+      const workSheet = xlsx.utils.json_to_sheet(this.props.data);
+      xlsx.utils.book_append_sheet(workBook, workSheet, "keyrier-json");
+      xlsx.writeFile(workBook, "export.xlsx");
   };
 }
 

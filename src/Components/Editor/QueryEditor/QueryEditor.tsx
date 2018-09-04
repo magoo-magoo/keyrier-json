@@ -1,17 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-// Order matter for Ace editor
-// tslint:disable-next-line:ordered-imports
-import AceEditor from "react-ace";
-// tslint:disable-next-line:ordered-imports
-import "brace/mode/javascript";
-// tslint:disable-next-line:ordered-imports
-import "brace/theme/monokai";
-
 import { Col, Row } from "reactstrap";
 import { UpdateQueryAction, updateQuery } from "../../../Actions/actions";
 import { AppState } from "../../../State/State";
+import { LoadableAce } from "../AceEditor";
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
@@ -29,7 +22,7 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
         </Row>
         <Row>
           <Col sm={{ size: 10, offset: 2 }}>
-            <AceEditor
+            <LoadableAce
               mode="javascript"
               theme="monokai"
               name="queryAceEditor"

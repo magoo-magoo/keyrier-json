@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import * as React from "react";
 import { QueryEditor } from "./QueryEditor";
 
-const onChangeMock = (e: string) => ({} as any)
+const onChangeMock = (_: string) => ({} as any)
 
 describe("QueryEditor", () => {
 

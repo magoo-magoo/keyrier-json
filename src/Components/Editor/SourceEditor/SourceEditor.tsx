@@ -1,18 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-// Order matter for Ace editor
-import AceEditor from "react-ace";
-// tslint:disable-next-line:ordered-imports
-import "brace/theme/monokai";
-// tslint:disable-next-line:ordered-imports
-import "brace/mode/json";
-
 import { Col, Row } from "reactstrap";
 import { UpdateSource, updateSource } from "../../../Actions/actions";
 import { jsonBeautify } from "../../../helpers/json";
 import { AppState } from "../../../State/State";
 import ImportMenu from "./ImportMenu";
+import { LoadableAce } from "../AceEditor";
 
 interface Props {
   onChange: (val: string) => UpdateSource;
@@ -31,7 +25,7 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
         <ImportMenu />
       </Col>
       <Col sm={10}>
-        <AceEditor
+        <LoadableAce
           mode="json"
           theme="monokai"
           name="sourceAceEditor"

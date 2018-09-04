@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Button, Col, Row } from "reactstrap";
-import { Action, ResetEditor, resetEditor } from "../../Actions/actions";
+import { ResetEditor, resetEditor } from "../../Actions/actions";
 import "./Editor.css";
 import Output from "./Output/Output";
 import QueryEditor from "./QueryEditor/QueryEditor";
