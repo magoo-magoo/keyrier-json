@@ -3,13 +3,13 @@ import { Col, Input, Row, Collapse, Button } from "reactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
 import { AppState, itemType } from "src/State/State";
-import Select from "react-select";
 import {
   updateTableColumns,
   UpdateTableColumns,
   UpdateTableGroupBy,
   updateTableGroupBy
 } from "../../../Actions/actions";
+import { LoadableReactSelect } from "./LoadableReactSelect";
 
 interface Props {
   data: itemType[];
@@ -66,7 +66,7 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
             >
               Export to Excel (.xlsx)
             </Button>
-            <Select
+            <LoadableReactSelect
               options={columnOptions}
               value={this.props.displayedColumns.map(k => ({
                 value: k,

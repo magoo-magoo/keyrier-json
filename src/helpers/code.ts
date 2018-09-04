@@ -1,4 +1,6 @@
-import * as lodash from "lodash";
+let lodash: _.LoDashStatic | null = null;
+
+import(/* webpackChunkName: "lodash" */ 'lodash').then(module => lodash = module);
 
 export const codeEvaluation = (
   sourceString: string,

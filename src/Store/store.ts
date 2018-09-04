@@ -1,7 +1,6 @@
 import { createStore, compose } from "redux";
 import rootReducers from "../Reducers/reducers";
 import { RootState, getInitialState } from "../State/State";
-import { merge } from "lodash";
 import { logError } from "../helpers/logger";
 
 const persistStore = (rootState: RootState) => {
@@ -17,37 +16,40 @@ const loadStore = () => {
   return null;
 };
 
-let preloadState = getInitialState();
+export const configureStore = async () => {
+  let preloadState = getInitialState();
 
-
-try {
-  const savedStateString = loadStore();
-  if (savedStateString) {
-    preloadState = JSON.parse(savedStateString);
-    preloadState = merge({}, getInitialState(), preloadState);
+  try {
+    const savedStateString = loadStore();
+    if (savedStateString) {
+      preloadState = JSON.parse(savedStateString);
+      const lodashModule = await import(/* webpackChunkName: "lodash" */ "lodash");
+      const merge = lodashModule.merge;
+      preloadState = merge({}, getInitialState(), preloadState);
+    }
+  } catch (error) {
+    logError(error);
   }
-} catch (error) {
-  logError(error);
-}
 
-const composeEnhancers =
-  typeof window === "object" &&
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-      })
-    : compose;
+  const composeEnhancers =
+    typeof window === "object" &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+      ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+          // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+        })
+      : compose;
 
-const enhancer = composeEnhancers();
+  const enhancer = composeEnhancers();
 
-const store = createStore(
-  rootReducers,
-  { rootReducer: preloadState },
-  enhancer
-);
+  const store = createStore(
+    rootReducers,
+    { rootReducer: preloadState },
+    enhancer
+  );
 
-store.subscribe(() => {
-  persistStore(store.getState().rootReducer);
-});
+  store.subscribe(() => {
+    persistStore(store.getState().rootReducer);
+  });
 
-export default store;
+  return store;
+};
