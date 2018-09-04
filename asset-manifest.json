@@ -1,6 +1,18 @@
 {
+  "brace/mode/javascript.js": "static/js/brace/mode/javascript.f55c7b78.chunk.js",
+  "brace/mode/javascript.js.map": "static/js/brace/mode/javascript.f55c7b78.chunk.js.map",
+  "brace/mode/json.js": "static/js/brace/mode/json.c78e761c.chunk.js",
+  "brace/mode/json.js.map": "static/js/brace/mode/json.c78e761c.chunk.js.map",
+  "brace/theme/github.js": "static/js/brace/theme/github.f8b2ae24.chunk.js",
+  "brace/theme/github.js.map": "static/js/brace/theme/github.f8b2ae24.chunk.js.map",
+  "brace/theme/monokai.js": "static/js/brace/theme/monokai.e0c60230.chunk.js",
+  "brace/theme/monokai.js.map": "static/js/brace/theme/monokai.e0c60230.chunk.js.map",
   "main.css": "static/css/main.1f3271f3.css",
   "main.css.map": "static/css/main.1f3271f3.css.map",
-  "main.js": "static/js/main.0760f90f.js",
-  "main.js.map": "static/js/main.0760f90f.js.map"
+  "main.js": "static/js/main.c5381267.js",
+  "main.js.map": "static/js/main.c5381267.js.map",
+  "react-ace.js": "static/js/react-ace.fdbaa557.chunk.js",
+  "react-ace.js.map": "static/js/react-ace.fdbaa557.chunk.js.map",
+  "xlsx.js.js": "static/js/xlsx.js.6ae2e27d.chunk.js",
+  "xlsx.js.js.map": "static/js/xlsx.js.6ae2e27d.chunk.js.map"
 }
