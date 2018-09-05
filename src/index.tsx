@@ -5,6 +5,8 @@ import { configureStore } from "./Store/store";
 import * as React from "react";
 import App from "./Components/App";
 import * as ReactDOM from "react-dom";
+
+// unawaited async load
 import(/* webpackChunkName: "bootswatch/dist/sandstone/bootstrap.min.css" */"bootswatch/dist/sandstone/bootstrap.min.css");
 
 const start = async () => {

@@ -1,10 +1,12 @@
-let lodash: _.LoDashStatic | null = null;
 
-import(/* webpackChunkName: "lodash" */ 'lodash').then(module => lodash = module);
+let lodash: _.LoDashStatic | null = null;
+import(/* webpackChunkName: "lodash" */ "lodash").then(module => {
+  lodash = module;
+});
 
 export const codeEvaluation = (
   sourceString: string,
-  queryString: string,
+  queryString: string
 ): string | null | Error => {
   if (!sourceString || sourceString.trim() === "") {
     return null;

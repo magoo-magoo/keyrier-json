@@ -17,13 +17,13 @@ const loadStore = () => {
 };
 
 export const configureStore = async () => {
+  const lodashModule = await import(/* webpackChunkName: "lodash" */ "lodash");
   let preloadState = getInitialState();
 
   try {
     const savedStateString = loadStore();
     if (savedStateString) {
       preloadState = JSON.parse(savedStateString);
-      const lodashModule = await import(/* webpackChunkName: "lodash" */ "lodash");
       const merge = lodashModule.merge;
       preloadState = merge({}, getInitialState(), preloadState);
     }
