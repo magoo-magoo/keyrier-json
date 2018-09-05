@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { Button, Col, Row } from "reactstrap";
+import { Button, Col, Row } from "../Deferred/DeferredReactstrap";
 import { ResetEditor, resetEditor } from "../../Actions/actions";
 import "./Editor.css";
 import Output from "./Output/Output";

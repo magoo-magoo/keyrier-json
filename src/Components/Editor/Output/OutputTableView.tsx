@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Fragment } from "react";
-import { Col, Row } from "reactstrap";
+import { Col, Row } from "../../Deferred/DeferredReactstrap";
 import { customToString, containsIgnoreCase } from "../../../helpers/string";
 import "./OutputTable.css";
 import { connect } from "react-redux";
 import { AppState, itemType } from "src/State/State";
 import TableAdvancedOptions from "./TableAdvancedOptions";
 
-import { LoadableReactTable } from "./LoadableReactTable";
+import { LoadableReactTable } from "../../Deferred/DeferredReactTable";
 import { Column, Filter } from "react-table";
 
 interface Props {

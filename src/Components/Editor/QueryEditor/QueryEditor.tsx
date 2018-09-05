@@ -1,10 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { Col, Row } from "reactstrap";
+import { Col, Row } from "../../Deferred/DeferredReactstrap";
 import { UpdateQueryAction, updateQuery } from "../../../Actions/actions";
 import { AppState } from "../../../State/State";
-import { LoadableAce } from "../AceEditor";
+import { AceEditor } from "../../Deferred/DeferredAceEditor";
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
@@ -17,12 +17,12 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
       <div>
         <Row>
           <Col sm={{ size: 10, offset: 2 }}>
-            <h5>Type your query:</h5>
+            <h3>Type your query:</h3>
           </Col>
         </Row>
         <Row>
           <Col sm={{ size: 10, offset: 2 }}>
-            <LoadableAce
+            <AceEditor
               mode="javascript"
               theme="monokai"
               name="queryAceEditor"

@@ -8,13 +8,13 @@ import {
   NavbarBrand,
   NavItem,
   NavLink,
-} from "reactstrap";
+} from "./Deferred/DeferredReactstrap";
 
 import Editor from "./Editor/Editor";
 
 export const App = () => (
   <div className="App">
-    <Navbar color="dark" dark={true} expand="md">
+    <Navbar color="primary" expand="md">
       <NavbarBrand href="/">Keyrier JSON</NavbarBrand>
       <Nav className="ml-auto" navbar={true}>
         <NavItem>

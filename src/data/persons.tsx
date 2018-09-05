@@ -1,5 +1,4 @@
 export const persons = {
-  errors: [],
   results: [
     {
       _id: "5b550b10ee94858ca7dc48bc",

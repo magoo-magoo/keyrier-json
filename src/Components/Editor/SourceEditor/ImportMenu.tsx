@@ -12,7 +12,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader
-} from "reactstrap";
+} from "../../Deferred/DeferredReactstrap";
 import { UpdateSource, updateSource } from "../../../Actions/actions";
 import { AppState } from "../../../State/State";
 

@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Col, Input, Row, Collapse, Button } from "reactstrap";
+import {
+  Col,
+  Input,
+  Row,
+  Collapse,
+  Button
+} from "../../Deferred/DeferredReactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
 import { AppState, itemType } from "src/State/State";
@@ -9,7 +15,7 @@ import {
   UpdateTableGroupBy,
   updateTableGroupBy
 } from "../../../Actions/actions";
-import { LoadableReactSelect } from "./LoadableReactSelect";
+import { LoadableReactSelect } from "../../Deferred/DeferredReactSelect";
 
 interface Props {
   data: itemType[];
@@ -42,6 +48,7 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
           <Button
             className={"float-left"}
             color="primary"
+            block={true}
             onClick={this.toggleCollapseOptions}
           >
             {this.state.optionsCollapsed
@@ -98,11 +105,11 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
     });
 
   private readonly handleOnclickOnExportToExcel = async () => {
-      const xlsx = await import(/* webpackChunkName: "xlsx.js" */"xlsx");
-      const workBook = xlsx.utils.book_new();
-      const workSheet = xlsx.utils.json_to_sheet(this.props.data);
-      xlsx.utils.book_append_sheet(workBook, workSheet, "keyrier-json");
-      xlsx.writeFile(workBook, "export.xlsx");
+    const xlsx = await import(/* webpackChunkName: "xlsx.js" */ "xlsx");
+    const workBook = xlsx.utils.book_new();
+    const workSheet = xlsx.utils.json_to_sheet(this.props.data);
+    xlsx.utils.book_append_sheet(workBook, workSheet, "keyrier-json");
+    xlsx.writeFile(workBook, "export.xlsx");
   };
 }
 

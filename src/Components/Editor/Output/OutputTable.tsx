@@ -8,7 +8,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter
-} from "reactstrap";
+} from "../../Deferred/DeferredReactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
 import { AppState } from "src/State/State";
@@ -29,8 +29,6 @@ export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
     <Fragment>
       <Modal
         isOpen={isModalOpen}
-        modalTransition={{ timeout: 700 }}
-        backdropTransition={{ timeout: 1300 }}
         toggle={toggleModal}
       >
         <ModalHeader toggle={toggleModal}>Table view</ModalHeader>
@@ -46,7 +44,7 @@ export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
       <div>
         <Row>
           <Col>
-            <Button color="dark" outline={true} onClick={toggleModal}>
+            <Button block={true} color="dark" outline={true} onClick={toggleModal}>
               Display results table fullscreen
             </Button>
           </Col>

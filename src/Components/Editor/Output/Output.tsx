@@ -9,7 +9,7 @@ import {
   NavLink,
   TabContent,
   TabPane
-} from "reactstrap";
+} from "../../Deferred/DeferredReactstrap";
 import { jsonBeautify } from "../../../helpers/json";
 import OutputTable from "./OutputTable";
 import { AppState } from "../../../State/State";
@@ -17,8 +17,12 @@ import { Fragment } from "react";
 
 import classNames from "classnames";
 
-import { getOutputErrorMessage, getOutputIsArray, getOutputText } from "../../../Store/selectors";
-import { LoadableAce } from "../AceEditor";
+import {
+  getOutputErrorMessage,
+  getOutputIsArray,
+  getOutputText
+} from "../../../Store/selectors";
+import { AceEditor } from "../../Deferred/DeferredAceEditor";
 
 interface Props {
   output: string;
@@ -30,7 +34,7 @@ interface State {
   activeTab: tabType;
 }
 
-type tabType = "RawJson" |"Table";
+type tabType = "RawJson" | "Table";
 
 export class Output extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -54,7 +58,8 @@ export class Output extends React.Component<Props, State> {
               <NavItem>
                 <NavLink
                   className={classNames({
-                    active: !this.props.isArray || this.state.activeTab === "RawJson"
+                    active:
+                      !this.props.isArray || this.state.activeTab === "RawJson"
                   })}
                   // tslint:disable-next-line:jsx-no-lambda
                   onClick={() => {
@@ -84,7 +89,7 @@ export class Output extends React.Component<Props, State> {
           <TabPane tabId="RawJson">
             <Row>
               <Col sm={{ size: 10, offset: 2 }}>
-                <LoadableAce
+                <AceEditor
                   mode="json"
                   theme="github"
                   name="outputAceEditor"
@@ -118,7 +123,7 @@ export class Output extends React.Component<Props, State> {
       <div>
         <Row>
           <Col sm={{ size: 10, offset: 2 }}>
-            <h5>Output:</h5>
+            <h3>Output:</h3>
           </Col>
         </Row>
         <div hidden={!this.props.errorMessage}>
