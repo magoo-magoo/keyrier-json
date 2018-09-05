@@ -51,7 +51,7 @@
     "react-scripts": "1.1.5",
     "react-test-renderer": "16.4.2",
     "redux-devtools": "3.4.1",
-    "typescript": "3.0.1"
+    "typescript": "3.0.3"
   },
   "jest": {
     "collectCoverageFrom": [
