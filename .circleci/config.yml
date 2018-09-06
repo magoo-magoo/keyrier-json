@@ -37,6 +37,3 @@ jobs:
       
       - run: npm run build
 
-      - run: npm run deploy
-
-
