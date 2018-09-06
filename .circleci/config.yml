@@ -33,10 +33,10 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
        
-      - run: yarn test --coverage
+      - run: npm test --coverage
       
-      - run: yarn run build
+      - run: npm run build
 
-      - run: yarn run deploy
+      - run: npm run deploy
 
 
