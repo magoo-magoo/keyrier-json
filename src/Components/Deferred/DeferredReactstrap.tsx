@@ -89,7 +89,7 @@ export const ButtonDropdown = Loadable({
     await import(/* webpackChunkName: "reactstrap/lib/ButtonDropdown" */ "reactstrap/lib/ButtonDropdown")
 });
 export const DropdownItem = Loadable({
-  loading: Loading(""),
+  loading: Loading("DropdownItem"),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/DropdownItem" */ "reactstrap/lib/DropdownItem")
 });

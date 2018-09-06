@@ -2,7 +2,7 @@ import * as React from "react";
 
 const CustomLoading = (
   props: LoadableExport.LoadingComponentProps,
-  componentName?: string
+  componentName: string
 ) => {
   if (props.error) {
     return <div>{props.error}</div>;
@@ -12,11 +12,7 @@ const CustomLoading = (
     return <React.Fragment />;
   }
 
-  if (typeof componentName === "string") {
-    return <div>{componentName} loading...</div>;
-  }
-
-  return <div>Loading...</div>;
+  return <div>{componentName} loading...</div>;
 };
 
 export const Loading = (componentName: string) => (

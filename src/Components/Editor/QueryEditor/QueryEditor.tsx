@@ -35,9 +35,13 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
               editorProps={{ $blockScrolling: Infinity }}
               setOptions={{
                 showLineNumbers: true,
-                tabSize: 2
+                tabSize: 2,
+                enableSnippets: true,
+                dragEnabled: true
               }}
               width={"100%"}
+              enableBasicAutocompletion={true}
+              enableLiveAutocompletion={true}
             />
           </Col>
         </Row>
