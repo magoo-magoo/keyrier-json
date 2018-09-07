@@ -1,13 +1,7 @@
-import {
-  output,
-  query,
-  rootReducerReset,
-  source
-} from "./reducers";
+import { output, query, rootReducerReset, source } from "./reducers";
 import { getInitialState } from "../State/State";
 
 describe("Reducers", () => {
-
   it("rootReducers should reset", () => {
     const state = {
       output: {

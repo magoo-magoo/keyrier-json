@@ -1,6 +1,11 @@
 import { codeEvaluation } from "./code";
 
 describe("code helpers", () => {
+
+  beforeAll(async()=> {
+     (window as any)._ = await import(/* webpackChunkName: "lodash" */ "lodash");
+  })
+
   it("should eval simple object", () => {
     const result = codeEvaluation('{"a": 1}', 'data.a');
     expect(result).toEqual('1');
