@@ -4,6 +4,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import { configureStore } from "./Store/store";
 import * as React from "react";
 import App from "./Components/App";
+import(/* webpackChunkName: "bootswatch/dist/sandstone/bootstrap.min.css" */ "bootswatch/dist/sandstone/bootstrap.min.css");
 
 const start = async () => {
   const promises = await Promise.all([
@@ -24,7 +25,6 @@ const start = async () => {
 
   registerServiceWorker();
 
-  import(/* webpackChunkName: "bootswatch/dist/sandstone/bootstrap.min.css" */ "bootswatch/dist/sandstone/bootstrap.min.css");
   require("react-loadable").preloadAll();
 };
 
