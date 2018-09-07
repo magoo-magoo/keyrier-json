@@ -24,7 +24,7 @@ export type itemType =
   | any;
 
 export interface OupoutTableState {
-  readonly array: Readonly<itemType[]>;
+  readonly array: itemType[];
   readonly isArray: boolean;
   readonly isModalOpen: boolean;
   readonly displayedColumns: string[];
