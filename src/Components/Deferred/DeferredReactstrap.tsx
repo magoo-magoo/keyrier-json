@@ -123,3 +123,13 @@ export const Progress = Loadable({
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/Progress" */ "reactstrap/lib/Progress")
 });
+export const Form = Loadable({
+  loading: Loading("Form"),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/Form" */ "reactstrap/lib/Form")
+});
+export const FormGroup = Loadable({
+  loading: Loading("FormGroup"),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/FormGroup" */ "reactstrap/lib/FormGroup")
+});

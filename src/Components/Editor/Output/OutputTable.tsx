@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Fragment } from "react";
 import {
   Col,
   Row,
@@ -17,7 +16,10 @@ import {
   toggleOutputTableModal,
   ToggleOutputTableModal
 } from "../../../Actions/actions";
-import { getisOutputTableModalOpen, getOutputTableData } from "../../../Store/selectors";
+import {
+  getisOutputTableModalOpen,
+  getOutputTableData
+} from "../../../Store/selectors";
 
 interface Props {
   toggleModal: () => ToggleOutputTableModal;
@@ -26,11 +28,8 @@ interface Props {
 
 export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
   return (
-    <Fragment>
-      <Modal
-        isOpen={isModalOpen}
-        toggle={toggleModal}
-      >
+    <div className="output-table">
+      <Modal isOpen={isModalOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Table view</ModalHeader>
         <ModalBody>
           <OutputTableView />
@@ -44,7 +43,12 @@ export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
       <div>
         <Row>
           <Col>
-            <Button block={true} color="dark" outline={true} onClick={toggleModal}>
+            <Button
+              block={true}
+              color="dark"
+              outline={true}
+              onClick={toggleModal}
+            >
               Display results table fullscreen
             </Button>
           </Col>
@@ -55,7 +59,7 @@ export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
           </Col>
         </Row>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

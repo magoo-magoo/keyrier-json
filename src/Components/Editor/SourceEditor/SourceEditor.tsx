@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
-  <div className="SourceEditor">
+  <React.Fragment>
     <Row>
       <Col sm={{ size: 10, offset: 2 }}>
         <h3>paste your JSON:</h3>
@@ -40,7 +40,6 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
           maxLines={20}
           wrapEnabled={true}
           // debounceChangePeriod={2000}
-
           setOptions={{
             showLineNumbers: true
           }}
@@ -49,7 +48,7 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
         />
       </Col>
     </Row>
-  </div>
+  </React.Fragment>
 );
 
 const mapStateToProps = (state: Readonly<AppState>) => ({

@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const Editor: React.SFC<Props> = ({ onReset }) => (
-  <div className="Editor">
+  <React.Fragment>
     <h1>Paste your JSON and Query it.</h1>
     <Row>
       <Col>
@@ -36,7 +36,7 @@ export const Editor: React.SFC<Props> = ({ onReset }) => (
         <Output />
       </Col>
     </Row>
-  </div>
+  </React.Fragment>
 );
 
 const mapStateToProps = () => ({});
