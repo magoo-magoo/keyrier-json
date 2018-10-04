@@ -49,7 +49,7 @@
     "@types/reactstrap": "6.4.0",
     "enzyme": "3.6.0",
     "enzyme-adapter-react-16": "1.5.0",
-    "gh-pages": "2.0.0",
+    "gh-pages": "2.0.1",
     "react-scripts": "1.1.5",
     "react-test-renderer": "16.5.2",
     "redux-devtools": "3.4.1",
