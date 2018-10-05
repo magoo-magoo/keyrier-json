@@ -47,7 +47,7 @@
     "@types/react-select": "2.0.4",
     "@types/react-table": "6.7.12",
     "@types/reactstrap": "6.4.0",
-    "enzyme": "3.6.0",
+    "enzyme": "3.7.0",
     "enzyme-adapter-react-16": "1.6.0",
     "gh-pages": "2.0.1",
     "react-scripts": "1.1.5",
