@@ -45,7 +45,7 @@
     "@types/react-dom": "16.0.8",
     "@types/react-redux": "6.0.9",
     "@types/react-select": "2.0.4",
-    "@types/react-table": "6.7.12",
+    "@types/react-table": "6.7.13",
     "@types/reactstrap": "6.4.0",
     "enzyme": "3.7.0",
     "enzyme-adapter-react-16": "1.6.0",
