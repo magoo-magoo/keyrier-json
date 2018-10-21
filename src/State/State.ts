@@ -60,10 +60,9 @@ const initialState: Readonly<RootState> = {
 // data is your JSON object
 // you can use any correct javascript code to query it
 // in addition of that,
-// you can use lodash helper functions like exemple below
+// you can use lodash helper functions like exemple below. see https://lodash.com/docs/
 _.chain(data)
   .get('results')
-  .filter({gender: 'male'})
     `
   },
   source: { text: JSON.stringify(persons) }

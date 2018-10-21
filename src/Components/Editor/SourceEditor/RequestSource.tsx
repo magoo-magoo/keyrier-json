@@ -3,10 +3,11 @@ import * as React from "react";
 import {
   Label,
   Input,
-  Form,
   FormGroup,
   Button,
-  Alert
+  Alert,
+  Col,
+  Form
 } from "../../Deferred/DeferredReactstrap";
 import { logError, logInfo } from "../../../helpers/logger";
 import { connect } from "react-redux";
@@ -20,6 +21,8 @@ interface Header {
 interface State {
   url: string;
   method: string;
+  body: string;
+  hasBody: boolean;
   headers: Header[];
   error: TypeError | null;
 }
@@ -34,7 +37,9 @@ export class HttpRequestSource extends Component<Props, State> {
       method: "GET",
       url: "https://rickandmortyapi.com/api/character/",
       headers: [{ key: "Accept", value: "application/json" }],
-      error: null
+      error: null,
+      body: "",
+      hasBody: false
     };
   }
 
@@ -42,13 +47,13 @@ export class HttpRequestSource extends Component<Props, State> {
     return (
       <React.Fragment>
         <FormGroup>
-          <Label for="exampleSelect">Method</Label>
+          <Label for="requestMethod">Method</Label>
           <Input
             type="select"
             bsSize="lg"
             defaultValue="GET"
             name="requestMethod"
-            id="exarequestMethodmpleSelect"
+            id="requestMethod"
             onChange={this.requestMethodChange}
           >
             <option>GET</option>
@@ -69,14 +74,33 @@ export class HttpRequestSource extends Component<Props, State> {
             onChange={this.requestUrlChange}
           />
         </FormGroup>
-        {this.state.headers.map(this.renderHeaderInput)}
+        <FormGroup check={true}>
+          <Label check={true}>
+            <Input checked={this.state.hasBody} type="checkbox" onChange={this.requesthasBodyChange} /> Add
+            body
+          </Label>
+        </FormGroup>
+        <Form inline={true} hidden={!this.state.hasBody}>
+        <FormGroup>
+          <Label>Body</Label>
+          <Input
+            type="textarea"
+            value={this.state.body}
+            onChange={this.requestBodyChange}
+          />{" "}
+        </FormGroup>
+        </Form>
+        <Label for="headers">Request headers</Label>{" "}
         <Button outline={true} color="primary" onClick={this.addHeader}>
           Add header
         </Button>
+        <br />
+        <br />
+        {this.state.headers.map(this.renderHeaderInput)}
+        <br />
         <Button block={true} color="primary" onClick={this.submit}>
           Submit
         </Button>
-
         {this.displayError(this.state.error)}
       </React.Fragment>
     );
@@ -88,8 +112,8 @@ export class HttpRequestSource extends Component<Props, State> {
     }
     return (
       <Alert color="danger">
-        Error: {error.message ? error.message : ''}
-        {error.stack ? error.stack : ''}
+        Error: {error.message ? error.message : ""}
+        {error.stack ? error.stack : ""}
       </Alert>
     );
   };
@@ -99,39 +123,33 @@ export class HttpRequestSource extends Component<Props, State> {
     const updateName = (e: any) => this.updateHeaderName(e, index);
     const updateValue = (e: any) => this.updateHeaderValue(e, index);
     return (
-      <Form inline={true} key={index}>
-        <FormGroup>
-          <Label for={`headerName${index}`}>name {index + 1}</Label>
+      <div className="row align-items-center" key={index}>
+        <Col sm={5}>
           <Input
-            defaultValue={header.key}
+            value={header.key}
             id={`headerName${index}`}
             type="text"
             name={`headerName${index}`}
             placeholder="enter an name"
             onChange={updateName}
           />
-        </FormGroup>
-        <FormGroup>
-          <Label for={`headerValue${index}`}>value {index + 1}</Label>
+        </Col>
+        <Col sm={5}>
           <Input
-            defaultValue={header.value}
+            value={header.value}
             type="text"
             name={`headerValue${index}`}
             id={`headerValue${index}`}
             placeholder="enter an value"
             onChange={updateValue}
           />
-        </FormGroup>
-
-        <Button
-          className="float-right"
-          outline={true}
-          color="danger"
-          onClick={remove}
-        >
-          remove
-        </Button>
-      </Form>
+        </Col>
+        <Col sm={2}>
+          <Button outline={true} color="danger" onClick={remove}>
+            remove
+          </Button>
+        </Col>
+      </div>
     );
   };
 
@@ -147,25 +165,23 @@ export class HttpRequestSource extends Component<Props, State> {
     this.setState({
       headers: this.state.headers.filter((_, i) => i !== index)
     });
-
   private submit = async () => {
     this.setState({ error: null });
-    const headers: Headers = new Headers();
-    this.state.headers.forEach(header =>
-      headers.append(header.key, header.value)
-    );
 
     const requestInit: RequestInit = {
       method: this.state.method,
-      headers,
-      cache: "no-cache"
+      headers: this.state.headers.map(h => [h.key, h.value]),
+      body: this.state.hasBody ? this.state.body : null
     };
+
     const request = new Request(this.state.url, requestInit);
+
     logInfo("request", {
       url: request.url,
       method: request.method,
       mode: request.mode,
-      headers: request.headers.forEach,
+      body: request.body,
+      headers: Array.from((request.headers as any).entries()),
       cache: request.cache,
       credentials: request.credentials,
       redirect: request.redirect,
@@ -187,7 +203,15 @@ export class HttpRequestSource extends Component<Props, State> {
   private requestUrlChange = (event: ChangeEvent<HTMLInputElement>) =>
     this.setState({ url: event.target.value });
   private requestMethodChange = (event: ChangeEvent<HTMLInputElement>) =>
-    this.setState({ method: event.target.value });
+    this.setState({ method: event.target.value, hasBody: false });
+  private requesthasBodyChange = (_: ChangeEvent<HTMLInputElement>) => {
+// tslint:disable-next-line:no-debugger
+debugger;
+    this.setState({ hasBody: !this.state.hasBody });
+  };
+  private requestBodyChange = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ body: event.target.value });
+  };
 
   private updateHeaderName = (
     event: ChangeEvent<HTMLInputElement>,
