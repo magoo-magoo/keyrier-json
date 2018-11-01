@@ -60,6 +60,9 @@ export const OutputTableView: React.SFC<Props> = ({
           />
         </Col>
       </Row>
+      <Row className="mx-3 align-items-center justify-content-end d-flex">
+        <h4>Number of elements: {data.length}</h4>
+      </Row>
     </Fragment>
   );
 };
