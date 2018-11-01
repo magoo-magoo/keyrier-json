@@ -233,6 +233,6 @@ export const rootReducerReset = (
   return rootReducer(state, action);
 };
 const rootReducers = combineReducers({
-  rootReducer: rootReducerReset
+  rootReducer: rootReducerReset as any
 });
 export default rootReducers;

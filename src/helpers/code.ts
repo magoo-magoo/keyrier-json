@@ -1,7 +1,7 @@
 
 let lodash: _.LoDashStatic | null = null;
 import(/* webpackChunkName: "lodash" */ "lodash").then(module => {
-  lodash = module;
+  lodash = module.default;
 });
 
 export const codeEvaluation = (

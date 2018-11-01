@@ -4,11 +4,11 @@ import { Col, Row } from "../../Deferred/DeferredReactstrap";
 import { customToString, containsIgnoreCase } from "../../../helpers/string";
 import "./OutputTable.css";
 import { connect } from "react-redux";
-import { AppState, itemType } from "src/State/State";
 import TableAdvancedOptions from "./TableAdvancedOptions";
 
 import { LoadableReactTable } from "../../Deferred/DeferredReactTable";
 import { Column, Filter } from "react-table";
+import { itemType, AppState } from "../../../State/State";
 
 interface Props {
   data: itemType[];

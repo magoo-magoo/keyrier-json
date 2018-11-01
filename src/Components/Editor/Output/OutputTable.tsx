@@ -10,7 +10,6 @@ import {
 } from "../../Deferred/DeferredReactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
-import { AppState } from "src/State/State";
 import OutputTableView from "./OutputTableView";
 import {
   toggleOutputTableModal,
@@ -20,6 +19,7 @@ import {
   getisOutputTableModalOpen,
   getOutputTableData
 } from "../../../Store/selectors";
+import { AppState } from "../../../State/State";
 
 interface Props {
   toggleModal: () => ToggleOutputTableModal;

@@ -120,8 +120,8 @@ export class HttpRequestSource extends Component<Props, State> {
 
   private renderHeaderInput = (header: Header, index: number) => {
     const remove = () => this.removeHeader(index);
-    const updateName = (e: any) => this.updateHeaderName(e, index);
-    const updateValue = (e: any) => this.updateHeaderValue(e, index);
+    const updateName = (e: ChangeEvent<HTMLInputElement>) => this.updateHeaderName(e, index);
+    const updateValue = (e: ChangeEvent<HTMLInputElement>) => this.updateHeaderValue(e, index);
     return (
       <div className="row align-items-center" key={index}>
         <Col sm={5}>

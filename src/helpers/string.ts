@@ -1,4 +1,4 @@
-export const customToString = (obj: any): string => {
+export const customToString = (obj: {}): string => {
   if (Array.isArray(obj)) {
     const array: any[] = obj;
     return array.map(e => customToString(e)).join(",");
@@ -9,14 +9,11 @@ export const customToString = (obj: any): string => {
   if (typeof obj === "undefined") {
     return "";
   }
-  if (typeof obj === "boolean") {
-    return obj.toString();
-  }
-  if (obj) {
+  if (obj !== null && obj !== undefined) {
     return obj.toString();
   }
 
-  return obj;
+  return "";
 };
 
 export const containsIgnoreCase = (str: string, part: string) => {

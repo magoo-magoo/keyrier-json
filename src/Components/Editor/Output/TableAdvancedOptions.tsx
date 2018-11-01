@@ -8,7 +8,6 @@ import {
 } from "../../Deferred/DeferredReactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
-import { AppState, itemType } from "src/State/State";
 import {
   updateTableColumns,
   UpdateTableColumns,
@@ -16,6 +15,8 @@ import {
   updateTableGroupBy
 } from "../../../Actions/actions";
 import { LoadableReactSelect } from "../../Deferred/DeferredReactSelect";
+import { itemType, AppState } from "../../../State/State";
+import { ActionMeta, ValueType } from "react-select/lib/types";
 
 interface Props {
   data: itemType[];
@@ -88,8 +89,11 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
     );
   }
 
-  private readonly handleColumnChange = (cols: Array<{ value: string }>) => {
-    this.props.onColumnsChange(cols.map(c => c.value));
+  private readonly handleColumnChange = (cols: ValueType<{}> | undefined | null, _action: ActionMeta) =>{
+      if (cols instanceof Array) {
+        const mapped = cols.map((c:{value?: string}) => c.value? c.value : '');
+        this.props.onColumnsChange(mapped);
+      }
   };
 
   private readonly handleGroupingSelectChange = (

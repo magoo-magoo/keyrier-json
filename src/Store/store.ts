@@ -3,7 +3,7 @@ import rootReducers from "../Reducers/reducers";
 import { RootState, getInitialState } from "../State/State";
 import { logError } from "../helpers/logger";
 
-const persistStore = (rootState: RootState) => {
+const persistStore = (rootState: RootState | {}) => {
   if (window.localStorage) {
     localStorage.setItem("keyrier-json.app.state", JSON.stringify(rootState));
   }
