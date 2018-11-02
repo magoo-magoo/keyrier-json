@@ -1,15 +1,15 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   FormGroup,
   Button,
   Alert,
   Form,
-} from "../../Deferred/DeferredReactstrap";
-import { logError, logInfo } from "../../../helpers/logger";
-import { connect } from "react-redux";
-import { updateSource } from "../../../Actions/actions";
-import { customToString } from "../../../helpers/string";
-import { RenderHeaderInput } from "./RequestHeader";
+} from '../../Deferred/DeferredReactstrap';
+import { logError, logInfo } from '../../../helpers/logger';
+import { connect } from 'react-redux';
+import { updateSource } from '../../../Actions/actions';
+import { customToString } from '../../../helpers/string';
+import { RenderHeaderInput } from './RequestHeader';
 
 interface Props {
   onRequestSucceed: () => void;
@@ -22,8 +22,8 @@ const displayError = (error: TypeError | null) => {
   }
   return (
     <Alert color="danger">
-      Error: {error.message ? error.message : ""}
-      {error.stack ? error.stack : ""}
+      Error: {error.message ? error.message : ''}
+      {error.stack ? error.stack : ''}
     </Alert>
   );
 };
@@ -32,15 +32,15 @@ export const HttpRequestSourceFunc: React.SFC<Props> = ({
   onRequestSucceed,
   updateSource,
 }) => {
-  const [method, setMethod] = React.useState("GET");
+  const [method, setMethod] = React.useState('GET');
   const [url, setUrl] = React.useState(
-    "https://rickandmortyapi.com/api/character/"
+    'https://rickandmortyapi.com/api/character/'
   );
   const [headers, setHeaders] = React.useState([
-    { key: "Accept", value: "application/json" },
+    { key: 'Accept', value: 'application/json' },
   ]);
   const [error, setError] = React.useState(null as TypeError | null);
-  const [body, setBody] = React.useState("");
+  const [body, setBody] = React.useState('');
   const [hasBody, setHasBody] = React.useState(false);
 
   const submit = async () => {
@@ -54,7 +54,7 @@ export const HttpRequestSourceFunc: React.SFC<Props> = ({
 
     const request = new Request(url, requestInit);
 
-    logInfo("request", {
+    logInfo('request', {
       url: request.url,
       method: request.method,
       mode: request.mode,
@@ -71,7 +71,7 @@ export const HttpRequestSourceFunc: React.SFC<Props> = ({
       const result = await fetch(request);
       json = await result.json();
     } catch (error) {
-      logError("HttpRequestSource.submit", error);
+      logError('HttpRequestSource.submit', error);
       setError(error);
       return;
     }
@@ -114,7 +114,7 @@ export const HttpRequestSourceFunc: React.SFC<Props> = ({
             type="checkbox"
             className="form-check-input"
             onChange={() => setHasBody(!hasBody)}
-          />{" "}
+          />{' '}
           Add body
         </label>
       </div>
@@ -126,17 +126,17 @@ export const HttpRequestSourceFunc: React.SFC<Props> = ({
             type="textarea"
             value={body}
             onChange={e => setBody(e.target.value)}
-          />{" "}
+          />{' '}
         </FormGroup>
       </Form>
-      <label htmlFor="headers">Request headers</label>{" "}
+      <label htmlFor="headers">Request headers</label>{' '}
       <Button
         outline={true}
         color="primary"
         onClick={() =>
           setHeaders([
             ...headers,
-            { key: `name-${headers.length + 1}`, value: "value" },
+            { key: `name-${headers.length + 1}`, value: 'value' },
           ])
         }
       >

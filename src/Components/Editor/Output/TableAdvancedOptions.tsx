@@ -1,16 +1,16 @@
-import * as React from "react";
-import { Collapse, Button } from "../../Deferred/DeferredReactstrap";
-import "./OutputTable.css";
-import { connect } from "react-redux";
+import * as React from 'react';
+import { Collapse, Button } from '../../Deferred/DeferredReactstrap';
+import './OutputTable.css';
+import { connect } from 'react-redux';
 import {
   updateTableColumns,
   UpdateTableColumns,
   UpdateTableGroupBy,
   updateTableGroupBy,
-} from "../../../Actions/actions";
-import { LoadableReactSelect } from "../../Deferred/DeferredReactSelect";
-import { itemType, AppState } from "../../../State/State";
-import { ActionMeta, ValueType } from "react-select/lib/types";
+} from '../../../Actions/actions';
+import { LoadableReactSelect } from '../../Deferred/DeferredReactSelect';
+import { itemType, AppState } from '../../../State/State';
+import { ActionMeta, ValueType } from 'react-select/lib/types';
 
 interface Props {
   data: itemType[];
@@ -41,14 +41,14 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
       <div className="row">
         <div className="col">
           <Button
-            className={"float-left"}
+            className={'float-left'}
             color="primary"
             block={true}
             onClick={this.toggleCollapseOptions}
           >
             {this.state.optionsCollapsed
-              ? "Hide advanced options"
-              : "Advanced options"}
+              ? 'Hide advanced options'
+              : 'Advanced options'}
           </Button>
           <Collapse isOpen={this.state.optionsCollapsed}>
             <select
@@ -57,13 +57,13 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
               id="groupingSelect"
               onChange={this.handleGroupingSelectChange}
             >
-              <option key={"Group by..."}>Group by...</option>
+              <option key={'Group by...'}>Group by...</option>
               {this.props.displayedColumns.map(key => (
                 <option key={key}>{key}</option>
               ))}
             </select>
             <Button
-              color={"success"}
+              color={'success'}
               onClick={this.handleOnclickOnExportToExcel}
             >
               Export to Excel (.xlsx)
@@ -89,7 +89,7 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
   ) => {
     if (cols instanceof Array) {
       const mapped = cols.map(
-        (c: { value?: string }) => (c.value ? c.value : "")
+        (c: { value?: string }) => (c.value ? c.value : '')
       );
       this.props.onColumnsChange(mapped);
     }
@@ -108,11 +108,11 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
     });
 
   private readonly handleOnclickOnExportToExcel = async () => {
-    const xlsx = await import(/* webpackChunkName: "xlsx.js" */ "xlsx");
+    const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx');
     const workBook = xlsx.utils.book_new();
     const workSheet = xlsx.utils.json_to_sheet(this.props.data);
-    xlsx.utils.book_append_sheet(workBook, workSheet, "keyrier-json");
-    xlsx.writeFile(workBook, "export.xlsx");
+    xlsx.utils.book_append_sheet(workBook, workSheet, 'keyrier-json');
+    xlsx.writeFile(workBook, 'export.xlsx');
   };
 }
 

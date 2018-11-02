@@ -1,8 +1,8 @@
-import "./App.css";
+import './App.css';
 
-import * as React from "react";
-import Editor from "./Editor/Editor";
-import { Header } from "./Header";
+import * as React from 'react';
+import Editor from './Editor/Editor';
+import { Header } from './Header';
 
 export const App = () => (
   <div className="App">

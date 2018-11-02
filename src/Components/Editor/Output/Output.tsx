@@ -1,19 +1,19 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { Alert, TabContent, TabPane } from "../../Deferred/DeferredReactstrap";
-import { jsonBeautify } from "../../../helpers/json";
-import OutputTable from "./OutputTable";
-import { AppState } from "../../../State/State";
-import { Fragment } from "react";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Alert, TabContent, TabPane } from '../../Deferred/DeferredReactstrap';
+import { jsonBeautify } from '../../../helpers/json';
+import OutputTable from './OutputTable';
+import { AppState } from '../../../State/State';
+import { Fragment } from 'react';
 
-import classNames from "classnames";
+import classNames from 'classnames';
 
 import {
   getOutputErrorMessage,
   getOutputIsArray,
   getOutputText,
-} from "../../../Store/selectors";
-import { AceEditor } from "../../Deferred/DeferredAceEditor";
+} from '../../../Store/selectors';
+import { AceEditor } from '../../Deferred/DeferredAceEditor';
 
 interface Props {
   output: string;
@@ -25,19 +25,19 @@ interface State {
   activeTab: tabType;
 }
 
-type tabType = "RawJson" | "Table";
+type tabType = 'RawJson' | 'Table';
 
 export class Output extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      activeTab: this.props.isArray ? "Table" : "RawJson",
+      activeTab: this.props.isArray ? 'Table' : 'RawJson',
     };
   }
 
   public componentDidUpdate() {
-    if (!this.props.isArray && this.state.activeTab === "Table") {
-      this.setState({ ...this.state, activeTab: "RawJson" });
+    if (!this.props.isArray && this.state.activeTab === 'Table') {
+      this.setState({ ...this.state, activeTab: 'RawJson' });
     }
   }
   public render() {
@@ -50,11 +50,11 @@ export class Output extends React.Component<Props, State> {
                 <a
                   className={classNames({
                     active:
-                      !this.props.isArray || this.state.activeTab === "RawJson",
-                    "nav-link": true,
+                      !this.props.isArray || this.state.activeTab === 'RawJson',
+                    'nav-link': true,
                   })}
                   onClick={() => {
-                    this.toggleTab("RawJson");
+                    this.toggleTab('RawJson');
                   }}
                 >
                   Raw JSON view
@@ -64,11 +64,11 @@ export class Output extends React.Component<Props, State> {
                 <a
                   className={classNames({
                     active:
-                      !this.props.isArray || this.state.activeTab === "Table",
-                    "nav-link": true,
+                      !this.props.isArray || this.state.activeTab === 'Table',
+                    'nav-link': true,
                   })}
                   onClick={() => {
-                    this.toggleTab("Table");
+                    this.toggleTab('Table');
                   }}
                 >
                   Table view
@@ -99,7 +99,7 @@ export class Output extends React.Component<Props, State> {
                     showLineNumbers: true,
                     tabSize: 2,
                   }}
-                  width={"100%"}
+                  width={'100%'}
                 />
               </div>
             </div>

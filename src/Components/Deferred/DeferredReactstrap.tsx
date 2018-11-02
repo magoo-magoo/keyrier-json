@@ -1,69 +1,69 @@
-import { Loading } from "./Loading";
+import { Loading } from './Loading';
 
 // tslint:disable-next-line:no-var-requires
-const Loadable: LoadableExport.Loadable = require("react-loadable");
+const Loadable: LoadableExport.Loadable = require('react-loadable');
 
 export const Button = Loadable({
-  loading: Loading("Button"),
+  loading: Loading('Button'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/Button" */ "reactstrap/lib/Button"),
+    await import(/* webpackChunkName: "reactstrap/lib/Button" */ 'reactstrap/lib/Button'),
 });
 export const Alert = Loadable({
-  loading: Loading("Alert"),
+  loading: Loading('Alert'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/Alert" */ "reactstrap/lib/Alert"),
+    await import(/* webpackChunkName: "reactstrap/lib/Alert" */ 'reactstrap/lib/Alert'),
 });
 
 export const TabContent = Loadable({
-  loading: Loading("TabContent"),
+  loading: Loading('TabContent'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/TabContent" */ "reactstrap/lib/TabContent"),
+    await import(/* webpackChunkName: "reactstrap/lib/TabContent" */ 'reactstrap/lib/TabContent'),
 });
 export const TabPane = Loadable({
-  loading: Loading("TabPane"),
+  loading: Loading('TabPane'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/TabPane" */ "reactstrap/lib/TabPane"),
+    await import(/* webpackChunkName: "reactstrap/lib/TabPane" */ 'reactstrap/lib/TabPane'),
 });
 
 export const Modal = Loadable({
-  loading: Loading("Modal"),
+  loading: Loading('Modal'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/Modal" */ "reactstrap/lib/Modal"),
+    await import(/* webpackChunkName: "reactstrap/lib/Modal" */ 'reactstrap/lib/Modal'),
 });
 export const ModalHeader = Loadable({
-  loading: Loading("ModalHeader"),
+  loading: Loading('ModalHeader'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/ModalHeader" */ "reactstrap/lib/ModalHeader"),
+    await import(/* webpackChunkName: "reactstrap/lib/ModalHeader" */ 'reactstrap/lib/ModalHeader'),
 });
 export const ModalBody = Loadable({
-  loading: Loading("ModalBody"),
+  loading: Loading('ModalBody'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/ModalBody" */ "reactstrap/lib/ModalBody"),
+    await import(/* webpackChunkName: "reactstrap/lib/ModalBody" */ 'reactstrap/lib/ModalBody'),
 });
 export const ModalFooter = Loadable({
-  loading: Loading("ModalFooter"),
+  loading: Loading('ModalFooter'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/ModalFooter" */ "reactstrap/lib/ModalFooter"),
+    await import(/* webpackChunkName: "reactstrap/lib/ModalFooter" */ 'reactstrap/lib/ModalFooter'),
 });
 export const ButtonDropdown = Loadable({
-  loading: Loading("ButtonDropdown"),
+  loading: Loading('ButtonDropdown'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/ButtonDropdown" */ "reactstrap/lib/ButtonDropdown"),
+    await import(/* webpackChunkName: "reactstrap/lib/ButtonDropdown" */ 'reactstrap/lib/ButtonDropdown'),
 });
 export const DropdownItem = Loadable({
-  loading: Loading("DropdownItem"),
+  loading: Loading('DropdownItem'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/DropdownItem" */ "reactstrap/lib/DropdownItem"),
+    await import(/* webpackChunkName: "reactstrap/lib/DropdownItem" */ 'reactstrap/lib/DropdownItem'),
 });
 export const DropdownMenu = Loadable({
-  loading: Loading("DropdownMenu"),
+  loading: Loading('DropdownMenu'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/DropdownMenu" */ "reactstrap/lib/DropdownMenu"),
+    await import(/* webpackChunkName: "reactstrap/lib/DropdownMenu" */ 'reactstrap/lib/DropdownMenu'),
 });
 export const DropdownToggle = Loadable({
-  loading: Loading("DropdownToggle"),
+  loading: Loading('DropdownToggle'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/DropdownToggle" */ "reactstrap/lib/DropdownToggle"),
+    await import(/* webpackChunkName: "reactstrap/lib/DropdownToggle" */ 'reactstrap/lib/DropdownToggle'),
 });
 // export const Label = Loadable({
 //   loading: Loading("Label"),
@@ -76,22 +76,22 @@ export const DropdownToggle = Loadable({
 //     await import(/* webpackChunkName: "reactstrap/lib/Input" */ "reactstrap/lib/Input")
 // });
 export const Collapse = Loadable({
-  loading: Loading("Collapse"),
+  loading: Loading('Collapse'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/Collapse" */ "reactstrap/lib/Collapse"),
+    await import(/* webpackChunkName: "reactstrap/lib/Collapse" */ 'reactstrap/lib/Collapse'),
 });
 export const Progress = Loadable({
-  loading: Loading("Progress"),
+  loading: Loading('Progress'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/Progress" */ "reactstrap/lib/Progress"),
+    await import(/* webpackChunkName: "reactstrap/lib/Progress" */ 'reactstrap/lib/Progress'),
 });
 export const Form = Loadable({
-  loading: Loading("Form"),
+  loading: Loading('Form'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/Form" */ "reactstrap/lib/Form"),
+    await import(/* webpackChunkName: "reactstrap/lib/Form" */ 'reactstrap/lib/Form'),
 });
 export const FormGroup = Loadable({
-  loading: Loading("FormGroup"),
+  loading: Loading('FormGroup'),
   loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/FormGroup" */ "reactstrap/lib/FormGroup"),
+    await import(/* webpackChunkName: "reactstrap/lib/FormGroup" */ 'reactstrap/lib/FormGroup'),
 });

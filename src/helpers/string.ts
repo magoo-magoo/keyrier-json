@@ -1,19 +1,19 @@
 export const customToString = (obj: {}): string => {
   if (Array.isArray(obj)) {
     const array: any[] = obj;
-    return array.map(e => customToString(e)).join(",");
+    return array.map(e => customToString(e)).join(',');
   }
-  if (typeof obj === "object") {
+  if (typeof obj === 'object') {
     return JSON.stringify(obj);
   }
-  if (typeof obj === "undefined") {
-    return "";
+  if (typeof obj === 'undefined') {
+    return '';
   }
   if (obj !== null && obj !== undefined) {
     return obj.toString();
   }
 
-  return "";
+  return '';
 };
 
 export const containsIgnoreCase = (str: string, part: string) => {
@@ -23,7 +23,6 @@ export const containsIgnoreCase = (str: string, part: string) => {
   if (str.toLocaleLowerCase().includes(part.toLocaleLowerCase())) {
     return true;
   }
-
 
   return false;
 };

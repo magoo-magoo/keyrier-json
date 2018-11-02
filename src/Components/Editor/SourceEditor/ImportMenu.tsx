@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Component } from "react";
-import { connect } from "react-redux";
+import * as React from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   Button,
   ButtonDropdown,
@@ -11,12 +11,12 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-} from "../../Deferred/DeferredReactstrap";
-import { UpdateSource, updateSource } from "../../../Actions/actions";
-import { AppState } from "../../../State/State";
-import HttpRequestSource from "./RequestSource";
-import "./ImportMenu.css";
-import { logInfo } from "../../../helpers/logger";
+} from '../../Deferred/DeferredReactstrap';
+import { UpdateSource, updateSource } from '../../../Actions/actions';
+import { AppState } from '../../../State/State';
+import HttpRequestSource from './RequestSource';
+import './ImportMenu.css';
+import { logInfo } from '../../../helpers/logger';
 interface Props {
   onFileContentReady: (fileContent: string) => UpdateSource;
 }
@@ -50,7 +50,7 @@ export class ImportMenu extends Component<Props, State> {
                   type="file"
                   name="file"
                   id="sourceFile"
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   onChange={this.onFileChange}
                 />
               </label>
@@ -91,10 +91,10 @@ export class ImportMenu extends Component<Props, State> {
   private toggleModal = () => this.setState({ modal: !this.state.modal });
 
   private onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    logInfo("onFileChange");
+    logInfo('onFileChange');
     if (e.target.files && e.target.files.length > 0) {
       const fileReader = new FileReader();
-      logInfo("e.target.files", e.target.files[0].name);
+      logInfo('e.target.files', e.target.files[0].name);
       fileReader.onload = () => {
         if (fileReader.result) {
           this.props.onFileContentReady(fileReader.result.toString());

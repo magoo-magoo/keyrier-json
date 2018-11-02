@@ -1,23 +1,23 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Button,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "../../Deferred/DeferredReactstrap";
-import "./OutputTable.css";
-import { connect } from "react-redux";
-import OutputTableView from "./OutputTableView";
+} from '../../Deferred/DeferredReactstrap';
+import './OutputTable.css';
+import { connect } from 'react-redux';
+import OutputTableView from './OutputTableView';
 import {
   toggleOutputTableModal,
   ToggleOutputTableModal,
-} from "../../../Actions/actions";
+} from '../../../Actions/actions';
 import {
   getisOutputTableModalOpen,
   getOutputTableData,
-} from "../../../Store/selectors";
-import { AppState } from "../../../State/State";
+} from '../../../Store/selectors';
+import { AppState } from '../../../State/State';
 
 interface Props {
   toggleModal: () => ToggleOutputTableModal;

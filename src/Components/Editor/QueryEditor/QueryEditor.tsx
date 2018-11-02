@@ -1,9 +1,9 @@
-import * as React from "react";
-import { connect } from "react-redux";
+import * as React from 'react';
+import { connect } from 'react-redux';
 
-import { UpdateQueryAction, updateQuery } from "../../../Actions/actions";
-import { AppState } from "../../../State/State";
-import { AceEditor } from "../../Deferred/DeferredAceEditor";
+import { UpdateQueryAction, updateQuery } from '../../../Actions/actions';
+import { AppState } from '../../../State/State';
+import { AceEditor } from '../../Deferred/DeferredAceEditor';
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
@@ -37,7 +37,7 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
               enableSnippets: true,
               dragEnabled: true,
             }}
-            width={"100%"}
+            width={'100%'}
             enableBasicAutocompletion={true}
             enableLiveAutocompletion={true}
           />

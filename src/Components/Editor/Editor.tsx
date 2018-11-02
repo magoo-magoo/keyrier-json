@@ -1,11 +1,11 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { Button } from "../Deferred/DeferredReactstrap";
-import { ResetEditor, resetEditor } from "../../Actions/actions";
-import "./Editor.css";
-import Output from "./Output/Output";
-import QueryEditor from "./QueryEditor/QueryEditor";
-import SourceEditor from "./SourceEditor/SourceEditor";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Button } from '../Deferred/DeferredReactstrap';
+import { ResetEditor, resetEditor } from '../../Actions/actions';
+import './Editor.css';
+import Output from './Output/Output';
+import QueryEditor from './QueryEditor/QueryEditor';
+import SourceEditor from './SourceEditor/SourceEditor';
 
 interface Props {
   onReset: () => ResetEditor;

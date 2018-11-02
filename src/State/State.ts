@@ -1,4 +1,4 @@
-import { persons } from "../data/persons";
+import { persons } from '../data/persons';
 
 export interface QueryState {
   readonly text: string;
@@ -45,15 +45,15 @@ export interface AppState {
 
 const initialState: Readonly<RootState> = {
   output: {
-    text: "",
+    text: '',
     table: {
       array: [],
       isArray: false,
       isModalOpen: false,
       displayedColumns: [],
       columns: [],
-      groupBy: []
-    }
+      groupBy: [],
+    },
   },
   query: {
     text: `
@@ -63,9 +63,9 @@ const initialState: Readonly<RootState> = {
 // you can use lodash helper functions like exemple below. see https://lodash.com/docs/
 _.chain(data)
   .get('results')
-    `
+    `,
   },
-  source: { text: JSON.stringify(persons) }
+  source: { text: JSON.stringify(persons) },
 };
 
 export const getInitialState = () => initialState;

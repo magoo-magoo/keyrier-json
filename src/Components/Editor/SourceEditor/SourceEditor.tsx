@@ -1,11 +1,11 @@
-import * as React from "react";
-import { connect } from "react-redux";
+import * as React from 'react';
+import { connect } from 'react-redux';
 
-import { UpdateSource, updateSource } from "../../../Actions/actions";
-import { jsonBeautify } from "../../../helpers/json";
-import { AppState } from "../../../State/State";
-import ImportMenu from "./ImportMenu";
-import { AceEditor } from "../../Deferred/DeferredAceEditor";
+import { UpdateSource, updateSource } from '../../../Actions/actions';
+import { jsonBeautify } from '../../../helpers/json';
+import { AppState } from '../../../State/State';
+import ImportMenu from './ImportMenu';
+import { AceEditor } from '../../Deferred/DeferredAceEditor';
 
 interface Props {
   onChange: (val: string) => UpdateSource;
@@ -43,7 +43,7 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
             showLineNumbers: true,
           }}
           editorProps={{ $blockScrolling: Infinity }}
-          width={"100%"}
+          width={'100%'}
         />
       </div>
     </div>

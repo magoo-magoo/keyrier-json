@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 const CustomLoading = (
   props: LoadableExport.LoadingComponentProps,
@@ -8,7 +8,7 @@ const CustomLoading = (
     return <div>{props.error}</div>;
   }
 
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === 'production') {
     return <React.Fragment />;
   }
 

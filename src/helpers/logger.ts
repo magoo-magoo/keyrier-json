@@ -1,7 +1,7 @@
 // tslint:disable:no-console
 
 export const logError = (error: string | Error, payload: any = undefined) => {
-  console.error("Keyrier error",error);
+  console.error('Keyrier error', error);
   console.error(payload);
 };
 

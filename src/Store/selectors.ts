@@ -1,4 +1,4 @@
-import { AppState } from "../State/State";
+import { AppState } from '../State/State';
 
 type selector<T> = (state: Readonly<AppState>) => T;
 

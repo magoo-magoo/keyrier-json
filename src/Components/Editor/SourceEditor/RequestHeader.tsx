@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Button } from "../../Deferred/DeferredReactstrap";
+import * as React from 'react';
+import { Button } from '../../Deferred/DeferredReactstrap';
 
 interface Header {
   key: string;

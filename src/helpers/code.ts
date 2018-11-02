@@ -1,6 +1,5 @@
-
 let lodash: _.LoDashStatic | null = null;
-import(/* webpackChunkName: "lodash" */ "lodash").then(module => {
+import(/* webpackChunkName: "lodash" */ 'lodash').then(module => {
   lodash = module.default;
 });
 
@@ -8,11 +7,11 @@ export const codeEvaluation = (
   sourceString: string,
   queryString: string
 ): string | null | Error => {
-  if (!sourceString || sourceString.trim() === "") {
+  if (!sourceString || sourceString.trim() === '') {
     return null;
   }
 
-  if (!queryString || queryString.trim() === "") {
+  if (!queryString || queryString.trim() === '') {
     return null;
   }
 
@@ -25,7 +24,7 @@ export const codeEvaluation = (
       `;
     const evaluatedQuery = eval.apply(null, [code]); // DANGEROUS
     const type = typeof evaluatedQuery;
-    if (type !== "string") {
+    if (type !== 'string') {
       return null;
     }
     return evaluatedQuery as string;
