@@ -7,17 +7,16 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Label,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Input
 } from "../../Deferred/DeferredReactstrap";
 import { UpdateSource, updateSource } from "../../../Actions/actions";
 import { AppState } from "../../../State/State";
 import HttpRequestSource from "./RequestSource";
-import './ImportMenu.css';
+import "./ImportMenu.css";
+import { logInfo } from "../../../helpers/logger";
 interface Props {
   onFileContentReady: (fileContent: string) => UpdateSource;
 }
@@ -34,49 +33,68 @@ export class ImportMenu extends Component<Props, State> {
   }
 
   public render() {
-    return <React.Fragment>
-        <ButtonDropdown isOpen={this.state.toggleDropdownIsOpen} toggle={this.toggleImportDropdown}>
+    return (
+      <React.Fragment>
+        <ButtonDropdown
+          isOpen={this.state.toggleDropdownIsOpen}
+          toggle={this.toggleImportDropdown}
+        >
           <DropdownToggle caret={true} color="primary">
             Import
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem>
-              <Label>
+              <label>
                 Browse JSON file...
-                <Input type="file" name="file" id="sourceFile" style={{ display: "none" }} onChange={this.onFileChange} />
-              </Label>
+                <input
+                  type="file"
+                  name="file"
+                  id="sourceFile"
+                  style={{ display: "none" }}
+                  onChange={this.onFileChange}
+                />
+              </label>
             </DropdownItem>
             <DropdownItem onClick={this.toggleModal}>
-              <Label>HTTP request</Label>
+              <label>HTTP request</label>
             </DropdownItem>
           </DropdownMenu>
         </ButtonDropdown>
-        <Modal id="requestModal" role="dialog" size="lg" isOpen={this.state.modal} toggle={this.toggleModal}>
+        <Modal
+          id="requestModal"
+          role="dialog"
+          size="lg"
+          isOpen={this.state.modal}
+          toggle={this.toggleModal}
+        >
           <ModalHeader toggle={this.toggleModal}>
             Import JSON from an HTTP request
           </ModalHeader>
           <ModalBody>
             <HttpRequestSource onRequestSucceed={this.toggleModal} />
           </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={this.toggleModal}>
-            Cancel
+          <ModalFooter>
+            <Button color="secondary" onClick={this.toggleModal}>
+              Cancel
             </Button>
-        </ModalFooter>
+          </ModalFooter>
         </Modal>
-      </React.Fragment>;
+      </React.Fragment>
+    );
   }
 
   private readonly toggleImportDropdown = () =>
     this.setState({
-      toggleDropdownIsOpen: !this.state.toggleDropdownIsOpen
+      toggleDropdownIsOpen: !this.state.toggleDropdownIsOpen,
     });
 
   private toggleModal = () => this.setState({ modal: !this.state.modal });
 
   private onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    logInfo("onFileChange");
     if (e.target.files && e.target.files.length > 0) {
       const fileReader = new FileReader();
+      logInfo("e.target.files", e.target.files[0].name);
       fileReader.onload = () => {
         if (fileReader.result) {
           this.props.onFileContentReady(fileReader.result.toString());
@@ -88,7 +106,7 @@ export class ImportMenu extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Readonly<AppState>) => ({
-  sourceText: state.rootReducer.source.text
+  sourceText: state.rootReducer.source.text,
 });
 
 export default connect(

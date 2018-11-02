@@ -1,7 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { Col, Row } from "../../Deferred/DeferredReactstrap";
 import { UpdateSource, updateSource } from "../../../Actions/actions";
 import { jsonBeautify } from "../../../helpers/json";
 import { AppState } from "../../../State/State";
@@ -15,16 +14,16 @@ interface Props {
 
 export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
   <React.Fragment>
-    <Row>
-      <Col sm={{ size: 10, offset: 2 }}>
+    <div className="row">
+      <div className="col-sm-10 offset-sm-2">
         <h3>paste your JSON:</h3>
-      </Col>
-    </Row>
-    <Row>
-      <Col sm={2}>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col-sm-2">
         <ImportMenu />
-      </Col>
-      <Col sm={10}>
+      </div>
+      <div className="col-sm-10">
         <AceEditor
           mode="json"
           theme="monokai"
@@ -41,18 +40,18 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
           wrapEnabled={true}
           // debounceChangePeriod={2000}
           setOptions={{
-            showLineNumbers: true
+            showLineNumbers: true,
           }}
           editorProps={{ $blockScrolling: Infinity }}
           width={"100%"}
         />
-      </Col>
-    </Row>
+      </div>
+    </div>
   </React.Fragment>
 );
 
 const mapStateToProps = (state: Readonly<AppState>) => ({
-  sourceText: state.rootReducer.source.text
+  sourceText: state.rootReducer.source.text,
 });
 
 export default connect(

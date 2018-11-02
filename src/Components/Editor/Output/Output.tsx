@@ -1,15 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import {
-  Alert,
-  Col,
-  Row,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane
-} from "../../Deferred/DeferredReactstrap";
+import { Alert, TabContent, TabPane } from "../../Deferred/DeferredReactstrap";
 import { jsonBeautify } from "../../../helpers/json";
 import OutputTable from "./OutputTable";
 import { AppState } from "../../../State/State";
@@ -20,7 +11,7 @@ import classNames from "classnames";
 import {
   getOutputErrorMessage,
   getOutputIsArray,
-  getOutputText
+  getOutputText,
 } from "../../../Store/selectors";
 import { AceEditor } from "../../Deferred/DeferredAceEditor";
 
@@ -40,7 +31,7 @@ export class Output extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      activeTab: this.props.isArray ? "Table" : "RawJson"
+      activeTab: this.props.isArray ? "Table" : "RawJson",
     };
   }
 
@@ -52,43 +43,44 @@ export class Output extends React.Component<Props, State> {
   public render() {
     const display = (
       <Fragment>
-        <Row>
-          <Col>
-            <Nav tabs={true}>
-              <NavItem>
-                <NavLink
+        <div className="row">
+          <div className="col">
+            <ul className="nav nav-tabs">
+              <li className="nav-item">
+                <a
                   className={classNames({
                     active:
-                      !this.props.isArray || this.state.activeTab === "RawJson"
+                      !this.props.isArray || this.state.activeTab === "RawJson",
+                    "nav-link": true,
                   })}
-                  // tslint:disable-next-line:jsx-no-lambda
                   onClick={() => {
                     this.toggleTab("RawJson");
                   }}
                 >
                   Raw JSON view
-                </NavLink>
-              </NavItem>
-              <NavItem hidden={!this.props.isArray}>
-                <NavLink
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
                   className={classNames({
-                    active: this.state.activeTab === "Table"
+                    active:
+                      !this.props.isArray || this.state.activeTab === "Table",
+                    "nav-link": true,
                   })}
-                  // tslint:disable-next-line:jsx-no-lambda
                   onClick={() => {
                     this.toggleTab("Table");
                   }}
                 >
                   Table view
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Col>
-        </Row>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="RawJson">
-            <Row>
-              <Col sm={{ size: 10, offset: 2 }}>
+            <div className="row">
+              <div className="col-sm-10 offset-sm-2">
                 <AceEditor
                   mode="json"
                   theme="github"
@@ -105,12 +97,12 @@ export class Output extends React.Component<Props, State> {
                   editorProps={{ $blockScrolling: Infinity }}
                   setOptions={{
                     showLineNumbers: true,
-                    tabSize: 2
+                    tabSize: 2,
                   }}
                   width={"100%"}
                 />
-              </Col>
-            </Row>
+              </div>
+            </div>
           </TabPane>
           <TabPane tabId="Table">
             <OutputTable />
@@ -121,17 +113,17 @@ export class Output extends React.Component<Props, State> {
 
     return (
       <div>
-        <Row>
-          <Col sm={{ size: 10, offset: 2 }}>
+        <div className="row">
+          <div className="col-sm-10 offset-sm-2">
             <h3>Output:</h3>
-          </Col>
-        </Row>
+          </div>
+        </div>
         <div hidden={!this.props.errorMessage}>
-          <Row>
-            <Col sm={{ size: 10, offset: 2 }}>
+          <div className="row">
+            <div className="col-sm-10 offset-sm-2">
               <Alert color="danger">{this.props.errorMessage}</Alert>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
         {display}
       </div>
@@ -146,7 +138,7 @@ const mapStateToProps = (state: Readonly<AppState>): Props => {
   return {
     errorMessage: getOutputErrorMessage(state),
     isArray: getOutputIsArray(state),
-    output: getOutputText(state)
+    output: getOutputText(state),
   };
 };
 

@@ -10,16 +10,18 @@ const start = async () => {
   const promises = await Promise.all([
     configureStore(),
     import(/* webpackChunkName: "react-dom" */ "react-dom"),
-    import(/* webpackChunkName: "lodash" */ "lodash")
+    import(/* webpackChunkName: "lodash" */ "lodash"),
   ]);
 
   const store = promises["0"];
   const ReactDOM = promises["1"];
 
   ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>,
     document.getElementById("root") as HTMLElement
   );
 

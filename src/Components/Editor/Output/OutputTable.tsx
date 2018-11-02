@@ -1,23 +1,21 @@
 import * as React from "react";
 import {
-  Col,
-  Row,
   Button,
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
 } from "../../Deferred/DeferredReactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
 import OutputTableView from "./OutputTableView";
 import {
   toggleOutputTableModal,
-  ToggleOutputTableModal
+  ToggleOutputTableModal,
 } from "../../../Actions/actions";
 import {
   getisOutputTableModalOpen,
-  getOutputTableData
+  getOutputTableData,
 } from "../../../Store/selectors";
 import { AppState } from "../../../State/State";
 
@@ -40,24 +38,22 @@ export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
           </Button>
         </ModalFooter>
       </Modal>
-      <div>
-        <Row>
-          <Col>
-            <Button
-              block={true}
-              color="dark"
-              outline={true}
-              onClick={toggleModal}
-            >
-              Display results table fullscreen
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <OutputTableView />
-          </Col>
-        </Row>
+      <div className="row">
+        <div className="col">
+          <Button
+            block={true}
+            color="dark"
+            outline={true}
+            onClick={toggleModal}
+          >
+            Display results table fullscreen
+          </Button>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <OutputTableView />
+        </div>
       </div>
     </div>
   );
@@ -65,12 +61,12 @@ export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
 
 const mapStateToProps = (state: Readonly<AppState>) => ({
   data: getOutputTableData(state),
-  isModalOpen: getisOutputTableModalOpen(state)
+  isModalOpen: getisOutputTableModalOpen(state),
 });
 
 export default connect(
   mapStateToProps,
   {
-    toggleModal: toggleOutputTableModal
+    toggleModal: toggleOutputTableModal,
   }
 )(OutputTable);

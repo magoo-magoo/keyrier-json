@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Fragment } from "react";
-import { Col, Row } from "../../Deferred/DeferredReactstrap";
 import { customToString, containsIgnoreCase } from "../../../helpers/string";
 import "./OutputTable.css";
 import { connect } from "react-redux";
@@ -9,6 +8,7 @@ import TableAdvancedOptions from "./TableAdvancedOptions";
 import { LoadableReactTable } from "../../Deferred/DeferredReactTable";
 import { Column, Filter } from "react-table";
 import { itemType, AppState } from "../../../State/State";
+import { getOutputTableData } from "../../../Store/selectors";
 
 interface Props {
   data: itemType[];
@@ -19,7 +19,7 @@ interface Props {
 export const OutputTableView: React.SFC<Props> = ({
   data,
   displayedColumns,
-  groupBy
+  groupBy,
 }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div />;
@@ -31,7 +31,7 @@ export const OutputTableView: React.SFC<Props> = ({
       cellProps ? customToString(cellProps.value) : "",
     Header: key,
     accessor: key,
-    className: "text-center"
+    className: "text-center",
   }));
 
   const defaultFilterMethod = (filter: Filter, row: itemType) =>
@@ -41,13 +41,13 @@ export const OutputTableView: React.SFC<Props> = ({
 
   return (
     <Fragment>
-      <Row>
-        <Col>
+      <div className="row">
+        <div className="col">
           <TableAdvancedOptions />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
           <LoadableReactTable
             noDataText="Oh Noes!"
             className="-highlight"
@@ -58,21 +58,21 @@ export const OutputTableView: React.SFC<Props> = ({
             pivotBy={groupBy}
             defaultFilterMethod={defaultFilterMethod}
           />
-        </Col>
-      </Row>
-      <Row className="mx-3 align-items-center justify-content-end d-flex">
+        </div>
+      </div>
+      <div className="mx-3 align-items-center justify-content-end d-flex">
         <h4>Number of elements: {data.length}</h4>
-      </Row>
+      </div>
     </Fragment>
   );
 };
 
 const mapStateToProps = (state: Readonly<AppState>) => {
   return {
-    data: state.rootReducer.output.table.array,
+    data: getOutputTableData(state),
     displayedColumns: state.rootReducer.output.table.displayedColumns,
     columns: state.rootReducer.output.table.columns,
-    groupBy: state.rootReducer.output.table.groupBy
+    groupBy: state.rootReducer.output.table.groupBy,
   };
 };
 

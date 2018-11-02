@@ -1,18 +1,12 @@
 import * as React from "react";
-import {
-  Col,
-  Input,
-  Row,
-  Collapse,
-  Button
-} from "../../Deferred/DeferredReactstrap";
+import { Collapse, Button } from "../../Deferred/DeferredReactstrap";
 import "./OutputTable.css";
 import { connect } from "react-redux";
 import {
   updateTableColumns,
   UpdateTableColumns,
   UpdateTableGroupBy,
-  updateTableGroupBy
+  updateTableGroupBy,
 } from "../../../Actions/actions";
 import { LoadableReactSelect } from "../../Deferred/DeferredReactSelect";
 import { itemType, AppState } from "../../../State/State";
@@ -44,8 +38,8 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
     const columnOptions = this.props.columns.map(k => ({ value: k, label: k }));
 
     return (
-      <Row>
-        <Col>
+      <div className="row">
+        <div className="col">
           <Button
             className={"float-left"}
             color="primary"
@@ -57,8 +51,8 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
               : "Advanced options"}
           </Button>
           <Collapse isOpen={this.state.optionsCollapsed}>
-            <Input
-              type="select"
+            <select
+              className="form-control-lg form-control"
               name="select"
               id="groupingSelect"
               onChange={this.handleGroupingSelectChange}
@@ -67,7 +61,7 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
               {this.props.displayedColumns.map(key => (
                 <option key={key}>{key}</option>
               ))}
-            </Input>
+            </select>
             <Button
               color={"success"}
               onClick={this.handleOnclickOnExportToExcel}
@@ -78,26 +72,31 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
               options={columnOptions}
               value={this.props.displayedColumns.map(k => ({
                 value: k,
-                label: k
+                label: k,
               }))}
               isMulti={true}
               onChange={this.handleColumnChange}
             />
           </Collapse>
-        </Col>
-      </Row>
+        </div>
+      </div>
     );
   }
 
-  private readonly handleColumnChange = (cols: ValueType<{}> | undefined | null, _action: ActionMeta) =>{
-      if (cols instanceof Array) {
-        const mapped = cols.map((c:{value?: string}) => c.value? c.value : '');
-        this.props.onColumnsChange(mapped);
-      }
+  private readonly handleColumnChange = (
+    cols: ValueType<{}> | undefined | null,
+    _action: ActionMeta
+  ) => {
+    if (cols instanceof Array) {
+      const mapped = cols.map(
+        (c: { value?: string }) => (c.value ? c.value : "")
+      );
+      this.props.onColumnsChange(mapped);
+    }
   };
 
   private readonly handleGroupingSelectChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     this.props.updateTableGroupBy([e.target.value]);
   };
@@ -105,7 +104,7 @@ export class TableAdvancedOptions extends React.Component<Props, State> {
   private readonly toggleCollapseOptions = () =>
     this.setState({
       ...this.state,
-      optionsCollapsed: !this.state.optionsCollapsed
+      optionsCollapsed: !this.state.optionsCollapsed,
     });
 
   private readonly handleOnclickOnExportToExcel = async () => {
@@ -122,7 +121,7 @@ const mapStateToProps = (state: Readonly<AppState>) => {
     data: state.rootReducer.output.table.array,
     displayedColumns: state.rootReducer.output.table.displayedColumns,
     columns: state.rootReducer.output.table.columns,
-    groupBy: state.rootReducer.output.table.groupBy
+    groupBy: state.rootReducer.output.table.groupBy,
   };
 };
 
