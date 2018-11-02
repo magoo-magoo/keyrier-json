@@ -3,9 +3,11 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
-const url = require('url');
-const isDev = require('electron-is-dev');
 
+const isDev =
+  'ELECTRON_IS_DEV' in process.env
+    ? parseInt(process.env.ELECTRON_IS_DEV, 10) === 1
+    : !app.isPackaged;
 let mainWindow;
 
 function createWindow() {
