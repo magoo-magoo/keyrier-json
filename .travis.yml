@@ -16,7 +16,7 @@ before_install:
   # - sudo apt-get update
   # - sudo apt-get install -y winehq-stable gcc
   - sudo apt-get update
-  - sudo apt-get install -y libstdc++-6-dev
+  - sudo apt-get install -y libstdc++6-4.7-dev
   - sudo apt-get install -y --no-install-recommends software-properties-common
   - sudo dpkg --add-architecture i386
   - curl -L https://dl.winehq.org/wine-builds/Release.key > Release.key && sudo apt-key add Release.key && sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu'
