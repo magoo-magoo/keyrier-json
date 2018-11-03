@@ -9,12 +9,17 @@
 
 A web application to perfom query on JSON object. Built in react/redux.
 
+## Desktop
 
-* Run locally:
-    ``` bash
-    yarn start
-    ```
-* Build:
-    ``` bash
-    yarn build
-    ```
+A desktop version is available. Last version [here](https://github.com/magoo-magoo/keyrier-json/releases/latest).
+
+## Development
+
+- Run locally:
+  ```bash
+  yarn start
+  ```
+- Build:
+  ```bash
+  yarn build
+  ```
