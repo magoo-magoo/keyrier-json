@@ -1,31 +1,42 @@
 dist: trusty
-language: node_js
-node_js:
-  - 10
+services: docker
+language: generic
 
 cache:
   yarn: true
   directories:
     - node_modules
+    - $HOME/.cache/electron
+    - $HOME/.cache/electron-builder
 
 before_install:
   # electron-builder => wine & it's deps
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - curl -L https://dl.winehq.org/wine-builds/Release.key > Release.key && sudo apt-key add Release.key && sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu'
-  - sudo apt-get update
-  - sudo dpkg --add-architecture i386
-  - sudo apt-get install -y --install-recommends winehq-devel g++-7
+  # - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  # - curl -L https://dl.winehq.org/wine-builds/Release.key > Release.key && sudo apt-key add Release.key && sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu'
+  # - sudo apt-get update
+  # - sudo dpkg --add-architecture i386
+  # - sudo apt-get install -y --install-recommends winehq-devel g++-7
 
 script:
-  - yarn test -- --coverage
-  - sonar-scanner
-  - npm version patch -m "release v%s [skip ci]"
-  - yarn run build
-  - yarn run build:electron
+  - docker run --rm \
+    --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
+    -v ${PWD}:/project \
+    -v ~/.cache/electron:/root/.cache/electron \
+    -v ~/.cache/electron-builder:/root/.cache/electron-builder \
+    electronuserland/builder:wine \
+    /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn release"
+  # - yarn test -- --coverage
+  # - sonar-scanner
+  # - npm version patch -m "release v%s [skip ci]"
+  # - yarn run build
+  # - yarn run build:electron
 
 addons:
   sonarcloud:
     organization: 'magoo-magoo-github'
+
+before_cache:
+  - rm -rf $HOME/.cache/electron-builder/wine
 
 before_deploy:
   - git config --local user.name "Travis CI"
