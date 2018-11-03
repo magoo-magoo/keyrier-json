@@ -10,7 +10,7 @@ cache:
 script:
   - yarn test -- --coverage
   - sonar-scanner
-  - npm version patch
+  - npm version patch -m "release version %s [skip ci]"
   - yarn run build
   - yarn run build:electron
 
@@ -44,3 +44,4 @@ deploy:
     skip_cleanup: true
     on:
       branch: master
+      tags: false

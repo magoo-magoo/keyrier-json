@@ -33,7 +33,7 @@
     "deploy": "gh-pages -d build",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build:electron": "electron-builder --linux deb rpm tar.gz",
+    "build:electron": "electron-builder --linux deb tar.gz",
     "postinstall": "electron-builder install-app-deps",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
   },
