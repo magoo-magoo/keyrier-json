@@ -33,7 +33,7 @@
     "deploy": "gh-pages -d build",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build:electron": "electron-builder --windows nsis",
+    "build:electron": "electron-builder --windows nsis --linux deb tar.gz",
     "release": "yarn test -- --coverage && sonar-scanner && npm version patch -m \"release v%s [skip ci]\" && yarn run build && yarn run build:electron",
     "postinstall": "electron-builder install-app-deps",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
