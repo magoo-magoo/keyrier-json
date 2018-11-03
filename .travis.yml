@@ -14,13 +14,25 @@ script:
 
 addons:
   sonarcloud:
-    organization: "magoo-magoo-github"
+    organization: 'magoo-magoo-github'
+
+before_deploy:
+  - git config --local user.name "Travis CI"
+  - git config --local user.email "travis@travis-ci.org"
+  - npm version patch
 
 deploy:
-  provider: pages
-  local-dir: build
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep-history: true
-  on:
-    branch: master
+  - provider: pages
+    local-dir: build
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN
+    keep-history: true
+    on:
+      branch: master
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file: dist/*
+    skip_cleanup: true
+    on:
+      branch: master

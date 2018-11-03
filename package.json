@@ -34,7 +34,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "preelectron:build": "npm run build",
-    "electron:build": "electron-builder --windows nsis --linux deb rpm tar.gz",
+    "electron:build": "electron-builder --linux deb rpm tar.gz",
     "postinstall": "electron-builder install-app-deps",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
   },
