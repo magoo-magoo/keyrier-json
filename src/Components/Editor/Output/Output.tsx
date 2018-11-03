@@ -60,7 +60,7 @@ export class Output extends React.Component<Props, State> {
                   Raw JSON view
                 </a>
               </li>
-              <li className="nav-item">
+              <li className="nav-item" hidden={!this.props.isArray}>
                 <a
                   className={classNames({
                     active:
