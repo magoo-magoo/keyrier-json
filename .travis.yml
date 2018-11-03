@@ -10,11 +10,11 @@ cache:
 
 before_install:
   # electron-builder => wine & it's deps
-  - wget https://dl.winehq.org/wine-builds/Release.key
-  - sudo apt-key add Release.key
-  - sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/'
+  # - wget https://dl.winehq.org/wine-builds/Release.key
+  # - sudo apt-key add Release.key
+  # - sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/'
   - sudo apt-get update
-  - sudo apt-get install -y winehq-stable libstdc++6
+  - sudo apt-get install -y wine64
 
 script:
   - yarn test -- --coverage
