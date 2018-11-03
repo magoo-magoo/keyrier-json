@@ -2,7 +2,7 @@
   "description": "Keyrier JSON",
   "name": "keyrier-json",
   "author": "magoo",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": true,
   "homepage": "./",
   "main": "public/electron.js",
