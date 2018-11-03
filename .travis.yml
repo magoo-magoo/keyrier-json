@@ -9,7 +9,7 @@ cache:
     - node_modules
 
 before_install:
-  - sudo apt-get install -y wine64
+  - sudo apt-get install -y wine32
 
 script:
   - yarn test -- --coverage
