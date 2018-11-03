@@ -10,11 +10,19 @@ cache:
 
 before_install:
   # electron-builder => wine & it's deps
-  - wget https://dl.winehq.org/wine-builds/Release.key
-  - sudo apt-key add Release.key
-  - sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/'
+  # - wget https://dl.winehq.org/wine-builds/Release.key
+  # - sudo apt-key add Release.key
+  # - sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/'
+  # - sudo apt-get update
+  # - sudo apt-get install -y winehq-stable gcc
   - sudo apt-get update
-  - sudo apt-get install -y winehq-stable gcc
+  - sudo apt-get install -y --no-install-recommends software-properties-common
+  - sudo dpkg --add-architecture i386
+  - curl -L https://dl.winehq.org/wine-builds/Release.key > Release.key && sudo apt-key add Release.key && sudo apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu'
+  - sudo apt-get update
+  - sudo apt-get -y purge software-properties-common libdbus-glib-1-2 python3-dbus python3-gi python3-pycurl python3-software-properties
+  - sudo apt-get install -y --no-install-recommends winehq-stable
+  - sudo apt-get clean && rm -rf /var/lib/apt/lists/* && unlink Release.key
 
 script:
   - yarn test -- --coverage
