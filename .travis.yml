@@ -27,7 +27,7 @@ before_install:
 script:
   - yarn test -- --coverage
   - sonar-scanner
-  - npm version patch -m "release version %s [skip ci]"
+  - npm version patch -m "release v%s [skip ci]"
   - yarn run build
   - yarn run build:electron
 
