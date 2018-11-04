@@ -19,7 +19,8 @@ script:
   - sonar-scanner
   - npm version patch -m "release v%s [skip ci]"
   - npm run build
-  - docker run --rm --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_')   -v ${PWD}:/project   -v ~/.cache/electron:/root/.cache/electron   -v ~/.cache/electron-builder:/root/.cache/electron-builder   electronuserland/builder:wine   /bin/bash -c "yarn run build:electron"
+    # we want to run build:electron inside a container
+  - docker run --rm --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') -v ${PWD}:/project -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine /bin/bash -c "yarn run build:electron"
 
 addons:
   sonarcloud:
@@ -29,15 +30,8 @@ before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 
 before_deploy:
-  - git config --local user.name "Travis CI"
-  - git config --local user.email "travis@travis-ci.org"
-  - git config --global push.default matching
-  - git config credential.helper "store --file=.git/credentials"
-  - echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
-  - git checkout -- .
-  - git status
-  - git push origin HEAD:$TRAVIS_BRANCH
-  - git push --tags
+  - git config --local user.name "Travis CI" && git config --local user.email "travis@travis-ci.org" && git config --global push.default matching && git config credential.helper "store --file=.git/credentials" && echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
+  - git checkout -- . && git status && git push origin HEAD:$TRAVIS_BRANCH && git push --tags
 
 deploy:
   - provider: pages
