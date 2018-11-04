@@ -37,7 +37,7 @@
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build",
-    "pack:electron": "electron-builder --linux deb rpm tar.gz --windows nsis portable --publish never",
+    "pack:electron": "electron-builder --linux deb rpm tar.gz --windows nsis portable --publish onTagOrDraft",
     "pack:dockerelectron": "bash -c \"docker run --rm --env GH_TOKEN=$GITHUB_TOKEN --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') -v ${PWD}:/project -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine /bin/bash -c \\\"npm run pack:electron\\\"\"",
     "postinstall": "electron-builder install-app-deps",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
