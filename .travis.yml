@@ -8,8 +8,8 @@ cache:
   yarn: true
   directories:
     - node_modules
-    - $HOME/.cache/electron
-    - $HOME/.cache/electron-builder
+    - .cache/electron
+    - .cache/electron-builder
 
 install:
   - npm ci
