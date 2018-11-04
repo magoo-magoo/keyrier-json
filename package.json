@@ -33,7 +33,7 @@
     "deploy": "gh-pages -d build",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build:electron": "electron-builder",
+    "build:electron": "electron-builder --linux deb rpm tar.gz --windows nsis portable",
     "release": "yarn test -- --coverage && sonar-scanner && npm version patch -m \"release v%s [skip ci]\" && yarn run build && yarn run build:electron",
     "postinstall": "electron-builder install-app-deps",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
@@ -115,12 +115,10 @@
     ],
     "linux": {
       "maintainer": "mael.gouacide@gmail.com",
-      "target": "deb rpm tar.gz",
       "executableName": "keyrier-json",
       "icon": "build/logo_192.png"
     },
     "win": {
-      "target": "nsis portable",
       "icon": "build/logo_192.png"
     }
   }
