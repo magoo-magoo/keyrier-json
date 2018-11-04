@@ -115,7 +115,8 @@
     ],
     "linux": {
       "maintainer": "mael.gouacide@gmail.com",
-      "target": "deb tar.gz AppImage",
+      "target": "deb rpm tar.gz",
+      "executableName": "keyrier-json",
       "icon": "build/logo_192.png"
     },
     "win": {
