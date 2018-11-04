@@ -119,7 +119,7 @@
       "icon": "build/logo_192.png"
     },
     "win": {
-      "icon": "build/logo_192.png"
+      "icon": "build/logo_512.png"
     }
   }
 }
