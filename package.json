@@ -55,7 +55,7 @@
     "@types/react-loadable": "5.4.1",
     "@types/react-redux": "6.0.9",
     "@types/react-select": "2.0.5",
-    "@types/react-table": "6.7.14",
+    "@types/react-table": "6.7.15",
     "@types/reactstrap": "6.4.2",
     "concurrently": "^4.0.1",
     "electron": "^3.0.7",
