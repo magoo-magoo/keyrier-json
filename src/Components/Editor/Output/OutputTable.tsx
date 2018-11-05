@@ -27,7 +27,7 @@ interface Props {
 export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
   return (
     <div className="output-table">
-      <Modal isOpen={isModalOpen} toggle={toggleModal}>
+      <Modal isOpen={isModalOpen} toggle={toggleModal} className="mw-100">
         <ModalHeader toggle={toggleModal}>Table view</ModalHeader>
         <ModalBody>
           <OutputTableView />

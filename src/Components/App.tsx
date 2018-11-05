@@ -1,11 +1,9 @@
-import './App.css';
-
 import * as React from 'react';
 import Editor from './Editor/Editor';
-import { Header } from './Header';
+import Header from './Header';
 
 export const App = () => (
-  <div className="App">
+  <div className="text-center">
     <Header />
     <div className="container">
       <Editor />

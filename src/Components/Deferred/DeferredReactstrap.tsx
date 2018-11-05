@@ -92,3 +92,33 @@ export const FormGroup = Loadable({
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/FormGroup" */ 'reactstrap/lib/FormGroup'),
 });
+export const Navbar = Loadable({
+  loading: Loading('Navbar'),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/Navbar" */ 'reactstrap/lib/Navbar'),
+});
+export const NavbarBrand = Loadable({
+  loading: Loading('NavbarBrand'),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/NavbarBrand" */ 'reactstrap/lib/NavbarBrand'),
+});
+export const NavbarToggler = Loadable({
+  loading: Loading('NavbarToggler'),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/NavbarToggler" */ 'reactstrap/lib/NavbarToggler'),
+});
+export const Nav = Loadable({
+  loading: Loading('Nav'),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/Nav" */ 'reactstrap/lib/Nav'),
+});
+export const NavItem = Loadable({
+  loading: Loading('NavItem'),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/NavItem" */ 'reactstrap/lib/NavItem'),
+});
+export const NavLink = Loadable({
+  loading: Loading('NavLink'),
+  loader: async () =>
+    await import(/* webpackChunkName: "reactstrap/lib/NavLink" */ 'reactstrap/lib/NavLink'),
+});

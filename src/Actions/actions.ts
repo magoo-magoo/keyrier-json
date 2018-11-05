@@ -1,3 +1,5 @@
+import { Theme } from '../Themes/Themes';
+
 /*
  * action creators
  */
@@ -56,6 +58,15 @@ export const updateTableGroupBy = (groupBy: string[]): UpdateTableGroupBy => ({
   type: 'UPDATE_TABLE_GROUP_BY',
 });
 
+export interface SwitchTheme {
+  type: 'SWITCH_GLOBAL_THEME';
+  theme: Theme;
+}
+export const switchTheme = (theme: Theme): SwitchTheme => ({
+  theme,
+  type: 'SWITCH_GLOBAL_THEME',
+});
+
 export interface ReduxInitAction {
   type: '@@INIT';
 }
@@ -68,4 +79,5 @@ export type Action =
   | Readonly<UpdateTableColumns>
   | Readonly<ReduxInitAction>
   | Readonly<UpdateTableGroupBy>
+  | Readonly<SwitchTheme>
   | Readonly<UpdateSource>;

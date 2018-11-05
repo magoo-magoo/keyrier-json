@@ -10,6 +10,7 @@ import {
   OupoutTableState,
   getInitialState,
   itemType,
+  UserSettingsState,
 } from '../State/State';
 import { logError, logWarning } from '../helpers/logger';
 
@@ -21,6 +22,7 @@ export const rootReducer = (
     ...rootState,
     query: query(rootState.query, action),
     source: source(rootState.source, action),
+    userSettings: userSettings(rootState.userSettings, action),
   };
 
   const newOutputState = output(
@@ -65,6 +67,17 @@ export const source = (state: Readonly<SourceState>, action: Action) => {
   switch (action.type) {
     case 'UPDATE_SOURCE_TEXT':
       return sourceText(state, action);
+    default:
+      return state;
+  }
+};
+export const userSettings = (
+  state: Readonly<UserSettingsState>,
+  action: Action
+) => {
+  switch (action.type) {
+    case 'SWITCH_GLOBAL_THEME':
+      return { ...state, globalTheme: action.theme };
     default:
       return state;
   }

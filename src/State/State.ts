@@ -1,4 +1,5 @@
 import initialStateJson from './default-state.json';
+import { Theme } from '../Themes/Themes';
 
 export interface QueryState {
   readonly text: string;
@@ -32,10 +33,15 @@ export interface OupoutTableState {
   readonly groupBy: string[];
 }
 
+export interface UserSettingsState {
+  readonly globalTheme: Theme | string;
+}
+
 export interface RootState {
   readonly source: Readonly<SourceState>;
   readonly query: Readonly<QueryState>;
   readonly output: Readonly<OupoutState>;
+  readonly userSettings: Readonly<UserSettingsState>;
   readonly error?: Error;
 }
 

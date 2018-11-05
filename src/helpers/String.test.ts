@@ -1,4 +1,4 @@
-import { customToString } from './string';
+import { customToString, containsIgnoreCase } from './string';
 
 describe('string helpers', () => {
   it('should convert number', () => {
@@ -30,5 +30,13 @@ describe('string helpers', () => {
   it('should convert object', () => {
     const result = customToString({ property: 42 });
     expect(result).toBe('{"property":42}');
+  });
+  it('should returns true when contains part', () => {
+    const result = containsIgnoreCase('une longue phrase', 'PhrasE');
+    expect(result).toBeTruthy();
+  });
+  it('should returns false when does not contain part', () => {
+    const result = containsIgnoreCase('une longue phrase', 'JAVA');
+    expect(result).toBeFalsy();
   });
 });

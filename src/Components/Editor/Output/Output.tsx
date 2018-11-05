@@ -22,12 +22,17 @@ interface Props {
 
 type tabType = 'RawJson' | 'Table';
 
-export const Output: React.SFC<Props> = props => {
+const pointer = {
+  cursor: 'pointer',
+  'font-size': 'large',
+};
+
+export const Output: React.SFC<Props> = ({ output, isArray, errorMessage }) => {
   const [activeTab, setActiveTab] = React.useState(
-    props.isArray ? 'Table' : ('RawJson' as tabType)
+    isArray ? 'Table' : ('RawJson' as tabType)
   );
   React.useEffect(() => {
-    if (!props.isArray && activeTab === 'Table') {
+    if (!isArray && activeTab === 'Table') {
       setActiveTab('RawJson');
     }
   });
@@ -40,25 +45,27 @@ export const Output: React.SFC<Props> = props => {
             <li className="nav-item">
               <a
                 className={classNames({
-                  active: !props.isArray || activeTab === 'RawJson',
+                  active: activeTab === 'RawJson',
                   'nav-link': true,
                 })}
                 onClick={() => {
                   setActiveTab('RawJson');
                 }}
+                style={pointer}
               >
                 Raw JSON view
               </a>
             </li>
-            <li className="nav-item" hidden={!props.isArray}>
+            <li className="nav-item" hidden={!isArray}>
               <a
                 className={classNames({
-                  active: !props.isArray || activeTab === 'Table',
+                  active: activeTab === 'Table',
                   'nav-link': true,
                 })}
                 onClick={() => {
                   setActiveTab('Table');
                 }}
+                style={pointer}
               >
                 Table view
               </a>
@@ -78,7 +85,7 @@ export const Output: React.SFC<Props> = props => {
                 showPrintMargin={true}
                 showGutter={true}
                 highlightActiveLine={true}
-                value={jsonBeautify(props.output)}
+                value={jsonBeautify(output)}
                 minLines={10}
                 maxLines={100}
                 wrapEnabled={false}
@@ -107,10 +114,10 @@ export const Output: React.SFC<Props> = props => {
           <h3>Output:</h3>
         </div>
       </div>
-      <div hidden={!props.errorMessage}>
+      <div hidden={!errorMessage}>
         <div className="row">
           <div className="col-sm-10 offset-sm-2">
-            <Alert color="danger">{props.errorMessage}</Alert>
+            <Alert color="danger">{errorMessage}</Alert>
           </div>
         </div>
       </div>

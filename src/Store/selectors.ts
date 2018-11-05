@@ -1,4 +1,5 @@
 import { AppState } from '../State/State';
+import { Theme } from '../Themes/Themes';
 
 type selector<T> = (state: Readonly<AppState>) => T;
 
@@ -17,3 +18,10 @@ export const getOutputTableData = (state: Readonly<AppState>) =>
 
 export const getisOutputTableModalOpen = (state: Readonly<AppState>) =>
   state.rootReducer.output.table.isModalOpen;
+
+export const getTheme = (state: Readonly<AppState>) => {
+  if (state.rootReducer.userSettings) {
+    return state.rootReducer.userSettings.globalTheme as Theme;
+  }
+  return 'materia';
+};
