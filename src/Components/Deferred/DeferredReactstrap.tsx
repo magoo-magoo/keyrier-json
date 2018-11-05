@@ -8,6 +8,7 @@ export const Button = Loadable({
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/Button" */ 'reactstrap/lib/Button'),
 });
+
 export const Alert = Loadable({
   loading: Loading('Alert'),
   loader: async () =>
@@ -19,6 +20,7 @@ export const TabContent = Loadable({
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/TabContent" */ 'reactstrap/lib/TabContent'),
 });
+
 export const TabPane = Loadable({
   loading: Loading('TabPane'),
   loader: async () =>
@@ -30,66 +32,61 @@ export const Modal = Loadable({
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/Modal" */ 'reactstrap/lib/Modal'),
 });
+
 export const ModalHeader = Loadable({
   loading: Loading('ModalHeader'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/ModalHeader" */ 'reactstrap/lib/ModalHeader'),
 });
+
 export const ModalBody = Loadable({
   loading: Loading('ModalBody'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/ModalBody" */ 'reactstrap/lib/ModalBody'),
 });
+
 export const ModalFooter = Loadable({
   loading: Loading('ModalFooter'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/ModalFooter" */ 'reactstrap/lib/ModalFooter'),
 });
+
 export const ButtonDropdown = Loadable({
   loading: Loading('ButtonDropdown'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/ButtonDropdown" */ 'reactstrap/lib/ButtonDropdown'),
 });
+
 export const DropdownItem = Loadable({
   loading: Loading('DropdownItem'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/DropdownItem" */ 'reactstrap/lib/DropdownItem'),
 });
+
 export const DropdownMenu = Loadable({
   loading: Loading('DropdownMenu'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/DropdownMenu" */ 'reactstrap/lib/DropdownMenu'),
 });
+
 export const DropdownToggle = Loadable({
   loading: Loading('DropdownToggle'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/DropdownToggle" */ 'reactstrap/lib/DropdownToggle'),
 });
-// export const Label = Loadable({
-//   loading: Loading("Label"),
-//   loader: async () =>
-//     await import(/* webpackChunkName: "reactstrap/lib/Label" */ "reactstrap/lib/Label")
-// });
-// export const Input = Loadable({
-//   loading: Loading("Input"),
-//   loader: async () =>
-//     await import(/* webpackChunkName: "reactstrap/lib/Input" */ "reactstrap/lib/Input")
-// });
+
 export const Collapse = Loadable({
   loading: Loading('Collapse'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/Collapse" */ 'reactstrap/lib/Collapse'),
 });
-export const Progress = Loadable({
-  loading: Loading('Progress'),
-  loader: async () =>
-    await import(/* webpackChunkName: "reactstrap/lib/Progress" */ 'reactstrap/lib/Progress'),
-});
+
 export const Form = Loadable({
   loading: Loading('Form'),
   loader: async () =>
     await import(/* webpackChunkName: "reactstrap/lib/Form" */ 'reactstrap/lib/Form'),
 });
+
 export const FormGroup = Loadable({
   loading: Loading('FormGroup'),
   loader: async () =>

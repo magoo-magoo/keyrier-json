@@ -9,7 +9,7 @@ const CustomLoading = (
   }
 
   if (process.env.NODE_ENV === 'production') {
-    return <React.Fragment />;
+    return <></>;
   }
 
   return <div>{componentName} loading...</div>;

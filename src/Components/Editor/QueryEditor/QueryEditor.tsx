@@ -12,7 +12,7 @@ interface Props {
 
 export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
   return (
-    <React.Fragment>
+    <>
       <div className="row">
         <div className="col-sm-10 offset-sm-2">
           <h3>Type your query:</h3>
@@ -43,7 +43,7 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -34,7 +34,7 @@ export class ImportMenu extends Component<Props, State> {
 
   public render() {
     return (
-      <React.Fragment>
+      <>
         <ButtonDropdown
           isOpen={this.state.toggleDropdownIsOpen}
           toggle={this.toggleImportDropdown}
@@ -79,7 +79,7 @@ export class ImportMenu extends Component<Props, State> {
             </Button>
           </ModalFooter>
         </Modal>
-      </React.Fragment>
+      </>
     );
   }
 

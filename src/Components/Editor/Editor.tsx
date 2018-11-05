@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const Editor: React.SFC<Props> = ({ onReset }) => (
-  <React.Fragment>
+  <>
     <h1>Paste your JSON and Query it.</h1>
     <div className="row">
       <div className="col">
@@ -36,7 +36,7 @@ export const Editor: React.SFC<Props> = ({ onReset }) => (
         <Output />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 
 export default connect(

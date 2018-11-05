@@ -10,7 +10,7 @@ import {
 } from '../../../Actions/actions';
 import { LoadableReactSelect } from '../../Deferred/DeferredReactSelect';
 import { itemType, AppState } from '../../../State/State';
-import { ActionMeta, ValueType } from 'react-select/lib/types';
+import { ValueType } from 'react-select/lib/types';
 
 interface Props {
   data: itemType[];
@@ -20,101 +20,82 @@ interface Props {
   onColumnsChange: (v: string[]) => UpdateTableColumns;
   updateTableGroupBy: (v: string[]) => UpdateTableGroupBy;
 }
-interface State {
-  optionsCollapsed: boolean;
-}
 
-export class TableAdvancedOptions extends React.Component<Props, State> {
-  public constructor(props: Props) {
-    super(props);
-    this.state = { optionsCollapsed: false };
-  }
+const handleOnclickOnExportToExcel = async (data: any) => {
+  const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx');
+  const workBook = xlsx.utils.book_new();
+  const workSheet = xlsx.utils.json_to_sheet(data);
+  xlsx.utils.book_append_sheet(workBook, workSheet, 'keyrier-json');
+  xlsx.writeFile(workBook, 'export.xlsx');
+};
 
-  public render() {
-    if (this.props.columns.length <= 0) {
-      return <div />;
-    }
+export const TableAdvancedOptions: React.SFC<Props> = ({
+  onColumnsChange,
+  columns,
+  updateTableGroupBy,
+  data,
+  displayedColumns,
+}) => {
+  const [optionsCollapsed, setOptionsCollapsed] = React.useState(false);
 
-    const columnOptions = this.props.columns.map(k => ({ value: k, label: k }));
-
-    return (
-      <div className="row">
-        <div className="col">
-          <Button
-            className={'float-left'}
-            color="primary"
-            block={true}
-            onClick={this.toggleCollapseOptions}
-          >
-            {this.state.optionsCollapsed
-              ? 'Hide advanced options'
-              : 'Advanced options'}
-          </Button>
-          <Collapse isOpen={this.state.optionsCollapsed}>
-            <select
-              className="form-control-lg form-control"
-              name="select"
-              id="groupingSelect"
-              onChange={this.handleGroupingSelectChange}
-            >
-              <option key={'Group by...'}>Group by...</option>
-              {this.props.displayedColumns.map(key => (
-                <option key={key}>{key}</option>
-              ))}
-            </select>
-            <Button
-              color={'success'}
-              onClick={this.handleOnclickOnExportToExcel}
-            >
-              Export to Excel (.xlsx)
-            </Button>
-            <LoadableReactSelect
-              options={columnOptions}
-              value={this.props.displayedColumns.map(k => ({
-                value: k,
-                label: k,
-              }))}
-              isMulti={true}
-              onChange={this.handleColumnChange}
-            />
-          </Collapse>
-        </div>
-      </div>
-    );
-  }
-
-  private readonly handleColumnChange = (
-    cols: ValueType<{}> | undefined | null,
-    _action: ActionMeta
-  ) => {
+  const handleColumnChange = (cols: ValueType<{}> | undefined | null) => {
     if (cols instanceof Array) {
       const mapped = cols.map(
         (c: { value?: string }) => (c.value ? c.value : '')
       );
-      this.props.onColumnsChange(mapped);
+      onColumnsChange(mapped);
     }
   };
 
-  private readonly handleGroupingSelectChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    this.props.updateTableGroupBy([e.target.value]);
-  };
+  if (columns.length <= 0) {
+    return <></>;
+  }
 
-  private readonly toggleCollapseOptions = () =>
-    this.setState({
-      ...this.state,
-      optionsCollapsed: !this.state.optionsCollapsed,
-    });
+  const columnOptions = columns.map(k => ({ value: k, label: k }));
 
-  private readonly handleOnclickOnExportToExcel = async () => {
-    const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx');
-    const workBook = xlsx.utils.book_new();
-    const workSheet = xlsx.utils.json_to_sheet(this.props.data);
-    xlsx.utils.book_append_sheet(workBook, workSheet, 'keyrier-json');
-    xlsx.writeFile(workBook, 'export.xlsx');
-  };
-}
+  return (
+    <div className="row">
+      <div className="col">
+        <Button
+          className={'float-left'}
+          color="primary"
+          block={true}
+          onClick={() => setOptionsCollapsed(!optionsCollapsed)}
+        >
+          {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
+        </Button>
+        <Collapse isOpen={optionsCollapsed}>
+          <select
+            className="form-control-lg form-control"
+            name="select"
+            id="groupingSelect"
+            onChange={e => updateTableGroupBy([e.target.value])}
+          >
+            <option key={'Group by...'}>Group by...</option>
+            {displayedColumns.map(key => (
+              <option key={key}>{key}</option>
+            ))}
+          </select>
+          <Button
+            color={'success'}
+            onClick={() => handleOnclickOnExportToExcel(data)}
+          >
+            Export to Excel (.xlsx)
+          </Button>
+          <LoadableReactSelect
+            options={columnOptions}
+            value={displayedColumns.map(k => ({
+              value: k,
+              label: k,
+            }))}
+            isMulti={true}
+            onChange={handleColumnChange}
+          />
+        </Collapse>
+      </div>
+    </div>
+  );
+};
 
 const mapStateToProps = (state: Readonly<AppState>) => {
   return {

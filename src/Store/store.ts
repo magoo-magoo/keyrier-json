@@ -10,7 +10,7 @@ const persistStore = (rootState: RootState | {}) => {
 };
 
 const loadStore = () => {
-  if (window.localStorage !== undefined) {
+  if (window.localStorage) {
     return localStorage.getItem('keyrier-json.app.state');
   }
   return null;

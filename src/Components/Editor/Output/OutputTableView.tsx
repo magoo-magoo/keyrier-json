@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Fragment } from 'react';
 import { customToString, containsIgnoreCase } from '../../../helpers/string';
 import './OutputTable.css';
 import { connect } from 'react-redux';
@@ -40,7 +39,7 @@ export const OutputTableView: React.SFC<Props> = ({
     containsIgnoreCase(customToString(row[filter.id]), filter.value);
 
   return (
-    <Fragment>
+    <>
       <div className="row">
         <div className="col">
           <TableAdvancedOptions />
@@ -63,7 +62,7 @@ export const OutputTableView: React.SFC<Props> = ({
       <div className="mx-3 align-items-center justify-content-end d-flex">
         <h4>Number of elements: {data.length}</h4>
       </div>
-    </Fragment>
+    </>
   );
 };
 

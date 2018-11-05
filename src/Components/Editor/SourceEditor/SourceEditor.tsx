@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
-  <React.Fragment>
+  <>
     <div className="row">
       <div className="col-sm-10 offset-sm-2">
         <h3>paste your JSON:</h3>
@@ -47,7 +47,7 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 
 const mapStateToProps = (state: Readonly<AppState>) => ({

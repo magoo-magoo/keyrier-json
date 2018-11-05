@@ -18,7 +18,7 @@ interface Props {
 
 const displayError = (error: TypeError | null) => {
   if (!error) {
-    return <React.Fragment />;
+    return <></>;
   }
   return (
     <Alert color="danger">
@@ -28,7 +28,7 @@ const displayError = (error: TypeError | null) => {
   );
 };
 
-export const HttpRequestSourceFunc: React.SFC<Props> = ({
+export const HttpRequestSource: React.SFC<Props> = ({
   onRequestSucceed,
   updateSource,
 }) => {
@@ -80,7 +80,7 @@ export const HttpRequestSourceFunc: React.SFC<Props> = ({
   };
 
   return (
-    <React.Fragment>
+    <>
       <FormGroup>
         <label htmlFor="requestMethod">Method</label>
         <select
@@ -160,11 +160,11 @@ export const HttpRequestSourceFunc: React.SFC<Props> = ({
         Submit
       </Button>
       {displayError(error)}
-    </React.Fragment>
+    </>
   );
 };
 
 export default connect(
   null,
   { updateSource }
-)(HttpRequestSourceFunc);
+)(HttpRequestSource);

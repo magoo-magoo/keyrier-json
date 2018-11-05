@@ -1,4 +1,4 @@
-import { persons } from '../data/persons';
+import initialStateJson from './default-state.json';
 
 export interface QueryState {
   readonly text: string;
@@ -43,29 +43,4 @@ export interface AppState {
   readonly rootReducer: Readonly<RootState>;
 }
 
-const initialState: Readonly<RootState> = {
-  output: {
-    text: '',
-    table: {
-      array: [],
-      isArray: false,
-      isModalOpen: false,
-      displayedColumns: [],
-      columns: [],
-      groupBy: [],
-    },
-  },
-  query: {
-    text: `
-// data is your JSON object
-// you can use any correct javascript code to query it
-// in addition of that,
-// you can use lodash helper functions like exemple below. see https://lodash.com/docs/
-_.chain(data)
-  .get('results')
-    `,
-  },
-  source: { text: JSON.stringify(persons) },
-};
-
-export const getInitialState = () => initialState;
+export const getInitialState = () => initialStateJson;

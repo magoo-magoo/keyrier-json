@@ -3,12 +3,11 @@
   "linterOptions": {
     "exclude": ["config/**/*.js", "node_modules/**/*.ts", "src/data/**/*.tsx"]
   },
-  "rules":{
+  "rules": {
     "object-literal-sort-keys": false,
     "interface-name": [true, "never-prefix"],
     "ordered-imports": false,
     "prefer-object-spread": true,
-    "trailing-comma": [false, {"multiline": "always", "singleline": "never"}]
-
+    "trailing-comma": [false, { "multiline": "always", "singleline": "never" }]
   }
 }
