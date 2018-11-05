@@ -17,7 +17,7 @@ install:
 script:
   - npm test -- --coverage
   - sonar-scanner
-  - npm version minor -m "release v%s [skip ci]"
+  - npm version patch -m "release v%s [skip ci]"
   - npm run build
   - npm run pack:dockerelectron
 

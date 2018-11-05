@@ -17,11 +17,9 @@ const start = async () => {
   const ReactDOM = promises['1'];
 
   ReactDOM.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>,
+    <Provider store={store}>
+      <App />
+    </Provider>,
     document.getElementById('root') as HTMLElement
   );
 

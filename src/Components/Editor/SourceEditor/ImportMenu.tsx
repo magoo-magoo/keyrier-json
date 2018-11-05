@@ -43,7 +43,7 @@ export class ImportMenu extends Component<Props, State> {
             Import
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem>
+            <DropdownItem toggle={false}>
               <label>
                 Browse JSON file...
                 <input
@@ -92,6 +92,7 @@ export class ImportMenu extends Component<Props, State> {
 
   private onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     logInfo('onFileChange');
+    this.toggleImportDropdown();
     if (e.target.files && e.target.files.length > 0) {
       const fileReader = new FileReader();
       logInfo('e.target.files', e.target.files[0].name);
