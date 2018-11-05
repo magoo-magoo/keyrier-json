@@ -17,6 +17,7 @@ function createWindow() {
   autoUpdater.logger = log;
   autoUpdater.checkForUpdatesAndNotify();
   mainWindow = new BrowserWindow({ width: 1200, height: 800 });
+  mainWindow.maximize();
   mainWindow.loadURL(
     isDev
       ? 'http://localhost:3000'
@@ -27,7 +28,7 @@ function createWindow() {
 
 function sendStatusToWindow(text) {
   log.info(text);
-  win.webContents.send('message', text);
+  mainWindow.webContents.send('message', text);
 }
 
 app.on('ready', createWindow);
