@@ -1,5 +1,5 @@
 import { output, query, rootReducerReset, source } from './reducers';
-import { getInitialState } from '../State/State';
+import { getInitialAppState } from '../State/State';
 
 describe('Reducers', () => {
   it('rootReducers should reset', () => {
@@ -22,8 +22,8 @@ describe('Reducers', () => {
       type: 'RESET_EDITOR',
     });
 
-    expect(results.query).toEqual(getInitialState().query);
-    expect(results.source).toEqual(getInitialState().source);
+    expect(results.query).toEqual(getInitialAppState().query);
+    expect(results.source).toEqual(getInitialAppState().source);
   });
 
   it('update query action should update', () => {

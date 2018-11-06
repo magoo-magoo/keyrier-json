@@ -12,13 +12,19 @@ import {
   ModalFooter,
   ModalHeader,
 } from '../../Deferred/DeferredReactstrap';
-import { UpdateSource, updateSource } from '../../../Actions/actions';
-import { AppState } from '../../../State/State';
+import {
+  UpdateSource,
+  updateSource,
+  ResetEditor,
+  resetEditor,
+} from '../../../Actions/actions';
+import { RootState } from '../../../State/State';
 import HttpRequestSource from './RequestSource';
 import './ImportMenu.css';
 import { logInfo } from '../../../helpers/logger';
 interface Props {
   onFileContentReady: (fileContent: string) => UpdateSource;
+  onReset: () => ResetEditor;
 }
 
 interface State {
@@ -57,6 +63,9 @@ export class ImportMenu extends Component<Props, State> {
             </DropdownItem>
             <DropdownItem onClick={this.toggleModal}>
               <label>HTTP request</label>
+            </DropdownItem>
+            <DropdownItem onClick={this.props.onReset}>
+              <label>Reset</label>
             </DropdownItem>
           </DropdownMenu>
         </ButtonDropdown>
@@ -106,11 +115,9 @@ export class ImportMenu extends Component<Props, State> {
   };
 }
 
-const mapStateToProps = (state: Readonly<AppState>) => ({
-  sourceText: state.rootReducer.source.text,
-});
+const mapStateToProps = (_state: Readonly<RootState>) => ({});
 
 export default connect(
   mapStateToProps,
-  { onFileContentReady: updateSource }
+  { onFileContentReady: updateSource, onReset: resetEditor }
 )(ImportMenu);

@@ -23,10 +23,12 @@ map.set('superhero', () =>
 map.set('united', () => import('bootswatch/dist/united/bootstrap.min.css'));
 map.set('yeti', () => import('bootswatch/dist/yeti/bootstrap.min.css'));
 
-export const importThemeStyleCustom = (theme: Theme) => {
-  const themeLoader = map.get(theme);
-  if (themeLoader) {
-    return themeLoader();
+export const importThemeStyleCustom = (theme: Theme | null) => {
+  if (theme !== null) {
+    const themeLoader = map.get(theme);
+    if (themeLoader) {
+      return themeLoader();
+    }
   }
   return Promise.reject('theme is not defined');
 };

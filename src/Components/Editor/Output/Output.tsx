@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Alert, TabContent, TabPane } from '../../Deferred/DeferredReactstrap';
 import { jsonBeautify } from '../../../helpers/json';
 import OutputTable from './OutputTable';
-import { AppState } from '../../../State/State';
+import { RootState } from '../../../State/State';
 
 import classNames from 'classnames';
 
@@ -126,7 +126,7 @@ export const Output: React.SFC<Props> = ({ output, isArray, errorMessage }) => {
   );
 };
 
-const mapStateToProps = (state: Readonly<AppState>): Props => {
+const mapStateToProps = (state: Readonly<RootState>): Props => {
   return {
     errorMessage: getOutputErrorMessage(state),
     isArray: getOutputIsArray(state),

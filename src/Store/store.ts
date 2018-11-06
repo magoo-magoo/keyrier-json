@@ -1,35 +1,68 @@
 import { createStore, compose } from 'redux';
 import rootReducers from '../Reducers/reducers';
-import { RootState, getInitialState } from '../State/State';
+import {
+  AppState,
+  getInitialAppState,
+  UserSettingsState,
+  getInitialUserSettingsState,
+} from '../State/State';
 import { logError } from '../helpers/logger';
+import { LoDashStatic } from 'lodash';
 
-const persistStore = (rootState: RootState | {}) => {
+const persistAppState = (appstate: AppState | {}) => {
   if (window.localStorage) {
-    localStorage.setItem('keyrier-json.app.state', JSON.stringify(rootState));
+    localStorage.setItem('keyrier-json.app.state', JSON.stringify(appstate));
+  }
+};
+const persistUserSettings = (userSettings: UserSettingsState | {}) => {
+  if (window.localStorage) {
+    localStorage.setItem(
+      'keyrier-json.user.settings',
+      JSON.stringify(userSettings)
+    );
   }
 };
 
-const loadStore = () => {
+const loadAppState = () => {
   if (window.localStorage) {
     return localStorage.getItem('keyrier-json.app.state');
   }
   return null;
 };
+const loadUserSettingsState = () => {
+  if (window.localStorage) {
+    return localStorage.getItem('keyrier-json.user.settings');
+  }
+  return null;
+};
 
-export const configureStore = async () => {
-  const lodashModule = await import(/* webpackChunkName: "lodash" */ 'lodash');
-  let preloadState = getInitialState();
-
+const loader = <T extends {}>(
+  getInitialStateFunc: () => T,
+  loadAppState: () => string | null,
+  lodashModule: LoDashStatic
+) => {
+  let state = getInitialStateFunc();
   try {
-    const savedStateString = loadStore();
+    const savedStateString = loadAppState();
     if (savedStateString) {
-      preloadState = JSON.parse(savedStateString);
+      state = JSON.parse(savedStateString);
       const merge = lodashModule.merge;
-      preloadState = merge({}, getInitialState(), preloadState);
+      state = merge({}, getInitialAppState(), state);
     }
   } catch (error) {
     logError(error);
   }
+  return state;
+};
+
+export const configureStore = async () => {
+  const lodashModule = await import(/* webpackChunkName: "lodash" */ 'lodash');
+  let AppState = loader(getInitialAppState, loadAppState, lodashModule.default);
+  let UserSettingsState = loader(
+    getInitialUserSettingsState,
+    loadUserSettingsState,
+    lodashModule.default
+  );
 
   const composeEnhancers =
     typeof window === 'object' &&
@@ -43,12 +76,13 @@ export const configureStore = async () => {
 
   const store = createStore(
     rootReducers,
-    { rootReducer: preloadState },
+    { app: AppState, userSettings: UserSettingsState },
     enhancer
   );
 
   store.subscribe(() => {
-    persistStore(store.getState().rootReducer);
+    persistAppState(store.getState().app);
+    persistUserSettings(store.getState().userSettings);
   });
 
   return store;

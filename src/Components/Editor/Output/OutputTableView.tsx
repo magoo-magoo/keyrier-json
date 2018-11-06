@@ -6,8 +6,13 @@ import TableAdvancedOptions from './TableAdvancedOptions';
 
 import { LoadableReactTable } from '../../Deferred/DeferredReactTable';
 import { Column, Filter } from 'react-table';
-import { itemType, AppState } from '../../../State/State';
-import { getOutputTableData } from '../../../Store/selectors';
+import { itemType, RootState } from '../../../State/State';
+import {
+  getOutputTableData,
+  getdisplayedColumns,
+  getColumns,
+  getGroupBy,
+} from '../../../Store/selectors';
 
 interface Props {
   data: itemType[];
@@ -66,12 +71,12 @@ export const OutputTableView: React.SFC<Props> = ({
   );
 };
 
-const mapStateToProps = (state: Readonly<AppState>) => {
+const mapStateToProps = (state: Readonly<RootState>) => {
   return {
     data: getOutputTableData(state),
-    displayedColumns: state.rootReducer.output.table.displayedColumns,
-    columns: state.rootReducer.output.table.columns,
-    groupBy: state.rootReducer.output.table.groupBy,
+    displayedColumns: getdisplayedColumns(state),
+    columns: getColumns(state),
+    groupBy: getGroupBy(state),
   };
 };
 

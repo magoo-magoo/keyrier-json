@@ -17,11 +17,11 @@ import { Theme } from '../Themes/themes';
 import { switchTheme } from '../Actions/actions';
 import { connect } from 'react-redux';
 import { getTheme } from '../Store/selectors';
-import { AppState } from '../State/State';
+import { RootState } from '../State/State';
 
 interface Props {
   switchTheme: (theme: Theme) => void;
-  currentTheme: Theme;
+  currentTheme: Theme | null;
 }
 
 const availableThemes: Theme[] = [
@@ -93,7 +93,7 @@ const Header: React.SFC<Props> = ({ switchTheme, currentTheme }) => {
   );
 };
 
-const mapStateToProps = (state: Readonly<AppState>) => ({
+const mapStateToProps = (state: Readonly<RootState>) => ({
   currentTheme: getTheme(state),
 });
 

@@ -2,8 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { UpdateQueryAction, updateQuery } from '../../../Actions/actions';
-import { AppState } from '../../../State/State';
+import { RootState } from '../../../State/State';
 import { AceEditor } from '../../Deferred/DeferredAceEditor';
+import { getQueryText } from '../../../Store/selectors';
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
@@ -47,8 +48,8 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
   );
 };
 
-const mapStateToProps = (state: Readonly<AppState>) => ({
-  queryText: state.rootReducer.query.text,
+const mapStateToProps = (state: Readonly<RootState>) => ({
+  queryText: getQueryText(state),
 });
 
 export default connect(

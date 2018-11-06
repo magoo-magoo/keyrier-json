@@ -1,5 +1,5 @@
 import initialStateJson from './default-state.json';
-import { Theme } from '../Themes/themes';
+import { Theme } from '../Themes/themes.js';
 
 export interface QueryState {
   readonly text: string;
@@ -34,19 +34,23 @@ export interface OupoutTableState {
 }
 
 export interface UserSettingsState {
-  readonly globalTheme: Theme | string;
-}
-
-export interface RootState {
-  readonly source: Readonly<SourceState>;
-  readonly query: Readonly<QueryState>;
-  readonly output: Readonly<OupoutState>;
-  readonly userSettings: Readonly<UserSettingsState>;
-  readonly error?: Error;
+  readonly globalTheme: Theme | null;
 }
 
 export interface AppState {
-  readonly rootReducer: Readonly<RootState>;
+  readonly source: Readonly<SourceState>;
+  readonly query: Readonly<QueryState>;
+  readonly output: Readonly<OupoutState>;
+  readonly error?: Error;
 }
 
-export const getInitialState = () => initialStateJson;
+export interface RootState {
+  readonly app: Readonly<AppState> | undefined;
+  readonly userSettings: Readonly<UserSettingsState> | undefined;
+}
+
+export const getInitialAppState = () => initialStateJson as AppState;
+export const getInitialUserSettingsState = () =>
+  ({
+    globalTheme: 'materia',
+  } as UserSettingsState);

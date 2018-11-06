@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 
 import { UpdateSource, updateSource } from '../../../Actions/actions';
 import { jsonBeautify } from '../../../helpers/json';
-import { AppState } from '../../../State/State';
+import { RootState } from '../../../State/State';
 import ImportMenu from './ImportMenu';
 import { AceEditor } from '../../Deferred/DeferredAceEditor';
+import { getSourceText } from '../../../Store/selectors';
 
 interface Props {
   onChange: (val: string) => UpdateSource;
@@ -50,8 +51,8 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
   </>
 );
 
-const mapStateToProps = (state: Readonly<AppState>) => ({
-  sourceText: state.rootReducer.source.text,
+const mapStateToProps = (state: Readonly<RootState>) => ({
+  sourceText: getSourceText(state),
 });
 
 export default connect(

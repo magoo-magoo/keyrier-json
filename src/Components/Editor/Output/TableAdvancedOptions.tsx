@@ -9,8 +9,14 @@ import {
   updateTableGroupBy,
 } from '../../../Actions/actions';
 import { LoadableReactSelect } from '../../Deferred/DeferredReactSelect';
-import { itemType, AppState } from '../../../State/State';
+import { itemType, RootState } from '../../../State/State';
 import { ValueType } from 'react-select/lib/types';
+import {
+  getTableArray,
+  getdisplayedColumns,
+  getColumns,
+  getGroupBy,
+} from '../../../Store/selectors';
 
 interface Props {
   data: itemType[];
@@ -97,12 +103,12 @@ export const TableAdvancedOptions: React.SFC<Props> = ({
   );
 };
 
-const mapStateToProps = (state: Readonly<AppState>) => {
+const mapStateToProps = (state: Readonly<RootState>) => {
   return {
-    data: state.rootReducer.output.table.array,
-    displayedColumns: state.rootReducer.output.table.displayedColumns,
-    columns: state.rootReducer.output.table.columns,
-    groupBy: state.rootReducer.output.table.groupBy,
+    data: getTableArray(state),
+    displayedColumns: getdisplayedColumns(state),
+    columns: getColumns(state),
+    groupBy: getGroupBy(state),
   };
 };
 

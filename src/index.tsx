@@ -6,7 +6,6 @@ import * as React from 'react';
 import App from './Components/App';
 import { getTheme } from './Store/selectors';
 import { importThemeStyleCustom } from './Themes/themes';
-import { AppState } from './State/State';
 import { logError } from './helpers/logger';
 
 const start = async () => {
@@ -19,9 +18,7 @@ const start = async () => {
 
   const store = promises[0];
   const ReactDOM = promises[1];
-  importThemeStyleCustom(getTheme(store.getState() as AppState)).catch(
-    logError
-  );
+  importThemeStyleCustom(getTheme(store.getState())).catch(logError);
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>

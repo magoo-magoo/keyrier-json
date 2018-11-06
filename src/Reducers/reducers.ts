@@ -5,24 +5,24 @@ import { jsonParseSafe } from '../helpers/json';
 import {
   OupoutState,
   QueryState,
-  RootState,
+  AppState,
   SourceState,
   OupoutTableState,
-  getInitialState,
+  getInitialAppState,
   itemType,
   UserSettingsState,
+  getInitialUserSettingsState,
 } from '../State/State';
 import { logError, logWarning } from '../helpers/logger';
 
 export const rootReducer = (
-  rootState: Readonly<RootState> = getInitialState(),
+  rootState: Readonly<AppState> = getInitialAppState(),
   action: Action
-): RootState => {
+): AppState => {
   const newState = {
     ...rootState,
     query: query(rootState.query, action),
     source: source(rootState.source, action),
-    userSettings: userSettings(rootState.userSettings, action),
   };
 
   const newOutputState = output(
@@ -41,10 +41,10 @@ export const rootReducer = (
 };
 
 export const crashReporter = (
-  rootReducerFn: Reducer<RootState>,
-  state: RootState,
+  rootReducerFn: Reducer<AppState>,
+  state: AppState,
   action: Action
-): RootState => {
+): AppState => {
   try {
     return rootReducerFn(state, action);
   } catch (error) {
@@ -72,7 +72,7 @@ export const source = (state: Readonly<SourceState>, action: Action) => {
   }
 };
 export const userSettings = (
-  state: Readonly<UserSettingsState>,
+  state: Readonly<UserSettingsState> = getInitialUserSettingsState(),
   action: Action
 ) => {
   switch (action.type) {
@@ -236,15 +236,16 @@ export const table = (state: OupoutTableState, action: Action) => {
 };
 
 export const rootReducerReset = (
-  state: Readonly<RootState>,
+  state: Readonly<AppState> | undefined,
   action: Action
 ) => {
   if (action.type === 'RESET_EDITOR') {
-    return rootReducer({ ...getInitialState() }, action);
+    return rootReducer({ ...getInitialAppState() }, action);
   }
   return rootReducer(state, action);
 };
 const rootReducers = combineReducers({
-  rootReducer: rootReducerReset as any,
+  app: rootReducerReset,
+  userSettings,
 });
 export default rootReducers;
