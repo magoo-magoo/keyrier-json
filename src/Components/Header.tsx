@@ -13,7 +13,7 @@ import {
   NavLink,
 } from './Deferred/DeferredReactstrap';
 import { UncontrolledDropdown } from 'reactstrap/lib/Uncontrolled';
-import { Theme } from '../Themes/Themes';
+import { Theme } from '../Themes/themes';
 import { switchTheme } from '../Actions/actions';
 import { connect } from 'react-redux';
 import { getTheme } from '../Store/selectors';
@@ -24,7 +24,27 @@ interface Props {
   currentTheme: Theme;
 }
 
-const availableThemes: Theme[] = ['materia', 'darkly', 'sandstone', 'sketchy'];
+const availableThemes: Theme[] = [
+  'materia',
+  'darkly',
+  'sandstone',
+  'cosmo',
+  'cyborg',
+  'flatly',
+  'journal',
+  'litera',
+  'lumen',
+  'lux',
+  'minty',
+  'pulse',
+  'simplex',
+  'slate',
+  'solar',
+  'spacelab',
+  'superhero',
+  'united',
+  'yeti',
+];
 
 const Header: React.SFC<Props> = ({ switchTheme, currentTheme }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -45,8 +65,9 @@ const Header: React.SFC<Props> = ({ switchTheme, currentTheme }) => {
                 Theme
               </DropdownToggle>
               <DropdownMenu right>
-                {availableThemes.map(theme => (
+                {availableThemes.map((theme, index) => (
                   <DropdownItem
+                    key={index}
                     active={currentTheme === theme}
                     onClick={() => switchThemeAndReload(theme)}
                   >

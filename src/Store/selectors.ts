@@ -1,5 +1,5 @@
 import { AppState } from '../State/State';
-import { Theme } from '../Themes/Themes';
+import { Theme } from '../Themes/themes';
 
 type selector<T> = (state: Readonly<AppState>) => T;
 

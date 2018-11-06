@@ -4,12 +4,13 @@ import registerServiceWorker from './registerServiceWorker';
 import { configureStore } from './Store/store';
 import * as React from 'react';
 import App from './Components/App';
-import { importThemeStyle } from './Themes/Themes';
 import { getTheme } from './Store/selectors';
-
-importThemeStyle('materia');
+import { importThemeStyleCustom } from './Themes/themes';
+import { AppState } from './State/State';
+import { logError } from './helpers/logger';
 
 const start = async () => {
+  importThemeStyleCustom('materia').catch(logError);
   const promises = await Promise.all([
     configureStore(),
     import(/* webpackChunkName: "react-dom" */ 'react-dom'),
@@ -18,8 +19,9 @@ const start = async () => {
 
   const store = promises[0];
   const ReactDOM = promises[1];
-  const state = store.getState() as any;
-  importThemeStyle(getTheme(state));
+  importThemeStyleCustom(getTheme(store.getState() as AppState)).catch(
+    logError
+  );
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>

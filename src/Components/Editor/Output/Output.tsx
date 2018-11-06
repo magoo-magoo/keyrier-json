@@ -24,7 +24,7 @@ type tabType = 'RawJson' | 'Table';
 
 const pointer = {
   cursor: 'pointer',
-  'font-size': 'large',
+  fontSize: 'large',
 };
 
 export const Output: React.SFC<Props> = ({ output, isArray, errorMessage }) => {

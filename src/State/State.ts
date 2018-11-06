@@ -1,5 +1,5 @@
 import initialStateJson from './default-state.json';
-import { Theme } from '../Themes/Themes';
+import { Theme } from '../Themes/themes';
 
 export interface QueryState {
   readonly text: string;

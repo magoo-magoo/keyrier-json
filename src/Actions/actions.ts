@@ -1,4 +1,4 @@
-import { Theme } from '../Themes/Themes';
+import { Theme } from '../Themes/themes';
 
 /*
  * action creators
