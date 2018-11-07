@@ -67,6 +67,15 @@ export const switchTheme = (theme: Theme): SwitchTheme => ({
   type: 'SWITCH_GLOBAL_THEME',
 });
 
+export interface UpdateSearchTerm {
+  type: 'UPDATE_OUTPUT_SEARCH_TERM';
+  searchTerm: string;
+}
+export const updateSearchTerm = (searchTerm: string): UpdateSearchTerm => ({
+  searchTerm,
+  type: 'UPDATE_OUTPUT_SEARCH_TERM',
+});
+
 export interface ReduxInitAction {
   type: '@@INIT';
 }
@@ -80,4 +89,5 @@ export type Action =
   | Readonly<ReduxInitAction>
   | Readonly<UpdateTableGroupBy>
   | Readonly<SwitchTheme>
+  | Readonly<UpdateSearchTerm>
   | Readonly<UpdateSource>;

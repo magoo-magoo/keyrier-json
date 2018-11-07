@@ -1,67 +1,23 @@
 import { createStore, compose } from 'redux';
 import rootReducers from '../Reducers/reducers';
 import {
-  AppState,
   getInitialAppState,
-  UserSettingsState,
   getInitialUserSettingsState,
 } from '../State/State';
-import { logError } from '../helpers/logger';
-import { LoDashStatic } from 'lodash';
-
-const persistAppState = (appstate: AppState | {}) => {
-  if (window.localStorage) {
-    localStorage.setItem('keyrier-json.app.state', JSON.stringify(appstate));
-  }
-};
-const persistUserSettings = (userSettings: UserSettingsState | {}) => {
-  if (window.localStorage) {
-    localStorage.setItem(
-      'keyrier-json.user.settings',
-      JSON.stringify(userSettings)
-    );
-  }
-};
-
-const loadAppState = () => {
-  if (window.localStorage) {
-    return localStorage.getItem('keyrier-json.app.state');
-  }
-  return null;
-};
-const loadUserSettingsState = () => {
-  if (window.localStorage) {
-    return localStorage.getItem('keyrier-json.user.settings');
-  }
-  return null;
-};
-
-const loader = <T extends {}>(
-  getInitialStateFunc: () => T,
-  loadAppState: () => string | null,
-  lodashModule: LoDashStatic
-) => {
-  let state = getInitialStateFunc();
-  try {
-    const savedStateString = loadAppState();
-    if (savedStateString) {
-      state = JSON.parse(savedStateString);
-      const merge = lodashModule.merge;
-      state = merge({}, getInitialAppState(), state);
-    }
-  } catch (error) {
-    logError(error);
-  }
-  return state;
-};
+import {
+  loadOrdCreate,
+  persistAppState,
+  persistUserSettings,
+} from './persistence';
 
 export const configureStore = async () => {
-  const lodashModule = await import(/* webpackChunkName: "lodash" */ 'lodash');
-  let AppState = loader(getInitialAppState, loadAppState, lodashModule.default);
-  let UserSettingsState = loader(
-    getInitialUserSettingsState,
-    loadUserSettingsState,
-    lodashModule.default
+  let AppState = await loadOrdCreate(
+    'keyrier-json.app.state',
+    getInitialAppState()
+  );
+  let UserSettingsState = await loadOrdCreate(
+    'keyrier-json.user.settings',
+    getInitialUserSettingsState()
   );
 
   const composeEnhancers =
@@ -72,12 +28,10 @@ export const configureStore = async () => {
         })
       : compose;
 
-  const enhancer = composeEnhancers();
-
   const store = createStore(
     rootReducers,
     { app: AppState, userSettings: UserSettingsState },
-    enhancer
+    composeEnhancers()
   );
 
   store.subscribe(() => {

@@ -51,10 +51,10 @@ const Header: React.SFC<Props> = ({ switchTheme, currentTheme }) => {
 
   const switchThemeAndReload = (theme: Theme) => {
     switchTheme(theme);
-    setTimeout(() => window.location.reload(), 250);
+    setTimeout(() => window.location.reload());
   };
   return (
-    <div>
+    <>
       <Navbar color="dark" dark expand="md">
         <NavbarBrand href="/">Keyrier JSON</NavbarBrand>
         <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
@@ -89,7 +89,7 @@ const Header: React.SFC<Props> = ({ switchTheme, currentTheme }) => {
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+    </>
   );
 };
 

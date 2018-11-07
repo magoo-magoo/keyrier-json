@@ -11,6 +11,9 @@ export interface SourceState {
 
 export interface OupoutState {
   readonly text: string;
+  readonly searchTerm: string;
+  readonly match: boolean;
+  readonly obj: object | null;
   readonly errorMessage?: string;
   readonly table: Readonly<OupoutTableState>;
 }

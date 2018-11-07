@@ -16,19 +16,19 @@ describe('json helpers', () => {
   });
   it('should parse empty', () => {
     const result = jsonParseSafe('');
-    expect(result).toEqual('');
+    expect(result).toBeNull();
   });
   it('should parse null', () => {
     const result = jsonParseSafe(null as any);
-    expect(result).toEqual('');
+    expect(result).toBeNull();
   });
   it('should parse undefined', () => {
     const result = jsonParseSafe(undefined as any);
-    expect(result).toEqual('');
+    expect(result).toBeNull();
   });
   it('should parse undefined', () => {
     const result = jsonParseSafe(undefined as any);
-    expect(result).toEqual('');
+    expect(result).toBeNull();
   });
   it('should parse json string with special character', () => {
     const result = jsonParseSafe(`

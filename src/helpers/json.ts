@@ -20,7 +20,7 @@ export const jsonBeautify = (str: string) => {
 
 export const jsonParseSafe = (str: string) => {
   if (!str || str.trim() === '') {
-    return '';
+    return null;
   }
 
   const safeStr = str

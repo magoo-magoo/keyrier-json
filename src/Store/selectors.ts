@@ -11,6 +11,12 @@ export const getOutputIsArray: selector<boolean> = state =>
 
 export const getOutputText = (state: Readonly<RootState>) =>
   state.app ? state.app.output.text : '';
+export const getOutputObject = (state: Readonly<RootState>) =>
+  state.app ? state.app.output.obj : {};
+export const getOutputSearchTerm = (state: Readonly<RootState>) =>
+  state.app ? state.app.output.searchTerm : '';
+export const getOutputSearchMatch = (state: Readonly<RootState>) =>
+  state.app ? state.app.output.match : false;
 
 export const getOutputTableData = (state: Readonly<RootState>) =>
   state.app ? state.app.output.table.array : [];

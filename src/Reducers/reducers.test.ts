@@ -1,4 +1,10 @@
-import { output, query, rootReducerReset, source } from './reducers';
+import {
+  output,
+  query,
+  rootReducerReset,
+  source,
+  containsTerm,
+} from './reducers';
 import { getInitialAppState } from '../State/State';
 
 describe('Reducers', () => {
@@ -6,6 +12,8 @@ describe('Reducers', () => {
     const state = {
       output: {
         text: 'fake o',
+        obj: {},
+        searchTerm: '',
         table: {
           array: [],
           isArray: false,
@@ -49,6 +57,8 @@ describe('Reducers', () => {
     const state = {
       output: {
         text: '{}',
+        obj: {},
+        searchTerm: '',
         table: {
           array: [],
           isArray: false,
@@ -69,5 +79,62 @@ describe('Reducers', () => {
     expect(result.text).toEqual('"test"');
     expect(result.table.isArray).toEqual(false);
     expect(result.errorMessage).toBeUndefined();
+  });
+
+  it('should filter object from tree if search term is not found', () => {
+    const { filteredObj, match } = containsTerm(
+      {
+        field1: {
+          field3: 42,
+          field4: 'val',
+          field5: 'la tête à toTo est tombée.',
+        },
+        field2: {
+          filed6: {},
+        },
+        field7: {
+          field8Toto: { a: 42 },
+        },
+        field9: {
+          field10Array: [{ field11: 'toto' }, { field12: { field13: 'éà' } }],
+        },
+      },
+      'toto'
+    );
+
+    expect(match).toBeTruthy();
+    expect(filteredObj).toEqual({
+      field1: {
+        field5: 'la tête à toTo est tombée.',
+      },
+      field7: {
+        field8Toto: { a: 42 },
+      },
+      field9: {
+        field10Array: [{ field11: 'toto' }],
+      },
+    });
+  });
+
+  test('should not match if search term is not found', () => {
+    const { filteredObj, match } = containsTerm(
+      {
+        field1: {
+          field3: 42,
+          field4: 'val',
+          field5: 'la tête est tombée.',
+        },
+        field2: {
+          filed6: {},
+        },
+        field7: {
+          field8Momo: { a: 42 },
+        },
+      },
+      'toto'
+    );
+
+    expect(match).toBeFalsy();
+    expect(filteredObj).toEqual({});
   });
 });

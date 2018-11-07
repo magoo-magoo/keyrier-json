@@ -14,6 +14,7 @@ import {
   getInitialUserSettingsState,
 } from '../State/State';
 import { logError, logWarning } from '../helpers/logger';
+import { containsIgnoreCase } from '../helpers/string';
 
 export const rootReducer = (
   rootState: Readonly<AppState> = getInitialAppState(),
@@ -119,6 +120,9 @@ export const computeOutput = (
   if (text === null) {
     return {
       text: '',
+      obj: null,
+      searchTerm: '',
+      match: false,
       table: {
         array: [],
         isArray: false,
@@ -132,6 +136,9 @@ export const computeOutput = (
   if (text instanceof Error) {
     return {
       text: '',
+      obj: null,
+      searchTerm: '',
+      match: false,
       errorMessage: text.message,
       table: {
         isArray: false,
@@ -170,6 +177,9 @@ export const computeOutput = (
       : previousState.table.isModalOpen;
   return {
     text,
+    obj: jsonParseSafe(text),
+    searchTerm: '',
+    match: false,
     table: {
       array: isArray ? array : [],
       isArray,
@@ -202,9 +212,83 @@ export const output = (
           isModalOpen: !previousState.table.isModalOpen,
         },
       };
+    case 'UPDATE_OUTPUT_SEARCH_TERM':
+      return {
+        ...filter(
+          computeOutput(previousState, sourceString, queryString, action),
+          action.searchTerm
+        ),
+        searchTerm: action.searchTerm,
+      };
     default:
       return previousState;
   }
+};
+
+export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
+  if (typeof src !== 'string' && typeof src !== 'object') {
+    return { match: false, filteredObj: src };
+  }
+
+  if (typeof src === 'string') {
+    if (containsIgnoreCase(src, searchTerm)) {
+      return { match: true, filteredObj: src };
+    }
+    return { match: false, filteredObj: src };
+  }
+  const obj: { [key: string]: any } = Array.isArray(src)
+    ? [...src]
+    : { ...src };
+
+  const keys = Array.isArray(obj)
+    ? Array.from({ length: obj.length }, (_v, k) => k)
+    : Object.getOwnPropertyNames(obj).filter(propertyName => propertyName);
+
+  let result = false;
+  for (let i = 0; i < keys.length; i++) {
+    const propertyName: string | number = keys[i];
+    const propertyNameContains =
+      typeof propertyName === 'string' &&
+      containsIgnoreCase(propertyName, searchTerm);
+    if (propertyNameContains) {
+      result = true;
+      continue;
+    }
+    const child = obj[propertyName];
+    const { match, filteredObj } = containsTerm(child, searchTerm);
+    if (propertyNameContains || match) {
+      result = true;
+      obj[propertyName] = filteredObj;
+    } else {
+      if (Array.isArray(obj) && typeof propertyName === 'number') {
+        obj.splice(propertyName, 1);
+      } else {
+        delete obj[propertyName];
+      }
+    }
+  }
+  if (!result) {
+    if (!Array.isArray(obj)) {
+      (keys as string[]).forEach(
+        (propertyName: string) => delete obj[propertyName]
+      );
+    } else {
+      obj.length = 0;
+    }
+  }
+  return { match: result, filteredObj: obj };
+};
+
+const filter = (state: OupoutState, _searchTerm: string) => {
+  if (!_searchTerm && _searchTerm.trim() === '') {
+    return { ...state, match: false };
+  }
+  const { filteredObj, match } = containsTerm(state.obj, _searchTerm);
+  if (match) {
+    return { ...state, obj: filteredObj, match };
+  }
+
+  return state;
 };
 
 export const table = (state: OupoutTableState, action: Action) => {

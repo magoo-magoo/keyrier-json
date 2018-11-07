@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Alert, TabContent, TabPane } from '../../Deferred/DeferredReactstrap';
-import { jsonBeautify } from '../../../helpers/json';
 import OutputTable from './OutputTable';
 import { RootState } from '../../../State/State';
 
@@ -10,12 +9,10 @@ import classNames from 'classnames';
 import {
   getOutputErrorMessage,
   getOutputIsArray,
-  getOutputText,
 } from '../../../Store/selectors';
-import { AceEditor } from '../../Deferred/DeferredAceEditor';
+import JsonView from './JsonView';
 
 interface Props {
-  output: string;
   isArray: boolean;
   errorMessage?: string;
 }
@@ -27,7 +24,7 @@ const pointer = {
   fontSize: 'large',
 };
 
-export const Output: React.SFC<Props> = ({ output, isArray, errorMessage }) => {
+export const Output: React.SFC<Props> = ({ isArray, errorMessage }) => {
   const [activeTab, setActiveTab] = React.useState(
     isArray ? 'Table' : ('RawJson' as tabType)
   );
@@ -77,26 +74,7 @@ export const Output: React.SFC<Props> = ({ output, isArray, errorMessage }) => {
         <TabPane tabId="RawJson">
           <div className="row">
             <div className="col-sm-10 offset-sm-2">
-              <AceEditor
-                mode="json"
-                theme="github"
-                name="outputAceEditor"
-                fontSize={18}
-                showPrintMargin={true}
-                showGutter={true}
-                highlightActiveLine={true}
-                value={jsonBeautify(output)}
-                minLines={10}
-                maxLines={100}
-                wrapEnabled={false}
-                readOnly={true}
-                editorProps={{ $blockScrolling: Infinity }}
-                setOptions={{
-                  showLineNumbers: true,
-                  tabSize: 2,
-                }}
-                width={'100%'}
-              />
+              <JsonView />
             </div>
           </div>
         </TabPane>
@@ -130,7 +108,6 @@ const mapStateToProps = (state: Readonly<RootState>): Props => {
   return {
     errorMessage: getOutputErrorMessage(state),
     isArray: getOutputIsArray(state),
-    output: getOutputText(state),
   };
 };
 
