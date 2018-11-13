@@ -60,7 +60,7 @@
     "@types/react-table": "6.7.16",
     "@types/reactstrap": "6.4.2",
     "concurrently": "4.0.1",
-    "electron": "3.0.8",
+    "electron": "3.0.9",
     "electron-builder": "20.31.2",
     "enzyme": "3.7.0",
     "enzyme-adapter-react-16": "1.7.0",
