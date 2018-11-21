@@ -35,6 +35,7 @@ const JsonView: React.SFC<Props> = ({
         className="form-control"
         onChange={e => onSearchChange(e.target.value)}
         debounceTimeout={500}
+        placeholder="Type your search term..."
       />
       <AceEditor
         mode="json"
@@ -56,14 +57,6 @@ const JsonView: React.SFC<Props> = ({
         }}
         width={'100%'}
       />
-      {/* <ReactJson
-        name="data"
-        src={src || {}}
-        theme="monokai"
-        iconStyle="square"
-        collapseStringsAfterLength={15}
-        onEdit={event => console.log(event.updated_src)}
-      /> */}
     </>
   );
 };

@@ -5,6 +5,12 @@ import { UpdateQueryAction, updateQuery } from '../../../Actions/actions';
 import { RootState } from '../../../State/State';
 import { AceEditor } from '../../Deferred/DeferredAceEditor';
 import { getQueryText } from '../../../Store/selectors';
+import {
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from '../../Deferred/DeferredReactstrap';
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
@@ -12,15 +18,29 @@ interface Props {
 }
 
 export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
+  const [modeOpen, setModeOpen] = React.useState(false);
   return (
     <>
       <div className="row">
-        <div className="col-sm-10 offset-sm-2">
+        <div className="col">
           <h3>Type your query:</h3>
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-10 offset-sm-2">
+        <div className="px-0">
+          <ButtonDropdown
+            isOpen={modeOpen}
+            toggle={() => setModeOpen(!modeOpen)}
+          >
+            <DropdownToggle caret>Mode</DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>Choose a predefined query</DropdownItem>
+              <DropdownItem disabled>Javascript</DropdownItem>
+              <DropdownItem disabled>SQL like</DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
+        </div>
+        <div className="col pl-0">
           <AceEditor
             mode="javascript"
             theme="monokai"

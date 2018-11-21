@@ -14,6 +14,7 @@ describe('Reducers', () => {
         text: 'fake o',
         obj: {},
         searchTerm: '',
+        match: false,
         table: {
           array: [],
           isArray: false,
@@ -58,6 +59,7 @@ describe('Reducers', () => {
       output: {
         text: '{}',
         obj: {},
+        match: false,
         searchTerm: '',
         table: {
           array: [],

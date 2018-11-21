@@ -8,3 +8,7 @@ const localStorageMock = {
   setItem: jest.fn(),
 };
 (global as any).localStorage = localStorageMock;
+
+(URL as any).createObjectURL = () => {};
+
+(global as any).Worker = {};
