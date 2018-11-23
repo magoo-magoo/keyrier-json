@@ -69,4 +69,32 @@ describe('code helpers', () => {
     );
     expect(JSON.parse(result as any)).toEqual([{ son: true }]);
   });
+
+  it('should select correct column when source is an array', () => {
+    const result = codeEvaluation(
+      '[{"id": 1, "field": 42}, {"id": 2, "foo": "bar"}]',
+      'select id from data',
+      'SQL'
+    );
+    expect(JSON.parse(result as any)).toEqual([{ id: 1 }, { id: 2 }]);
+  });
+
+  it('should rename column whith As keyword correct column SQL query', () => {
+    const result = codeEvaluation(
+      '{"age": 1, "name": "John Doe", "c": 999}',
+      'select age, name as fullName from data',
+      'SQL'
+    );
+    expect(JSON.parse(result as any)).toEqual({ age: 1, fullName: 'John Doe' });
+  });
+  it('should rename column whith As keyword correct column when source is an array SQL query', () => {
+    const result = codeEvaluation(
+      '[{"age": 1, "name": "John Doe", "c": 999}]',
+      'select age, name as fullName from data',
+      'SQL'
+    );
+    expect(JSON.parse(result as any)).toEqual([
+      { age: 1, fullName: 'John Doe' },
+    ]);
+  });
 });

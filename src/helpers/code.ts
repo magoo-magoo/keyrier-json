@@ -48,8 +48,33 @@ const sqlEvaluation = (_sourceString: string, queryString: string) => {
       result = result.get(fromPath);
     }
 
-    if (parsed.fields[0].constructor !== nodes.Star)
-      result = result.pick(parsed.fields.map((f: any) => f.field.value));
+    if (parsed.fields[0].constructor !== nodes.Star) {
+      const fieldNameMap = new Map<string, string>();
+      parsed.fields.forEach((field: any) => {
+        if (field.field && field.name)
+          fieldNameMap.set(field.field.value, field.name.value);
+      });
+      const fieldNameMapper = (_value: any, key: string) =>
+        fieldNameMap.has(key) ? fieldNameMap.get(key) : key;
+
+      const tempValue = result.value();
+      if (Array.isArray(tempValue) && lodash) {
+        result = lodash.chain(tempValue).map(v => {
+          if (!lodash) {
+            return {};
+          }
+          let mapped = lodash.pick(
+            v,
+            parsed.fields.map((f: any) => f.field.value)
+          );
+          mapped = lodash.mapKeys(mapped, fieldNameMapper);
+          return mapped;
+        });
+      } else if (lodash) {
+        result = result.pick(parsed.fields.map((f: any) => f.field.value));
+        result = result.mapKeys(fieldNameMapper);
+      }
+    }
 
     const resultValue = result.value();
 
