@@ -44,3 +44,5 @@ export const getQueryText = (state: Readonly<RootState>) =>
   state.app ? state.app.query.text : '';
 export const getSourceText = (state: Readonly<RootState>) =>
   state.app ? state.app.source.text : '';
+export const getQueryMode = (state: Readonly<RootState>) =>
+  state.app ? state.app.query.mode : 'Javascript';

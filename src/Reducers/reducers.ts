@@ -12,6 +12,7 @@ import {
   itemType,
   UserSettingsState,
   getInitialUserSettingsState,
+  QueryMode,
 } from '../State/State';
 import { logError, logWarning } from '../helpers/logger';
 import { containsIgnoreCase } from '../helpers/string';
@@ -30,7 +31,8 @@ export const rootReducer = (
     newState.output,
     newState.source.text,
     newState.query.text,
-    action
+    action,
+    newState.query.mode
   );
   return {
     ...newState,
@@ -91,6 +93,15 @@ export const query = (state: Readonly<QueryState>, action: Action) => {
         ...state,
         text: action.query,
       };
+    case 'UPDATE_QUERY_MODE':
+      return {
+        ...state,
+        mode: action.mode,
+        text:
+          action.mode === 'Javascript'
+            ? getInitialAppState().query.text
+            : 'select * from data',
+      };
     default:
       return state;
   }
@@ -114,9 +125,10 @@ export const computeOutput = (
   previousState: Readonly<OupoutState>,
   sourceString: string,
   queryString: string,
-  action: Action
+  action: Action,
+  mode: QueryMode
 ): OupoutState => {
-  const text = codeEvaluation(sourceString, queryString);
+  const text = codeEvaluation(sourceString, queryString, mode);
   if (text === null) {
     return {
       text: '',
@@ -195,7 +207,8 @@ export const output = (
   previousState: OupoutState,
   sourceString: string,
   queryString: string,
-  action: Action
+  action: Action,
+  mode: QueryMode
 ): OupoutState => {
   switch (action.type) {
     case '@@INIT':
@@ -203,7 +216,13 @@ export const output = (
     case 'RESET_EDITOR':
     case 'UPDATE_QUERY':
     case 'UPDATE_SOURCE_TEXT':
-      return computeOutput(previousState, sourceString, queryString, action);
+      return computeOutput(
+        previousState,
+        sourceString,
+        queryString,
+        action,
+        mode
+      );
     case 'TOGGLE_OUTPUT_TABLE_MODAL':
       return {
         ...previousState,
@@ -215,7 +234,7 @@ export const output = (
     case 'UPDATE_OUTPUT_SEARCH_TERM':
       return {
         ...filter(
-          computeOutput(previousState, sourceString, queryString, action),
+          computeOutput(previousState, sourceString, queryString, action, mode),
           action.searchTerm
         ),
         searchTerm: action.searchTerm,

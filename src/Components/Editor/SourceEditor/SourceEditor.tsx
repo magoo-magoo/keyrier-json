@@ -45,6 +45,7 @@ export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
           }}
           editorProps={{ $blockScrolling: Infinity }}
           width={'100%'}
+          annotations={[]}
         />
       </div>
     </div>

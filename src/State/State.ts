@@ -3,6 +3,7 @@ import { Theme } from '../Themes/themes.js';
 
 export interface QueryState {
   readonly text: string;
+  readonly mode: QueryMode;
 }
 
 export interface SourceState {
@@ -26,6 +27,8 @@ export type itemType =
   | number
   | never
   | any;
+
+export type QueryMode = 'Javascript' | 'SQL';
 
 export interface OupoutTableState {
   readonly array: itemType[];

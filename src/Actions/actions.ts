@@ -1,4 +1,5 @@
 import { Theme } from '../Themes/themes';
+import { QueryMode } from '../State/State';
 
 /*
  * action creators
@@ -75,6 +76,14 @@ export const updateSearchTerm = (searchTerm: string): UpdateSearchTerm => ({
   searchTerm,
   type: 'UPDATE_OUTPUT_SEARCH_TERM',
 });
+export interface UpdateQueryMode {
+  type: 'UPDATE_QUERY_MODE';
+  mode: QueryMode;
+}
+export const updateQueryMode = (mode: QueryMode): UpdateQueryMode => ({
+  mode,
+  type: 'UPDATE_QUERY_MODE',
+});
 
 export interface ReduxInitAction {
   type: '@@INIT';
@@ -90,4 +99,5 @@ export type Action =
   | Readonly<UpdateTableGroupBy>
   | Readonly<SwitchTheme>
   | Readonly<UpdateSearchTerm>
+  | Readonly<UpdateQueryMode>
   | Readonly<UpdateSource>;

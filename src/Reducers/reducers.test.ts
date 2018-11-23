@@ -24,7 +24,7 @@ describe('Reducers', () => {
           groupBy: [],
         },
       },
-      query: { text: 'fake q' },
+      query: { text: 'fake q', mode: 'Javascript' },
       source: { text: 'fake s' },
     };
     const results = rootReducerReset(state, {
@@ -36,11 +36,11 @@ describe('Reducers', () => {
   });
 
   it('update query action should update', () => {
-    const state = { text: 'initial' };
+    const state = { text: 'initial', mode: 'Javascript' };
 
     const result = query(state, { query: 'new value', type: 'UPDATE_QUERY' });
 
-    expect(result).toEqual({ text: 'new value' });
+    expect(result).toEqual({ text: 'new value', mode: 'Javascript' });
   });
 
   it('update source action should update', () => {
@@ -74,9 +74,15 @@ describe('Reducers', () => {
       source: { text: '{"value": "test"}' },
     };
 
-    const result = output(state.output, state.source.text, state.query.text, {
-      type: 'EVALUATE_CODE',
-    });
+    const result = output(
+      state.output,
+      state.source.text,
+      state.query.text,
+      {
+        type: 'EVALUATE_CODE',
+      },
+      'Javascript'
+    );
 
     expect(result.text).toEqual('"test"');
     expect(result.table.isArray).toEqual(false);

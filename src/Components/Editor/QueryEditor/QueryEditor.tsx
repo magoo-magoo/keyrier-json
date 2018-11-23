@@ -1,10 +1,15 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { UpdateQueryAction, updateQuery } from '../../../Actions/actions';
-import { RootState } from '../../../State/State';
+import {
+  UpdateQueryAction,
+  updateQuery,
+  updateQueryMode,
+  UpdateQueryMode,
+} from '../../../Actions/actions';
+import { RootState, QueryMode } from '../../../State/State';
 import { AceEditor } from '../../Deferred/DeferredAceEditor';
-import { getQueryText } from '../../../Store/selectors';
+import { getQueryText, getQueryMode } from '../../../Store/selectors';
 import {
   ButtonDropdown,
   DropdownToggle,
@@ -14,10 +19,17 @@ import {
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
+  updateQueryMode: (e: QueryMode) => UpdateQueryMode;
   queryText: string;
+  mode: QueryMode;
 }
 
-export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
+export const QueryEditor: React.SFC<Props> = ({
+  onChange,
+  queryText,
+  mode,
+  updateQueryMode,
+}) => {
   const [modeOpen, setModeOpen] = React.useState(false);
   return (
     <>
@@ -35,14 +47,24 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
             <DropdownToggle caret>Mode</DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Choose a predefined query</DropdownItem>
-              <DropdownItem disabled>Javascript</DropdownItem>
-              <DropdownItem disabled>SQL like</DropdownItem>
+              <DropdownItem
+                active={mode === 'Javascript'}
+                onClick={() => updateQueryMode('Javascript')}
+              >
+                Javascript
+              </DropdownItem>
+              <DropdownItem
+                active={mode === 'SQL'}
+                onClick={() => updateQueryMode('SQL')}
+              >
+                SQL like(experimental)
+              </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </div>
         <div className="col pl-0">
           <AceEditor
-            mode="javascript"
+            mode={mode === 'Javascript' ? 'javascript' : 'mysql'}
             theme="monokai"
             name="queryAceEditor"
             onChange={onChange}
@@ -56,7 +78,10 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
               showLineNumbers: true,
               tabSize: 2,
               enableSnippets: true,
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
               dragEnabled: true,
+              debounceChangePeriod: 500,
             }}
             width={'100%'}
             enableBasicAutocompletion={true}
@@ -70,9 +95,10 @@ export const QueryEditor: React.SFC<Props> = ({ onChange, queryText }) => {
 
 const mapStateToProps = (state: Readonly<RootState>) => ({
   queryText: getQueryText(state),
+  mode: getQueryMode(state),
 });
 
 export default connect(
   mapStateToProps,
-  { onChange: updateQuery }
+  { onChange: updateQuery, updateQueryMode }
 )(QueryEditor);
