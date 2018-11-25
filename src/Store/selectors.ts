@@ -1,4 +1,4 @@
-import { RootState } from '../State/State';
+import { RootState, tabType } from '../State/State';
 
 type selector<T> = (state: Readonly<RootState>) => T;
 
@@ -8,9 +8,8 @@ export const getOutputErrorMessage: selector<string | undefined> = (
 
 export const getOutputIsArray: selector<boolean> = state =>
   state.app ? state.app.output.table.isArray : false;
-
-export const getOutputText = (state: Readonly<RootState>) =>
-  state.app ? state.app.output.text : '';
+export const getOutputActiveTab: selector<tabType> = state =>
+  state.app ? state.app.output.selectedTab : 'RawJson';
 export const getOutputObject = (state: Readonly<RootState>) =>
   state.app ? state.app.output.obj : {};
 export const getOutputSearchTerm = (state: Readonly<RootState>) =>

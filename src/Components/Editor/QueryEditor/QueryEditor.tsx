@@ -73,7 +73,9 @@ export const QueryEditor: React.SFC<Props> = ({
             value={queryText}
             minLines={10}
             maxLines={25}
-            editorProps={{ $blockScrolling: Infinity }}
+            editorProps={{
+              $blockScrolling: Infinity,
+            }}
             setOptions={{
               showLineNumbers: true,
               tabSize: 2,

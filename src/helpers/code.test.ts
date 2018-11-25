@@ -87,14 +87,38 @@ describe('code helpers', () => {
     );
     expect(JSON.parse(result as any)).toEqual({ age: 1, fullName: 'John Doe' });
   });
+
   it('should rename column whith As keyword correct column when source is an array SQL query', () => {
     const result = codeEvaluation(
       '[{"age": 1, "name": "John Doe", "c": 999}]',
       'select age, name as fullName from data',
       'SQL'
     );
+
     expect(JSON.parse(result as any)).toEqual([
       { age: 1, fullName: 'John Doe' },
+    ]);
+  });
+
+  it('should returns filtered results with where clause - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+      'select name as fullName from data where age = 42',
+      'SQL'
+    );
+    expect(result).toBeDefined();
+    expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }]);
+  });
+  it('should returns filtered results with where clause -handle OR - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 84, "name": "Macron Manu"}]',
+      'select name as fullName from data where age = 42 or age = 21',
+      'SQL'
+    );
+    expect(result).toBeDefined();
+    expect(JSON.parse(result as any)).toEqual([
+      { fullName: 'John Doe' },
+      { fullName: 'Danny de Vito' },
     ]);
   });
 });

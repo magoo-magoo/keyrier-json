@@ -1,5 +1,5 @@
 import { QueryMode } from '../State/State';
-import { lexer, parser, nodes } from 'sql-parser';
+import { nodes, parse, Op } from 'sql-parser';
 import { jsonParseSafe } from './json';
 
 let lodash: _.LoDashStatic | null = null;
@@ -21,57 +21,65 @@ export const codeEvaluation = (
   return new Error('unsupported mode');
 };
 
-const sqlEvaluation = (_sourceString: string, queryString: string) => {
+const sqlEvaluation = (sourceString: string, queryString: string) => {
   try {
     if (!lodash) {
       return new Error('lodash is missing');
     }
-    const tokens = lexer.tokenize(queryString);
-    const parsed = parser.parse(tokens);
+    const sqlTree = parse(queryString);
 
-    if (parsed.source.name.values[0] !== 'data') {
-      return new Error(`${parsed.source.name.values[0]} table does not exist`);
+    if (sqlTree.source.name.values[0] !== 'data') {
+      return new Error(`${sqlTree.source.name.values[0]} table does not exist`);
     }
 
-    let fromPath = [];
+    let fromPath: string[] = [];
 
-    if (parsed.source.name.values && parsed.source.name.values.length > 1) {
-      if (parsed.source.name.values[0] === 'data') {
-        fromPath = [...parsed.source.name.values];
+    if (sqlTree.source.name.values && sqlTree.source.name.values.length > 1) {
+      if (sqlTree.source.name.values[0] === 'data') {
+        fromPath = [...sqlTree.source.name.values];
         fromPath.shift();
       }
     }
 
-    let result = lodash.chain(jsonParseSafe(_sourceString));
+    let result = lodash.chain(jsonParseSafe(sourceString));
 
     if (fromPath && fromPath.length > 0) {
       result = result.get(fromPath);
     }
 
-    if (parsed.fields[0].constructor !== nodes.Star) {
+    if (sqlTree.fields[0].constructor !== nodes.Star) {
       const fieldNameMap = new Map<string, string>();
-      parsed.fields.forEach((field: any) => {
+      sqlTree.fields.forEach((field: any) => {
         if (field.field && field.name)
           fieldNameMap.set(field.field.value, field.name.value);
       });
       const fieldNameMapper = (_value: any, key: string) =>
         fieldNameMap.has(key) ? fieldNameMap.get(key) : key;
 
-      const tempValue = result.value();
+      let tempValue = result.value();
       if (Array.isArray(tempValue) && lodash) {
+        if (sqlTree.where && sqlTree.where.conditions) {
+          tempValue = tempValue.filter(v => {
+            const leftValue = sqlTree.where.conditions.left;
+            const rightValue = sqlTree.where.conditions.right;
+            const operation = sqlTree.where.conditions.operation;
+            debugger;
+            return compareOperands(operation, leftValue, rightValue, v);
+          });
+        }
         result = lodash.chain(tempValue).map(v => {
           if (!lodash) {
             return {};
           }
           let mapped = lodash.pick(
             v,
-            parsed.fields.map((f: any) => f.field.value)
+            sqlTree.fields.map((f: any) => f.field.value)
           );
           mapped = lodash.mapKeys(mapped, fieldNameMapper);
           return mapped;
         });
       } else if (lodash) {
-        result = result.pick(parsed.fields.map((f: any) => f.field.value));
+        result = result.pick(sqlTree.fields.map((f: any) => f.field.value));
         result = result.mapKeys(fieldNameMapper);
       }
     }
@@ -82,6 +90,60 @@ const sqlEvaluation = (_sourceString: string, queryString: string) => {
   } catch (e) {
     return e;
   }
+};
+
+const compareOperands = (
+  operation: string | null,
+  lefty: Op,
+  righty: Op,
+  value: any
+): boolean => {
+  if (operation) {
+    if (operation.toLowerCase() === 'or') {
+      return (
+        compareOperands(lefty.operation, lefty.left, lefty.right, value) ||
+        compareOperands(righty.operation, righty.left, righty.right, value)
+      );
+    }
+
+    if (operation.toLowerCase() === 'and') {
+      return (
+        compareOperands(lefty.operation, lefty.left, lefty.right, value) &&
+        compareOperands(righty.operation, righty.left, righty.right, value)
+      );
+    }
+  }
+
+  if (!lefty.value) {
+    return false;
+  }
+
+  if (operation === '=' && value[lefty.value] == righty.value) {
+    return true;
+  }
+  if (operation === '!=' && value[lefty.value] != righty.value) {
+    return true;
+  }
+  if (operation === '<>' && value[lefty.value] != righty.value) {
+    return true;
+  }
+
+  if (righty.value) {
+    if (operation === '>' && value[lefty.value] > righty.value) {
+      return true;
+    }
+    if (operation === '>=' && value[lefty.value] >= righty.value) {
+      return true;
+    }
+    if (operation === '<' && value[lefty.value] < righty.value) {
+      return true;
+    }
+    if (operation === '<=' && value[lefty.value] <= righty.value) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 const jsEvaluation = (sourceString: string, queryString: string) => {

@@ -2,19 +2,18 @@ import * as React from 'react';
 import {
   getOutputObject,
   getOutputSearchTerm,
-  getOutputText,
   getOutputSearchMatch,
 } from '../../../Store/selectors';
 import { RootState } from '../../../State/State';
 import { connect } from 'react-redux';
 import { DebounceInput } from 'react-debounce-input';
 import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions';
-import { AceEditor } from '../../Deferred/DeferredAceEditor';
+import { Suspense, lazy } from 'react';
+const ReactJson = lazy(() => import('react-json-view'));
 
 interface Props {
   src: object | null;
   searchTerm: string | undefined;
-  text: string;
   match: boolean;
   onSearchChange: (value: string) => UpdateSearchTerm;
 }
@@ -37,26 +36,18 @@ const JsonView: React.SFC<Props> = ({
         debounceTimeout={500}
         placeholder="Type your search term..."
       />
-      <AceEditor
-        mode="json"
-        theme="github"
-        name="outputAceEditor"
-        fontSize={18}
-        showPrintMargin={true}
-        showGutter={true}
-        highlightActiveLine={true}
-        value={JSON.stringify(src, null, 4)}
-        minLines={10}
-        maxLines={100}
-        wrapEnabled={false}
-        readOnly={true}
-        editorProps={{ $blockScrolling: Infinity }}
-        setOptions={{
-          showLineNumbers: true,
-          tabSize: 2,
-        }}
-        width={'100%'}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <ReactJson
+          src={src ? src : {}}
+          name="data"
+          iconStyle="triangle"
+          indentWidth={8}
+          onAdd={() => {}}
+          onDelete={() => {}}
+          onEdit={() => {}}
+          onSelect={() => {}}
+        />
+      </Suspense>
     </>
   );
 };
@@ -64,7 +55,6 @@ const JsonView: React.SFC<Props> = ({
 const mapStateToProps = (state: Readonly<RootState>) => {
   return {
     src: getOutputObject(state),
-    text: getOutputText(state),
     searchTerm: getOutputSearchTerm(state),
     match: getOutputSearchMatch(state),
   };

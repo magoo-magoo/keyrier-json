@@ -13,6 +13,7 @@ import {
   UserSettingsState,
   getInitialUserSettingsState,
   QueryMode,
+  tabType,
 } from '../State/State';
 import { logError, logWarning } from '../helpers/logger';
 import { containsIgnoreCase } from '../helpers/string';
@@ -131,6 +132,7 @@ export const computeOutput = (
   const text = codeEvaluation(sourceString, queryString, mode);
   if (text === null) {
     return {
+      selectedTab: 'RawJson',
       text: '',
       obj: null,
       searchTerm: '',
@@ -147,6 +149,7 @@ export const computeOutput = (
   }
   if (text instanceof Error) {
     return {
+      selectedTab: 'RawJson',
       text: '',
       obj: null,
       searchTerm: '',
@@ -187,7 +190,14 @@ export const computeOutput = (
     action.type === 'TOGGLE_OUTPUT_TABLE_MODAL'
       ? !previousState.table.isModalOpen
       : previousState.table.isModalOpen;
+
+  let selectedTab: tabType = isArray ? 'Table' : 'RawJson';
+
+  if (action.type === 'UPDATE_OUTPUT_TAB_SELECTION') {
+    selectedTab = action.tab;
+  }
   return {
+    selectedTab,
     text,
     obj: jsonParseSafe(text),
     searchTerm: '',
@@ -216,6 +226,7 @@ export const output = (
     case 'RESET_EDITOR':
     case 'UPDATE_QUERY':
     case 'UPDATE_SOURCE_TEXT':
+    case 'UPDATE_OUTPUT_TAB_SELECTION':
       return computeOutput(
         previousState,
         sourceString,
@@ -231,6 +242,11 @@ export const output = (
           isModalOpen: !previousState.table.isModalOpen,
         },
       };
+    case 'UPDATE_OUTPUT_TAB_SELECTION':
+      return {
+        ...previousState,
+        selectedTab: action.tab,
+      };
     case 'UPDATE_OUTPUT_SEARCH_TERM':
       return {
         ...filter(
@@ -238,6 +254,7 @@ export const output = (
           action.searchTerm
         ),
         searchTerm: action.searchTerm,
+        selectedTab: 'RawJson',
       };
     default:
       return previousState;

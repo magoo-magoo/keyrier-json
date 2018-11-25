@@ -1,5 +1,5 @@
 import { Theme } from '../Themes/themes';
-import { QueryMode } from '../State/State';
+import { QueryMode, tabType } from '../State/State';
 
 /*
  * action creators
@@ -85,6 +85,17 @@ export const updateQueryMode = (mode: QueryMode): UpdateQueryMode => ({
   type: 'UPDATE_QUERY_MODE',
 });
 
+export interface UpdateOutputTabSelection {
+  type: 'UPDATE_OUTPUT_TAB_SELECTION';
+  tab: tabType;
+}
+export const updateOutputTabSelection = (
+  tab: tabType
+): UpdateOutputTabSelection => ({
+  tab,
+  type: 'UPDATE_OUTPUT_TAB_SELECTION',
+});
+
 export interface ReduxInitAction {
   type: '@@INIT';
 }
@@ -100,4 +111,5 @@ export type Action =
   | Readonly<SwitchTheme>
   | Readonly<UpdateSearchTerm>
   | Readonly<UpdateQueryMode>
+  | Readonly<UpdateOutputTabSelection>
   | Readonly<UpdateSource>;

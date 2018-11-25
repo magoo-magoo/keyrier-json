@@ -30,4 +30,40 @@ declare module 'brace/ext/searchbox';
 declare module 'brace/snippets/javascript';
 declare module 'brace/snippets/json';
 
-declare module 'sql-parser';
+declare module 'sql-parser' {
+  export interface Name {
+    values: string[];
+  }
+  export interface Source {
+    name: Name;
+  }
+
+  export interface Field {}
+  export interface Op {
+    value: string | number | null;
+    operation: string | null;
+    left: Op;
+    right: Op;
+  }
+  export interface Conditions {
+    left: Op;
+    right: Op;
+    operation: string | null;
+  }
+  export interface Where {
+    conditions: Conditions;
+  }
+
+  export interface sqlTree {
+    source: Source;
+    where: Where;
+    fields: Field[];
+  }
+
+  export class nodes {
+    public static readonly Star: Function;
+  }
+
+  export type ParseFunction = (s: string) => sqlTree;
+  export const parse: ParseFunction;
+}

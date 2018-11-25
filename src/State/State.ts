@@ -10,10 +10,13 @@ export interface SourceState {
   readonly text: string;
 }
 
+export type tabType = 'RawJson' | 'Table';
+
 export interface OupoutState {
   readonly text: string;
   readonly searchTerm: string;
   readonly match: boolean;
+  readonly selectedTab: tabType;
   readonly obj: object | null;
   readonly errorMessage?: string;
   readonly table: Readonly<OupoutTableState>;

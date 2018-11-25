@@ -3,7 +3,7 @@ import Editor from './Editor/Editor';
 import Header from './Header';
 
 export const App = () => (
-  <div className="text-center">
+  <div>
     <Header />
     <div className="container">
       <Editor />

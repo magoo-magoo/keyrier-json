@@ -2,38 +2,39 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Alert, TabContent, TabPane } from '../../Deferred/DeferredReactstrap';
 import OutputTable from './OutputTable';
-import { RootState } from '../../../State/State';
+import { RootState, tabType } from '../../../State/State';
 
 import classNames from 'classnames';
 
 import {
   getOutputErrorMessage,
   getOutputIsArray,
+  getOutputActiveTab,
 } from '../../../Store/selectors';
 import JsonView from './JsonView';
+import {
+  UpdateOutputTabSelection,
+  updateOutputTabSelection,
+} from '../../../Actions/actions';
 
 interface Props {
   isArray: boolean;
+  activeTab: tabType;
+  setActiveTab: (v: tabType) => UpdateOutputTabSelection;
   errorMessage?: string;
 }
-
-type tabType = 'RawJson' | 'Table';
 
 const pointer = {
   cursor: 'pointer',
   fontSize: 'large',
 };
 
-export const Output: React.SFC<Props> = ({ isArray, errorMessage }) => {
-  const [activeTab, setActiveTab] = React.useState(
-    isArray ? 'Table' : ('RawJson' as tabType)
-  );
-  React.useEffect(() => {
-    if (!isArray && activeTab === 'Table') {
-      setActiveTab('RawJson');
-    }
-  });
-
+export const Output: React.SFC<Props> = ({
+  isArray,
+  errorMessage,
+  activeTab,
+  setActiveTab,
+}) => {
   const display = (
     <>
       <div className="row">
@@ -104,11 +105,15 @@ export const Output: React.SFC<Props> = ({ isArray, errorMessage }) => {
   );
 };
 
-const mapStateToProps = (state: Readonly<RootState>): Props => {
+const mapStateToProps = (state: Readonly<RootState>) => {
   return {
     errorMessage: getOutputErrorMessage(state),
     isArray: getOutputIsArray(state),
+    activeTab: getOutputActiveTab(state),
   };
 };
 
-export default connect(mapStateToProps)(Output);
+export default connect(
+  mapStateToProps,
+  { setActiveTab: updateOutputTabSelection }
+)(Output);
