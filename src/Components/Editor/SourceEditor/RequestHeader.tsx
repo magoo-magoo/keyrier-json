@@ -13,7 +13,7 @@ interface Props {
   onRemove: () => void;
 }
 
-export const RenderHeaderInput: React.SFC<Props> = ({
+export const RenderHeaderInput: React.FC<Props> = ({
   header,
   onRemove,
   onChange,

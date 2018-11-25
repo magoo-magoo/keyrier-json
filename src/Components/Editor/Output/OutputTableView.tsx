@@ -20,7 +20,7 @@ interface Props {
   groupBy: string[];
 }
 
-export const OutputTableView: React.SFC<Props> = ({
+export const OutputTableView: React.FC<Props> = ({
   data,
   displayedColumns,
   groupBy,

@@ -35,7 +35,7 @@ const handleOnclickOnExportToExcel = async (data: any) => {
   xlsx.writeFile(workBook, 'export.xlsx');
 };
 
-export const TableAdvancedOptions: React.SFC<Props> = ({
+export const TableAdvancedOptions: React.FC<Props> = ({
   onColumnsChange,
   columns,
   updateTableGroupBy,
@@ -46,8 +46,8 @@ export const TableAdvancedOptions: React.SFC<Props> = ({
 
   const handleColumnChange = (cols: ValueType<{}> | undefined | null) => {
     if (cols instanceof Array) {
-      const mapped = cols.map(
-        (c: { value?: string }) => (c.value ? c.value : '')
+      const mapped = cols.map((c: { value?: string }) =>
+        c.value ? c.value : ''
       );
       onColumnsChange(mapped);
     }

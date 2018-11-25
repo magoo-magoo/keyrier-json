@@ -46,7 +46,7 @@ const availableThemes: Theme[] = [
   'yeti',
 ];
 
-const Header: React.SFC<Props> = ({ switchTheme, currentTheme }) => {
+const Header: React.FC<Props> = ({ switchTheme, currentTheme }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const switchThemeAndReload = (theme: Theme) => {

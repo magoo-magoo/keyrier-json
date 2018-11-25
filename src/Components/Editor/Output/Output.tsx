@@ -29,7 +29,7 @@ const pointer = {
   fontSize: 'large',
 };
 
-export const Output: React.SFC<Props> = ({
+export const Output: React.FC<Props> = ({
   isArray,
   errorMessage,
   activeTab,

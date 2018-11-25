@@ -24,7 +24,7 @@ interface Props {
   mode: QueryMode;
 }
 
-export const QueryEditor: React.SFC<Props> = ({
+export const QueryEditor: React.FC<Props> = ({
   onChange,
   queryText,
   mode,

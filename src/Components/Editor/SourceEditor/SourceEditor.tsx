@@ -13,7 +13,7 @@ interface Props {
   sourceText: string;
 }
 
-export const SourceEditor: React.SFC<Props> = ({ onChange, sourceText }) => (
+export const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
   <>
     <div className="row">
       <div className="col-sm-10 offset-sm-2">

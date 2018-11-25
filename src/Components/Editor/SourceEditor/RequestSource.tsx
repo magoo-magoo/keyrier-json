@@ -28,7 +28,7 @@ const displayError = (error: TypeError | null) => {
   );
 };
 
-export const HttpRequestSource: React.SFC<Props> = ({
+export const HttpRequestSource: React.FC<Props> = ({
   onRequestSucceed,
   updateSource,
 }) => {

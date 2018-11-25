@@ -24,7 +24,7 @@ interface Props {
   isModalOpen: boolean;
 }
 
-export const OutputTable: React.SFC<Props> = ({ toggleModal, isModalOpen }) => {
+export const OutputTable: React.FC<Props> = ({ toggleModal, isModalOpen }) => {
   return (
     <div className="output-table">
       <Modal isOpen={isModalOpen} toggle={toggleModal} className="mw-100">

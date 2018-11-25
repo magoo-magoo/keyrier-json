@@ -20,7 +20,7 @@ interface Props {
 
 const errorStyles = { border: '3px solid red' };
 
-const JsonView: React.SFC<Props> = ({
+const JsonView: React.FC<Props> = ({
   src,
   searchTerm,
   onSearchChange,
