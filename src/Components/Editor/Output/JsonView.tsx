@@ -42,10 +42,10 @@ const JsonView: React.FC<Props> = ({
           name="data"
           iconStyle="triangle"
           indentWidth={8}
-          onAdd={() => {}}
-          onDelete={() => {}}
-          onEdit={() => {}}
-          onSelect={() => {}}
+          onAdd={() => null}
+          onDelete={() => null}
+          onEdit={() => null}
+          onSelect={() => null}
         />
       </Suspense>
     </>

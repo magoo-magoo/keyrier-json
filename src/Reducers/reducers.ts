@@ -277,12 +277,12 @@ export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
     : { ...src };
 
   const keys = Array.isArray(obj)
-    ? Array.from({ length: obj.length }, (_v, k) => k)
+    ? Array.from({ length: obj.length }, (_, k) => k)
     : Object.getOwnPropertyNames(obj).filter(propertyName => propertyName);
 
   let result = false;
-  for (let i = 0; i < keys.length; i++) {
-    const propertyName: string | number = keys[i];
+
+  for (const propertyName of keys) {
     const propertyNameContains =
       typeof propertyName === 'string' &&
       containsIgnoreCase(propertyName, searchTerm);
@@ -315,11 +315,11 @@ export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
   return { match: result, filteredObj: obj };
 };
 
-const filter = (state: OupoutState, _searchTerm: string) => {
-  if (!_searchTerm && _searchTerm.trim() === '') {
+const filter = (state: OupoutState, searchTerm: string) => {
+  if (!searchTerm && searchTerm.trim() === '') {
     return { ...state, match: false };
   }
-  const { filteredObj, match } = containsTerm(state.obj, _searchTerm);
+  const { filteredObj, match } = containsTerm(state.obj, searchTerm);
   if (match) {
     return { ...state, obj: filteredObj, match };
   }

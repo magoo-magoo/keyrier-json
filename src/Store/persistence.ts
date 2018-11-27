@@ -4,6 +4,7 @@ import {
   getInitialAppState,
 } from '../State/State';
 import { logError } from '../helpers/logger';
+import lodash from 'lodash';
 
 export const persistAppState = (appstate: AppState) => {
   if (window.localStorage) {
@@ -38,13 +39,12 @@ export const loadOrdCreate = async <T extends {}>(
   key: string,
   defaultValue: T
 ) => {
-  const lodashModule = await import(/* webpackChunkName: "lodash" */ 'lodash');
   let state = defaultValue;
   try {
     const savedStateString = loadFromLocalStorage(key);
     if (savedStateString) {
       state = JSON.parse(savedStateString);
-      state = lodashModule.merge({}, getInitialAppState(), state);
+      state = lodash.merge({}, getInitialAppState(), state);
     }
   } catch (error) {
     logError(error);

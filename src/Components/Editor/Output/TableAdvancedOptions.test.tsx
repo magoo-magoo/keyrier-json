@@ -10,7 +10,7 @@ describe('TableAdvancedOptions', () => {
         groupBy={[]}
         columns={['col1']}
         onColumnsChange={(a: any) => null as any}
-        updateTableGroupBy={(a: any) => null as any}
+        setTableGroupBy={(a: any) => null as any}
       />
     );
 

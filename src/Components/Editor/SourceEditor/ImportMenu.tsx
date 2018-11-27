@@ -18,7 +18,6 @@ import {
   ResetEditor,
   resetEditor,
 } from '../../../Actions/actions';
-import { RootState } from '../../../State/State';
 import HttpRequestSource from './RequestSource';
 import './ImportMenu.css';
 import { logInfo } from '../../../helpers/logger';
@@ -115,7 +114,7 @@ export class ImportMenu extends Component<Props, State> {
   };
 }
 
-const mapStateToProps = (_state: Readonly<RootState>) => ({});
+const mapStateToProps = () => ({});
 
 export default connect(
   mapStateToProps,

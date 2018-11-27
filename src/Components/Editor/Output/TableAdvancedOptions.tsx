@@ -24,7 +24,7 @@ interface Props {
   groupBy: string[];
   columns: string[];
   onColumnsChange: (v: string[]) => UpdateTableColumns;
-  updateTableGroupBy: (v: string[]) => UpdateTableGroupBy;
+  setTableGroupBy: (v: string[]) => UpdateTableGroupBy;
 }
 
 const handleOnclickOnExportToExcel = async (data: any) => {
@@ -38,7 +38,7 @@ const handleOnclickOnExportToExcel = async (data: any) => {
 export const TableAdvancedOptions: React.FC<Props> = ({
   onColumnsChange,
   columns,
-  updateTableGroupBy,
+  setTableGroupBy,
   data,
   displayedColumns,
 }) => {
@@ -75,7 +75,7 @@ export const TableAdvancedOptions: React.FC<Props> = ({
             className="form-control-lg form-control"
             name="select"
             id="groupingSelect"
-            onChange={e => updateTableGroupBy([e.target.value])}
+            onChange={e => setTableGroupBy([e.target.value])}
           >
             <option key={'Group by...'}>Group by...</option>
             {displayedColumns.map(key => (
@@ -114,5 +114,5 @@ const mapStateToProps = (state: Readonly<RootState>) => {
 
 export default connect(
   mapStateToProps,
-  { onColumnsChange: updateTableColumns, updateTableGroupBy }
+  { onColumnsChange: updateTableColumns, setTableGroupBy: updateTableGroupBy }
 )(TableAdvancedOptions);

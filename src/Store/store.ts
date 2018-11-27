@@ -11,11 +11,11 @@ import {
 } from './persistence';
 
 export const configureStore = async () => {
-  let AppState = await loadOrdCreate(
+  const AppState = await loadOrdCreate(
     'keyrier-json.app.state',
     getInitialAppState()
   );
-  let UserSettingsState = await loadOrdCreate(
+  const UserSettingsState = await loadOrdCreate(
     'keyrier-json.user.settings',
     getInitialUserSettingsState()
   );

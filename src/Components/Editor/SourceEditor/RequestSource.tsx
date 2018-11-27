@@ -13,7 +13,7 @@ import { RenderHeaderInput } from './RequestHeader';
 
 interface Props {
   onRequestSucceed: () => void;
-  updateSource: (src: string) => void;
+  setSource: (src: string) => void;
 }
 
 const displayError = (error: TypeError | null) => {
@@ -30,7 +30,7 @@ const displayError = (error: TypeError | null) => {
 
 export const HttpRequestSource: React.FC<Props> = ({
   onRequestSucceed,
-  updateSource,
+  setSource,
 }) => {
   const [method, setMethod] = React.useState('GET');
   const [url, setUrl] = React.useState(
@@ -47,7 +47,7 @@ export const HttpRequestSource: React.FC<Props> = ({
     setError(null);
 
     const requestInit: RequestInit = {
-      method: method,
+      method,
       headers: headers.map(h => [h.key, h.value]),
       body: hasBody ? body : null,
     };
@@ -75,7 +75,7 @@ export const HttpRequestSource: React.FC<Props> = ({
       setError(error);
       return;
     }
-    updateSource(customToString(json));
+    setSource(customToString(json));
     onRequestSucceed();
   };
 
@@ -152,7 +152,7 @@ export const HttpRequestSource: React.FC<Props> = ({
             headers[index] = { ...h };
             setHeaders([...headers]);
           }}
-          onRemove={() => setHeaders(headers.filter(h => h != header))}
+          onRemove={() => setHeaders(headers.filter(h => h !== header))}
         />
       ))}
       <br />
@@ -166,5 +166,5 @@ export const HttpRequestSource: React.FC<Props> = ({
 
 export default connect(
   null,
-  { updateSource }
+  { setSource: updateSource }
 )(HttpRequestSource);

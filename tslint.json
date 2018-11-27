@@ -1,12 +1,13 @@
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "linterOptions": {
-    "exclude": ["config/**/*.js", "node_modules/**/*.ts"]
+    "exclude": ["config/**/*.js", "node_modules/**/*", "**/*.json"]
   },
   "rules": {
     "object-literal-sort-keys": false,
     "interface-name": [true, "never-prefix"],
     "ordered-imports": false,
-    "prefer-object-spread": true
+    "prefer-object-spread": true,
+    "jsx-no-lambda": false
   }
 }

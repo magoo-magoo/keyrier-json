@@ -13,7 +13,6 @@ const start = async () => {
   const promises = await Promise.all([
     configureStore(),
     import(/* webpackChunkName: "react-dom" */ 'react-dom'),
-    import(/* webpackChunkName: "lodash" */ 'lodash'),
   ]);
 
   const store = promises[0];

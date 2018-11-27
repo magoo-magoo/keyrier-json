@@ -1,10 +1,6 @@
 import { codeEvaluation } from './code';
 
 describe('code helpers', () => {
-  beforeAll(async () => {
-    (window as any)._ = await import(/* webpackChunkName: "lodash" */ 'lodash');
-  });
-
   it('should eval simple object', () => {
     const result = codeEvaluation('{"a": 1}', 'data.a', 'Javascript');
     expect(result).toEqual('1');
@@ -43,7 +39,7 @@ describe('code helpers', () => {
     expect(result).toBeInstanceOf(Error);
   });
 
-  it('should returns a simple object for `select * from data` SQL query', () => {
+  it('should returns a simple object for select star from data SQL query', () => {
     const result = codeEvaluation(
       '{"a": 1, "b": 42}',
       'select * from data',
@@ -61,7 +57,7 @@ describe('code helpers', () => {
     expect(JSON.parse(result as any)).toEqual({ a: 1, c: 999 });
   });
 
-  it('should returns sub object for `select * from data.child` SQL query', () => {
+  it('should returns sub object for select star from data.child SQL query', () => {
     const result = codeEvaluation(
       '{"a": 1, "b": 42, "child":[{"son":true}]}',
       'select * from data.child',
@@ -109,6 +105,7 @@ describe('code helpers', () => {
     expect(result).toBeDefined();
     expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }]);
   });
+
   it('should returns filtered results with where clause -handle OR - SQL query', () => {
     const result = codeEvaluation(
       '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 84, "name": "Macron Manu"}]',

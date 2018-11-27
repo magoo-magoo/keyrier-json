@@ -20,7 +20,7 @@ import { getTheme } from '../Store/selectors';
 import { RootState } from '../State/State';
 
 interface Props {
-  switchTheme: (theme: Theme) => void;
+  setTheme: (theme: Theme) => void;
   currentTheme: Theme | null;
 }
 
@@ -46,25 +46,25 @@ const availableThemes: Theme[] = [
   'yeti',
 ];
 
-const Header: React.FC<Props> = ({ switchTheme, currentTheme }) => {
+const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const switchThemeAndReload = (theme: Theme) => {
-    switchTheme(theme);
+    setTheme(theme);
     setTimeout(() => window.location.reload());
   };
   return (
     <>
-      <Navbar color="dark" dark expand="md">
+      <Navbar color="dark" dark={true} expand="md">
         <NavbarBrand href="/">Keyrier JSON</NavbarBrand>
         <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
+        <Collapse isOpen={isOpen} navbar={true}>
+          <Nav className="ml-auto" navbar={true}>
             <UncontrolledDropdown>
-              <DropdownToggle nav caret>
+              <DropdownToggle nav={true} caret={true}>
                 Theme
               </DropdownToggle>
-              <DropdownMenu right>
+              <DropdownMenu right={true}>
                 {availableThemes.map((theme, index) => (
                   <DropdownItem
                     key={index}
@@ -99,5 +99,5 @@ const mapStateToProps = (state: Readonly<RootState>) => ({
 
 export default connect(
   mapStateToProps,
-  { switchTheme }
+  { setTheme: switchTheme }
 )(Header);

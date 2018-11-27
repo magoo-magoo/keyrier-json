@@ -19,7 +19,7 @@ import {
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
-  updateQueryMode: (e: QueryMode) => UpdateQueryMode;
+  setQueryMode: (e: QueryMode) => UpdateQueryMode;
   queryText: string;
   mode: QueryMode;
 }
@@ -28,7 +28,7 @@ export const QueryEditor: React.FC<Props> = ({
   onChange,
   queryText,
   mode,
-  updateQueryMode,
+  setQueryMode,
 }) => {
   const [modeOpen, setModeOpen] = React.useState(false);
   return (
@@ -44,18 +44,20 @@ export const QueryEditor: React.FC<Props> = ({
             isOpen={modeOpen}
             toggle={() => setModeOpen(!modeOpen)}
           >
-            <DropdownToggle caret>Mode</DropdownToggle>
+            <DropdownToggle caret={true}>Mode</DropdownToggle>
             <DropdownMenu>
-              <DropdownItem header>Choose a predefined query</DropdownItem>
+              <DropdownItem header={true}>
+                Choose a predefined query
+              </DropdownItem>
               <DropdownItem
                 active={mode === 'Javascript'}
-                onClick={() => updateQueryMode('Javascript')}
+                onClick={() => setQueryMode('Javascript')}
               >
                 Javascript
               </DropdownItem>
               <DropdownItem
                 active={mode === 'SQL'}
-                onClick={() => updateQueryMode('SQL')}
+                onClick={() => setQueryMode('SQL')}
               >
                 SQL like(experimental)
               </DropdownItem>
@@ -83,7 +85,6 @@ export const QueryEditor: React.FC<Props> = ({
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
               dragEnabled: true,
-              debounceChangePeriod: 500,
             }}
             width={'100%'}
             enableBasicAutocompletion={true}
@@ -102,5 +103,5 @@ const mapStateToProps = (state: Readonly<RootState>) => ({
 
 export default connect(
   mapStateToProps,
-  { onChange: updateQuery, updateQueryMode }
+  { onChange: updateQuery, setQueryMode: updateQueryMode }
 )(QueryEditor);
