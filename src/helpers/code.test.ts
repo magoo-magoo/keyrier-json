@@ -1,6 +1,7 @@
 import { codeEvaluation } from './code';
+import { computePath } from './sql';
 
-describe('code helpers', () => {
+fdescribe('code helpers', () => {
   it('should eval simple object', () => {
     const result = codeEvaluation('{"a": 1}', 'data.a', 'Javascript');
     expect(result).toEqual('1');
@@ -106,6 +107,26 @@ describe('code helpers', () => {
     expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }]);
   });
 
+  it.each`
+    path                               | expected
+    ${['field']}                       | ${['field']}
+    ${['data', 'field']}               | ${['field']}
+    ${['child', 'value', 'something']} | ${['child', 'value', 'something']}
+  `('returns $expected when given path is $path', ({ path, expected }) => {
+    const result = computePath(path);
+    expect(result).toEqual(expected);
+  });
+
+  it('should returns filtered results with deep where clause - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"id": 42, "child": {"foo": "bar"}},{"id": 666, "child": {"foo": "devil"}}]',
+      "select id from data where child.foo = 'bar'",
+      'SQL'
+    );
+    expect(result).toBeDefined();
+    expect(JSON.parse(result as any)).toEqual([{ id: 42 }]);
+  });
+
   it('should returns filtered results with where clause -handle OR - SQL query', () => {
     const result = codeEvaluation(
       '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 84, "name": "Macron Manu"}]',
@@ -117,5 +138,19 @@ describe('code helpers', () => {
       { fullName: 'John Doe' },
       { fullName: 'Danny de Vito' },
     ]);
+  });
+
+  it('should select sub object field', () => {
+    const result = codeEvaluation(
+      `[{"child" : {
+                    "foo": { "field" : "bar" }
+                  }
+        }
+      ]`,
+      'select child.foo.field from data',
+      'SQL'
+    );
+
+    expect(JSON.parse(result as any)).toEqual([{ field: 'bar' }]);
   });
 });

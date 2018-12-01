@@ -1,6 +1,76 @@
-import lodash from 'lodash';
-import { parse, nodes, Op } from 'sql-parser';
+import _ from 'lodash';
+import { parse, nodes, Op, Field, SQLTree } from 'sql-parser';
 import { jsonParseSafe } from './json';
+
+export const computePath = (path: string[]) => {
+  if (!path || path.length === 0) {
+    return [];
+  }
+  if (path[0] === 'data') {
+    const newPath = [...path];
+    newPath.shift();
+    return newPath;
+  }
+
+  return path;
+};
+
+const mapWithFields = (v: object, fields: Field[]) => {
+  let mapped = v;
+  if (fields[0].constructor !== nodes.Star) {
+    const temp: any = {};
+    fields.forEach(field => {
+      const value = _.get(mapped, field.field.values);
+      let key = field.field.value;
+
+      if (field.field.value2) {
+        key = field.field.value2;
+      }
+
+      if (field.name) {
+        key = field.name.value;
+      }
+
+      temp[key] = value;
+    });
+    mapped = temp;
+  }
+
+  return mapped;
+};
+
+const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
+  let fromPath: string[] = [];
+
+  if (sqlTree.source.name.values && sqlTree.source.name.values.length > 1) {
+    if (sqlTree.source.name.values[0] === 'data') {
+      fromPath = [...sqlTree.source.name.values];
+      fromPath.shift();
+    }
+  }
+
+  let result = _.chain(sourceDataObject);
+
+  if (fromPath && fromPath.length > 0) {
+    result = result.get(fromPath);
+  }
+  if (_.isArray(sourceDataObject)) {
+    return result
+      .filter(v => {
+        if (!sqlTree.where || !sqlTree.where.conditions) {
+          return true;
+        }
+        const leftValue = sqlTree.where.conditions.left;
+        const rightValue = sqlTree.where.conditions.right;
+        const operation = sqlTree.where.conditions.operation;
+        return compareOperands(operation, leftValue, rightValue, v);
+      })
+      .map(v => mapWithFields(v, sqlTree.fields))
+      .value();
+  } else {
+    return mapWithFields(result.value(), sqlTree.fields);
+  }
+};
 
 export const sqlEvaluation = (sourceString: string, queryString: string) => {
   try {
@@ -10,63 +80,11 @@ export const sqlEvaluation = (sourceString: string, queryString: string) => {
       return new Error(`${sqlTree.source.name.values[0]} table does not exist`);
     }
 
-    let fromPath: string[] = [];
+    const sourceDataObject: object = jsonParseSafe(sourceString);
 
-    if (sqlTree.source.name.values && sqlTree.source.name.values.length > 1) {
-      if (sqlTree.source.name.values[0] === 'data') {
-        fromPath = [...sqlTree.source.name.values];
-        fromPath.shift();
-      }
-    }
+    const result = executeQuery(sqlTree, sourceDataObject);
 
-    let result = lodash.chain(jsonParseSafe(sourceString));
-
-    if (fromPath && fromPath.length > 0) {
-      result = result.get(fromPath);
-    }
-
-    const fieldNameMap = new Map<string, string>();
-    if (sqlTree.fields[0].constructor !== nodes.Star) {
-      sqlTree.fields.forEach((field: any) => {
-        if (field.field && field.name) {
-          fieldNameMap.set(field.field.value, field.name.value);
-        }
-      });
-    }
-    const fieldNameMapper = (_: any, key: string) =>
-      fieldNameMap.has(key) ? fieldNameMap.get(key) : key;
-    let tempValue = result.value();
-    if (Array.isArray(tempValue)) {
-      if (sqlTree.where && sqlTree.where.conditions) {
-        tempValue = tempValue.filter(v => {
-          const leftValue = sqlTree.where.conditions.left;
-          const rightValue = sqlTree.where.conditions.right;
-          const operation = sqlTree.where.conditions.operation;
-          return compareOperands(operation, leftValue, rightValue, v);
-        });
-      }
-      result = lodash.chain(tempValue).map(v => {
-        let mapped = v;
-        if (sqlTree.fields[0].constructor !== nodes.Star) {
-          mapped = lodash.pick(
-            v,
-            sqlTree.fields.map((f: any) => f.field.value)
-          );
-        }
-
-        mapped = lodash.mapKeys(mapped, fieldNameMapper);
-        return mapped;
-      });
-    } else {
-      if (sqlTree.fields[0].constructor !== nodes.Star) {
-        result = result.pick(sqlTree.fields.map((f: any) => f.field.value));
-      }
-      result = result.mapKeys(fieldNameMapper);
-    }
-
-    const resultValue = result.value();
-
-    return JSON.stringify(resultValue);
+    return JSON.stringify(result);
   } catch (e) {
     return e;
   }
@@ -74,51 +92,53 @@ export const sqlEvaluation = (sourceString: string, queryString: string) => {
 
 const compareOperands = (
   operation: string | null,
-  lefty: Op,
-  righty: Op,
-  value: any
+  left: Op,
+  right: Op,
+  value: object
 ): boolean => {
   if (operation) {
     if (operation.toLowerCase() === 'or') {
       return (
-        compareOperands(lefty.operation, lefty.left, lefty.right, value) ||
-        compareOperands(righty.operation, righty.left, righty.right, value)
+        compareOperands(left.operation, left.left, left.right, value) ||
+        compareOperands(right.operation, right.left, right.right, value)
       );
     }
 
     if (operation.toLowerCase() === 'and') {
       return (
-        compareOperands(lefty.operation, lefty.left, lefty.right, value) &&
-        compareOperands(righty.operation, righty.left, righty.right, value)
+        compareOperands(left.operation, left.left, left.right, value) &&
+        compareOperands(right.operation, right.left, right.right, value)
       );
     }
   }
 
-  if (!lefty.value) {
+  if (!left.value) {
     return false;
   }
 
-  if (operation === '=' && value[lefty.value] === righty.value) {
+  const leftValue = _.get(value, computePath(left.values));
+
+  if (operation === '=' && leftValue === right.value) {
     return true;
   }
-  if (operation === '!=' && value[lefty.value] !== righty.value) {
+  if (operation === '!=' && leftValue !== right.value) {
     return true;
   }
-  if (operation === '<>' && value[lefty.value] !== righty.value) {
+  if (operation === '<>' && leftValue !== right.value) {
     return true;
   }
 
-  if (righty.value) {
-    if (operation === '>' && value[lefty.value] > righty.value) {
+  if (right.value) {
+    if (operation === '>' && leftValue > right.value) {
       return true;
     }
-    if (operation === '>=' && value[lefty.value] >= righty.value) {
+    if (operation === '>=' && leftValue >= right.value) {
       return true;
     }
-    if (operation === '<' && value[lefty.value] < righty.value) {
+    if (operation === '<' && leftValue < right.value) {
       return true;
     }
-    if (operation === '<=' && value[lefty.value] <= righty.value) {
+    if (operation === '<=' && leftValue <= right.value) {
       return true;
     }
   }

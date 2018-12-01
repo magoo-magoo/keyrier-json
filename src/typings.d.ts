@@ -38,9 +38,20 @@ declare module 'sql-parser' {
     name: Name;
   }
 
-  export interface Field {}
+  export interface Value {
+    value: string;
+    values: string[];
+    value2: string;
+  }
+
+  export interface Field {
+    field: Value;
+    name: Value;
+  }
+
   export interface Op {
     value: string | number | null;
+    values: string[];
     operation: string | null;
     left: Op;
     right: Op;
@@ -54,7 +65,7 @@ declare module 'sql-parser' {
     conditions: Conditions;
   }
 
-  export interface sqlTree {
+  export interface SQLTree {
     source: Source;
     where: Where;
     fields: Field[];
@@ -64,6 +75,6 @@ declare module 'sql-parser' {
     public static readonly Star: Function;
   }
 
-  export type ParseFunction = (s: string) => sqlTree;
+  export type ParseFunction = (s: string) => SQLTree;
   export const parse: ParseFunction;
 }
