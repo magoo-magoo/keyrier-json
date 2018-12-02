@@ -78,7 +78,7 @@
     "redux-mock-store": "1.5.3",
     "tslint": "5.11.0",
     "tslint-react": "3.6.0",
-    "tslint-config-prettier": "1.16.0",
+    "tslint-config-prettier": "1.17.0",
     "typescript": "3.2.1",
     "wait-on": "3.2.0"
   },
