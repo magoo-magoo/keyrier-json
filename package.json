@@ -67,7 +67,7 @@
     "electron": "3.0.10",
     "electron-builder": "20.38.2",
     "enzyme": "3.7.0",
-    "enzyme-adapter-react-16": "1.7.0",
+    "enzyme-adapter-react-16": "1.7.1",
     "gh-pages": "2.0.1",
     "husky": "1.2.0",
     "prettier": "1.15.3",
