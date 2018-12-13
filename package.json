@@ -69,7 +69,7 @@
     "enzyme": "3.7.0",
     "enzyme-adapter-react-16": "1.7.0",
     "gh-pages": "2.0.1",
-    "husky": "1.2.0",
+    "husky": "1.2.1",
     "prettier": "1.15.3",
     "pretty-quick": "1.8.0",
     "react-scripts": "2.1.1",
