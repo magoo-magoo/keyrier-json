@@ -59,7 +59,7 @@
     "@types/react-loadable": "5.4.2",
     "@types/react-redux": "6.0.10",
     "@types/react-select": "2.0.10",
-    "@types/react-table": "6.7.17",
+    "@types/react-table": "6.7.20",
     "@types/react-test-renderer": "16.0.3",
     "@types/reactstrap": "6.4.3",
     "@types/redux-mock-store": "1.0.0",
