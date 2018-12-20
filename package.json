@@ -20,7 +20,7 @@
     "lodash": "4.17.11",
     "popper.js": "1.14.7",
     "react": "16.7.0-alpha.2",
-    "react-ace": "6.2.0",
+    "react-ace": "6.3.2",
     "react-debounce-input": "3.2.0",
     "react-dom": "16.7.0-alpha.2",
     "react-json-view": "1.19.1",
