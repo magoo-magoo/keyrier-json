@@ -47,7 +47,7 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "devDependencies": {
-    "@types/classnames": "2.2.6",
+    "@types/classnames": "2.2.7",
     "@types/enzyme": "3.1.15",
     "@types/enzyme-adapter-react-16": "1.0.3",
     "@types/jest": "23.3.10",
