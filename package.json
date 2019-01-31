@@ -56,7 +56,7 @@
     "@types/prop-types": "15.5.8",
     "@types/react": "16.8.1",
     "@types/react-dom": "16.0.11",
-    "@types/react-loadable": "5.4.3",
+    "@types/react-loadable": "5.5.0",
     "@types/react-redux": "6.0.10",
     "@types/react-select": "2.0.11",
     "@types/react-table": "6.7.17",
