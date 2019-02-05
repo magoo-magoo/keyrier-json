@@ -50,7 +50,7 @@
     "@types/classnames": "2.2.7",
     "@types/enzyme": "3.1.15",
     "@types/enzyme-adapter-react-16": "1.0.3",
-    "@types/jest": "23.3.10",
+    "@types/jest": "23.3.14",
     "@types/lodash": "4.14.119",
     "@types/node": "10.12.18",
     "@types/prop-types": "15.5.8",
