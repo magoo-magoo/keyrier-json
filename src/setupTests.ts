@@ -1,7 +1,7 @@
 import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import EnzymeAdapter from 'enzyme-adapter-react-16';
 
-configure({ adapter: new Adapter() });
+configure({ adapter: new EnzymeAdapter() });
 const localStorageMock = {
   clear: jest.fn(),
   getItem: jest.fn(),
@@ -9,6 +9,8 @@ const localStorageMock = {
 };
 (global as any).localStorage = localStorageMock;
 
-(URL as any).createObjectURL = () => {};
+(URL as any).createObjectURL = () => {
+  //
+};
 
 (global as any).Worker = {};

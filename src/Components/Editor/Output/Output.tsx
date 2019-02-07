@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Alert, TabContent, TabPane } from '../../Deferred/DeferredReactstrap';
 import OutputTable from './OutputTable';
 import { RootState, tabType } from '../../../State/State';
 
@@ -16,6 +15,7 @@ import {
   UpdateOutputTabSelection,
   updateOutputTabSelection,
 } from '../../../Actions/actions';
+import { TabContent, TabPane, Alert } from 'reactstrap';
 
 interface Props {
   isArray: boolean;

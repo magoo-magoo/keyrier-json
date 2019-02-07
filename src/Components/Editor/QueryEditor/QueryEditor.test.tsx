@@ -1,11 +1,7 @@
-// import { shallow } from 'enzyme';
-// import * as React from 'react';
-// import { QueryEditor } from './QueryEditor';
+import * as React from 'react';
 
-const onChangeMock = (_: string) => ({} as any);
-
-describe('QueryEditor', () => {
+describe('Output', () => {
   it('renders without crashing', () => {
-    // shallow(<QueryEditor onChange={onChangeMock} queryText={''} />);
+    //
   });
 });

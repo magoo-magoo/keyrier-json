@@ -2,11 +2,12 @@ import * as React from 'react';
 import './Editor.css';
 import Output from './Output/Output';
 import SourceEditor from './SourceEditor/SourceEditor';
-import { Button, Collapse } from '../Deferred/DeferredReactstrap';
 import QueryEditor from './QueryEditor/QueryEditor';
+import { Button, Collapse } from 'reactstrap';
+import { useState } from 'react';
 
 export const Editor = () => {
-  const [collapse, setCollapse] = React.useState(false);
+  const [collapse, setCollapse] = useState(false);
   return (
     <>
       <h1 className="my-5">Paste your JSON and Query it.</h1>

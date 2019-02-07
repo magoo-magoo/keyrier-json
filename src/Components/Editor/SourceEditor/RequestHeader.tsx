@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '../../Deferred/DeferredReactstrap';
+import { Button } from 'reactstrap';
 
 interface Header {
   key: string;
@@ -8,7 +8,7 @@ interface Header {
 
 interface Props {
   header: Header;
-  key: number;
+  id: number;
   onChange: (h: Header) => void;
   onRemove: () => void;
 }
@@ -17,17 +17,17 @@ export const RenderHeaderInput: React.FC<Props> = ({
   header,
   onRemove,
   onChange,
-  key,
+  id,
 }) => {
   return (
-    <div className="row align-items-center" key={key}>
+    <div className="row align-items-center" key={id}>
       <div className="col-sm-5">
         <input
           className="form-control-lg form-control"
           value={header.key}
-          id={`headerName${key}`}
+          id={`headerName${id}`}
           type="text"
-          name={`headerName${key}`}
+          name={`headerName${id}`}
           placeholder="enter an name"
           onChange={e => onChange({ ...header, key: e.target.value })}
         />
@@ -37,8 +37,8 @@ export const RenderHeaderInput: React.FC<Props> = ({
           className="form-control-lg form-control"
           value={header.value}
           type="text"
-          name={`headerValue${key}`}
-          id={`headerValue${key}`}
+          name={`headerValue${id}`}
+          id={`headerValue${id}`}
           placeholder="enter an value"
           onChange={e => onChange({ ...header, value: e.target.value })}
         />

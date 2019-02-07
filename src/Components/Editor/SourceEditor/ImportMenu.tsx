@@ -2,17 +2,6 @@ import * as React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Button,
-  ButtonDropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from '../../Deferred/DeferredReactstrap';
-import {
   UpdateSource,
   updateSource,
   ResetEditor,
@@ -21,6 +10,17 @@ import {
 import HttpRequestSource from './RequestSource';
 import './ImportMenu.css';
 import { logInfo } from '../../../helpers/logger';
+import {
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from 'reactstrap';
 interface Props {
   onFileContentReady: (fileContent: string) => UpdateSource;
   onReset: () => ResetEditor;

@@ -1,15 +1,11 @@
 import * as React from 'react';
-import {
-  FormGroup,
-  Button,
-  Alert,
-  Form,
-} from '../../Deferred/DeferredReactstrap';
 import { logError, logInfo } from '../../../helpers/logger';
 import { connect } from 'react-redux';
 import { updateSource } from '../../../Actions/actions';
 import { customToString } from '../../../helpers/string';
 import { RenderHeaderInput } from './RequestHeader';
+import { Alert, FormGroup, Form, Button } from 'reactstrap';
+import { useState } from 'react';
 
 interface Props {
   onRequestSucceed: () => void;
@@ -32,16 +28,14 @@ export const HttpRequestSource: React.FC<Props> = ({
   onRequestSucceed,
   setSource,
 }) => {
-  const [method, setMethod] = React.useState('GET');
-  const [url, setUrl] = React.useState(
-    'https://rickandmortyapi.com/api/character/'
-  );
-  const [headers, setHeaders] = React.useState([
+  const [method, setMethod] = useState('GET');
+  const [url, setUrl] = useState('https://rickandmortyapi.com/api/character/');
+  const [headers, setHeaders] = useState([
     { key: 'Accept', value: 'application/json' },
   ]);
-  const [error, setError] = React.useState(null as TypeError | null);
-  const [body, setBody] = React.useState('');
-  const [hasBody, setHasBody] = React.useState(false);
+  const [error, setError] = useState(null as TypeError | null);
+  const [body, setBody] = useState('');
+  const [hasBody, setHasBody] = useState(false);
 
   const submit = async () => {
     setError(null);
@@ -148,6 +142,7 @@ export const HttpRequestSource: React.FC<Props> = ({
         <RenderHeaderInput
           header={header}
           key={index}
+          id={index}
           onChange={h => {
             headers[index] = { ...h };
             setHeaders([...headers]);

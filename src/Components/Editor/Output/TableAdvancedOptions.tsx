@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Collapse, Button } from '../../Deferred/DeferredReactstrap';
 import './OutputTable.css';
 import { connect } from 'react-redux';
 import {
@@ -17,6 +16,8 @@ import {
   getColumns,
   getGroupBy,
 } from '../../../Store/selectors';
+import { Button, Collapse } from 'reactstrap';
+import { useState } from 'react';
 
 interface Props {
   data: itemType[];
@@ -42,7 +43,7 @@ export const TableAdvancedOptions: React.FC<Props> = ({
   data,
   displayedColumns,
 }) => {
-  const [optionsCollapsed, setOptionsCollapsed] = React.useState(false);
+  const [optionsCollapsed, setOptionsCollapsed] = useState(false);
 
   const handleColumnChange = (cols: ValueType<{}> | undefined | null) => {
     if (cols instanceof Array) {

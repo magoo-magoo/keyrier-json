@@ -13,6 +13,10 @@ import {
   getColumns,
   getGroupBy,
 } from '../../../Store/selectors';
+import Modal from 'reactstrap/lib/Modal';
+import { useState, Suspense, lazy } from 'react';
+import { ModalHeader, ModalBody } from 'reactstrap';
+const ReactJson = lazy(() => import('react-json-view'));
 
 interface Props {
   data: itemType[];
@@ -25,14 +29,24 @@ export const OutputTableView: React.FC<Props> = ({
   displayedColumns,
   groupBy,
 }) => {
+  const [detailsCellValue, setDetailsCellValue] = useState(null as any);
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div />;
   }
 
   const tableColumnConfig = displayedColumns.map<Column>(key => ({
     Aggregated: (row: any) => (row ? row.value : ''),
-    Cell: (cellProps: any) =>
-      cellProps ? customToString(cellProps.value) : '',
+    Cell: (cellProps: any) => {
+      const cellContent = cellProps ? customToString(cellProps.value) : '';
+      return (
+        <a
+          href="javascript:void(0);"
+          onClick={() => setDetailsCellValue(cellProps.value)}
+        >
+          {cellContent}
+        </a>
+      );
+    },
     Header: key,
     accessor: key,
     className: 'text-center',
@@ -67,6 +81,30 @@ export const OutputTableView: React.FC<Props> = ({
       <div className="mx-3 align-items-center justify-content-end d-flex">
         <h4>Number of elements: {data.length}</h4>
       </div>
+      <Modal
+        isOpen={!!detailsCellValue}
+        toggle={() => setDetailsCellValue(null)}
+      >
+        <ModalHeader>Details</ModalHeader>
+        <ModalBody>
+          {typeof detailsCellValue === 'object' ? (
+            <Suspense fallback={<div>Loading...</div>}>
+              <ReactJson
+                src={detailsCellValue ? detailsCellValue : {}}
+                name="data"
+                iconStyle="triangle"
+                indentWidth={8}
+                onAdd={() => null}
+                onDelete={() => null}
+                onEdit={() => null}
+                onSelect={() => null}
+              />
+            </Suspense>
+          ) : (
+            detailsCellValue
+          )}
+        </ModalBody>
+      </Modal>
     </>
   );
 };

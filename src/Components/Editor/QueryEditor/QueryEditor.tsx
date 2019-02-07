@@ -15,7 +15,8 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-} from '../../Deferred/DeferredReactstrap';
+} from 'reactstrap';
+import { useState } from 'react';
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
@@ -30,7 +31,7 @@ export const QueryEditor: React.FC<Props> = ({
   mode,
   setQueryMode,
 }) => {
-  const [modeOpen, setModeOpen] = React.useState(false);
+  const [modeOpen, setModeOpen] = useState(false);
   return (
     <>
       <div className="row">
@@ -89,6 +90,7 @@ export const QueryEditor: React.FC<Props> = ({
             width={'100%'}
             enableBasicAutocompletion={true}
             enableLiveAutocompletion={true}
+            debounceChangePeriod={250}
           />
         </div>
       </div>

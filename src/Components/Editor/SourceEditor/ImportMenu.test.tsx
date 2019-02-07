@@ -5,7 +5,9 @@ import { ImportMenu } from './ImportMenu';
 describe('ImportMenu', () => {
   it('renders without crashing', () => {
     const onChangeMock = () => ({} as any);
-    shallow(<ImportMenu onFileContentReady={onChangeMock} />);
+    shallow(
+      <ImportMenu onReset={onChangeMock} onFileContentReady={onChangeMock} />
+    );
   });
 
   it('should load file content', async () => {
@@ -20,7 +22,7 @@ describe('ImportMenu', () => {
     };
 
     const importMenu = shallow(
-      <ImportMenu onFileContentReady={onChangeMock} />
+      <ImportMenu onReset={onChangeMock} onFileContentReady={onChangeMock} />
     );
 
     const blob = new Blob(['File content'], { type: 'text/html' });

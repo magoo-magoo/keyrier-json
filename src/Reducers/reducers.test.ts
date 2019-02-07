@@ -5,16 +5,17 @@ import {
   source,
   containsTerm,
 } from './reducers';
-import { getInitialAppState } from '../State/State';
+import { getInitialAppState, AppState, QueryState } from '../State/State';
 
 describe('Reducers', () => {
   it('rootReducers should reset', () => {
-    const state = {
+    const state: AppState = {
       output: {
         text: 'fake o',
         obj: {},
         searchTerm: '',
         match: false,
+        selectedTab: 'RawJson',
         table: {
           array: [],
           isArray: false,
@@ -36,7 +37,7 @@ describe('Reducers', () => {
   });
 
   it('update query action should update', () => {
-    const state = { text: 'initial', mode: 'Javascript' };
+    const state: QueryState = { text: 'initial', mode: 'Javascript' };
 
     const result = query(state, { query: 'new value', type: 'UPDATE_QUERY' });
 
@@ -55,12 +56,13 @@ describe('Reducers', () => {
   });
 
   it('output ', () => {
-    const state = {
+    const state: AppState = {
       output: {
         text: '{}',
         obj: {},
         match: false,
         searchTerm: '',
+        selectedTab: 'RawJson',
         table: {
           array: [],
           isArray: false,
@@ -70,7 +72,7 @@ describe('Reducers', () => {
           groupBy: [],
         },
       },
-      query: { text: 'data.value' },
+      query: { text: 'data.value', mode: 'Javascript' },
       source: { text: '{"value": "test"}' },
     };
 

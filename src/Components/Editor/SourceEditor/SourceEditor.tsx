@@ -36,6 +36,7 @@ export const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
           showGutter={true}
           highlightActiveLine={true}
           value={jsonBeautify(sourceText)}
+          debounceChangePeriod={500}
           minLines={10}
           maxLines={20}
           wrapEnabled={true}

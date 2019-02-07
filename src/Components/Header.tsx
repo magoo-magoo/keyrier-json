@@ -1,23 +1,24 @@
 import * as React from 'react';
 import { version } from '../../package.json';
-import {
-  DropdownItem,
-  DropdownToggle,
-  DropdownMenu,
-  Collapse,
-  Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  Nav,
-  NavItem,
-  NavLink,
-} from './Deferred/DeferredReactstrap';
-import { UncontrolledDropdown } from 'reactstrap/lib/Uncontrolled';
 import { Theme } from '../Themes/themes';
 import { switchTheme } from '../Actions/actions';
 import { connect } from 'react-redux';
 import { getTheme } from '../Store/selectors';
 import { RootState } from '../State/State';
+import {
+  UncontrolledDropdown,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  Collapse,
+  Nav,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavItem,
+  NavLink,
+} from 'reactstrap';
+import { useState } from 'react';
 
 interface Props {
   setTheme: (theme: Theme) => void;
@@ -47,7 +48,7 @@ const availableThemes: Theme[] = [
 ];
 
 const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const switchThemeAndReload = (theme: Theme) => {
     setTheme(theme);

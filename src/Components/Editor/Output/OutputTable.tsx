@@ -1,11 +1,4 @@
 import * as React from 'react';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from '../../Deferred/DeferredReactstrap';
 import './OutputTable.css';
 import { connect } from 'react-redux';
 import OutputTableView from './OutputTableView';
@@ -18,6 +11,7 @@ import {
   getOutputTableData,
 } from '../../../Store/selectors';
 import { RootState } from '../../../State/State';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 interface Props {
   toggleModal: () => ToggleOutputTableModal;
