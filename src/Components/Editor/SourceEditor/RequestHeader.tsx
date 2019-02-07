@@ -1,24 +1,19 @@
-import * as React from 'react';
-import { Button } from '../../Deferred/DeferredReactstrap';
+import * as React from 'react'
+import { Button } from '../../Deferred/DeferredReactstrap'
 
 interface Header {
-  key: string;
-  value: string;
+  key: string
+  value: string
 }
 
 interface Props {
-  header: Header;
-  id: number;
-  onChange: (h: Header) => void;
-  onRemove: () => void;
+  header: Header
+  id: number
+  onChange: (h: Header) => void
+  onRemove: () => void
 }
 
-export const RenderHeaderInput: React.FC<Props> = ({
-  header,
-  onRemove,
-  onChange,
-  id,
-}) => {
+export const RenderHeaderInput: React.FC<Props> = ({ header, onRemove, onChange, id }) => {
   return (
     <div className="row align-items-center" key={id}>
       <div className="col-sm-5">
@@ -49,5 +44,5 @@ export const RenderHeaderInput: React.FC<Props> = ({
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}

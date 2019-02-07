@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { version } from '../../package.json';
-import { Theme } from '../Themes/themes';
-import { switchTheme } from '../Actions/actions';
-import { connect } from 'react-redux';
-import { getTheme } from '../Store/selectors';
-import { RootState } from '../State/State';
-import { useToggleState } from '../Hooks/hooks';
+import * as React from 'react'
+import { version } from '../../package.json'
+import { Theme } from '../Themes/themes'
+import { switchTheme } from '../Actions/actions'
+import { connect } from 'react-redux'
+import { getTheme } from '../Store/selectors'
+import { RootState } from '../State/State'
+import { useToggleState } from '../Hooks/hooks'
 import {
   Navbar,
   NavbarBrand,
@@ -18,11 +18,11 @@ import {
   NavItem,
   NavLink,
   Dropdown,
-} from './Deferred/DeferredReactstrap';
+} from './Deferred/DeferredReactstrap'
 
 interface Props {
-  setTheme: (theme: Theme) => void;
-  currentTheme: Theme | null;
+  setTheme: (theme: Theme) => void
+  currentTheme: Theme | null
 }
 
 const availableThemes: Theme[] = [
@@ -45,16 +45,16 @@ const availableThemes: Theme[] = [
   'superhero',
   'united',
   'yeti',
-];
+]
 
 const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
-  const [isOpen, switchIsOpen] = useToggleState();
-  const [dropDownIsOpen, toggleDropdown] = useToggleState();
+  const [isOpen, switchIsOpen] = useToggleState()
+  const [dropDownIsOpen, toggleDropdown] = useToggleState()
 
   const switchThemeAndReload = (theme: Theme) => {
-    setTheme(theme);
-    setTimeout(() => window.location.reload());
-  };
+    setTheme(theme)
+    setTimeout(() => window.location.reload())
+  }
   return (
     <>
       <Navbar color="dark" dark={true} expand="md">
@@ -68,38 +68,30 @@ const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
               </DropdownToggle>
               <DropdownMenu right={true}>
                 {availableThemes.map((theme, index) => (
-                  <DropdownItem
-                    key={index}
-                    active={currentTheme === theme}
-                    onClick={() => switchThemeAndReload(theme)}
-                  >
+                  <DropdownItem key={index} active={currentTheme === theme} onClick={() => switchThemeAndReload(theme)}>
                     {theme}
                   </DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
             <NavItem>
-              <NavLink href="https://github.com/magoo-magoo/keyrier-json/releases/latest">
-                v{version}
-              </NavLink>
+              <NavLink href="https://github.com/magoo-magoo/keyrier-json/releases/latest">v{version}</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/magoo-magoo/keyrier-json">
-                GitHub
-              </NavLink>
+              <NavLink href="https://github.com/magoo-magoo/keyrier-json">GitHub</NavLink>
             </NavItem>
           </Nav>
         </Collapse>
       </Navbar>
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: Readonly<RootState>) => ({
   currentTheme: getTheme(state),
-});
+})
 
 export default connect(
   mapStateToProps,
   { setTheme: switchTheme }
-)(Header);
+)(Header)

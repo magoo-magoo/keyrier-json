@@ -1,57 +1,47 @@
-import * as React from 'react';
-import { logError, logInfo } from '../../../helpers/logger';
-import { connect } from 'react-redux';
-import { updateSource } from '../../../Actions/actions';
-import { customToString } from '../../../helpers/string';
-import { RenderHeaderInput } from './RequestHeader';
-import { useState } from 'react';
-import {
-  Alert,
-  FormGroup,
-  Form,
-  Button,
-} from '../../Deferred/DeferredReactstrap';
+import * as React from 'react'
+import { logError, logInfo } from '../../../helpers/logger'
+import { connect } from 'react-redux'
+import { updateSource } from '../../../Actions/actions'
+import { customToString } from '../../../helpers/string'
+import { RenderHeaderInput } from './RequestHeader'
+import { useState } from 'react'
+import { Alert, FormGroup, Form, Button } from '../../Deferred/DeferredReactstrap'
 
 interface Props {
-  onRequestSucceed: () => void;
-  setSource: (src: string) => void;
+  onRequestSucceed: () => void
+  setSource: (src: string) => void
 }
 
 const displayError = (error: TypeError | null) => {
   if (!error) {
-    return <></>;
+    return <></>
   }
   return (
     <Alert color="danger">
       Error: {error.message ? error.message : ''}
       {error.stack ? error.stack : ''}
     </Alert>
-  );
-};
+  )
+}
 
-export const HttpRequestSource: React.FC<Props> = ({
-  onRequestSucceed,
-  setSource,
-}) => {
-  const [method, setMethod] = useState('GET');
-  const [url, setUrl] = useState('https://rickandmortyapi.com/api/character/');
-  const [headers, setHeaders] = useState([
-    { key: 'Accept', value: 'application/json' },
-  ]);
-  const [error, setError] = useState(null as TypeError | null);
-  const [body, setBody] = useState('');
-  const [hasBody, setHasBody] = useState(false);
+export const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource }) => {
+  const [method, setMethod] = useState('GET')
+  const [url, setUrl] = useState('https://rickandmortyapi.com/api/character/')
+  const [headers, setHeaders] = useState([{ key: 'Accept', value: 'application/json' }])
+  const [error, setError] = useState(null as TypeError | null)
+  const [body, setBody] = useState('')
+  const [hasBody, setHasBody] = useState(false)
 
   const submit = async () => {
-    setError(null);
+    setError(null)
 
     const requestInit: RequestInit = {
       method,
       headers: headers.map(h => [h.key, h.value]),
       body: hasBody ? body : null,
-    };
+    }
 
-    const request = new Request(url, requestInit);
+    const request = new Request(url, requestInit)
 
     logInfo('request', {
       url: request.url,
@@ -63,20 +53,20 @@ export const HttpRequestSource: React.FC<Props> = ({
       credentials: request.credentials,
       redirect: request.redirect,
       referrer: request.referrer,
-    });
+    })
 
-    let json: string;
+    let json: string
     try {
-      const result = await fetch(request);
-      json = await result.json();
+      const result = await fetch(request)
+      json = await result.json()
     } catch (error) {
-      logError('HttpRequestSource.submit', error);
-      setError(error);
-      return;
+      logError('HttpRequestSource.submit', error)
+      setError(error)
+      return
     }
-    setSource(customToString(json));
-    onRequestSucceed();
-  };
+    setSource(customToString(json))
+    onRequestSucceed()
+  }
 
   return (
     <>
@@ -109,12 +99,7 @@ export const HttpRequestSource: React.FC<Props> = ({
       </FormGroup>
       <div className="position-relative form-check">
         <label className="form-check-label">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            onChange={() => setHasBody(!hasBody)}
-          />{' '}
-          Add body
+          <input type="checkbox" className="form-check-input" onChange={() => setHasBody(!hasBody)} /> Add body
         </label>
       </div>
       <Form inline={true} hidden={!hasBody}>
@@ -132,12 +117,7 @@ export const HttpRequestSource: React.FC<Props> = ({
       <Button
         outline={true}
         color="primary"
-        onClick={() =>
-          setHeaders([
-            ...headers,
-            { key: `name-${headers.length + 1}`, value: 'value' },
-          ])
-        }
+        onClick={() => setHeaders([...headers, { key: `name-${headers.length + 1}`, value: 'value' }])}
       >
         Add header
       </Button>
@@ -149,8 +129,8 @@ export const HttpRequestSource: React.FC<Props> = ({
           key={index}
           id={index}
           onChange={h => {
-            headers[index] = { ...h };
-            setHeaders([...headers]);
+            headers[index] = { ...h }
+            setHeaders([...headers])
           }}
           onRemove={() => setHeaders(headers.filter(h => h !== header))}
         />
@@ -161,10 +141,10 @@ export const HttpRequestSource: React.FC<Props> = ({
       </Button>
       {displayError(error)}
     </>
-  );
-};
+  )
+}
 
 export default connect(
   null,
   { setSource: updateSource }
-)(HttpRequestSource);
+)(HttpRequestSource)

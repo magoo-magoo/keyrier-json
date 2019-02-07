@@ -1,40 +1,28 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import OutputTable from './OutputTable';
-import { RootState, tabType } from '../../../State/State';
+import * as React from 'react'
+import { connect } from 'react-redux'
+import OutputTable from './OutputTable'
+import { RootState, tabType } from '../../../State/State'
 
-import classNames from 'classnames';
+import classNames from 'classnames'
 
-import {
-  getOutputErrorMessage,
-  getOutputIsArray,
-  getOutputActiveTab,
-} from '../../../Store/selectors';
-import JsonView from './JsonView';
-import {
-  UpdateOutputTabSelection,
-  updateOutputTabSelection,
-} from '../../../Actions/actions';
-import { TabContent, TabPane, Alert } from '../../Deferred/DeferredReactstrap';
+import { getOutputErrorMessage, getOutputIsArray, getOutputActiveTab } from '../../../Store/selectors'
+import JsonView from './JsonView'
+import { UpdateOutputTabSelection, updateOutputTabSelection } from '../../../Actions/actions'
+import { TabContent, TabPane, Alert } from '../../Deferred/DeferredReactstrap'
 
 interface Props {
-  isArray: boolean;
-  activeTab: tabType;
-  setActiveTab: (v: tabType) => UpdateOutputTabSelection;
-  errorMessage?: string;
+  isArray: boolean
+  activeTab: tabType
+  setActiveTab: (v: tabType) => UpdateOutputTabSelection
+  errorMessage?: string
 }
 
 const pointer = {
   cursor: 'pointer',
   fontSize: 'large',
-};
+}
 
-export const Output: React.FC<Props> = ({
-  isArray,
-  errorMessage,
-  activeTab,
-  setActiveTab,
-}) => {
+export const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab }) => {
   const display = (
     <>
       <div className="row">
@@ -47,7 +35,7 @@ export const Output: React.FC<Props> = ({
                   'nav-link': true,
                 })}
                 onClick={() => {
-                  setActiveTab('RawJson');
+                  setActiveTab('RawJson')
                 }}
                 style={pointer}
               >
@@ -61,7 +49,7 @@ export const Output: React.FC<Props> = ({
                   'nav-link': true,
                 })}
                 onClick={() => {
-                  setActiveTab('Table');
+                  setActiveTab('Table')
                 }}
                 style={pointer}
               >
@@ -84,7 +72,7 @@ export const Output: React.FC<Props> = ({
         </TabPane>
       </TabContent>
     </>
-  );
+  )
 
   return (
     <div>
@@ -102,18 +90,18 @@ export const Output: React.FC<Props> = ({
       </div>
       {display}
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: Readonly<RootState>) => {
   return {
     errorMessage: getOutputErrorMessage(state),
     isArray: getOutputIsArray(state),
     activeTab: getOutputActiveTab(state),
-  };
-};
+  }
+}
 
 export default connect(
   mapStateToProps,
   { setActiveTab: updateOutputTabSelection }
-)(Output);
+)(Output)

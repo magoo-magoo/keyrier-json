@@ -1,37 +1,22 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
+import * as React from 'react'
+import { connect } from 'react-redux'
 
-import {
-  UpdateQueryAction,
-  updateQuery,
-  updateQueryMode,
-  UpdateQueryMode,
-} from '../../../Actions/actions';
-import { RootState, QueryMode } from '../../../State/State';
-import { AceEditor } from '../../Deferred/DeferredAceEditor';
-import { getQueryText, getQueryMode } from '../../../Store/selectors';
-import { useToggleState } from '../../../Hooks/hooks';
-import {
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from '../../Deferred/DeferredReactstrap';
+import { UpdateQueryAction, updateQuery, updateQueryMode, UpdateQueryMode } from '../../../Actions/actions'
+import { RootState, QueryMode } from '../../../State/State'
+import { AceEditor } from '../../Deferred/DeferredAceEditor'
+import { getQueryText, getQueryMode } from '../../../Store/selectors'
+import { useToggleState } from '../../../Hooks/hooks'
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from '../../Deferred/DeferredReactstrap'
 
 interface Props {
-  onChange: (e: string) => UpdateQueryAction;
-  setQueryMode: (e: QueryMode) => UpdateQueryMode;
-  queryText: string;
-  mode: QueryMode;
+  onChange: (e: string) => UpdateQueryAction
+  setQueryMode: (e: QueryMode) => UpdateQueryMode
+  queryText: string
+  mode: QueryMode
 }
 
-export const QueryEditor: React.FC<Props> = ({
-  onChange,
-  queryText,
-  mode,
-  setQueryMode,
-}) => {
-  const [modeOpen, switchModeOpen] = useToggleState();
+export const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode }) => {
+  const [modeOpen, switchModeOpen] = useToggleState()
   return (
     <>
       <div className="row">
@@ -44,19 +29,11 @@ export const QueryEditor: React.FC<Props> = ({
           <ButtonDropdown isOpen={modeOpen} toggle={switchModeOpen}>
             <DropdownToggle caret={true}>Mode</DropdownToggle>
             <DropdownMenu>
-              <DropdownItem header={true}>
-                Choose a predefined query
-              </DropdownItem>
-              <DropdownItem
-                active={mode === 'Javascript'}
-                onClick={() => setQueryMode('Javascript')}
-              >
+              <DropdownItem header={true}>Choose a predefined query</DropdownItem>
+              <DropdownItem active={mode === 'Javascript'} onClick={() => setQueryMode('Javascript')}>
                 Javascript
               </DropdownItem>
-              <DropdownItem
-                active={mode === 'SQL'}
-                onClick={() => setQueryMode('SQL')}
-              >
+              <DropdownItem active={mode === 'SQL'} onClick={() => setQueryMode('SQL')}>
                 SQL like(experimental)
               </DropdownItem>
             </DropdownMenu>
@@ -92,15 +69,15 @@ export const QueryEditor: React.FC<Props> = ({
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: Readonly<RootState>) => ({
   queryText: getQueryText(state),
   mode: getQueryMode(state),
-});
+})
 
 export default connect(
   mapStateToProps,
   { onChange: updateQuery, setQueryMode: updateQueryMode }
-)(QueryEditor);
+)(QueryEditor)

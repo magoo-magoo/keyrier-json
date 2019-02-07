@@ -1,11 +1,5 @@
-import {
-  output,
-  query,
-  rootReducerReset,
-  source,
-  containsTerm,
-} from './reducers';
-import { getInitialAppState, AppState, QueryState } from '../State/State';
+import { output, query, rootReducerReset, source, containsTerm } from './reducers'
+import { getInitialAppState, AppState, QueryState } from '../State/State'
 
 describe('Reducers', () => {
   it('rootReducers should reset', () => {
@@ -27,33 +21,33 @@ describe('Reducers', () => {
       },
       query: { text: 'fake q', mode: 'Javascript' },
       source: { text: 'fake s' },
-    };
+    }
     const results = rootReducerReset(state, {
       type: 'RESET_EDITOR',
-    });
+    })
 
-    expect(results.query).toEqual(getInitialAppState().query);
-    expect(results.source).toEqual(getInitialAppState().source);
-  });
+    expect(results.query).toEqual(getInitialAppState().query)
+    expect(results.source).toEqual(getInitialAppState().source)
+  })
 
   it('update query action should update', () => {
-    const state: QueryState = { text: 'initial', mode: 'Javascript' };
+    const state: QueryState = { text: 'initial', mode: 'Javascript' }
 
-    const result = query(state, { query: 'new value', type: 'UPDATE_QUERY' });
+    const result = query(state, { query: 'new value', type: 'UPDATE_QUERY' })
 
-    expect(result).toEqual({ text: 'new value', mode: 'Javascript' });
-  });
+    expect(result).toEqual({ text: 'new value', mode: 'Javascript' })
+  })
 
   it('update source action should update', () => {
-    const state = { text: 'initial' };
+    const state = { text: 'initial' }
 
     const result = source(state, {
       source: 'new value',
       type: 'UPDATE_SOURCE_TEXT',
-    });
+    })
 
-    expect(result).toEqual({ text: 'new value' });
-  });
+    expect(result).toEqual({ text: 'new value' })
+  })
 
   it('output ', () => {
     const state: AppState = {
@@ -74,7 +68,7 @@ describe('Reducers', () => {
       },
       query: { text: 'data.value', mode: 'Javascript' },
       source: { text: '{"value": "test"}' },
-    };
+    }
 
     const result = output(
       state.output,
@@ -84,12 +78,12 @@ describe('Reducers', () => {
         type: 'EVALUATE_CODE',
       },
       'Javascript'
-    );
+    )
 
-    expect(result.text).toEqual('"test"');
-    expect(result.table.isArray).toEqual(false);
-    expect(result.errorMessage).toBeUndefined();
-  });
+    expect(result.text).toEqual('"test"')
+    expect(result.table.isArray).toEqual(false)
+    expect(result.errorMessage).toBeUndefined()
+  })
 
   it('should filter object from tree if search term is not found', () => {
     const { filteredObj, match } = containsTerm(
@@ -110,9 +104,9 @@ describe('Reducers', () => {
         },
       },
       'toto'
-    );
+    )
 
-    expect(match).toBeTruthy();
+    expect(match).toBeTruthy()
     expect(filteredObj).toEqual({
       field1: {
         field5: 'la tête à toTo est tombée.',
@@ -123,8 +117,8 @@ describe('Reducers', () => {
       field9: {
         field10Array: [{ field11: 'toto' }],
       },
-    });
-  });
+    })
+  })
 
   test('should not match if search term is not found', () => {
     const { filteredObj, match } = containsTerm(
@@ -142,9 +136,9 @@ describe('Reducers', () => {
         },
       },
       'toto'
-    );
+    )
 
-    expect(match).toBeFalsy();
-    expect(filteredObj).toEqual({});
-  });
-});
+    expect(match).toBeFalsy()
+    expect(filteredObj).toEqual({})
+  })
+})

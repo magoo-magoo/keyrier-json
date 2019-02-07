@@ -1,6 +1,6 @@
-import * as React from 'react';
-import Editor from './Editor/Editor';
-import Header from './Header';
+import * as React from 'react'
+import Editor from './Editor/Editor'
+import Header from './Header'
 
 export const App = () => (
   <div>
@@ -9,6 +9,6 @@ export const App = () => (
       <Editor />
     </div>
   </div>
-);
+)
 
-export default App;
+export default App

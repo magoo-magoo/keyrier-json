@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
+import * as React from 'react'
+import { connect } from 'react-redux'
 
-import { UpdateSource, updateSource } from '../../../Actions/actions';
-import { jsonBeautify } from '../../../helpers/json';
-import { RootState } from '../../../State/State';
-import ImportMenu from './ImportMenu';
-import { AceEditor } from '../../Deferred/DeferredAceEditor';
-import { getSourceText } from '../../../Store/selectors';
+import { UpdateSource, updateSource } from '../../../Actions/actions'
+import { jsonBeautify } from '../../../helpers/json'
+import { RootState } from '../../../State/State'
+import ImportMenu from './ImportMenu'
+import { AceEditor } from '../../Deferred/DeferredAceEditor'
+import { getSourceText } from '../../../Store/selectors'
 
 interface Props {
-  onChange: (val: string) => UpdateSource;
-  sourceText: string;
+  onChange: (val: string) => UpdateSource
+  sourceText: string
 }
 
 export const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
@@ -51,13 +51,13 @@ export const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
       </div>
     </div>
   </>
-);
+)
 
 const mapStateToProps = (state: Readonly<RootState>) => ({
   sourceText: getSourceText(state),
-});
+})
 
 export default connect(
   mapStateToProps,
   { onChange: updateSource }
-)(SourceEditor);
+)(SourceEditor)

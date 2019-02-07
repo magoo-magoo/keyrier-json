@@ -1,33 +1,22 @@
-import * as React from 'react';
-import {
-  getOutputObject,
-  getOutputSearchTerm,
-  getOutputSearchMatch,
-} from '../../../Store/selectors';
-import { RootState } from '../../../State/State';
-import { connect } from 'react-redux';
-import { DebounceInput } from 'react-debounce-input';
-import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions';
-import { Suspense, lazy } from 'react';
-const ReactJson = lazy(() =>
-  import(/* webpackChunkName: "react-json-view" */ 'react-json-view')
-);
+import * as React from 'react'
+import { getOutputObject, getOutputSearchTerm, getOutputSearchMatch } from '../../../Store/selectors'
+import { RootState } from '../../../State/State'
+import { connect } from 'react-redux'
+import { DebounceInput } from 'react-debounce-input'
+import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions'
+import { Suspense, lazy } from 'react'
+const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {
-  src: object | null;
-  searchTerm: string | undefined;
-  match: boolean;
-  onSearchChange: (value: string) => UpdateSearchTerm;
+  src: object | null
+  searchTerm: string | undefined
+  match: boolean
+  onSearchChange: (value: string) => UpdateSearchTerm
 }
 
-const errorStyles = { border: '3px solid red' };
+const errorStyles = { border: '3px solid red' }
 
-const JsonView: React.FC<Props> = ({
-  src,
-  searchTerm,
-  onSearchChange,
-  match,
-}) => {
+const JsonView: React.FC<Props> = ({ src, searchTerm, onSearchChange, match }) => {
   return (
     <>
       <DebounceInput
@@ -51,18 +40,18 @@ const JsonView: React.FC<Props> = ({
         />
       </Suspense>
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: Readonly<RootState>) => {
   return {
     src: getOutputObject(state),
     searchTerm: getOutputSearchTerm(state),
     match: getOutputSearchMatch(state),
-  };
-};
+  }
+}
 
 export default connect(
   mapStateToProps,
   { onSearchChange: updateSearchTerm }
-)(JsonView);
+)(JsonView)

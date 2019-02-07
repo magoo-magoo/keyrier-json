@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { TableAdvancedOptions } from './TableAdvancedOptions';
+import * as React from 'react'
+import { TableAdvancedOptions } from './TableAdvancedOptions'
 
 describe('TableAdvancedOptions', () => {
   it('renders without crashing', () => {
@@ -12,8 +12,8 @@ describe('TableAdvancedOptions', () => {
         onColumnsChange={() => null as any}
         setTableGroupBy={() => null as any}
       />
-    );
+    )
 
-    expect(r).toBeDefined();
-  });
-});
+    expect(r).toBeDefined()
+  })
+})
