@@ -15,8 +15,10 @@ import {
 } from '../../../Store/selectors';
 import Modal from 'reactstrap/lib/Modal';
 import { useState, Suspense, lazy } from 'react';
-import { ModalHeader, ModalBody } from 'reactstrap';
-const ReactJson = lazy(() => import('react-json-view'));
+import { ModalBody, ModalHeader } from '../../Deferred/DeferredReactstrap';
+const ReactJson = lazy(() =>
+  import(/* webpackChunkName: "react-json-view" */ 'react-json-view')
+);
 
 interface Props {
   data: itemType[];
@@ -35,16 +37,16 @@ export const OutputTableView: React.FC<Props> = ({
   }
 
   const tableColumnConfig = displayedColumns.map<Column>(key => ({
-    Aggregated: (row: any) => (row ? row.value : ''),
+    Aggregated: () => (row: any) => (row ? row.value : ''),
     Cell: (cellProps: any) => {
       const cellContent = cellProps ? customToString(cellProps.value) : '';
       return (
-        <a
-          href="javascript:void(0);"
+        <div
+          className="btn"
           onClick={() => setDetailsCellValue(cellProps.value)}
         >
           {cellContent}
-        </a>
+        </div>
       );
     },
     Header: key,
@@ -84,6 +86,7 @@ export const OutputTableView: React.FC<Props> = ({
       <Modal
         isOpen={!!detailsCellValue}
         toggle={() => setDetailsCellValue(null)}
+        size="lg"
       >
         <ModalHeader>Details</ModalHeader>
         <ModalBody>

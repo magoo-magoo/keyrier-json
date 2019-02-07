@@ -15,7 +15,7 @@ import {
   UpdateOutputTabSelection,
   updateOutputTabSelection,
 } from '../../../Actions/actions';
-import { TabContent, TabPane, Alert } from 'reactstrap';
+import { TabContent, TabPane, Alert } from '../../Deferred/DeferredReactstrap';
 
 interface Props {
   isArray: boolean;

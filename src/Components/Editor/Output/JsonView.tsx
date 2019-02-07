@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import { DebounceInput } from 'react-debounce-input';
 import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions';
 import { Suspense, lazy } from 'react';
-const ReactJson = lazy(() => import('react-json-view'));
+const ReactJson = lazy(() =>
+  import(/* webpackChunkName: "react-json-view" */ 'react-json-view')
+);
 
 interface Props {
   src: object | null;

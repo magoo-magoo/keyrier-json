@@ -10,13 +10,13 @@ import {
 import { RootState, QueryMode } from '../../../State/State';
 import { AceEditor } from '../../Deferred/DeferredAceEditor';
 import { getQueryText, getQueryMode } from '../../../Store/selectors';
+import { useToggleState } from '../../../Hooks/hooks';
 import {
   ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-} from 'reactstrap';
-import { useState } from 'react';
+} from '../../Deferred/DeferredReactstrap';
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction;
@@ -31,7 +31,7 @@ export const QueryEditor: React.FC<Props> = ({
   mode,
   setQueryMode,
 }) => {
-  const [modeOpen, setModeOpen] = useState(false);
+  const [modeOpen, switchModeOpen] = useToggleState();
   return (
     <>
       <div className="row">
@@ -41,10 +41,7 @@ export const QueryEditor: React.FC<Props> = ({
       </div>
       <div className="row">
         <div className="px-0">
-          <ButtonDropdown
-            isOpen={modeOpen}
-            toggle={() => setModeOpen(!modeOpen)}
-          >
+          <ButtonDropdown isOpen={modeOpen} toggle={switchModeOpen}>
             <DropdownToggle caret={true}>Mode</DropdownToggle>
             <DropdownMenu>
               <DropdownItem header={true}>

@@ -6,18 +6,16 @@ import * as React from 'react';
 import App from './Components/App';
 import { getTheme } from './Store/selectors';
 import { importThemeStyleCustom } from './Themes/themes';
-import { logError } from './helpers/logger';
 
 const start = async () => {
-  importThemeStyleCustom('materia').catch(logError);
+  const store = configureStore();
+
   const promises = await Promise.all([
-    configureStore(),
     import(/* webpackChunkName: "react-dom" */ 'react-dom'),
+    importThemeStyleCustom(getTheme(store.getState())),
   ]);
 
-  const store = promises[0];
-  const ReactDOM = promises[1];
-  importThemeStyleCustom(getTheme(store.getState())).catch(logError);
+  const ReactDOM = promises[0];
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
@@ -29,7 +27,7 @@ const start = async () => {
 
   registerServiceWorker();
 
-  require('react-loadable').preloadAll();
+  (await import(/* webpackChunkName: "react-loadable" */ 'react-loadable')).preloadAll();
 };
 
 start();

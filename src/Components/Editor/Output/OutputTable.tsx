@@ -11,7 +11,13 @@ import {
   getOutputTableData,
 } from '../../../Store/selectors';
 import { RootState } from '../../../State/State';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from '../../Deferred/DeferredReactstrap';
 
 interface Props {
   toggleModal: () => ToggleOutputTableModal;

@@ -5,8 +5,8 @@ import { switchTheme } from '../Actions/actions';
 import { connect } from 'react-redux';
 import { getTheme } from '../Store/selectors';
 import { RootState } from '../State/State';
+import { useToggleState } from '../Hooks/hooks';
 import {
-  UncontrolledDropdown,
   Navbar,
   NavbarBrand,
   NavbarToggler,
@@ -17,8 +17,8 @@ import {
   DropdownItem,
   NavItem,
   NavLink,
-} from 'reactstrap';
-import { useState } from 'react';
+  Dropdown,
+} from './Deferred/DeferredReactstrap';
 
 interface Props {
   setTheme: (theme: Theme) => void;
@@ -48,7 +48,8 @@ const availableThemes: Theme[] = [
 ];
 
 const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, switchIsOpen] = useToggleState();
+  const [dropDownIsOpen, toggleDropdown] = useToggleState();
 
   const switchThemeAndReload = (theme: Theme) => {
     setTheme(theme);
@@ -58,10 +59,10 @@ const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
     <>
       <Navbar color="dark" dark={true} expand="md">
         <NavbarBrand href="/">Keyrier JSON</NavbarBrand>
-        <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
+        <NavbarToggler onClick={switchIsOpen} />
         <Collapse isOpen={isOpen} navbar={true}>
           <Nav className="ml-auto" navbar={true}>
-            <UncontrolledDropdown>
+            <Dropdown isOpen={dropDownIsOpen} toggle={toggleDropdown}>
               <DropdownToggle nav={true} caret={true}>
                 Theme
               </DropdownToggle>
@@ -76,7 +77,7 @@ const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
                   </DropdownItem>
                 ))}
               </DropdownMenu>
-            </UncontrolledDropdown>
+            </Dropdown>
             <NavItem>
               <NavLink href="https://github.com/magoo-magoo/keyrier-json/releases/latest">
                 v{version}

@@ -35,10 +35,7 @@ const loadFromLocalStorage = (key: string) => {
   return null;
 };
 
-export const loadOrdCreate = async <T extends {}>(
-  key: string,
-  defaultValue: T
-) => {
+export const loadOrdCreate = <T extends {}>(key: string, defaultValue: T) => {
   let state = defaultValue;
   try {
     const savedStateString = loadFromLocalStorage(key);

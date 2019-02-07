@@ -16,8 +16,8 @@ import {
   getColumns,
   getGroupBy,
 } from '../../../Store/selectors';
-import { Button, Collapse } from 'reactstrap';
-import { useState } from 'react';
+import { useToggleState } from '../../../Hooks/hooks';
+import { Button, Collapse } from '../../Deferred/DeferredReactstrap';
 
 interface Props {
   data: itemType[];
@@ -43,7 +43,7 @@ export const TableAdvancedOptions: React.FC<Props> = ({
   data,
   displayedColumns,
 }) => {
-  const [optionsCollapsed, setOptionsCollapsed] = useState(false);
+  const [optionsCollapsed, switchOptionsCollapsed] = useToggleState();
 
   const handleColumnChange = (cols: ValueType<{}> | undefined | null) => {
     if (cols instanceof Array) {
@@ -67,7 +67,7 @@ export const TableAdvancedOptions: React.FC<Props> = ({
           className={'float-left'}
           color="primary"
           block={true}
-          onClick={() => setOptionsCollapsed(!optionsCollapsed)}
+          onClick={switchOptionsCollapsed}
         >
           {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
         </Button>

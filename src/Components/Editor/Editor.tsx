@@ -3,11 +3,11 @@ import './Editor.css';
 import Output from './Output/Output';
 import SourceEditor from './SourceEditor/SourceEditor';
 import QueryEditor from './QueryEditor/QueryEditor';
-import { Button, Collapse } from 'reactstrap';
-import { useState } from 'react';
+import { useToggleState } from '../../Hooks/hooks';
+import { Button, Collapse } from '../Deferred/DeferredReactstrap';
 
 export const Editor = () => {
-  const [collapse, setCollapse] = useState(false);
+  const [collapse, switchCollapse] = useToggleState();
   return (
     <>
       <h1 className="my-5">Paste your JSON and Query it.</h1>
@@ -18,7 +18,7 @@ export const Editor = () => {
       </div>
       <div className="row align-items-center my-5">
         <div className="col-md-2">
-          <Button color="primary" onClick={() => setCollapse(!collapse)}>
+          <Button color="primary" onClick={switchCollapse}>
             Modify query
           </Button>
         </div>

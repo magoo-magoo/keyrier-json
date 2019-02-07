@@ -4,8 +4,13 @@ import { connect } from 'react-redux';
 import { updateSource } from '../../../Actions/actions';
 import { customToString } from '../../../helpers/string';
 import { RenderHeaderInput } from './RequestHeader';
-import { Alert, FormGroup, Form, Button } from 'reactstrap';
 import { useState } from 'react';
+import {
+  Alert,
+  FormGroup,
+  Form,
+  Button,
+} from '../../Deferred/DeferredReactstrap';
 
 interface Props {
   onRequestSucceed: () => void;
