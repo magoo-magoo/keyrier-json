@@ -30,7 +30,7 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
     Cell: (cellProps: any) => {
       const cellContent = cellProps ? customToString(cellProps.value) : ''
       return (
-        <div className="btn" onClick={() => setDetailsCellValue(cellProps.value)}>
+        <div className="btn btn-link" onClick={() => setDetailsCellValue(cellProps.value)}>
           {cellContent}
         </div>
       )
