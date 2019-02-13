@@ -54,7 +54,7 @@
     "@types/jest": "24.0.2",
     "@types/lodash": "4.14.120",
     "@types/node": "10.12.25",
-    "@types/prop-types": "15.5.8",
+    "@types/prop-types": "15.5.9",
     "@types/react": "16.8.2",
     "@types/react-dom": "16.8.0",
     "@types/react-loadable": "5.5.0",
