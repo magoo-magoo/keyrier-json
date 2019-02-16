@@ -87,7 +87,7 @@ const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
   )
 }
 
-const mapStateToProps = (state: Readonly<RootState>) => ({
+const mapStateToProps = (state: RootState) => ({
   currentTheme: getTheme(state),
 })
 

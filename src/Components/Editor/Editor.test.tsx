@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Editor } from './Editor'
+import Editor from './Editor'
 import { create as render } from 'react-test-renderer'
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store'

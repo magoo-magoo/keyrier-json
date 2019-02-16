@@ -25,3 +25,4 @@ yarn-error.log*
 *.LOCAL
 *.orig
 *.REMOTE
+.env.local

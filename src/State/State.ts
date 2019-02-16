@@ -1,55 +1,56 @@
 import initialStateJson from './default-state.json'
 import { Theme } from '../Themes/themes.js'
+import { DeepReadonly } from 'utility-types'
 
-export interface QueryState {
-  readonly text: string
-  readonly mode: QueryMode
-}
+export type QueryState = DeepReadonly<{
+  text: string
+  mode: QueryMode
+}>
 
-export interface SourceState {
-  readonly text: string
-}
+export type SourceState = DeepReadonly<{
+  text: string
+}>
 
 export type tabType = 'RawJson' | 'Table'
 
-export interface OupoutState {
-  readonly text: string
-  readonly searchTerm: string
-  readonly match: boolean
-  readonly selectedTab: tabType
-  readonly obj: object | null
-  readonly errorMessage?: string
-  readonly table: Readonly<OupoutTableState>
-}
+export type OupoutState = Readonly<{
+  text: string
+  searchTerm: string
+  match: boolean
+  selectedTab: tabType
+  obj: object | null
+  errorMessage?: string
+  table: OupoutTableState
+}>
 
-export type itemType = null | undefined | string | boolean | number | never | any
+export type itemType = any
 
 export type QueryMode = 'Javascript' | 'SQL'
 
-export interface OupoutTableState {
-  readonly array: itemType[]
-  readonly isArray: boolean
-  readonly isModalOpen: boolean
-  readonly displayedColumns: string[]
-  readonly columns: string[]
-  readonly groupBy: string[]
-}
+export type OupoutTableState = Readonly<{
+  array: itemType[]
+  isArray: boolean
+  isModalOpen: boolean
+  displayedColumns: string[]
+  columns: string[]
+  groupBy: string[]
+}>
 
-export interface UserSettingsState {
-  readonly globalTheme: Theme | null
-}
+export type UserSettingsState = DeepReadonly<{
+  globalTheme: Theme | null
+}>
 
-export interface AppState {
-  readonly source: Readonly<SourceState>
-  readonly query: Readonly<QueryState>
-  readonly output: Readonly<OupoutState>
-  readonly error?: Error
-}
+export type AppState = Readonly<{
+  source: SourceState
+  query: QueryState
+  output: OupoutState
+  error?: Error
+}>
 
-export interface RootState {
-  readonly app: Readonly<AppState> | undefined
-  readonly userSettings: Readonly<UserSettingsState> | undefined
-}
+export type RootState = Readonly<{
+  app: AppState
+  userSettings: UserSettingsState
+}>
 
 export const getInitialAppState = () => initialStateJson as AppState
 export const getInitialUserSettingsState = () =>

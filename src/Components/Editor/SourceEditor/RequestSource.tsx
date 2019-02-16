@@ -4,8 +4,10 @@ import { connect } from 'react-redux'
 import { updateSource } from '../../../Actions/actions'
 import { customToString } from '../../../helpers/string'
 import { RenderHeaderInput } from './RequestHeader'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { Alert, FormGroup, Form, Button } from '../../Deferred/DeferredReactstrap'
+import { useToggleState, useChangeEventState } from '../../../Hooks/hooks'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
   onRequestSucceed: () => void
@@ -24,13 +26,13 @@ const displayError = (error: TypeError | null) => {
   )
 }
 
-export const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource }) => {
-  const [method, setMethod] = useState('GET')
-  const [url, setUrl] = useState('https://rickandmortyapi.com/api/character/')
+const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource }) => {
+  const [method, setMethod] = useChangeEventState('GET')
+  const [url, setUrl] = useChangeEventState('https://rickandmortyapi.com/api/character/')
+  const [body, setBody] = useChangeEventState('')
   const [headers, setHeaders] = useState([{ key: 'Accept', value: 'application/json' }])
   const [error, setError] = useState(null as TypeError | null)
-  const [body, setBody] = useState('')
-  const [hasBody, setHasBody] = useState(false)
+  const [hasBody, setHasBody] = useToggleState()
 
   const submit = async () => {
     setError(null)
@@ -77,7 +79,7 @@ export const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource
           defaultValue={method}
           name="requestMethod"
           id="requestMethod"
-          onChange={e => setMethod(e.target.value)}
+          onChange={setMethod}
         >
           <option>GET</option>
           <option>POST</option>
@@ -94,23 +96,18 @@ export const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource
           name="requestUrl"
           id="requestUrl"
           placeholder="enter an URL"
-          onChange={e => setUrl(e.target.value)}
+          onChange={setUrl}
         />
       </FormGroup>
       <div className="position-relative form-check">
         <label className="form-check-label">
-          <input type="checkbox" className="form-check-input" onChange={() => setHasBody(!hasBody)} /> Add body
+          <input type="checkbox" className="form-check-input" onChange={setHasBody} /> Add body
         </label>
       </div>
       <Form inline={true} hidden={!hasBody}>
         <FormGroup>
           <label>Body</label>
-          <input
-            className="form-control-lg form-control"
-            type="textarea"
-            value={body}
-            onChange={e => setBody(e.target.value)}
-          />{' '}
+          <input className="form-control-lg form-control" type="textarea" value={body} onChange={setBody} />{' '}
         </FormGroup>
       </Form>
       <label htmlFor="headers">Request headers</label>{' '}
@@ -147,4 +144,4 @@ export const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource
 export default connect(
   null,
   { setSource: updateSource }
-)(HttpRequestSource)
+)(memo(withErrorBoundary(HttpRequestSource)))

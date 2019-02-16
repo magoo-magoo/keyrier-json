@@ -1,34 +1,24 @@
-import { RootState, tabType } from '../State/State'
+import { RootState } from '../State/State'
 
-type selector<T> = (state: Readonly<RootState>) => T
+export const getOutputErrorMessage = (state: RootState) => state.app.output.errorMessage
 
-export const getOutputErrorMessage: selector<string | undefined> = (state: Readonly<RootState>) =>
-  state.app ? state.app.output.errorMessage : ''
+export const getOutputIsArray = (state: RootState) => state.app.output.table.isArray
+export const getOutputActiveTab = (state: RootState) => state.app.output.selectedTab
+export const getOutputObject = (state: RootState) => state.app.output.obj
+export const getOutputSearchTerm = (state: RootState) => state.app.output.searchTerm
+export const getOutputSearchMatch = (state: RootState) => state.app.output.match
 
-export const getOutputIsArray: selector<boolean> = state => (state.app ? state.app.output.table.isArray : false)
-export const getOutputActiveTab: selector<tabType> = state => (state.app ? state.app.output.selectedTab : 'RawJson')
-export const getOutputObject = (state: Readonly<RootState>) => (state.app ? state.app.output.obj : {})
-export const getOutputSearchTerm = (state: Readonly<RootState>) => (state.app ? state.app.output.searchTerm : '')
-export const getOutputSearchMatch = (state: Readonly<RootState>) => (state.app ? state.app.output.match : false)
+export const getOutputTableData = (state: RootState) => [...state.app.output.table.array]
 
-export const getOutputTableData = (state: Readonly<RootState>) => (state.app ? state.app.output.table.array : [])
+export const getisOutputTableModalOpen = (state: RootState) => state.app.output.table.isModalOpen
 
-export const getisOutputTableModalOpen = (state: Readonly<RootState>) =>
-  state.app ? state.app.output.table.isModalOpen : false
+export const getTheme = (state: RootState) => state.userSettings.globalTheme
 
-export const getTheme = (state: Readonly<RootState>) => {
-  if (state.userSettings) {
-    return state.userSettings.globalTheme
-  }
-  return null
-}
+export const getdisplayedColumns = (state: RootState) => [...state.app.output.table.displayedColumns]
+export const getTableArray = (state: RootState) => [...state.app.output.table.array]
+export const getColumns = (state: RootState) => [...state.app.output.table.columns]
+export const getGroupBy = (state: RootState) => [...state.app.output.table.groupBy]
 
-export const getdisplayedColumns = (state: Readonly<RootState>) =>
-  state.app ? state.app.output.table.displayedColumns : []
-export const getTableArray = (state: Readonly<RootState>) => (state.app ? state.app.output.table.array : [])
-export const getColumns = (state: Readonly<RootState>) => (state.app ? state.app.output.table.columns : [])
-export const getGroupBy = (state: Readonly<RootState>) => (state.app ? state.app.output.table.groupBy : [])
-
-export const getQueryText = (state: Readonly<RootState>) => (state.app ? state.app.query.text : '')
-export const getSourceText = (state: Readonly<RootState>) => (state.app ? state.app.source.text : '')
-export const getQueryMode = (state: Readonly<RootState>) => (state.app ? state.app.query.mode : 'Javascript')
+export const getQueryText = (state: RootState) => state.app.query.text
+export const getSourceText = (state: RootState) => state.app.source.text
+export const getQueryMode = (state: RootState) => state.app.query.mode

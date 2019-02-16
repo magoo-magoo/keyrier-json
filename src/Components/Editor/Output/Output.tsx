@@ -9,6 +9,8 @@ import { getOutputErrorMessage, getOutputIsArray, getOutputActiveTab } from '../
 import JsonView from './JsonView'
 import { UpdateOutputTabSelection, updateOutputTabSelection } from '../../../Actions/actions'
 import { TabContent, TabPane, Alert } from '../../Deferred/DeferredReactstrap'
+import { memo } from 'react'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
   isArray: boolean
@@ -22,7 +24,7 @@ const pointer = {
   fontSize: 'large',
 }
 
-export const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab }) => {
+const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab }) => {
   const display = (
     <>
       <div className="row">
@@ -93,7 +95,7 @@ export const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setA
   )
 }
 
-const mapStateToProps = (state: Readonly<RootState>) => {
+const mapStateToProps = (state: RootState) => {
   return {
     errorMessage: getOutputErrorMessage(state),
     isArray: getOutputIsArray(state),
@@ -104,4 +106,4 @@ const mapStateToProps = (state: Readonly<RootState>) => {
 export default connect(
   mapStateToProps,
   { setActiveTab: updateOutputTabSelection }
-)(Output)
+)(memo(withErrorBoundary(Output)))

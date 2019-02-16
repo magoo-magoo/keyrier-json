@@ -4,7 +4,8 @@ import { RootState } from '../../../State/State'
 import { connect } from 'react-redux'
 import { DebounceInput } from 'react-debounce-input'
 import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions'
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, memo } from 'react'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {
@@ -43,7 +44,7 @@ const JsonView: React.FC<Props> = ({ src, searchTerm, onSearchChange, match }) =
   )
 }
 
-const mapStateToProps = (state: Readonly<RootState>) => {
+const mapStateToProps = (state: RootState) => {
   return {
     src: getOutputObject(state),
     searchTerm: getOutputSearchTerm(state),
@@ -54,4 +55,4 @@ const mapStateToProps = (state: Readonly<RootState>) => {
 export default connect(
   mapStateToProps,
   { onSearchChange: updateSearchTerm }
-)(JsonView)
+)(memo(withErrorBoundary(JsonView)))

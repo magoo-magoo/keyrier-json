@@ -7,13 +7,14 @@ import { RootState } from '../../../State/State'
 import ImportMenu from './ImportMenu'
 import { AceEditor } from '../../Deferred/DeferredAceEditor'
 import { getSourceText } from '../../../Store/selectors'
+import { memo } from 'react'
 
 interface Props {
   onChange: (val: string) => UpdateSource
   sourceText: string
 }
 
-export const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
+const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
   <>
     <div className="row">
       <div className="col-sm-10 offset-sm-2">
@@ -53,11 +54,11 @@ export const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
   </>
 )
 
-const mapStateToProps = (state: Readonly<RootState>) => ({
+const mapStateToProps = (state: RootState) => ({
   sourceText: getSourceText(state),
 })
 
 export default connect(
   mapStateToProps,
   { onChange: updateSource }
-)(SourceEditor)
+)(memo(SourceEditor))

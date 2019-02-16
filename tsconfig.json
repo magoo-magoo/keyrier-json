@@ -27,16 +27,9 @@
     "strictFunctionTypes": true /* Enable strict checking of function types. */,
     "strictPropertyInitialization": true /* Enable strict checking of property initialization in classes. */,
     "alwaysStrict": true,
-    "noEmit": true
+    "noEmit": true,
+    "skipDefaultLibCheck": true
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "src/setupTests.ts"
-  ],
+  "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
   "include": ["src"]
 }

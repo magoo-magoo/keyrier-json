@@ -18,7 +18,7 @@ import {
 import { logError, logWarning } from '../helpers/logger'
 import { containsIgnoreCase } from '../helpers/string'
 
-export const rootReducer = (rootState: Readonly<AppState> = getInitialAppState(), action: Action): AppState => {
+export const rootReducer = (rootState: AppState = getInitialAppState(), action: Action): AppState => {
   const newState = {
     ...rootState,
     query: query(rootState.query, action),
@@ -46,12 +46,12 @@ export const crashReporter = (rootReducerFn: Reducer<AppState>, state: AppState,
   }
 }
 
-export const sourceText = (state: Readonly<SourceState>, action: UpdateSource) => ({
+export const sourceText = (state: SourceState, action: UpdateSource) => ({
   ...state,
   text: action.source,
 })
 
-export const source = (state: Readonly<SourceState>, action: Action) => {
+export const source = (state: SourceState, action: Action) => {
   switch (action.type) {
     case 'UPDATE_SOURCE_TEXT':
       return sourceText(state, action)
@@ -59,7 +59,7 @@ export const source = (state: Readonly<SourceState>, action: Action) => {
       return state
   }
 }
-export const userSettings = (state: Readonly<UserSettingsState> = getInitialUserSettingsState(), action: Action) => {
+export const userSettings = (state: UserSettingsState = getInitialUserSettingsState(), action: Action) => {
   switch (action.type) {
     case 'SWITCH_GLOBAL_THEME':
       return { ...state, globalTheme: action.theme }
@@ -68,7 +68,7 @@ export const userSettings = (state: Readonly<UserSettingsState> = getInitialUser
   }
 }
 
-export const query = (state: Readonly<QueryState>, action: Action) => {
+export const query = (state: QueryState, action: Action) => {
   switch (action.type) {
     case 'UPDATE_QUERY':
       return {
@@ -86,7 +86,7 @@ export const query = (state: Readonly<QueryState>, action: Action) => {
   }
 }
 
-export const outputTable = (state: Readonly<OupoutTableState>, action: Action) => {
+export const outputTable = (state: OupoutTableState, action: Action) => {
   switch (action.type) {
     case 'UPDATE_TABLE_COLUMNS':
       return { ...state, columns: action.columns }
@@ -98,7 +98,7 @@ interface Map<T> {
   [key: string]: T
 }
 export const computeOutput = (
-  previousState: Readonly<OupoutState>,
+  previousState: OupoutState,
   sourceString: string,
   queryString: string,
   action: Action,
@@ -311,7 +311,7 @@ export const table = (state: OupoutTableState, action: Action) => {
   }
 }
 
-export const rootReducerReset = (state: Readonly<AppState> | undefined, action: Action) => {
+export const rootReducerReset = (state: AppState | undefined, action: Action) => {
   if (action.type === 'RESET_EDITOR') {
     return rootReducer({ ...getInitialAppState() }, action)
   }

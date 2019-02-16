@@ -1,16 +1,10 @@
 import * as React from 'react'
+import Styles from './Loading.module.scss'
 
-const CustomLoading = (props: LoadableExport.LoadingComponentProps, componentName: string) => {
+export const Loading = (componentName: string) => (props: LoadableExport.LoadingComponentProps) => {
   if (props.error) {
     return <div>{props.error}</div>
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    return <></>
-  }
-
-  return <div>{componentName} loading...</div>
+  return <div className={Styles.loader}>{process.env.NODE_ENV === 'production' ? '' : componentName}</div>
 }
-
-export const Loading = (componentName: string) => (props: LoadableExport.LoadingComponentProps) =>
-  CustomLoading(props, componentName)

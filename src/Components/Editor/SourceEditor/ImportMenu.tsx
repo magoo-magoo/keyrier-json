@@ -16,12 +16,14 @@ import {
   ModalFooter,
   Button,
 } from '../../Deferred/DeferredReactstrap'
+import { memo } from 'react'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 interface Props {
   onFileContentReady: (fileContent: string) => UpdateSource
   onReset: () => ResetEditor
 }
 
-export const ImportMenu: React.FC<Props> = ({ onReset, onFileContentReady }) => {
+const ImportMenu: React.FC<Props> = ({ onReset, onFileContentReady }) => {
   const [dropdownIsOpen, toggleDropdown] = useToggleState()
   const [modalIsOpen, toggleModal] = useToggleState()
   return (
@@ -88,4 +90,4 @@ const mapStateToProps = () => ({})
 export default connect(
   mapStateToProps,
   { onFileContentReady: updateSource, onReset: resetEditor }
-)(ImportMenu)
+)(memo(withErrorBoundary(ImportMenu)))

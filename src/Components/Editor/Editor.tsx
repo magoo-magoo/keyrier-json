@@ -5,8 +5,9 @@ import SourceEditor from './SourceEditor/SourceEditor'
 import QueryEditor from './QueryEditor/QueryEditor'
 import { useToggleState } from '../../Hooks/hooks'
 import { Button, Collapse } from '../Deferred/DeferredReactstrap'
+import { withErrorBoundary } from '../Common/ErrorBoundary'
 
-export const Editor = () => {
+const Editor = () => {
   const [collapse, switchCollapse] = useToggleState()
   return (
     <>
@@ -37,4 +38,4 @@ export const Editor = () => {
   )
 }
 
-export default Editor
+export default withErrorBoundary(Editor)

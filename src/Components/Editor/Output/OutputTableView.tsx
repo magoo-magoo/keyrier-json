@@ -9,14 +9,15 @@ import { Column, Filter } from 'react-table'
 import { itemType, RootState } from '../../../State/State'
 import { getOutputTableData, getdisplayedColumns, getColumns, getGroupBy } from '../../../Store/selectors'
 import Modal from 'reactstrap/lib/Modal'
-import { useState, Suspense, lazy } from 'react'
+import { useState, Suspense, lazy, memo } from 'react'
 import { ModalBody, ModalHeader } from '../../Deferred/DeferredReactstrap'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
-interface Props {
-  data: itemType[]
+type Props = {
+  data: ReadonlyArray<unknown>
   displayedColumns: string[]
-  groupBy: string[]
+  groupBy?: string[]
 }
 
 export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, groupBy }) => {
@@ -92,7 +93,7 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
   )
 }
 
-const mapStateToProps = (state: Readonly<RootState>) => {
+const mapStateToProps = (state: RootState) => {
   return {
     data: getOutputTableData(state),
     displayedColumns: getdisplayedColumns(state),
@@ -101,4 +102,4 @@ const mapStateToProps = (state: Readonly<RootState>) => {
   }
 }
 
-export default connect(mapStateToProps)(OutputTableView)
+export default connect(mapStateToProps)(memo(withErrorBoundary(OutputTableView)))

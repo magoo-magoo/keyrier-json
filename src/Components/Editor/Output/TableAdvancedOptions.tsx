@@ -13,6 +13,8 @@ import { ValueType } from 'react-select/lib/types'
 import { getTableArray, getdisplayedColumns, getColumns, getGroupBy } from '../../../Store/selectors'
 import { useToggleState } from '../../../Hooks/hooks'
 import { Button, Collapse } from '../../Deferred/DeferredReactstrap'
+import { memo } from 'react'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
   data: itemType[]
@@ -31,7 +33,7 @@ const handleOnclickOnExportToExcel = async (data: any) => {
   xlsx.writeFile(workBook, 'export.xlsx')
 }
 
-export const TableAdvancedOptions: React.FC<Props> = ({
+const TableAdvancedOptions: React.FC<Props> = ({
   onColumnsChange,
   columns,
   setTableGroupBy,
@@ -89,7 +91,7 @@ export const TableAdvancedOptions: React.FC<Props> = ({
   )
 }
 
-const mapStateToProps = (state: Readonly<RootState>) => {
+const mapStateToProps = (state: RootState) => {
   return {
     data: getTableArray(state),
     displayedColumns: getdisplayedColumns(state),
@@ -101,4 +103,4 @@ const mapStateToProps = (state: Readonly<RootState>) => {
 export default connect(
   mapStateToProps,
   { onColumnsChange: updateTableColumns, setTableGroupBy: updateTableGroupBy }
-)(TableAdvancedOptions)
+)(memo(withErrorBoundary(TableAdvancedOptions)))

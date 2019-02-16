@@ -1,15 +1,14 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
-import { Output } from './Output'
-import { updateOutputTabSelection } from '../../../Actions/actions'
+import Output from './Output'
 
 describe('Output', () => {
   it('renders without crashing', () => {
-    shallow(<Output isArray={false} activeTab={'RawJson'} setActiveTab={a => updateOutputTabSelection(a)} />)
+    shallow(<Output />)
   })
 
   it("should not render a output table when output isn't array", () => {
-    const wrapper = <Output isArray={false} activeTab={'RawJson'} setActiveTab={a => updateOutputTabSelection(a)} />
+    const wrapper = <Output />
     expect(wrapper).toBeDefined()
   })
 })

@@ -6,13 +6,15 @@ import { toggleOutputTableModal, ToggleOutputTableModal } from '../../../Actions
 import { getisOutputTableModalOpen, getOutputTableData } from '../../../Store/selectors'
 import { RootState } from '../../../State/State'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from '../../Deferred/DeferredReactstrap'
+import { memo } from 'react'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
   toggleModal: () => ToggleOutputTableModal
   isModalOpen: boolean
 }
 
-export const OutputTable: React.FC<Props> = ({ toggleModal, isModalOpen }) => {
+const OutputTable: React.FC<Props> = ({ toggleModal, isModalOpen }) => {
   return (
     <div className="output-table">
       <Modal isOpen={isModalOpen} toggle={toggleModal} className="mw-100">
@@ -42,7 +44,7 @@ export const OutputTable: React.FC<Props> = ({ toggleModal, isModalOpen }) => {
   )
 }
 
-const mapStateToProps = (state: Readonly<RootState>) => ({
+const mapStateToProps = (state: RootState) => ({
   data: getOutputTableData(state),
   isModalOpen: getisOutputTableModalOpen(state),
 })
@@ -52,4 +54,4 @@ export default connect(
   {
     toggleModal: toggleOutputTableModal,
   }
-)(OutputTable)
+)(memo(withErrorBoundary(OutputTable)))

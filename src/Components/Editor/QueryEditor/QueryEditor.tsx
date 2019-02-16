@@ -7,6 +7,8 @@ import { AceEditor } from '../../Deferred/DeferredAceEditor'
 import { getQueryText, getQueryMode } from '../../../Store/selectors'
 import { useToggleState } from '../../../Hooks/hooks'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from '../../Deferred/DeferredReactstrap'
+import { memo } from 'react'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
   onChange: (e: string) => UpdateQueryAction
@@ -15,7 +17,7 @@ interface Props {
   mode: QueryMode
 }
 
-export const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode }) => {
+const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode }) => {
   const [modeOpen, switchModeOpen] = useToggleState()
   return (
     <>
@@ -72,7 +74,7 @@ export const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQue
   )
 }
 
-const mapStateToProps = (state: Readonly<RootState>) => ({
+const mapStateToProps = (state: RootState) => ({
   queryText: getQueryText(state),
   mode: getQueryMode(state),
 })
@@ -80,4 +82,4 @@ const mapStateToProps = (state: Readonly<RootState>) => ({
 export default connect(
   mapStateToProps,
   { onChange: updateQuery, setQueryMode: updateQueryMode }
-)(QueryEditor)
+)(memo(withErrorBoundary(QueryEditor)))

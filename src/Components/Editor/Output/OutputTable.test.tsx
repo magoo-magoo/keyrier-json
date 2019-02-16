@@ -1,15 +1,12 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
-import { OutputTable } from './OutputTable'
-import { ToggleOutputTableModal } from '../../../Actions/actions'
-
-const dispatchMock = () => ({} as ToggleOutputTableModal)
+import OutputTable from './OutputTable'
 
 describe('Output', () => {
   it('renders without crashing', () => {
-    shallow(<OutputTable isModalOpen={false} toggleModal={dispatchMock} />)
+    shallow(<OutputTable />)
   })
   it('renders a non empty array', () => {
-    shallow(<OutputTable isModalOpen={false} toggleModal={dispatchMock} />)
+    shallow(<OutputTable />)
   })
 })
