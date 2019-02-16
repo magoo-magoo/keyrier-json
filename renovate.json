@@ -3,7 +3,7 @@
   "packageRules": [
     {
       "packagePatterns": ["^@types"],
-      "groupName": "eslint packages"
+      "groupName": "typings packages"
     }
   ]
 }
