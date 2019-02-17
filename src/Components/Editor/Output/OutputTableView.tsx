@@ -5,13 +5,12 @@ import { connect } from 'react-redux'
 import TableAdvancedOptions from './TableAdvancedOptions'
 
 import { LoadableReactTable } from '../../Deferred/DeferredReactTable'
-import { Column, Filter } from 'react-table'
+import { Column, Filter, RowInfo } from 'react-table'
 import { itemType, RootState } from '../../../State/State'
 import { getOutputTableData, getdisplayedColumns, getColumns, getGroupBy } from '../../../Store/selectors'
-import Modal from 'reactstrap/lib/Modal'
 import { useState, Suspense, lazy, memo } from 'react'
-import { ModalBody, ModalHeader } from '../../Deferred/DeferredReactstrap'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 type Props = {
@@ -30,15 +29,11 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
     Aggregated: () => (row: any) => (row ? row.value : ''),
     Cell: (cellProps: any) => {
       const cellContent = cellProps ? customToString(cellProps.value) : ''
-      return (
-        <div className="btn btn-link" onClick={() => setDetailsCellValue(cellProps.value)}>
-          {cellContent}
-        </div>
-      )
+      return <>{cellContent}</>
     },
     Header: key,
     accessor: key,
-    className: 'text-center',
+    className: 'text-center btn btn-link',
   }))
 
   const defaultFilterMethod = (filter: Filter, row: itemType) =>
@@ -62,13 +57,22 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
             filterable={true}
             pivotBy={groupBy}
             defaultFilterMethod={defaultFilterMethod}
+            // tslint:disable-next-line:variable-name
+            getTdProps={(_state: any, rowInfo?: RowInfo, column?: Column | undefined, _instance?: any) => ({
+              onClick: (e: React.MouseEvent, original: () => void) => {
+                if (e && column && column.id && rowInfo && rowInfo.row) {
+                  setDetailsCellValue(rowInfo.row[column.id])
+                }
+                original()
+              },
+            })}
           />
         </div>
       </div>
       <div className="mx-3 align-items-center justify-content-end d-flex">
         <h4>Number of elements: {data.length}</h4>
       </div>
-      <Modal isOpen={!!detailsCellValue} toggle={() => setDetailsCellValue(null)} size="lg">
+      <Modal<ModalProps> isOpen={!!detailsCellValue} toggle={() => setDetailsCellValue(null)} size="lg">
         <ModalHeader>Details</ModalHeader>
         <ModalBody>
           {typeof detailsCellValue === 'object' ? (

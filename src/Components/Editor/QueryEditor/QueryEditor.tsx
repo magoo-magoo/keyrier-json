@@ -22,14 +22,16 @@ const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode 
   return (
     <>
       <div className="row">
-        <div className="col">
-          <h3>Type your query:</h3>
+        <div className="col-sm-10 offset-sm-2">
+          <h3>2. Type your query:</h3>
         </div>
       </div>
       <div className="row">
-        <div className="px-0">
+        <div className="col-sm-2">
           <ButtonDropdown isOpen={modeOpen} toggle={switchModeOpen}>
-            <DropdownToggle caret={true}>Mode</DropdownToggle>
+            <DropdownToggle color="primary" caret={true}>
+              Mode
+            </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header={true}>Choose a predefined query</DropdownItem>
               <DropdownItem active={mode === 'Javascript'} onClick={() => setQueryMode('Javascript')}>
@@ -41,24 +43,24 @@ const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode 
             </DropdownMenu>
           </ButtonDropdown>
         </div>
-        <div className="col pl-0">
+        <div className="col-sm-10">
           <AceEditor
             mode={mode === 'Javascript' ? 'javascript' : 'mysql'}
             theme="monokai"
             name="queryAceEditor"
             onChange={onChange}
-            fontSize={18}
+            fontSize={13}
             highlightActiveLine={true}
             value={queryText}
             minLines={10}
             maxLines={25}
+            showPrintMargin={false}
             editorProps={{
               $blockScrolling: Infinity,
             }}
             setOptions={{
               showLineNumbers: true,
               tabSize: 2,
-              enableSnippets: true,
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
               dragEnabled: true,

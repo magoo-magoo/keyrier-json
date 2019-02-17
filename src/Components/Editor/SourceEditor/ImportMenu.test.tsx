@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
-import { ImportMenu } from './ImportMenu'
+import { ImportMenu } from './LateralMenu'
 
 describe('ImportMenu', () => {
   it('renders without crashing', () => {

@@ -77,10 +77,10 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
   )
 
   return (
-    <div>
+    <>
       <div className="row">
         <div className="col-sm-10 offset-sm-2">
-          <h3>Output:</h3>
+          <h3>3. View your results:</h3>
         </div>
       </div>
       <div hidden={!errorMessage}>
@@ -91,7 +91,7 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
         </div>
       </div>
       {display}
-    </div>
+    </>
   )
 }
 

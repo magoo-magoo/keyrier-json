@@ -25,7 +25,7 @@ interface Props {
   setTableGroupBy: (v: string[]) => UpdateTableGroupBy
 }
 
-const handleOnclickOnExportToExcel = async (data: any) => {
+const handleOnclickOnExportToExcel = async (data: itemType[]) => {
   const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx')
   const workBook = xlsx.utils.book_new()
   const workSheet = xlsx.utils.json_to_sheet(data)

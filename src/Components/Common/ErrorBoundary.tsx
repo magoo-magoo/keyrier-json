@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     const { error } = this.state
 
     if (error) {
-      return <div>An error occured</div>
+      return <>An error occured</>
     }
 
     return children
