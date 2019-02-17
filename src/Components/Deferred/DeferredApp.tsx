@@ -1,7 +1,1 @@
-import { Loading } from './Loading'
-import * as Loadable from 'react-loadable'
-
-export const App = Loadable({
-  loading: Loading('App'),
-  loader: () => import(/* webpackChunkName: "App" */ '../App'),
-})
+export const ___FILE_TO_DELETE___ = undefined

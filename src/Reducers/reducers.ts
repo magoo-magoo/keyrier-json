@@ -14,11 +14,15 @@ import {
   getInitialUserSettingsState,
   QueryMode,
   tabType,
+  emptyState,
 } from '../State/State'
 import { logError, logWarning } from '../helpers/logger'
 import { containsIgnoreCase } from '../helpers/string'
 
 export const rootReducer = (rootState: AppState = getInitialAppState(), action: Action): AppState => {
+  if (action.type === 'CLEAR_EDITOR') {
+    return emptyState
+  }
   const newState = {
     ...rootState,
     query: query(rootState.query, action),

@@ -1,5 +1,5 @@
 import { output, query, rootReducerReset, source, containsTerm } from './reducers'
-import { getInitialAppState, AppState, QueryState } from '../State/State'
+import { getInitialAppState, AppState, QueryState, emptyState } from '../State/State'
 
 describe('Reducers', () => {
   it('rootReducers should reset', () => {
@@ -28,6 +28,32 @@ describe('Reducers', () => {
 
     expect(results.query).toEqual(getInitialAppState().query)
     expect(results.source).toEqual(getInitialAppState().source)
+  })
+  it('rootReducers clear reset', () => {
+    const state: AppState = {
+      output: {
+        text: 'fake o',
+        obj: {},
+        searchTerm: '',
+        match: false,
+        selectedTab: 'RawJson',
+        table: {
+          array: ['fake'],
+          isArray: false,
+          isModalOpen: true,
+          displayedColumns: [],
+          columns: ['1'],
+          groupBy: [],
+        },
+      },
+      query: { text: 'fake q', mode: 'Javascript' },
+      source: { text: 'fake s' },
+    }
+    const results = rootReducerReset(state, {
+      type: 'RESET_EDITOR',
+    })
+
+    expect(results).toEqual(emptyState)
   })
 
   it('update query action should update', () => {

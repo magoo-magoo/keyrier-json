@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { UpdateSource, updateSource } from '../../../Actions/actions'
 import { jsonBeautify } from '../../../helpers/json'
 import { RootState } from '../../../State/State'
-import ImportMenu from './ImportMenu'
+import ImportMenu from './LateralMenu'
 import { AceEditor } from '../../Deferred/DeferredAceEditor'
 import { getSourceText } from '../../../Store/selectors'
 import { memo } from 'react'
@@ -18,7 +18,7 @@ const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
   <>
     <div className="row">
       <div className="col-sm-10 offset-sm-2">
-        <h3>paste your JSON:</h3>
+        <h3>1.Paste your JSON:</h3>
       </div>
     </div>
     <div className="row">
@@ -31,23 +31,22 @@ const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
           theme="monokai"
           name="sourceAceEditor"
           onChange={onChange}
-          fontSize={18}
+          fontSize={13}
           cursorStart={1}
-          showPrintMargin={true}
+          showPrintMargin={false}
           showGutter={true}
           highlightActiveLine={true}
           value={jsonBeautify(sourceText)}
-          debounceChangePeriod={500}
-          minLines={10}
-          maxLines={20}
+          debounceChangePeriod={1000}
+          minLines={35}
+          maxLines={35}
           wrapEnabled={true}
-          // debounceChangePeriod={2000}
           setOptions={{
             showLineNumbers: true,
           }}
           editorProps={{ $blockScrolling: Infinity }}
-          width={'100%'}
           annotations={[]}
+          width={'100%'}
         />
       </div>
     </div>

@@ -57,3 +57,16 @@ export const getInitialUserSettingsState = () =>
   ({
     globalTheme: 'materia',
   } as UserSettingsState)
+
+export const emptyState: AppState = {
+  source: { text: '' },
+  query: { text: '', mode: 'Javascript' },
+  output: {
+    match: false,
+    text: '',
+    obj: {},
+    searchTerm: '',
+    selectedTab: 'RawJson',
+    table: { isArray: false, array: [], columns: [], displayedColumns: [], isModalOpen: false, groupBy: [] },
+  },
+}

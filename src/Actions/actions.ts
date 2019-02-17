@@ -28,6 +28,12 @@ export interface ResetEditor {
 export const resetEditor = (): ResetEditor => ({
   type: 'RESET_EDITOR',
 })
+export interface ClearEditor {
+  type: 'CLEAR_EDITOR'
+}
+export const clearEditor = (): ClearEditor => ({
+  type: 'CLEAR_EDITOR',
+})
 export interface EvaluateCode {
   type: 'EVALUATE_CODE'
 }
@@ -101,6 +107,7 @@ export interface ReduxInitAction {
 export type Action =
   | Readonly<EvaluateCode>
   | Readonly<ResetEditor>
+  | Readonly<ClearEditor>
   | Readonly<UpdateQueryAction>
   | Readonly<ToggleOutputTableModal>
   | Readonly<UpdateTableColumns>

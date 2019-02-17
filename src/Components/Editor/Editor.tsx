@@ -1,37 +1,34 @@
 import * as React from 'react'
 import './Editor.css'
-import Output from './Output/Output'
-import SourceEditor from './SourceEditor/SourceEditor'
-import QueryEditor from './QueryEditor/QueryEditor'
-import { useToggleState } from '../../Hooks/hooks'
-import { Button, Collapse } from '../Deferred/DeferredReactstrap'
 import { withErrorBoundary } from '../Common/ErrorBoundary'
+import { lazy, Suspense } from 'react'
+const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ './SourceEditor/SourceEditor'))
+const Output = lazy(() => import(/* webpackChunkName: "Output" */ './Output/Output'))
+const QueryEditor = lazy(() => import(/* webpackChunkName: "QueryEditor" */ './QueryEditor/QueryEditor'))
 
 const Editor = () => {
-  const [collapse, switchCollapse] = useToggleState()
   return (
     <>
       <h1 className="my-5">Paste your JSON and Query it.</h1>
       <div className="row my-5">
         <div className="col">
-          <SourceEditor />
+          <Suspense fallback={'loading...'}>
+            <SourceEditor />
+          </Suspense>
         </div>
       </div>
       <div className="row align-items-center my-5">
-        <div className="col-md-2">
-          <Button color="primary" onClick={switchCollapse}>
-            Modify query
-          </Button>
-        </div>
-        <div className="col-md-10">
-          <Collapse isOpen={collapse}>
+        <div className="col">
+          <Suspense fallback={'loading...'}>
             <QueryEditor />
-          </Collapse>
+          </Suspense>
         </div>
       </div>
       <div className="row my-5">
         <div className="col">
-          <Output />
+          <Suspense fallback={'loading...'}>
+            <Output />
+          </Suspense>
         </div>
       </div>
     </>
