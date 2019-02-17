@@ -6,6 +6,7 @@
 [![Build Status](https://travis-ci.org/magoo-magoo/keyrier-json.svg?branch=master)](https://travis-ci.org/magoo-magoo/keyrier-json)
 [![technical debt](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=sqale_index)](https://sonarcloud.io/dashboard?id=keyrier-json)
 [![coverage](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=coverage)](https://sonarcloud.io/dashboard?id=keyrier-json)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/5aa1568f-9fcc-4964-803b-6a3b76e6f0cf/deploy-status)](https://app.netlify.com/sites/keyrier/deploys)
 
 ## [Live demo](https://magoo-magoo.github.io/keyrier-json) and [here](https://keyrier.netlify.com)
 
