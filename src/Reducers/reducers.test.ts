@@ -29,7 +29,7 @@ describe('Reducers', () => {
     expect(results.query).toEqual(getInitialAppState().query)
     expect(results.source).toEqual(getInitialAppState().source)
   })
-  it('rootReducers clear reset', () => {
+  it('clear action', () => {
     const state: AppState = {
       output: {
         text: 'fake o',
@@ -50,7 +50,7 @@ describe('Reducers', () => {
       source: { text: 'fake s' },
     }
     const results = rootReducerReset(state, {
-      type: 'RESET_EDITOR',
+      type: 'CLEAR_EDITOR',
     })
 
     expect(results).toEqual(emptyState)
