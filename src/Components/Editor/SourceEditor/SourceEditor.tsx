@@ -18,7 +18,7 @@ const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
   <>
     <div className="row">
       <div className="col-sm-10 offset-sm-2">
-        <h3>1.Paste your JSON:</h3>
+        <h3>1. Paste your JSON:</h3>
       </div>
     </div>
     <div className="row">
