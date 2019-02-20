@@ -111,12 +111,22 @@ const compareOperands = (operation: string | null, left: Op, right: Op, value: o
     return false
   }
 
+  if (!operation) {
+    return false
+  }
+
   const leftValue = _.get(value, computePath(left.values))
 
   if (operation === '=' && leftValue === right.value) {
     return true
   }
+  if (operation.toLowerCase() === 'is' && leftValue === right.value) {
+    return true
+  }
   if (operation === '!=' && leftValue !== right.value) {
+    return true
+  }
+  if (operation.toLowerCase() === 'is not' && leftValue !== right.value) {
     return true
   }
   if (operation === '<>' && leftValue !== right.value) {

@@ -21,7 +21,7 @@ type Props = {
 
 export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, groupBy }) => {
   const [detailsCellValue, setDetailsCellValue] = useState(null as any)
-  if (!data || !Array.isArray(data) || data.length === 0) {
+  if (!data || !Array.isArray(data) || data.length === 0 || data.every(e => !e || Object.keys(e).length === 0)) {
     return <div />
   }
 
@@ -49,7 +49,7 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
       <div className="row">
         <div className="col">
           <LoadableReactTable
-            noDataText="Oh Noes!"
+            noDataText="FRACKING EMPTY!"
             className="-highlight"
             data={data.map(e => (e ? e : {}))}
             defaultPageSize={20}
@@ -60,10 +60,11 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
             // tslint:disable-next-line:variable-name
             getTdProps={(_state: any, rowInfo?: RowInfo, column?: Column | undefined, _instance?: any) => ({
               onClick: (e: React.MouseEvent, original: () => void) => {
-                if (e && column && column.id && rowInfo && rowInfo.row) {
+                if (rowInfo && rowInfo.aggregated) {
+                  original()
+                } else if (e && column && column.id && rowInfo && rowInfo.row) {
                   setDetailsCellValue(rowInfo.row[column.id])
                 }
-                original()
               },
             })}
           />
