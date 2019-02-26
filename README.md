@@ -10,7 +10,7 @@
 
 ## [Live demo](https://magoo-magoo.github.io/keyrier-json) and [here](https://keyrier.netlify.com)
 
-A web application to perfom query on JSON object. Built in react/redux.
+A web application to perfom query on JSON object. Built with react/redux.
 
 ## Desktop
 
