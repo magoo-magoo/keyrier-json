@@ -74,7 +74,7 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
             <div className="col-sm-2 pt-5">
               <h3>
                 <Badge color="secondary" pill={true}>
-                  {prettyPrintBytes(objSize, { locale: true })}
+                  {prettyPrintBytes(objSize)}
                 </Badge>
               </h3>
             </div>
