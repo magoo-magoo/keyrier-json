@@ -1,4 +1,4 @@
-import { customToString, containsIgnoreCase } from './string'
+import { customToString, containsIgnoreCase, prettyPrintBytes } from './string'
 
 describe('string helpers', () => {
   it('should convert number', () => {
@@ -38,5 +38,23 @@ describe('string helpers', () => {
   it('should returns false when does not contain part', () => {
     const result = containsIgnoreCase('une longue phrase', 'JAVA')
     expect(result).toBeFalsy()
+  })
+
+  it('should print 0 B when size is 0 byte', () => {
+    const result = prettyPrintBytes(0)
+    expect(result).toEqual('0 B')
+  })
+  it('should print 0 B when size is 1 byte', () => {
+    const result = prettyPrintBytes(1)
+    expect(result).toEqual('1 B')
+  })
+  it('should print -1 kB when size is -1024 bytes', () => {
+    const result = prettyPrintBytes(-1024)
+    expect(result).toEqual('-1 kB')
+  })
+
+  it('should print 1 mB when size is 1048576 bytes', () => {
+    const result = prettyPrintBytes(1048576)
+    expect(result).toEqual('1 MB')
   })
 })

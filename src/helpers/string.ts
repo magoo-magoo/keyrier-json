@@ -29,7 +29,7 @@ export const containsIgnoreCase = (str: string, part: string) => {
 
 const UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 
-const toLocaleString = (value: number, locale: boolean | string) => {
+const toLocaleString = (value: number, locale: boolean | string = false) => {
   let result = value.toString()
   if (typeof locale === 'string') {
     result = value.toLocaleString(locale)
@@ -40,40 +40,25 @@ const toLocaleString = (value: number, locale: boolean | string) => {
   return result
 }
 
-type Options = {
-  signed?: boolean
-  value?: number
-  locale?: boolean | string
-}
-
-export const prettyPrintBytes = (value: number, options: Options = {}) => {
+export const prettyPrintBytes = (value: number, signed = false, locale: boolean | string = false) => {
   if (!Number.isFinite(value)) {
     throw new TypeError(`Expected a finite number, got ${typeof value}: ${value}`)
   }
-
-  options = { ...options }
-
-  if (options.value && value === 0) {
-    return ' 0 B'
+  if (value === 0) {
+    return '0 B'
   }
-
   const isNegative = value < 0
-  const prefix = isNegative ? '-' : options.signed ? '+' : ''
-
+  const prefix = isNegative ? '-' : signed ? '+' : ''
   if (isNegative) {
     value = -value
   }
-
   if (value < 1) {
-    const numberStr = toLocaleString(value, options.locale ? options.locale : false)
+    const numberStr = toLocaleString(value, locale ? locale : false)
     return prefix + numberStr + ' B'
   }
-
   const exponent = Math.min(Math.floor(Math.log10(value) / 3), UNITS.length - 1)
-  value = Number((value / Math.pow(1000, exponent)).toPrecision(3))
-  const numberString = toLocaleString(value, options.locale ? options.locale : false)
-
+  value = Number((value / Math.pow(1024, exponent)).toPrecision(3))
+  const numberString = toLocaleString(value, locale ? locale : false)
   const unit = UNITS[exponent]
-
   return prefix + numberString + ' ' + unit
 }
