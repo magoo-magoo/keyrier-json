@@ -144,4 +144,4 @@ const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource }) => 
 export default connect(
   null,
   { setSource: updateSource }
-)(memo(withErrorBoundary(HttpRequestSource)))
+)(withErrorBoundary(memo(HttpRequestSource)))

@@ -11,6 +11,7 @@ import { getOutputTableData, getdisplayedColumns, getColumns, getGroupBy } from 
 import { useState, Suspense, lazy, memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
+import deepEqual from 'fast-deep-equal'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 type Props = {
@@ -20,7 +21,7 @@ type Props = {
 }
 
 export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, groupBy }) => {
-  const [detailsCellValue, setDetailsCellValue] = useState(null as any)
+  const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | never)
   if (!data || !Array.isArray(data) || data.length === 0 || data.every(e => !e || Object.keys(e).length === 0)) {
     return <div />
   }
@@ -29,7 +30,7 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
     Aggregated: () => (row: any) => (row ? row.value : ''),
     Cell: (cellProps: any) => {
       const cellContent = cellProps ? customToString(cellProps.value) : ''
-      return <>{cellContent}</>
+      return cellContent
     },
     Header: key,
     accessor: key,
@@ -107,4 +108,4 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-export default connect(mapStateToProps)(memo(withErrorBoundary(OutputTableView)))
+export default connect(mapStateToProps)(withErrorBoundary(memo(OutputTableView, (prev, next) => deepEqual(prev, next))))

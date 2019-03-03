@@ -84,4 +84,4 @@ const mapStateToProps = (state: RootState) => ({
 export default connect(
   mapStateToProps,
   { onChange: updateQuery, setQueryMode: updateQueryMode }
-)(memo(withErrorBoundary(QueryEditor)))
+)(withErrorBoundary(memo(QueryEditor)))

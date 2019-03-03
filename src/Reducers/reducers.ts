@@ -1,7 +1,7 @@
 import { combineReducers, Reducer } from 'redux'
-import { Action, UpdateSource } from '../Actions/actions'
+import { Action } from '../Actions/actions'
 import { codeEvaluation } from '../helpers/code'
-import { jsonParseSafe } from '../helpers/json'
+import { jsonParseSafe, jsonBeautify } from '../helpers/json'
 import {
   OupoutState,
   QueryState,
@@ -29,7 +29,7 @@ export const rootReducer = (rootState: AppState = getInitialAppState(), action: 
     source: source(rootState.source, action),
   }
 
-  const newOutputState = output(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
+  const newOutputState = output(rootState, newState, action)
   return {
     ...newState,
     output: {
@@ -50,15 +50,15 @@ export const crashReporter = (rootReducerFn: Reducer<AppState>, state: AppState,
   }
 }
 
-export const sourceText = (state: SourceState, action: UpdateSource) => ({
-  ...state,
-  text: action.source,
-})
-
 export const source = (state: SourceState, action: Action) => {
   switch (action.type) {
     case 'UPDATE_SOURCE_TEXT':
-      return sourceText(state, action)
+      return {
+        ...state,
+        text: state.autoFormat ? jsonBeautify(action.source.trim()) : action.source,
+      }
+    case 'UPDATE_AUTOFORMAT_SOURCE':
+      return { ...state, text: action.active ? jsonBeautify(state.text.trim()) : state.text, autoFormat: action.active }
     default:
       return state
   }
@@ -77,7 +77,7 @@ export const query = (state: QueryState, action: Action) => {
     case 'UPDATE_QUERY':
       return {
         ...state,
-        text: action.query,
+        text: action.query.trim(),
       }
     case 'UPDATE_QUERY_MODE':
       return {
@@ -109,11 +109,13 @@ export const computeOutput = (
   mode: QueryMode
 ): OupoutState => {
   const text = codeEvaluation(sourceString, queryString, mode)
+
   if (text === null) {
     return {
       selectedTab: 'RawJson',
       text: '',
       obj: null,
+      objSize: 0,
       searchTerm: '',
       match: false,
       table: {
@@ -131,6 +133,7 @@ export const computeOutput = (
       selectedTab: 'RawJson',
       text: '',
       obj: null,
+      objSize: 0,
       searchTerm: '',
       match: false,
       errorMessage: text.message,
@@ -177,6 +180,7 @@ export const computeOutput = (
     selectedTab,
     text,
     obj: jsonParseSafe(text),
+    objSize: text ? text.length : 0,
     searchTerm: '',
     match: false,
     table: {
@@ -190,42 +194,38 @@ export const computeOutput = (
   }
 }
 
-export const output = (
-  previousState: OupoutState,
-  sourceString: string,
-  queryString: string,
-  action: Action,
-  mode: QueryMode
-): OupoutState => {
+export const output = (previousState: AppState, newState: AppState, action: Action): OupoutState => {
   switch (action.type) {
     case '@@INIT':
+      return computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
     case 'EVALUATE_CODE':
     case 'RESET_EDITOR':
     case 'UPDATE_QUERY':
     case 'UPDATE_SOURCE_TEXT':
-    case 'UPDATE_OUTPUT_TAB_SELECTION':
-      return computeOutput(previousState, sourceString, queryString, action, mode)
+      return previousState.source.text === newState.source.text && previousState.query.text === newState.query.text
+        ? previousState.output
+        : computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
     case 'TOGGLE_OUTPUT_TABLE_MODAL':
       return {
-        ...previousState,
+        ...newState.output,
         table: {
-          ...previousState.table,
-          isModalOpen: !previousState.table.isModalOpen,
+          ...newState.output.table,
+          isModalOpen: !newState.output.table.isModalOpen,
         },
       }
     case 'UPDATE_OUTPUT_TAB_SELECTION':
       return {
-        ...previousState,
+        ...newState.output,
         selectedTab: action.tab,
       }
     case 'UPDATE_OUTPUT_SEARCH_TERM':
       return {
-        ...filter(computeOutput(previousState, sourceString, queryString, action, mode), action.searchTerm),
+        ...filter(newState.output, action.searchTerm),
         searchTerm: action.searchTerm,
         selectedTab: 'RawJson',
       }
     default:
-      return previousState
+      return newState.output
   }
 }
 

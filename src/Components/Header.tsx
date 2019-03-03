@@ -19,6 +19,8 @@ import {
   NavLink,
   Dropdown,
 } from './Deferred/DeferredReactstrap'
+import { withErrorBoundary } from './Common/ErrorBoundary'
+import { memo } from 'react'
 
 interface Props {
   setTheme: (theme: Theme) => void
@@ -94,4 +96,4 @@ const mapStateToProps = (state: RootState) => ({
 export default connect(
   mapStateToProps,
   { setTheme: switchTheme }
-)(Header)
+)(memo(withErrorBoundary(Header)))

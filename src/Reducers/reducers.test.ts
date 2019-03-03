@@ -76,6 +76,25 @@ describe('Reducers', () => {
   })
 
   it('output ', () => {
+    const prevState: AppState = {
+      output: {
+        text: '{}',
+        obj: {},
+        match: false,
+        searchTerm: '',
+        selectedTab: 'RawJson',
+        table: {
+          array: [],
+          isArray: false,
+          isModalOpen: false,
+          displayedColumns: [],
+          columns: [],
+          groupBy: [],
+        },
+      },
+      query: { text: 'data.value', mode: 'Javascript' },
+      source: { text: '{}' },
+    }
     const state: AppState = {
       output: {
         text: '{}',
@@ -96,15 +115,9 @@ describe('Reducers', () => {
       source: { text: '{"value": "test"}' },
     }
 
-    const result = output(
-      state.output,
-      state.source.text,
-      state.query.text,
-      {
-        type: 'EVALUATE_CODE',
-      },
-      'Javascript'
-    )
+    const result = output(prevState, state, {
+      type: 'EVALUATE_CODE',
+    })
 
     expect(result.text).toEqual('"test"')
     expect(result.table.isArray).toEqual(false)

@@ -6,6 +6,7 @@ import { DebounceInput } from 'react-debounce-input'
 import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions'
 import { Suspense, lazy, memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import deepEqual from 'fast-deep-equal'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {
@@ -55,4 +56,4 @@ const mapStateToProps = (state: RootState) => {
 export default connect(
   mapStateToProps,
   { onSearchChange: updateSearchTerm }
-)(memo(withErrorBoundary(JsonView)))
+)(withErrorBoundary(memo(JsonView, (prev, next) => deepEqual(prev, next))))

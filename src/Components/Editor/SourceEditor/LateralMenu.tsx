@@ -7,6 +7,8 @@ import {
   resetEditor,
   ClearEditor,
   clearEditor,
+  updateAutoFormatSource,
+  UpdateAutoFormatSource,
 } from '../../../Actions/actions'
 import HttpRequestSource from './RequestSource'
 import './ImportMenu.css'
@@ -23,16 +25,24 @@ import {
   ModalFooter,
   Button,
   ButtonGroup,
+  FormGroup,
+  Label,
+  Input,
 } from '../../Deferred/DeferredReactstrap'
 import { memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { getSourceAutoFormat } from '../../../Store/selectors'
+import { RootState } from '../../../State/State'
+
 interface Props {
   onFileContentReady: (fileContent: string) => UpdateSource
+  changeAutoFormat: (active: boolean) => UpdateAutoFormatSource
   onReset: () => ResetEditor
   onClear: () => ClearEditor
+  autoFormat: boolean
 }
 
-const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear }) => {
+const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, autoFormat, changeAutoFormat }) => {
   const [dropdownIsOpen, toggleDropdown] = useToggleState()
   const [modalIsOpen, toggleModal] = useToggleState()
   return (
@@ -67,6 +77,12 @@ const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear }) 
           Clear
         </Button>
       </ButtonGroup>
+      <FormGroup className="pt-4" check={true}>
+        <Label check={true}>
+          <Input checked={autoFormat} type="checkbox" onChange={() => changeAutoFormat(!autoFormat)} />
+          Auto format
+        </Label>
+      </FormGroup>
       <Modal id="requestModal" role="dialog" size="lg" isOpen={modalIsOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Import JSON from an HTTP request</ModalHeader>
         <ModalBody>
@@ -99,9 +115,14 @@ const onFileChange = (toggleImportDropdown: () => void, onFileContentReady: (s: 
   }
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = (state: RootState) => ({ autoFormat: getSourceAutoFormat(state) })
 
 export default connect(
   mapStateToProps,
-  { onFileContentReady: updateSource, onReset: resetEditor, onClear: clearEditor }
+  {
+    onFileContentReady: updateSource,
+    onReset: resetEditor,
+    onClear: clearEditor,
+    changeAutoFormat: updateAutoFormatSource,
+  }
 )(memo(withErrorBoundary(LateralMenu)))

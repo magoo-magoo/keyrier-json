@@ -1,9 +1,14 @@
 import { Theme } from '../Themes/themes'
 import { QueryMode, tabType } from '../State/State'
 
-/*
- * action creators
- */
+export interface UpdateAutoFormatSource {
+  type: 'UPDATE_AUTOFORMAT_SOURCE'
+  active: boolean
+}
+export const updateAutoFormatSource = (active: boolean): UpdateAutoFormatSource => ({
+  active,
+  type: 'UPDATE_AUTOFORMAT_SOURCE',
+})
 export interface UpdateSource {
   type: 'UPDATE_SOURCE_TEXT'
   source: string
@@ -118,3 +123,4 @@ export type Action =
   | Readonly<UpdateQueryMode>
   | Readonly<UpdateOutputTabSelection>
   | Readonly<UpdateSource>
+  | Readonly<UpdateAutoFormatSource>

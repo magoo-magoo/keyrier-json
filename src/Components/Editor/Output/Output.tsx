@@ -5,16 +5,23 @@ import { RootState, tabType } from '../../../State/State'
 
 import classNames from 'classnames'
 
-import { getOutputErrorMessage, getOutputIsArray, getOutputActiveTab } from '../../../Store/selectors'
+import {
+  getOutputErrorMessage,
+  getOutputIsArray,
+  getOutputActiveTab,
+  getOutputObjectSize,
+} from '../../../Store/selectors'
 import JsonView from './JsonView'
 import { UpdateOutputTabSelection, updateOutputTabSelection } from '../../../Actions/actions'
-import { TabContent, TabPane, Alert } from '../../Deferred/DeferredReactstrap'
+import { TabContent, TabPane, Alert, Badge } from '../../Deferred/DeferredReactstrap'
 import { memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { prettyPrintBytes } from '../../../helpers/string'
 
 interface Props {
   isArray: boolean
   activeTab: tabType
+  objSize: number
   setActiveTab: (v: tabType) => UpdateOutputTabSelection
   errorMessage?: string
 }
@@ -24,7 +31,7 @@ const pointer = {
   fontSize: 'large',
 }
 
-const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab }) => {
+const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, objSize }) => {
   const display = (
     <>
       <div className="row">
@@ -64,7 +71,14 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
       <TabContent activeTab={activeTab}>
         <TabPane tabId="RawJson">
           <div className="row">
-            <div className="col-sm-10 offset-sm-2">
+            <div className="col-sm-2 pt-5">
+              <h3>
+                <Badge color="secondary" pill={true}>
+                  {prettyPrintBytes(objSize, { locale: true })}
+                </Badge>
+              </h3>
+            </div>
+            <div className="col-sm-10">
               <JsonView />
             </div>
           </div>
@@ -100,6 +114,7 @@ const mapStateToProps = (state: RootState) => {
     errorMessage: getOutputErrorMessage(state),
     isArray: getOutputIsArray(state),
     activeTab: getOutputActiveTab(state),
+    objSize: getOutputObjectSize(state),
   }
 }
 

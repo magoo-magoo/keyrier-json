@@ -1,13 +1,12 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-
 import { UpdateSource, updateSource } from '../../../Actions/actions'
-import { jsonBeautify } from '../../../helpers/json'
 import { RootState } from '../../../State/State'
 import ImportMenu from './LateralMenu'
 import { AceEditor } from '../../Deferred/DeferredAceEditor'
 import { getSourceText } from '../../../Store/selectors'
 import { memo } from 'react'
+import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
   onChange: (val: string) => UpdateSource
@@ -36,7 +35,7 @@ const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
           showPrintMargin={false}
           showGutter={true}
           highlightActiveLine={true}
-          value={jsonBeautify(sourceText)}
+          value={sourceText}
           debounceChangePeriod={1000}
           minLines={35}
           maxLines={35}
@@ -60,4 +59,4 @@ const mapStateToProps = (state: RootState) => ({
 export default connect(
   mapStateToProps,
   { onChange: updateSource }
-)(memo(SourceEditor))
+)(withErrorBoundary(memo(SourceEditor)))

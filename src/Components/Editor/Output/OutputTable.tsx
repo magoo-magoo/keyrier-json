@@ -54,4 +54,4 @@ export default connect(
   {
     toggleModal: toggleOutputTableModal,
   }
-)(memo(withErrorBoundary(OutputTable)))
+)(withErrorBoundary(memo(OutputTable)))
