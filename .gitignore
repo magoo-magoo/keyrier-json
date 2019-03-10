@@ -26,3 +26,6 @@ yarn-error.log*
 *.orig
 *.REMOTE
 .env.local
+
+cypress/screenshots/
+cypress/videos/
