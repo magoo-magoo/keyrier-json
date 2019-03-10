@@ -3,6 +3,7 @@
 # Keyrier JSON
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+![GitHub release](https://img.shields.io/github/release/magoo-magoo/keyrier-json.svg)
 [![Build Status](https://travis-ci.org/magoo-magoo/keyrier-json.svg?branch=master)](https://travis-ci.org/magoo-magoo/keyrier-json)
 [![technical debt](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=sqale_index)](https://sonarcloud.io/dashboard?id=keyrier-json)
 [![coverage](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=coverage)](https://sonarcloud.io/dashboard?id=keyrier-json)
