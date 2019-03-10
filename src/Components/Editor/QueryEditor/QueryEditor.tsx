@@ -10,6 +10,8 @@ import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from '../.
 import { memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
+// import { unstable_runWithPriority } from 'scheduler'
+
 interface Props {
   onChange: (e: string) => UpdateQueryAction
   setQueryMode: (e: QueryMode) => UpdateQueryMode
@@ -68,7 +70,7 @@ const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode 
             width={'100%'}
             enableBasicAutocompletion={true}
             enableLiveAutocompletion={true}
-            debounceChangePeriod={250}
+            debounceChangePeriod={1250}
           />
         </div>
       </div>

@@ -7,8 +7,9 @@ import * as React from 'react'
 import { getTheme } from './Store/selectors'
 import { importThemeStyleCustom } from './Themes/themes'
 import * as Loadable from 'react-loadable'
-
-const start = async () => {
+import { load } from './Store/persistence'
+import { UserSettingsState } from './State/State'
+;(async () => {
   const store = configureStore()
 
   const promises = await Promise.all([
@@ -17,20 +18,33 @@ const start = async () => {
     importThemeStyleCustom(getTheme(store.getState())),
   ])
 
-  await Loadable.preloadAll()
+  const userSettings = load<UserSettingsState>('keyrier-json.user.settings')
 
   const ReactDOM = promises[0]
   const App = promises[1].default
-  ReactDOM.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>,
-    document.getElementById('root') as HTMLElement
-  )
+
+  if (userSettings.concurrentModeEnable) {
+    const Concurrent = (React as any).unstable_ConcurrentMode
+    const root = (ReactDOM as any).unstable_createRoot(document.getElementById('root'))
+    root.render(
+      <Concurrent>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </Concurrent>
+    )
+  } else {
+    ReactDOM.render(
+      <React.StrictMode>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </React.StrictMode>,
+      document.getElementById('root')
+    )
+  }
+
+  Loadable.preloadAll()
 
   registerServiceWorker()
-}
-
-start()
+})()

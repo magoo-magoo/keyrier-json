@@ -39,7 +39,9 @@ const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
           debounceChangePeriod={1000}
           minLines={35}
           maxLines={35}
-          wrapEnabled={true}
+          enableBasicAutocompletion={false}
+          enableLiveAutocompletion={false}
+          wrapEnabled={false}
           setOptions={{
             showLineNumbers: true,
           }}

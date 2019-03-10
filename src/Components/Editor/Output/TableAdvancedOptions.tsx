@@ -10,7 +10,7 @@ import {
 import { LoadableReactSelect } from '../../Deferred/DeferredReactSelect'
 import { itemType, RootState } from '../../../State/State'
 import { ValueType } from 'react-select/lib/types'
-import { getTableArray, getdisplayedColumns, getColumns, getGroupBy } from '../../../Store/selectors'
+import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
 import { useToggleState } from '../../../Hooks/hooks'
 import { Button, Collapse } from '../../Deferred/DeferredReactstrap'
 import { memo } from 'react'
@@ -93,7 +93,7 @@ const TableAdvancedOptions: React.FC<Props> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    data: getTableArray(state),
+    data: getOutputarray(state),
     displayedColumns: getdisplayedColumns(state),
     columns: getColumns(state),
     groupBy: getGroupBy(state),

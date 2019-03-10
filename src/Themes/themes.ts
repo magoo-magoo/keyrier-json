@@ -83,3 +83,25 @@ export type Theme =
   | 'superhero'
   | 'united'
   | 'yeti'
+
+export const availableThemes: Theme[] = [
+  'materia',
+  'darkly',
+  'sandstone',
+  'cosmo',
+  'cyborg',
+  'flatly',
+  'journal',
+  'litera',
+  'lumen',
+  'lux',
+  'minty',
+  'pulse',
+  'simplex',
+  'slate',
+  'solar',
+  'spacelab',
+  'superhero',
+  'united',
+  'yeti',
+]

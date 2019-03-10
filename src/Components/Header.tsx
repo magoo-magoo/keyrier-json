@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { version } from '../../package.json'
-import { Theme } from '../Themes/themes'
+import { Theme, availableThemes } from '../Themes/themes'
 import { switchTheme } from '../Actions/actions'
 import { connect } from 'react-redux'
 import { getTheme } from '../Store/selectors'
@@ -26,28 +26,6 @@ interface Props {
   setTheme: (theme: Theme) => void
   currentTheme: Theme | null
 }
-
-const availableThemes: Theme[] = [
-  'materia',
-  'darkly',
-  'sandstone',
-  'cosmo',
-  'cyborg',
-  'flatly',
-  'journal',
-  'litera',
-  'lumen',
-  'lux',
-  'minty',
-  'pulse',
-  'simplex',
-  'slate',
-  'solar',
-  'spacelab',
-  'superhero',
-  'united',
-  'yeti',
-]
 
 const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
   const [isOpen, switchIsOpen] = useToggleState()

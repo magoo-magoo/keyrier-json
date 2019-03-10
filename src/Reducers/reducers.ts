@@ -119,7 +119,6 @@ export const computeOutput = (
       searchTerm: '',
       match: false,
       table: {
-        array: [],
         isArray: false,
         isModalOpen: false,
         displayedColumns: [],
@@ -139,7 +138,6 @@ export const computeOutput = (
       errorMessage: text.message,
       table: {
         isArray: false,
-        array: [],
         isModalOpen: false,
         displayedColumns: [],
         columns: [],
@@ -149,11 +147,10 @@ export const computeOutput = (
   }
 
   let displayedColumns = new Array<string>()
-  const array: itemType[] = jsonParseSafe(text)
-  const isArray = Array.isArray(array)
-  if (isArray) {
+  const outputObject: itemType[] | object = jsonParseSafe(text)
+  if (Array.isArray(outputObject)) {
     const keyMap: Map<string> = {}
-    array
+    outputObject
       .filter(d => d)
       .filter(d => typeof d === 'object')
       .filter(d => !Object.is(d, {}))
@@ -171,7 +168,7 @@ export const computeOutput = (
   const isModalOpen =
     action.type === 'TOGGLE_OUTPUT_TABLE_MODAL' ? !previousState.table.isModalOpen : previousState.table.isModalOpen
 
-  let selectedTab: tabType = isArray ? 'Table' : 'RawJson'
+  let selectedTab: tabType = Array.isArray(outputObject) ? 'Table' : 'RawJson'
 
   if (action.type === 'UPDATE_OUTPUT_TAB_SELECTION') {
     selectedTab = action.tab
@@ -179,13 +176,12 @@ export const computeOutput = (
   return {
     selectedTab,
     text,
-    obj: jsonParseSafe(text),
+    obj: outputObject,
     objSize: text ? text.length : 0,
     searchTerm: '',
     match: false,
     table: {
-      array: isArray ? array : [],
-      isArray,
+      isArray: Array.isArray(outputObject),
       isModalOpen,
       displayedColumns,
       columns: displayedColumns,

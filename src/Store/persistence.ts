@@ -1,43 +1,68 @@
-import { AppState, UserSettingsState, getInitialAppState } from '../State/State'
+import { AppState, UserSettingsState, getInitialAppState, getInitialUserSettingsState } from '../State/State'
 import { logError } from '../helpers/logger'
 import lodash from 'lodash'
+import { toast } from 'react-toastify'
+import { prettyPrintBytes } from '../helpers/string'
+
+type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
 
 export const persistAppState = (appstate: AppState) => {
-  if (window.localStorage) {
-    localStorage.setItem('keyrier-json.app.state', JSON.stringify(appstate))
-  }
+  persist('keyrier-json.app.state', appstate)
 }
+
 export const persistUserSettings = (userSettings: UserSettingsState) => {
-  if (window.localStorage) {
-    localStorage.setItem('keyrier-json.user.settings', JSON.stringify(userSettings))
+  persist('keyrier-json.user.settings', userSettings)
+}
+
+const persist = (key: StorageKey, value: any) => {
+  const storage = getStorage()
+  if (storage) {
+    const toBeSaved = JSON.stringify(value)
+    try {
+      storage.setItem(key, toBeSaved)
+    } catch (error) {
+      toast.warn(`Error while saving ${key} to storage. size: ${prettyPrintBytes(toBeSaved.length)}`)
+    }
   }
 }
 
-export const loadAppState = () => {
-  return loadFromLocalStorage('keyrier-json.app.state')
-}
-
-export const loadUserSettingsState = () => {
-  return loadFromLocalStorage('keyrier-json.user.settings')
-}
-
-const loadFromLocalStorage = (key: string) => {
-  if (window.localStorage) {
-    return localStorage.getItem(key)
+const loadFromStorage = (key: StorageKey) => {
+  const storage = getStorage()
+  if (storage) {
+    return storage.getItem(key)
   }
   return null
 }
 
-export const loadOrdCreate = <T extends {}>(key: string, defaultValue: T) => {
-  let state = defaultValue
+const getDefault = (key: StorageKey) => {
+  switch (key) {
+    case 'keyrier-json.app.state':
+      return getInitialAppState()
+    case 'keyrier-json.user.settings':
+      return getInitialUserSettingsState()
+    default:
+      throw new Error(`no defaul value for ${key}`)
+  }
+}
+
+export function load<T extends UserSettingsState | AppState>(key: StorageKey) {
+  let state = getDefault(key) as T
   try {
-    const savedStateString = loadFromLocalStorage(key)
+    const savedStateString = loadFromStorage(key)
     if (savedStateString) {
       state = JSON.parse(savedStateString)
-      state = lodash.merge({}, getInitialAppState(), state)
+      state = lodash.merge({}, state)
     }
   } catch (error) {
     logError(error)
   }
+
   return state
+}
+
+const getStorage = () => {
+  if (window.localStorage) {
+    return window.localStorage
+  }
+  return window.sessionStorage
 }

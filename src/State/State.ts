@@ -30,7 +30,6 @@ export type itemType = any
 export type QueryMode = 'Javascript' | 'SQL'
 
 export type OupoutTableState = Readonly<{
-  array: itemType[]
   isArray: boolean
   isModalOpen: boolean
   displayedColumns: string[]
@@ -40,6 +39,7 @@ export type OupoutTableState = Readonly<{
 
 export type UserSettingsState = DeepReadonly<{
   globalTheme: Theme | null
+  concurrentModeEnable: boolean
 }>
 
 export type AppState = Readonly<{
@@ -55,10 +55,10 @@ export type RootState = Readonly<{
 }>
 
 export const getInitialAppState = () => initialStateJson as AppState
-export const getInitialUserSettingsState = () =>
-  ({
-    globalTheme: 'materia',
-  } as UserSettingsState)
+export const getInitialUserSettingsState = () => ({
+  globalTheme: 'materia' as Theme,
+  concurrentModeEnable: false,
+})
 
 export const emptyState: AppState = {
   source: { text: '', autoFormat: true },
@@ -70,6 +70,12 @@ export const emptyState: AppState = {
     objSize: 2,
     searchTerm: '',
     selectedTab: 'RawJson',
-    table: { isArray: false, array: [], columns: [], displayedColumns: [], isModalOpen: false, groupBy: [] },
+    table: {
+      isArray: false,
+      columns: [],
+      displayedColumns: [],
+      isModalOpen: false,
+      groupBy: [],
+    },
   },
 }

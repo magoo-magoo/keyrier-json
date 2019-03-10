@@ -8,15 +8,13 @@ export const getOutputObject = (state: RootState) => state.app.output.obj
 export const getOutputObjectSize = (state: RootState) => state.app.output.objSize
 export const getOutputSearchTerm = (state: RootState) => state.app.output.searchTerm
 export const getOutputSearchMatch = (state: RootState) => state.app.output.match
-
-export const getOutputTableData = (state: RootState) => [...state.app.output.table.array]
-
 export const getisOutputTableModalOpen = (state: RootState) => state.app.output.table.isModalOpen
 
 export const getTheme = (state: RootState) => state.userSettings.globalTheme
 
 export const getdisplayedColumns = (state: RootState) => [...state.app.output.table.displayedColumns]
-export const getTableArray = (state: RootState) => [...state.app.output.table.array]
+export const getOutputarray = (state: RootState) =>
+  Array.isArray(state.app.output.obj) ? [...state.app.output.obj] : []
 export const getColumns = (state: RootState) => [...state.app.output.table.columns]
 export const getGroupBy = (state: RootState) => [...state.app.output.table.groupBy]
 

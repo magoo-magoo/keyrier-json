@@ -3,7 +3,7 @@ import './OutputTable.css'
 import { connect } from 'react-redux'
 import OutputTableView from './OutputTableView'
 import { toggleOutputTableModal, ToggleOutputTableModal } from '../../../Actions/actions'
-import { getisOutputTableModalOpen, getOutputTableData } from '../../../Store/selectors'
+import { getisOutputTableModalOpen, getOutputObject } from '../../../Store/selectors'
 import { RootState } from '../../../State/State'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from '../../Deferred/DeferredReactstrap'
 import { memo } from 'react'
@@ -45,7 +45,7 @@ const OutputTable: React.FC<Props> = ({ toggleModal, isModalOpen }) => {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  data: getOutputTableData(state),
+  data: getOutputObject(state),
   isModalOpen: getisOutputTableModalOpen(state),
 })
 

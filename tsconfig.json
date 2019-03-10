@@ -28,8 +28,9 @@
     "strictPropertyInitialization": true /* Enable strict checking of property initialization in classes. */,
     "alwaysStrict": true,
     "noEmit": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "types": ["cypress"]
   },
   "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
-  "include": ["src"]
+  "include": ["src", "cypress/*/*.ts"]
 }

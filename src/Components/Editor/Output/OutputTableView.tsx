@@ -7,7 +7,7 @@ import TableAdvancedOptions from './TableAdvancedOptions'
 import { LoadableReactTable } from '../../Deferred/DeferredReactTable'
 import { Column, Filter, RowInfo } from 'react-table'
 import { itemType, RootState } from '../../../State/State'
-import { getOutputTableData, getdisplayedColumns, getColumns, getGroupBy } from '../../../Store/selectors'
+import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
 import { useState, Suspense, lazy, memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
@@ -101,7 +101,7 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
 
 const mapStateToProps = (state: RootState) => {
   return {
-    data: getOutputTableData(state),
+    data: getOutputarray(state),
     displayedColumns: getdisplayedColumns(state),
     columns: getColumns(state),
     groupBy: getGroupBy(state),

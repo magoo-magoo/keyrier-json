@@ -20,7 +20,7 @@ const errorStyles = { border: '3px solid red' }
 
 const JsonView: React.FC<Props> = ({ src, searchTerm, onSearchChange, match }) => {
   return (
-    <>
+    <div id="jsonView">
       <DebounceInput
         style={searchTerm && searchTerm !== '' && !match ? errorStyles : {}}
         value={searchTerm}
@@ -41,7 +41,7 @@ const JsonView: React.FC<Props> = ({ src, searchTerm, onSearchChange, match }) =
           onSelect={() => null}
         />
       </Suspense>
-    </>
+    </div>
   )
 }
 

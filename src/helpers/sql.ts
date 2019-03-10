@@ -15,25 +15,16 @@ export const computePath = (path: string[]) => {
   return path
 }
 
-const mapWithFields = (v: object, fields: Field[]) => {
+const map = (v: object, fields: Field[]) => {
+  // tslint:disable-next-line:no-debugger
+  debugger
   let mapped = v
   if (fields[0].constructor !== nodes.Star) {
-    const temp: any = {}
-    fields.forEach(field => {
-      const value = _.get(mapped, field.field.values)
-      let key = field.field.value
-
-      if (field.field.value2) {
-        key = field.field.value2
-      }
-
-      if (field.name) {
-        key = field.name.value
-      }
-
-      temp[key] = value
-    })
-    mapped = temp
+    if (!Array.isArray(mapped)) {
+      mapped = mapObject(fields, mapped)
+    } else {
+      mapped = mapped.map(x => mapObject(fields, x))
+    }
   }
 
   return mapped
@@ -65,10 +56,10 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
         const operation = sqlTree.where.conditions.operation
         return compareOperands(operation, leftValue, rightValue, v)
       })
-      .map(v => mapWithFields(v, sqlTree.fields))
+      .map(v => map(v, sqlTree.fields))
       .value()
   } else {
-    return mapWithFields(result.value(), sqlTree.fields)
+    return map(result.value(), sqlTree.fields)
   }
 }
 
@@ -149,4 +140,22 @@ const compareOperands = (operation: string | null, left: Op, right: Op, value: o
   }
 
   return false
+}
+const mapObject = (fields: Field[], mapped: object) => {
+  const temp: {
+    [key: string]: any
+  } = {}
+  fields.forEach(field => {
+    const value = _.get(mapped, field.field.values)
+    let key = field.field.value
+    if (field.field.value2) {
+      key = field.field.value2
+    }
+    if (field.name) {
+      key = field.name.value
+    }
+    temp[key] = value
+  })
+  mapped = temp
+  return mapped
 }
