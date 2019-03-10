@@ -16,7 +16,7 @@ install:
 
 script:
   - npm test -- --coverage
-  - npm run cypress:run --key $CYPRESS_RECORD_KEY
+  - npm run cypress:run -- --record --key $CYPRESS_RECORD_KEY
   - sonar-scanner
   - npm version patch -m "release v%s [skip ci]"
   - npm run build
