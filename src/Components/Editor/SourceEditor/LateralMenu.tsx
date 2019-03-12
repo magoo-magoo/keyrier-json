@@ -29,7 +29,7 @@ import {
   Label,
   Input,
 } from '../../Deferred/DeferredReactstrap'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { getSourceAutoFormat } from '../../../Store/selectors'
 import { RootState } from '../../../State/State'
@@ -45,6 +45,27 @@ interface Props {
 const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, autoFormat, changeAutoFormat }) => {
   const [dropdownIsOpen, toggleDropdown] = useToggleState()
   const [modalIsOpen, toggleModal] = useToggleState()
+
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      logInfo('onFileChange')
+      toggleDropdown()
+      if (e.target.files && e.target.files.length > 0) {
+        const fileReader = new FileReader()
+        logInfo('e.target.files', e.target.files[0].name)
+        fileReader.onload = () => {
+          if (fileReader.result) {
+            onFileContentReady(fileReader.result.toString())
+          }
+        }
+        fileReader.readAsText(e.target.files[0])
+      }
+    },
+    [toggleDropdown, onFileContentReady]
+  )
+
+  const handleAutoFormatChange = useCallback(() => changeAutoFormat(!autoFormat), [changeAutoFormat, autoFormat])
+
   return (
     <>
       <ButtonGroup vertical={true}>
@@ -61,7 +82,7 @@ const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, au
                   name="file"
                   id="sourceFile"
                   style={{ display: 'none' }}
-                  onChange={onFileChange(toggleDropdown, onFileContentReady)}
+                  onChange={handleFileChange}
                 />
               </label>
             </DropdownItem>
@@ -79,7 +100,7 @@ const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, au
       </ButtonGroup>
       <FormGroup className="pt-4" check={true}>
         <Label check={true}>
-          <Input checked={autoFormat} type="checkbox" onChange={() => changeAutoFormat(!autoFormat)} />
+          <Input checked={autoFormat} type="checkbox" onChange={handleAutoFormatChange} />
           Auto format
         </Label>
       </FormGroup>
@@ -96,23 +117,6 @@ const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, au
       </Modal>
     </>
   )
-}
-
-const onFileChange = (toggleImportDropdown: () => void, onFileContentReady: (s: string) => void) => (
-  e: React.ChangeEvent<HTMLInputElement>
-) => {
-  logInfo('onFileChange')
-  toggleImportDropdown()
-  if (e.target.files && e.target.files.length > 0) {
-    const fileReader = new FileReader()
-    logInfo('e.target.files', e.target.files[0].name)
-    fileReader.onload = () => {
-      if (fileReader.result) {
-        onFileContentReady(fileReader.result.toString())
-      }
-    }
-    fileReader.readAsText(e.target.files[0])
-  }
 }
 
 const mapStateToProps = (state: RootState) => ({ autoFormat: getSourceAutoFormat(state) })

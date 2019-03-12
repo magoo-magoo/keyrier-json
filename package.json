@@ -91,23 +91,24 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}",
+      "src/**/*.{ts}",
+      "!/src/Components/*.{tsx}",
       "!src/data/*.{ts,tsx}",
       "!src/registerServiceWorker.ts",
       "!/node_modules/"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 40,
-        "lines": 40,
-        "statements": 40
-      }
-    },
     "coverageReporters": [
       "json",
       "lcov",
       "text"
     ]
+  },
+  "coverageThreshold": {
+    "global": {
+      "branches": 40,
+      "lines": 40,
+      "statements": 40
+    }
   },
   "browserslist": [
     ">0.2%",

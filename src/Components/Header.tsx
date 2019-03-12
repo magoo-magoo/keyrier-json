@@ -20,7 +20,7 @@ import {
   Dropdown,
 } from './Deferred/DeferredReactstrap'
 import { withErrorBoundary } from './Common/ErrorBoundary'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 
 interface Props {
   setTheme: (theme: Theme) => void
@@ -31,10 +31,6 @@ const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
   const [isOpen, switchIsOpen] = useToggleState()
   const [dropDownIsOpen, toggleDropdown] = useToggleState()
 
-  const switchThemeAndReload = (theme: Theme) => {
-    setTheme(theme)
-    setTimeout(() => window.location.reload())
-  }
   return (
     <>
       <Navbar color="dark" dark={true} expand="md">
@@ -48,9 +44,7 @@ const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
               </DropdownToggle>
               <DropdownMenu right={true}>
                 {availableThemes.map((theme, index) => (
-                  <DropdownItem key={index} active={currentTheme === theme} onClick={() => switchThemeAndReload(theme)}>
-                    {theme}
-                  </DropdownItem>
+                  <ThemeDropDownItem setTheme={setTheme} key={index} active={currentTheme === theme} theme={theme} />
                 ))}
               </DropdownMenu>
             </Dropdown>
@@ -64,6 +58,24 @@ const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
         </Collapse>
       </Navbar>
     </>
+  )
+}
+
+type ThemeDropDownItemProps = {
+  theme: Theme
+  active: boolean
+  setTheme: (theme: Theme) => void
+}
+
+const ThemeDropDownItem: React.FC<ThemeDropDownItemProps> = ({ theme, active, setTheme }) => {
+  const onClick = useCallback(() => {
+    setTheme(theme)
+    setTimeout(() => window.location.reload())
+  }, [theme, setTheme])
+  return (
+    <DropdownItem active={active} onClick={onClick}>
+      {theme}
+    </DropdownItem>
   )
 }
 

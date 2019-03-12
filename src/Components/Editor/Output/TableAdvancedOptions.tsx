@@ -13,7 +13,7 @@ import { ValueType } from 'react-select/lib/types'
 import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
 import { useToggleState } from '../../../Hooks/hooks'
 import { Button, Collapse } from '../../Deferred/DeferredReactstrap'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
@@ -25,14 +25,6 @@ interface Props {
   setTableGroupBy: (v: string[]) => UpdateTableGroupBy
 }
 
-const handleOnclickOnExportToExcel = async (data: itemType[]) => {
-  const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx')
-  const workBook = xlsx.utils.book_new()
-  const workSheet = xlsx.utils.json_to_sheet(data)
-  xlsx.utils.book_append_sheet(workBook, workSheet, 'keyrier-json')
-  xlsx.writeFile(workBook, 'export.xlsx')
-}
-
 const TableAdvancedOptions: React.FC<Props> = ({
   onColumnsChange,
   columns,
@@ -42,12 +34,28 @@ const TableAdvancedOptions: React.FC<Props> = ({
 }) => {
   const [optionsCollapsed, switchOptionsCollapsed] = useToggleState()
 
-  const handleColumnChange = (cols: ValueType<{}> | undefined | null) => {
-    if (cols instanceof Array) {
-      const mapped = cols.map((c: { value?: string }) => (c.value ? c.value : ''))
-      onColumnsChange(mapped)
-    }
-  }
+  const handleColumnChange = useCallback(
+    (cols: ValueType<{}> | undefined | null) => {
+      if (cols instanceof Array) {
+        const mapped = cols.map((c: { value?: string }) => (c.value ? c.value : ''))
+        onColumnsChange(mapped)
+      }
+    },
+    [onColumnsChange]
+  )
+
+  const handleExport = useCallback(async () => {
+    const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx')
+    const workBook = xlsx.utils.book_new()
+    const workSheet = xlsx.utils.json_to_sheet(data)
+    xlsx.utils.book_append_sheet(workBook, workSheet, 'keyrier-json')
+    xlsx.writeFile(workBook, 'export.xlsx')
+  }, [data])
+
+  const handleGroupChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => setTableGroupBy([e.target.value]),
+    [setTableGroupBy]
+  )
 
   if (columns.length <= 0) {
     return <></>
@@ -66,14 +74,14 @@ const TableAdvancedOptions: React.FC<Props> = ({
             className="form-control-lg form-control"
             name="select"
             id="groupingSelect"
-            onChange={e => setTableGroupBy([e.target.value])}
+            onChange={handleGroupChange}
           >
             <option key={'Group by...'}>Group by...</option>
             {displayedColumns.map(key => (
               <option key={key}>{key}</option>
             ))}
           </select>
-          <Button color={'success'} onClick={() => handleOnclickOnExportToExcel(data)}>
+          <Button color={'success'} onClick={handleExport}>
             Export to Excel (.xlsx)
           </Button>
           <LoadableReactSelect

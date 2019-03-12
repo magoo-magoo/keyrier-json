@@ -7,7 +7,7 @@ import { AceEditor } from '../../Deferred/DeferredAceEditor'
 import { getQueryText, getQueryMode } from '../../../Store/selectors'
 import { useToggleState } from '../../../Hooks/hooks'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from '../../Deferred/DeferredReactstrap'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 // import { unstable_runWithPriority } from 'scheduler'
@@ -21,6 +21,10 @@ interface Props {
 
 const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode }) => {
   const [modeOpen, switchModeOpen] = useToggleState()
+
+  const setJsMode = useCallback(() => setQueryMode('Javascript'), [setQueryMode])
+  const setSqlMode = useCallback(() => setQueryMode('SQL'), [setQueryMode])
+
   return (
     <>
       <div className="row">
@@ -36,10 +40,10 @@ const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode 
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header={true}>Choose a predefined query</DropdownItem>
-              <DropdownItem active={mode === 'Javascript'} onClick={() => setQueryMode('Javascript')}>
+              <DropdownItem active={mode === 'Javascript'} onClick={setJsMode}>
                 Javascript
               </DropdownItem>
-              <DropdownItem active={mode === 'SQL'} onClick={() => setQueryMode('SQL')}>
+              <DropdownItem active={mode === 'SQL'} onClick={setSqlMode}>
                 SQL like(experimental)
               </DropdownItem>
             </DropdownMenu>

@@ -14,7 +14,7 @@ import {
 import JsonView from './JsonView'
 import { UpdateOutputTabSelection, updateOutputTabSelection } from '../../../Actions/actions'
 import { TabContent, TabPane, Alert, Badge } from '../../Deferred/DeferredReactstrap'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { prettyPrintBytes } from '../../../helpers/string'
 
@@ -32,64 +32,8 @@ const pointer = {
 }
 
 const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, objSize }) => {
-  const display = (
-    <>
-      <div className="row">
-        <div className="col">
-          <ul className="nav nav-tabs">
-            <li className="nav-item">
-              <a
-                className={classNames({
-                  active: activeTab === 'RawJson',
-                  'nav-link': true,
-                })}
-                onClick={() => {
-                  setActiveTab('RawJson')
-                }}
-                style={pointer}
-              >
-                Raw JSON view
-              </a>
-            </li>
-            <li className="nav-item" hidden={!isArray}>
-              <a
-                className={classNames({
-                  active: activeTab === 'Table',
-                  'nav-link': true,
-                })}
-                onClick={() => {
-                  setActiveTab('Table')
-                }}
-                style={pointer}
-              >
-                Table view
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="RawJson">
-          <div className="row">
-            <div className="col-sm-2 pt-5">
-              <h3>
-                <Badge id="badgeSize" color="secondary" pill={true}>
-                  {prettyPrintBytes(objSize)}
-                </Badge>
-              </h3>
-            </div>
-            <div className="col-sm-10">
-              <JsonView />
-            </div>
-          </div>
-        </TabPane>
-        <TabPane tabId="Table">
-          <OutputTable />
-        </TabPane>
-      </TabContent>
-    </>
-  )
-
+  const handleActiveTable = useCallback(() => setActiveTab('Table'), [setActiveTab])
+  const handleActiveRawJson = useCallback(() => setActiveTab('RawJson'), [setActiveTab])
   return (
     <>
       <div className="row">
@@ -104,7 +48,57 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
           </div>
         </div>
       </div>
-      {display}
+      <>
+        <div className="row">
+          <div className="col">
+            <ul className="nav nav-tabs">
+              <li className="nav-item">
+                <a
+                  className={classNames({
+                    active: activeTab === 'RawJson',
+                    'nav-link': true,
+                  })}
+                  onClick={handleActiveRawJson}
+                  style={pointer}
+                >
+                  Raw JSON view
+                </a>
+              </li>
+              <li className="nav-item" hidden={!isArray}>
+                <a
+                  className={classNames({
+                    active: activeTab === 'Table',
+                    'nav-link': true,
+                  })}
+                  onClick={handleActiveTable}
+                  style={pointer}
+                >
+                  Table view
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="RawJson">
+            <div className="row">
+              <div className="col-sm-2 pt-5">
+                <h3>
+                  <Badge id="badgeSize" color="secondary" pill={true}>
+                    {prettyPrintBytes(objSize)}
+                  </Badge>
+                </h3>
+              </div>
+              <div className="col-sm-10">
+                <JsonView />
+              </div>
+            </div>
+          </TabPane>
+          <TabPane tabId="Table">
+            <OutputTable />
+          </TabPane>
+        </TabContent>
+      </>
     </>
   )
 }

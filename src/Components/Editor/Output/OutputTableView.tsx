@@ -8,7 +8,7 @@ import { LoadableReactTable } from '../../Deferred/DeferredReactTable'
 import { Column, Filter, RowInfo } from 'react-table'
 import { itemType, RootState } from '../../../State/State'
 import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
-import { useState, Suspense, lazy, memo } from 'react'
+import { useState, Suspense, lazy, memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
 import deepEqual from 'fast-deep-equal'
@@ -22,6 +22,23 @@ type Props = {
 
 export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, groupBy }) => {
   const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | never)
+
+  const getTdProps = React.useCallback(
+    // tslint:disable-next-line:variable-name
+    (_state: any, rowInfo?: RowInfo, column?: Column | undefined, _instance?: any) => ({
+      onClick: (e: React.MouseEvent, original: () => void) => {
+        if (rowInfo && rowInfo.aggregated) {
+          original()
+        } else if (e && column && column.id && rowInfo && rowInfo.row) {
+          setDetailsCellValue(rowInfo.row[column.id])
+        }
+      },
+    }),
+    [setDetailsCellValue]
+  )
+
+  const handleCloseDetail = useCallback(() => setDetailsCellValue(null), [setDetailsCellValue])
+
   if (!data || !Array.isArray(data) || data.length === 0 || data.every(e => !e || Object.keys(e).length === 0)) {
     return <div />
   }
@@ -33,12 +50,10 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
       return cellContent
     },
     Header: key,
+    headerClassName: 'data-test-id-column-name',
     accessor: key,
-    className: 'text-center btn btn-link',
+    className: 'text-center btn btn-link data-test-id-cell-data',
   }))
-
-  const defaultFilterMethod = (filter: Filter, row: itemType) =>
-    filter && row && containsIgnoreCase(customToString(row[filter.id]), filter.value)
 
   return (
     <>
@@ -51,30 +66,21 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
         <div className="col">
           <LoadableReactTable
             noDataText="FRACKING EMPTY!"
-            className="-highlight"
+            className="data-test-id-output-table -highlight"
             data={data.map(e => (e ? e : {}))}
             defaultPageSize={20}
             columns={tableColumnConfig}
             filterable={true}
             pivotBy={groupBy}
             defaultFilterMethod={defaultFilterMethod}
-            // tslint:disable-next-line:variable-name
-            getTdProps={(_state: any, rowInfo?: RowInfo, column?: Column | undefined, _instance?: any) => ({
-              onClick: (e: React.MouseEvent, original: () => void) => {
-                if (rowInfo && rowInfo.aggregated) {
-                  original()
-                } else if (e && column && column.id && rowInfo && rowInfo.row) {
-                  setDetailsCellValue(rowInfo.row[column.id])
-                }
-              },
-            })}
+            getTdProps={getTdProps}
           />
         </div>
       </div>
-      <div className="mx-3 align-items-center justify-content-end d-flex">
+      <div id="data-test-id-output-table-length" className="mx-3 align-items-center justify-content-end d-flex">
         <h4>Number of elements: {data.length}</h4>
       </div>
-      <Modal<ModalProps> isOpen={!!detailsCellValue} toggle={() => setDetailsCellValue(null)} size="lg">
+      <Modal<ModalProps> isOpen={!!detailsCellValue} toggle={handleCloseDetail} size="lg">
         <ModalHeader>Details</ModalHeader>
         <ModalBody>
           {typeof detailsCellValue === 'object' ? (
@@ -98,6 +104,9 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
     </>
   )
 }
+
+const defaultFilterMethod = (filter: Filter, row: itemType) =>
+  filter && row && containsIgnoreCase(customToString(row[filter.id]), filter.value)
 
 const mapStateToProps = (state: RootState) => {
   return {

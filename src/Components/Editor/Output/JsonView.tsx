@@ -4,7 +4,7 @@ import { RootState } from '../../../State/State'
 import { connect } from 'react-redux'
 import { DebounceInput } from 'react-debounce-input'
 import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions'
-import { Suspense, lazy, memo } from 'react'
+import { Suspense, lazy, memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import deepEqual from 'fast-deep-equal'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
@@ -18,14 +18,17 @@ interface Props {
 
 const errorStyles = { border: '3px solid red' }
 
+const noop = () => null
+
 const JsonView: React.FC<Props> = ({ src, searchTerm, onSearchChange, match }) => {
+  const handlechange = useCallback(e => onSearchChange(e.target.value), [onSearchChange])
   return (
     <div id="jsonView">
       <DebounceInput
         style={searchTerm && searchTerm !== '' && !match ? errorStyles : {}}
         value={searchTerm}
         className="form-control"
-        onChange={e => onSearchChange(e.target.value)}
+        onChange={handlechange}
         debounceTimeout={500}
         placeholder="Type your search term..."
       />
@@ -35,10 +38,10 @@ const JsonView: React.FC<Props> = ({ src, searchTerm, onSearchChange, match }) =
           name="data"
           iconStyle="triangle"
           indentWidth={8}
-          onAdd={() => null}
-          onDelete={() => null}
-          onEdit={() => null}
-          onSelect={() => null}
+          onAdd={noop}
+          onDelete={noop}
+          onEdit={noop}
+          onSelect={noop}
         />
       </Suspense>
     </div>

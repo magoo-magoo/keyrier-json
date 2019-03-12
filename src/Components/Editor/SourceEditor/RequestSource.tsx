@@ -34,41 +34,7 @@ const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource }) => 
   const [error, setError] = useState(null as TypeError | null)
   const [hasBody, setHasBody] = useToggleState()
 
-  const submit = async () => {
-    setError(null)
-
-    const requestInit: RequestInit = {
-      method,
-      headers: headers.map(h => [h.key, h.value]),
-      body: hasBody ? body : null,
-    }
-
-    const request = new Request(url, requestInit)
-
-    logInfo('request', {
-      url: request.url,
-      method: request.method,
-      mode: request.mode,
-      body: request.body,
-      headers: Array.from((request.headers as any).entries()),
-      cache: request.cache,
-      credentials: request.credentials,
-      redirect: request.redirect,
-      referrer: request.referrer,
-    })
-
-    let json: string
-    try {
-      const result = await fetch(request)
-      json = await result.json()
-    } catch (error) {
-      logError('HttpRequestSource.submit', error)
-      setError(error)
-      return
-    }
-    setSource(customToString(json))
-    onRequestSucceed()
-  }
+  const submit = buildSubmit(setError, method, headers, hasBody, body, url, setSource, onRequestSucceed)
 
   return (
     <>
@@ -145,3 +111,46 @@ export default connect(
   null,
   { setSource: updateSource }
 )(withErrorBoundary(memo(HttpRequestSource)))
+
+const buildSubmit = (
+  setError: (e: TypeError | null) => void,
+  method: string,
+  headers: Array<{ key: string; value: string }>,
+  hasBody: boolean,
+  body: string,
+  url: string,
+  setSource: (src: string) => void,
+  onRequestSucceed: () => void
+) => {
+  return async () => {
+    setError(null)
+    const requestInit: RequestInit = {
+      method,
+      headers: headers.map(h => [h.key, h.value]),
+      body: hasBody ? body : null,
+    }
+    const request = new Request(url, requestInit)
+    logInfo('request', {
+      url: request.url,
+      method: request.method,
+      mode: request.mode,
+      body: request.body,
+      headers: Array.from((request.headers as any).entries()),
+      cache: request.cache,
+      credentials: request.credentials,
+      redirect: request.redirect,
+      referrer: request.referrer,
+    })
+    let json: string
+    try {
+      const result = await fetch(request)
+      json = await result.json()
+    } catch (error) {
+      logError('HttpRequestSource.submit', error)
+      setError(error)
+      return
+    }
+    setSource(customToString(json))
+    onRequestSucceed()
+  }
+}
