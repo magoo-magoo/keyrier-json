@@ -18,8 +18,7 @@ script:
   - npm test -- --coverage
   - npm run cypress:run
   - sonar-scanner
-  - npm version patch -m "release v%s [skip ci]"
-  - npm run build
+  - npm run build:ci
   - npm run pack:dockerelectron
 
 addons:
