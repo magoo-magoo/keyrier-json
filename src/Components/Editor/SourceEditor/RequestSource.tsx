@@ -5,7 +5,7 @@ import { updateSource } from '../../../Actions/actions'
 import { customToString } from '../../../helpers/string'
 import { RenderHeaderInput } from './RequestHeader'
 import { useState, memo } from 'react'
-import { Alert, FormGroup, Form, Button } from '../../Deferred/DeferredReactstrap'
+import { Alert, FormGroup, Form, Button } from 'reactstrap'
 import { useToggleState, useChangeEventState } from '../../../Hooks/hooks'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 

@@ -5,7 +5,7 @@ import OutputTableView from './OutputTableView'
 import { toggleOutputTableModal, ToggleOutputTableModal } from '../../../Actions/actions'
 import { getisOutputTableModalOpen, getOutputObject } from '../../../Store/selectors'
 import { RootState } from '../../../State/State'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from '../../Deferred/DeferredReactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 

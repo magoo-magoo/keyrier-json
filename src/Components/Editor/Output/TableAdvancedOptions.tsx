@@ -7,14 +7,17 @@ import {
   UpdateTableGroupBy,
   updateTableGroupBy,
 } from '../../../Actions/actions'
-import { LoadableReactSelect } from '../../Deferred/DeferredReactSelect'
 import { itemType, RootState } from '../../../State/State'
 import { ValueType } from 'react-select/lib/types'
 import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
 import { useToggleState } from '../../../Hooks/hooks'
-import { Button, Collapse } from '../../Deferred/DeferredReactstrap'
-import { memo, useCallback } from 'react'
+import { Button, Collapse } from 'reactstrap'
+import { memo, useCallback, Suspense } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { lazy } from 'react'
+import { Loading } from '../../Deferred/Loading'
+
+export const ReactSelect = lazy(() => import(/* webpackChunkName: "react-select" */ 'react-select'))
 
 interface Props {
   data: itemType[]
@@ -84,15 +87,17 @@ const TableAdvancedOptions: React.FC<Props> = ({
           <Button color={'success'} onClick={handleExport}>
             Export to Excel (.xlsx)
           </Button>
-          <LoadableReactSelect
-            options={columnOptions}
-            value={displayedColumns.map(k => ({
-              value: k,
-              label: k,
-            }))}
-            isMulti={true}
-            onChange={handleColumnChange}
-          />
+          <Suspense fallback={<Loading componentName="ReactSelect" />}>
+            <ReactSelect
+              options={columnOptions}
+              value={displayedColumns.map(k => ({
+                value: k,
+                label: k,
+              }))}
+              isMulti={true}
+              onChange={handleColumnChange}
+            />
+          </Suspense>
         </Collapse>
       </div>
     </div>

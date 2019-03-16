@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button } from '../../Deferred/DeferredReactstrap'
+import { Button } from 'reactstrap'
 import { memo } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 

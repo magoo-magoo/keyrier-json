@@ -4,8 +4,6 @@ import lodash from 'lodash'
 import { toast } from 'react-toastify'
 import { prettyPrintBytes } from '../helpers/string'
 
-type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
-
 export const persistAppState = (appstate: AppState) => {
   persist('keyrier-json.app.state', appstate)
 }
@@ -14,15 +12,22 @@ export const persistUserSettings = (userSettings: UserSettingsState) => {
   persist('keyrier-json.user.settings', userSettings)
 }
 
-const persist = (key: StorageKey, value: any) => {
+export const getUserSettings = () => load<UserSettingsState>('keyrier-json.user.settings')
+export const getAppState = () => load<AppState>('keyrier-json.app.state')
+
+type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
+
+const persist = (key: StorageKey, value: object) => {
   const storage = getStorage()
-  if (storage) {
-    const toBeSaved = JSON.stringify(value)
-    try {
-      storage.setItem(key, toBeSaved)
-    } catch (error) {
-      toast.warn(`Error while saving ${key} to storage. size: ${prettyPrintBytes(toBeSaved.length)}`)
-    }
+  if (!storage) {
+    toast.warn("Browser does'nt support required storage")
+    return
+  }
+  const toBeSaved = JSON.stringify(value)
+  try {
+    storage.setItem(key, toBeSaved)
+  } catch (error) {
+    toast.warn(`Error while saving ${key} to storage. size: ${prettyPrintBytes(toBeSaved.length)}`)
   }
 }
 
@@ -45,7 +50,7 @@ const getDefault = (key: StorageKey) => {
   }
 }
 
-export function load<T extends UserSettingsState | AppState>(key: StorageKey) {
+const load = <T extends UserSettingsState | AppState>(key: StorageKey) => {
   let state = getDefault(key) as T
   try {
     const savedStateString = loadFromStorage(key)
@@ -64,5 +69,8 @@ const getStorage = () => {
   if (window.localStorage) {
     return window.localStorage
   }
-  return window.sessionStorage
+  if (window.sessionStorage) {
+    return window.sessionStorage
+  }
+  return null
 }

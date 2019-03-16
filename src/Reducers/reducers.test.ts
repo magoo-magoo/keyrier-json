@@ -97,7 +97,6 @@ describe('Reducers', () => {
     }
     const state: AppState = {
       output: {
-        text: '{}',
         obj: {},
         match: false,
         searchTerm: '',
@@ -119,7 +118,6 @@ describe('Reducers', () => {
       type: 'EVALUATE_CODE',
     })
 
-    expect(result.text).toEqual('"test"')
     expect(result.table.isArray).toEqual(false)
     expect(result.errorMessage).toBeUndefined()
   })

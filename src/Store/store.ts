@@ -1,11 +1,10 @@
 import { createStore, compose } from 'redux'
 import rootReducers from '../Reducers/reducers'
-import { AppState, UserSettingsState } from '../State/State'
-import { load, persistAppState, persistUserSettings } from './persistence'
+import { persistAppState, persistUserSettings, getAppState, getUserSettings } from './persistence'
 
 export const configureStore = () => {
-  const appState = load<AppState>('keyrier-json.app.state')
-  const userSettingsState = load<UserSettingsState>('keyrier-json.user.settings')
+  const appState = getAppState()
+  const userSettingsState = getUserSettings()
 
   const composeEnhancers =
     typeof window === 'object' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

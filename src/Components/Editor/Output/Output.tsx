@@ -13,7 +13,7 @@ import {
 } from '../../../Store/selectors'
 import JsonView from './JsonView'
 import { UpdateOutputTabSelection, updateOutputTabSelection } from '../../../Actions/actions'
-import { TabContent, TabPane, Alert, Badge } from '../../Deferred/DeferredReactstrap'
+import { TabContent, TabPane, Alert, Badge } from 'reactstrap'
 import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { prettyPrintBytes } from '../../../helpers/string'

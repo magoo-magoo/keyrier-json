@@ -1,7 +1,6 @@
-import { Loading } from './Loading'
-import * as Loadable from 'react-loadable'
+import { lazy } from 'react'
 
-const loadAceEditor = async () => {
+export const AceEditor = lazy(async () => {
   const aceEditor = await import(/* webpackChunkName: "react-ace" */ 'react-ace')
   await Promise.all([
     import(/* webpackChunkName: "brace/theme/monokai" */ 'brace/theme/monokai'),
@@ -15,9 +14,4 @@ const loadAceEditor = async () => {
     import(/* webpackChunkName: "brace/snippets/json" */ 'brace/snippets/json'),
   ])
   return aceEditor
-}
-
-export const AceEditor = Loadable({
-  loading: Loading('AceEditor'),
-  loader: loadAceEditor,
 })

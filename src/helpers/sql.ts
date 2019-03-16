@@ -16,18 +16,15 @@ export const computePath = (path: string[]) => {
 }
 
 const map = (v: object, fields: Field[]) => {
-  // tslint:disable-next-line:no-debugger
-  debugger
-  let mapped = v
-  if (fields[0].constructor !== nodes.Star) {
-    if (!Array.isArray(mapped)) {
-      mapped = mapObject(fields, mapped)
-    } else {
-      mapped = mapped.map(x => mapObject(fields, x))
-    }
+  if (fields[0].constructor === nodes.Star) {
+    return v
   }
 
-  return mapped
+  if (Array.isArray(v)) {
+    return v.map(x => mapObject(fields, x))
+  }
+
+  return mapObject(fields, v)
 }
 
 const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {

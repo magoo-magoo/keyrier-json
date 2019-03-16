@@ -28,7 +28,7 @@ import {
   FormGroup,
   Label,
   Input,
-} from '../../Deferred/DeferredReactstrap'
+} from 'reactstrap'
 import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { getSourceAutoFormat } from '../../../Store/selectors'

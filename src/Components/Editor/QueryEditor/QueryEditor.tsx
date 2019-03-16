@@ -6,7 +6,7 @@ import { RootState, QueryMode } from '../../../State/State'
 import { AceEditor } from '../../Deferred/DeferredAceEditor'
 import { getQueryText, getQueryMode } from '../../../Store/selectors'
 import { useToggleState } from '../../../Hooks/hooks'
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from '../../Deferred/DeferredReactstrap'
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 

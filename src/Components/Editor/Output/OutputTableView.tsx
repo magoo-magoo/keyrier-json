@@ -1,10 +1,7 @@
 import * as React from 'react'
 import { customToString, containsIgnoreCase } from '../../../helpers/string'
-import './OutputTable.css'
 import { connect } from 'react-redux'
 import TableAdvancedOptions from './TableAdvancedOptions'
-
-import { LoadableReactTable } from '../../Deferred/DeferredReactTable'
 import { Column, Filter, RowInfo } from 'react-table'
 import { itemType, RootState } from '../../../State/State'
 import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
@@ -12,7 +9,14 @@ import { useState, Suspense, lazy, memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
 import deepEqual from 'fast-deep-equal'
+
+import 'react-table/react-table.css'
+import './OutputTable.css'
+import { Loading } from '../../Deferred/Loading'
+import { arrayElementName } from '../../../models/array'
+
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
+const ReactTable = lazy(() => import(/* webpackChunkName: "react-table" */ 'react-table'))
 
 type Props = {
   data: ReadonlyArray<unknown>
@@ -39,14 +43,19 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
 
   const handleCloseDetail = useCallback(() => setDetailsCellValue(null), [setDetailsCellValue])
 
-  if (!data || !Array.isArray(data) || data.length === 0 || data.every(e => !e || Object.keys(e).length === 0)) {
+  if (
+    !data ||
+    !Array.isArray(data) ||
+    data.length === 0 ||
+    data.every(e => e === null || e === undefined || (typeof e === 'object' && Object.keys(e).length === 0))
+  ) {
     return <div />
   }
 
   const tableColumnConfig = displayedColumns.map<Column>(key => ({
     Aggregated: () => (row: any) => (row ? row.value : ''),
     Cell: (cellProps: any) => {
-      const cellContent = cellProps ? customToString(cellProps.value) : ''
+      const cellContent = cellProps !== null && cellProps !== undefined ? customToString(cellProps.value) : ''
       return cellContent
     },
     Header: key,
@@ -64,17 +73,21 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
       </div>
       <div className="row">
         <div className="col">
-          <LoadableReactTable
-            noDataText="FRACKING EMPTY!"
-            className="data-test-id-output-table -highlight"
-            data={data.map(e => (e ? e : {}))}
-            defaultPageSize={20}
-            columns={tableColumnConfig}
-            filterable={true}
-            pivotBy={groupBy}
-            defaultFilterMethod={defaultFilterMethod}
-            getTdProps={getTdProps}
-          />
+          <Suspense fallback={<Loading componentName="ReactTable" />}>
+            <ReactTable
+              noDataText="FRACKING EMPTY!"
+              className="data-test-id-output-table -highlight"
+              data={data.map(e =>
+                e !== null && e !== undefined ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {}
+              )}
+              defaultPageSize={20}
+              columns={tableColumnConfig}
+              filterable={true}
+              pivotBy={groupBy}
+              defaultFilterMethod={defaultFilterMethod}
+              getTdProps={getTdProps}
+            />
+          </Suspense>
         </div>
       </div>
       <div id="data-test-id-output-table-length" className="mx-3 align-items-center justify-content-end d-flex">
@@ -84,7 +97,7 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
         <ModalHeader>Details</ModalHeader>
         <ModalBody>
           {typeof detailsCellValue === 'object' ? (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading componentName="ReactJson" />}>
               <ReactJson
                 src={detailsCellValue ? detailsCellValue : {}}
                 name="data"

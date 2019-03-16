@@ -14,8 +14,7 @@ export type SourceState = DeepReadonly<{
 
 export type tabType = 'RawJson' | 'Table'
 
-export type OupoutState = Readonly<{
-  text: string
+export type OupoutState = DeepReadonly<{
   searchTerm: string
   match: boolean
   selectedTab: tabType
@@ -29,27 +28,26 @@ export type itemType = any
 
 export type QueryMode = 'Javascript' | 'SQL'
 
-export type OupoutTableState = Readonly<{
+export type OupoutTableState = DeepReadonly<{
   isArray: boolean
   isModalOpen: boolean
-  displayedColumns: string[]
-  columns: string[]
-  groupBy: string[]
+  displayedColumns: ReadonlyArray<string>
+  columns: ReadonlyArray<string>
+  groupBy: ReadonlyArray<string>
 }>
 
 export type UserSettingsState = DeepReadonly<{
   globalTheme: Theme | null
-  concurrentModeEnable: boolean
 }>
 
-export type AppState = Readonly<{
+export type AppState = DeepReadonly<{
   source: SourceState
   query: QueryState
   output: OupoutState
   error?: Error
 }>
 
-export type RootState = Readonly<{
+export type RootState = DeepReadonly<{
   app: AppState
   userSettings: UserSettingsState
 }>
@@ -65,7 +63,6 @@ export const emptyState: AppState = {
   query: { text: '', mode: 'Javascript' },
   output: {
     match: false,
-    text: '',
     obj: {},
     objSize: 2,
     searchTerm: '',

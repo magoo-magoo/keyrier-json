@@ -18,11 +18,17 @@ import {
 } from '../State/State'
 import { logError, logWarning } from '../helpers/logger'
 import { containsIgnoreCase } from '../helpers/string'
+import { arrayElementName } from '../models/array'
 
 export const rootReducer = (rootState: AppState = getInitialAppState(), action: Action): AppState => {
   if (action.type === 'CLEAR_EDITOR') {
     return emptyState
   }
+
+  if (!action.type) {
+    return rootState
+  }
+
   const newState = {
     ...rootState,
     query: query(rootState.query, action),
@@ -98,6 +104,7 @@ export const outputTable = (state: OupoutTableState, action: Action) => {
       return state
   }
 }
+
 interface Map<T> {
   [key: string]: T
 }
@@ -113,7 +120,6 @@ export const computeOutput = (
   if (text === null) {
     return {
       selectedTab: 'RawJson',
-      text: '',
       obj: null,
       objSize: 0,
       searchTerm: '',
@@ -130,7 +136,6 @@ export const computeOutput = (
   if (text instanceof Error) {
     return {
       selectedTab: 'RawJson',
-      text: '',
       obj: null,
       objSize: 0,
       searchTerm: '',
@@ -151,11 +156,10 @@ export const computeOutput = (
   if (Array.isArray(outputObject)) {
     const keyMap: Map<string> = {}
     outputObject
-      .filter(d => d)
-      .filter(d => typeof d === 'object')
+      .filter(d => d !== null && d !== undefined)
       .filter(d => !Object.is(d, {}))
       .filter(d => !Array.isArray(d))
-      .map(d => (d ? Object.keys(d) : []))
+      .map(d => (d ? (typeof d === 'object' ? Object.keys(d) : [arrayElementName]) : []))
       .forEach(keysToAdd => {
         keysToAdd.forEach(key => (keyMap[key] = key))
       })
@@ -175,7 +179,6 @@ export const computeOutput = (
   }
   return {
     selectedTab,
-    text,
     obj: outputObject,
     objSize: text ? text.length : 0,
     searchTerm: '',
@@ -201,6 +204,8 @@ export const output = (previousState: AppState, newState: AppState, action: Acti
       return previousState.source.text === newState.source.text && previousState.query.text === newState.query.text
         ? previousState.output
         : computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
+    case 'UPDATE_QUERY_MODE':
+      return computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
     case 'TOGGLE_OUTPUT_TABLE_MODAL':
       return {
         ...newState.output,

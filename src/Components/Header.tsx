@@ -18,7 +18,7 @@ import {
   NavItem,
   NavLink,
   Dropdown,
-} from './Deferred/DeferredReactstrap'
+} from 'reactstrap'
 import { withErrorBoundary } from './Common/ErrorBoundary'
 import { memo, useCallback } from 'react'
 
