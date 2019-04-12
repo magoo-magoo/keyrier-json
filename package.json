@@ -43,7 +43,7 @@
     "react-select": "2.4.2",
     "react-table": "6.9.2",
     "react-toastify": "5.0.1",
-    "reactstrap": "7.1.0",
+    "reactstrap": "8.0.0",
     "redux": "4.0.1",
     "sql-parser": "0.5.0",
     "utility-types": "3.5.0",
