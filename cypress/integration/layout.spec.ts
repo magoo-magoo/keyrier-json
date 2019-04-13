@@ -1,3 +1,5 @@
+/// <reference types="cypress"/>
+
 describe('Style and layout', () => {
   it('should be have a dark theme', () => {
     cy.visit('/')

@@ -103,14 +103,12 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
   )
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    errorMessage: getOutputErrorMessage(state),
-    isArray: getOutputIsArray(state),
-    activeTab: getOutputActiveTab(state),
-    objSize: getOutputObjectSize(state),
-  }
-}
+const mapStateToProps = (state: RootState) => ({
+  errorMessage: getOutputErrorMessage(state),
+  isArray: getOutputIsArray(state),
+  activeTab: getOutputActiveTab(state),
+  objSize: getOutputObjectSize(state),
+})
 
 export default connect(
   mapStateToProps,

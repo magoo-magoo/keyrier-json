@@ -1,3 +1,5 @@
+/// <reference types="cypress"/>
+
 describe('Table', () => {
   it('should display data as a table', () => {
     cy.visit('/')

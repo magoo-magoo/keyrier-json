@@ -1,43 +1,51 @@
 import * as React from 'react'
-import { logError, logInfo } from '../../../helpers/logger'
+import { logError } from '../../../helpers/logger'
 import { connect } from 'react-redux'
 import { updateSource } from '../../../Actions/actions'
 import { customToString } from '../../../helpers/string'
 import { RenderHeaderInput } from './RequestHeader'
-import { useState, memo } from 'react'
+import { useState, memo, useCallback } from 'react'
 import { Alert, FormGroup, Form, Button } from 'reactstrap'
 import { useToggleState, useChangeEventState } from '../../../Hooks/hooks'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
 interface Props {
-  onRequestSucceed: () => void
+  onFinish: () => void
   setSource: (src: string) => void
 }
 
-const displayError = (error: TypeError | null) => {
-  if (!error) {
-    return <></>
-  }
-  return (
-    <Alert color="danger">
-      Error: {error.message ? error.message : ''}
-      {error.stack ? error.stack : ''}
-    </Alert>
-  )
-}
-
-const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource }) => {
+const HttpRequestSource: React.FC<Props> = ({ onFinish, setSource }) => {
   const [method, setMethod] = useChangeEventState('GET')
   const [url, setUrl] = useChangeEventState('https://rickandmortyapi.com/api/character/')
   const [body, setBody] = useChangeEventState('')
-  const [headers, setHeaders] = useState([{ key: 'Accept', value: 'application/json' }])
+  const [headers, setHeaders] = useState([['Accept', 'application/json'] as [string, string]])
   const [error, setError] = useState(null as TypeError | null)
   const [hasBody, setHasBody] = useToggleState()
 
-  const submit = buildSubmit(setError, method, headers, hasBody, body, url, setSource, onRequestSucceed)
+  const submit = useCallback(async () => {
+    const requestInit: RequestInit = {
+      method,
+      headers,
+      body: hasBody ? body : null,
+    }
+    const request = new Request(url, requestInit)
+    setError(null)
+
+    let json: string
+    try {
+      const result = await fetch(request)
+      json = await result.json()
+    } catch (e) {
+      logError('HttpRequestSource.submit', e)
+      setError(e)
+      return
+    }
+    setSource(customToString(json))
+    onFinish()
+  }, [method, url, body, headers, hasBody, setError, setSource, onFinish])
 
   return (
-    <>
+    <div id="HttpRequestSource">
       <FormGroup>
         <label htmlFor="requestMethod">Method</label>
         <select
@@ -80,29 +88,50 @@ const HttpRequestSource: React.FC<Props> = ({ onRequestSucceed, setSource }) => 
       <Button
         outline={true}
         color="primary"
-        onClick={() => setHeaders([...headers, { key: `name-${headers.length + 1}`, value: 'value' }])}
+        onClick={() => setHeaders([...headers, [`name-${headers.length + 1}`, 'value']])}
       >
         Add header
       </Button>
       <br />
       <br />
-      {headers.map((header, index) => (
-        <RenderHeaderInput
-          header={header}
-          key={index}
-          id={index}
-          onChange={h => {
-            headers[index] = { ...h }
-            setHeaders([...headers])
-          }}
-          onRemove={() => setHeaders(headers.filter(h => h !== header))}
-        />
-      ))}
+      <HeaderList headers={headers} onChange={setHeaders} />
       <br />
       <Button block={true} color="primary" onClick={submit}>
         Submit
       </Button>
-      {displayError(error)}
+      {error && (
+        <Alert color="danger">
+          Error: {error.message ? error.message : ''}
+          {error.stack ? error.stack : ''}
+        </Alert>
+      )}
+    </div>
+  )
+}
+
+type HeaderListProps = {
+  headers: Array<[string, string]>
+  onChange: (headers: Array<[string, string]>) => void
+}
+
+const HeaderList: React.FC<HeaderListProps> = ({ headers, onChange }) => {
+  const onRemove = React.useCallback((header: [string, string]) => onChange(headers.filter(h => h !== header)), [
+    headers,
+    onChange,
+  ])
+  const onChangeCallback = React.useCallback(
+    (header: [string, string]) => {
+      const index = headers.indexOf(header)
+      headers[index] = { ...header }
+      onChange([...headers])
+    },
+    [headers, onChange]
+  )
+  return (
+    <>
+      {headers.map((header, index) => (
+        <RenderHeaderInput header={header} key={index} id={index} onChange={onChangeCallback} onRemove={onRemove} />
+      ))}
     </>
   )
 }
@@ -111,46 +140,3 @@ export default connect(
   null,
   { setSource: updateSource }
 )(withErrorBoundary(memo(HttpRequestSource)))
-
-const buildSubmit = (
-  setError: (e: TypeError | null) => void,
-  method: string,
-  headers: Array<{ key: string; value: string }>,
-  hasBody: boolean,
-  body: string,
-  url: string,
-  setSource: (src: string) => void,
-  onRequestSucceed: () => void
-) => {
-  return async () => {
-    setError(null)
-    const requestInit: RequestInit = {
-      method,
-      headers: headers.map(h => [h.key, h.value]),
-      body: hasBody ? body : null,
-    }
-    const request = new Request(url, requestInit)
-    logInfo('request', {
-      url: request.url,
-      method: request.method,
-      mode: request.mode,
-      body: request.body,
-      headers: Array.from((request.headers as any).entries()),
-      cache: request.cache,
-      credentials: request.credentials,
-      redirect: request.redirect,
-      referrer: request.referrer,
-    })
-    let json: string
-    try {
-      const result = await fetch(request)
-      json = await result.json()
-    } catch (error) {
-      logError('HttpRequestSource.submit', error)
-      setError(error)
-      return
-    }
-    setSource(customToString(json))
-    onRequestSucceed()
-  }
-}

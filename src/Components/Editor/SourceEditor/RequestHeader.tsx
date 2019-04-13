@@ -1,48 +1,49 @@
 import * as React from 'react'
 import { Button } from 'reactstrap'
-import { memo } from 'react'
+import { memo, useCallback, ChangeEvent, FC } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
 
-interface Header {
-  key: string
-  value: string
-}
-
 interface Props {
-  header: Header
+  header: [string, string]
   id: number
-  onChange: (h: Header) => void
-  onRemove: () => void
+  onChange: (h: [string, string]) => void
+  onRemove: (h: [string, string]) => void
 }
 
-export const RenderHeaderInput: React.FC<Props> = memo(
+export const RenderHeaderInput: FC<Props> = memo(
   withErrorBoundary(({ header, onRemove, onChange, id }) => {
+    const [key, value] = header
+
+    const onKeyChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([e.target.value, value]), [onChange])
+    const onValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([key, e.target.value]), [onChange])
+    const onRemoveCallback = useCallback(() => onRemove(header), [onRemove])
+
     return (
-      <div className="row align-items-center" key={id}>
+      <div className="row align-items-center">
         <div className="col-sm-5">
           <input
             className="form-control-lg form-control"
-            value={header.key}
+            value={key}
             id={`headerName${id}`}
             type="text"
             name={`headerName${id}`}
             placeholder="enter an name"
-            onChange={e => onChange({ ...header, key: e.target.value })}
+            onChange={onKeyChange}
           />
         </div>
         <div className="col-sm-5">
           <input
             className="form-control-lg form-control"
-            value={header.value}
+            value={value}
             type="text"
             name={`headerValue${id}`}
             id={`headerValue${id}`}
             placeholder="enter an value"
-            onChange={e => onChange({ ...header, value: e.target.value })}
+            onChange={onValueChange}
           />
         </div>
         <div className="col-sm-2">
-          <Button outline={true} color="danger" onClick={onRemove}>
+          <Button outline={true} color="danger" onClick={onRemoveCallback}>
             remove
           </Button>
         </div>

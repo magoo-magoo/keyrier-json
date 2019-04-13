@@ -1,3 +1,5 @@
+/// <reference types="cypress"/>
+
 describe('Minimum valuable product', () => {
   it('should be a simple JSON object', () => {
     cy.visit('/')

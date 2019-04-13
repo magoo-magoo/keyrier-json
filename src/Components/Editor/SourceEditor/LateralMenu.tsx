@@ -11,7 +11,6 @@ import {
   UpdateAutoFormatSource,
 } from '../../../Actions/actions'
 import HttpRequestSource from './RequestSource'
-import './ImportMenu.css'
 import { logInfo } from '../../../helpers/logger'
 import { useToggleState } from '../../../Hooks/hooks'
 import {
@@ -70,12 +69,12 @@ const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, au
     <>
       <ButtonGroup vertical={true}>
         <ButtonDropdown isOpen={dropdownIsOpen} toggle={toggleDropdown}>
-          <DropdownToggle caret={true} color="primary">
+          <DropdownToggle id="import-menu-button" caret={true} color="primary">
             Import
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem toggle={false}>
-              <label>
+              <label id="import-file">
                 Browse JSON file...
                 <input
                   type="file"
@@ -86,7 +85,7 @@ const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, au
                 />
               </label>
             </DropdownItem>
-            <DropdownItem onClick={toggleModal}>
+            <DropdownItem id="http-request" onClick={toggleModal}>
               <label>HTTP request</label>
             </DropdownItem>
             <DropdownItem onClick={onReset}>
@@ -107,7 +106,7 @@ const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, au
       <Modal id="requestModal" role="dialog" size="lg" isOpen={modalIsOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Import JSON from an HTTP request</ModalHeader>
         <ModalBody>
-          <HttpRequestSource onRequestSucceed={toggleModal} />
+          <HttpRequestSource onFinish={toggleModal} />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleModal}>

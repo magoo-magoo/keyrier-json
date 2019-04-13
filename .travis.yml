@@ -12,14 +12,14 @@ cache:
     - .cache/electron-builder
 
 install:
-  - npm ci
+  - yarn --frozen-lockfile
 
 script:
-  - npm test -- --coverage
-  - npm run cypress:run
+  - yarn test --coverage
+  - yarn cypress:run
   - sonar-scanner
-  - npm run build:ci
-  - npm run pack:dockerelectron
+  - yarn build:ci
+  - yarn pack:dockerelectron
 
 addons:
   sonarcloud:

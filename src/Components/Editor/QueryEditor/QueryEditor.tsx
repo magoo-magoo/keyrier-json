@@ -9,21 +9,26 @@ import { useToggleState } from '../../../Hooks/hooks'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import { memo, useCallback } from 'react'
 import { withErrorBoundary } from '../../Common/ErrorBoundary'
-
-// import { unstable_runWithPriority } from 'scheduler'
+import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
 
 interface Props {
-  onChange: (e: string) => UpdateQueryAction
+  setQuery: (e: string) => UpdateQueryAction
   setQueryMode: (e: QueryMode) => UpdateQueryMode
   queryText: string
   mode: QueryMode
 }
 
-const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode }) => {
+const QueryEditor: React.FC<Props> = ({ setQuery, queryText, mode, setQueryMode }) => {
   const [modeOpen, switchModeOpen] = useToggleState()
 
   const setJsMode = useCallback(() => setQueryMode('Javascript'), [setQueryMode])
   const setSqlMode = useCallback(() => setQueryMode('SQL'), [setQueryMode])
+  const onChange = useCallback(
+    (a: string) => {
+      unstable_runWithPriority(unstable_IdlePriority, () => setQuery(a))
+    },
+    [setQuery]
+  )
 
   return (
     <>
@@ -74,7 +79,7 @@ const QueryEditor: React.FC<Props> = ({ onChange, queryText, mode, setQueryMode 
             width={'100%'}
             enableBasicAutocompletion={true}
             enableLiveAutocompletion={true}
-            debounceChangePeriod={1250}
+            debounceChangePeriod={250}
           />
         </div>
       </div>
@@ -89,5 +94,5 @@ const mapStateToProps = (state: RootState) => ({
 
 export default connect(
   mapStateToProps,
-  { onChange: updateQuery, setQueryMode: updateQueryMode }
+  { setQuery: updateQuery, setQueryMode: updateQueryMode }
 )(withErrorBoundary(memo(QueryEditor)))

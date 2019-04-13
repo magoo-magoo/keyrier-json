@@ -25,11 +25,10 @@ type Props = {
 }
 
 export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, groupBy }) => {
-  const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | never)
+  const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | null)
 
   const getTdProps = React.useCallback(
-    // tslint:disable-next-line:variable-name
-    (_state: any, rowInfo?: RowInfo, column?: Column | undefined, _instance?: any) => ({
+    (_: any, rowInfo?: RowInfo, column?: Column | undefined, __?: any) => ({
       onClick: (e: React.MouseEvent, original: () => void) => {
         if (rowInfo && rowInfo.aggregated) {
           original()
