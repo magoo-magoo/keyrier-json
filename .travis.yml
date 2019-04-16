@@ -10,6 +10,7 @@ cache:
     - node_modules
     - .cache/electron
     - .cache/electron-builder
+    - .cache/Cypress
 
 install:
   - yarn --frozen-lockfile
