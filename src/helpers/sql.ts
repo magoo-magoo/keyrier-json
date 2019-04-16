@@ -42,6 +42,7 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
   if (fromPath && fromPath.length > 0) {
     result = result.get(fromPath)
   }
+  sourceDataObject = result.value()
   if (_.isArray(sourceDataObject)) {
     return result
       .filter(v => {
@@ -56,7 +57,7 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
       .map(v => map(v, sqlTree.fields))
       .value()
   } else {
-    return map(result.value(), sqlTree.fields)
+    return map(sourceDataObject, sqlTree.fields)
   }
 }
 

@@ -167,4 +167,31 @@ fdescribe('code helpers', () => {
       },
     ])
   })
+  it('should select correct path for array field with where clause', () => {
+    const result = codeEvaluation(
+      `
+      {
+        "arrayField": [
+          {
+            "field1": 42,
+            "field2": "foo"
+          },
+          {
+            "field1": 0,
+            "field2": "bar",
+            "field3": "tesla"
+          },
+          {
+            "field1": 66,
+            "field2": "test"
+          }
+        ]
+      }
+      `,
+      `select field1, field2 from data.arrayField where field1 = 42`,
+      'SQL'
+    )
+
+    expect(JSON.parse(result as any)).toEqual([{ field1: 42, field2: 'foo' }])
+  })
 })
