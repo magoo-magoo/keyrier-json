@@ -39,7 +39,7 @@ declare module 'sql-parser' {
   }
 
   export interface Value {
-    value: string
+    value: string | number
     values: string[]
     value2: string
   }
@@ -50,7 +50,7 @@ declare module 'sql-parser' {
   }
 
   export interface Op {
-    value: string | number | null
+    value: string | number | Value[] | null
     values: string[]
     operation: string | null
     left: Op
@@ -65,10 +65,15 @@ declare module 'sql-parser' {
     conditions: Conditions
   }
 
+  export interface Limit {
+    value: Value
+  }
+
   export interface SQLTree {
     source: Source
-    where: Where
+    where?: Where | null
     fields: Field[]
+    limit: Limit | null
   }
 
   export class nodes {

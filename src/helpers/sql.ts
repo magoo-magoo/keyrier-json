@@ -55,6 +55,9 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
         return compareOperands(operation, leftValue, rightValue, v)
       })
       .map(v => map(v, sqlTree.fields))
+      .take(
+        sqlTree.limit && typeof sqlTree.limit.value.value === 'number' ? sqlTree.limit.value.value : 999999999999999
+      )
       .value()
   } else {
     return map(sourceDataObject, sqlTree.fields)
@@ -80,27 +83,25 @@ export const sqlEvaluation = (sourceString: string, queryString: string) => {
 }
 
 const compareOperands = (operation: string | null, left: Op, right: Op, value: object): boolean => {
-  if (operation) {
-    if (operation.toLowerCase() === 'or') {
-      return (
-        compareOperands(left.operation, left.left, left.right, value) ||
-        compareOperands(right.operation, right.left, right.right, value)
-      )
-    }
-
-    if (operation.toLowerCase() === 'and') {
-      return (
-        compareOperands(left.operation, left.left, left.right, value) &&
-        compareOperands(right.operation, right.left, right.right, value)
-      )
-    }
-  }
-
-  if (!left.value) {
+  if (!operation) {
     return false
   }
 
-  if (!operation) {
+  if (operation.toLowerCase() === 'or') {
+    return (
+      compareOperands(left.operation, left.left, left.right, value) ||
+      compareOperands(right.operation, right.left, right.right, value)
+    )
+  }
+
+  if (operation.toLowerCase() === 'and') {
+    return (
+      compareOperands(left.operation, left.left, left.right, value) &&
+      compareOperands(right.operation, right.left, right.right, value)
+    )
+  }
+
+  if (!left.value) {
     return false
   }
 
@@ -122,6 +123,22 @@ const compareOperands = (operation: string | null, left: Op, right: Op, value: o
     return true
   }
 
+  if (operation.toLocaleLowerCase() === 'like' && typeof right.value === 'string' && typeof leftValue === 'string') {
+    if (right.value.startsWith('%') && right.value.endsWith('%')) {
+      if (leftValue.includes(right.value.substring(1, right.value.length - 1))) {
+        return true
+      }
+    } else if (right.value.startsWith('%')) {
+      if (leftValue.endsWith(right.value.substring(right.value.indexOf('%') + 1))) {
+        return true
+      }
+    } else if (right.value.endsWith('%')) {
+      if (leftValue.startsWith(right.value.substring(0, right.value.indexOf('%')))) {
+        return true
+      }
+    }
+  }
+
   if (right.value) {
     if (operation === '>' && leftValue > right.value) {
       return true
@@ -137,8 +154,17 @@ const compareOperands = (operation: string | null, left: Op, right: Op, value: o
     }
   }
 
+  if (
+    operation.toLowerCase() === 'in' &&
+    Array.isArray(right.value) &&
+    right.value.filter(x => x.value === leftValue).length > 0
+  ) {
+    return true
+  }
+
   return false
 }
+
 const mapObject = (fields: Field[], mapped: object) => {
   const temp: {
     [key: string]: any

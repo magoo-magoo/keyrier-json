@@ -1,7 +1,7 @@
 import { codeEvaluation } from './code'
 import { computePath } from './sql'
 
-fdescribe('code helpers', () => {
+describe('code helpers', () => {
   it('should eval simple object', () => {
     const result = codeEvaluation('{"a": 1}', 'data.a', 'Javascript')
     expect(result).toEqual('1')
@@ -60,6 +60,23 @@ fdescribe('code helpers', () => {
     expect(JSON.parse(result as any)).toEqual([{ id: 1 }, { id: 2 }])
   })
 
+  it('should return 2 items array when limit is 2', () => {
+    const result = codeEvaluation(
+      '[{"id": 1, "field": 42}, {"id": 2, "foo": "bar"},  {"id": 3, "field": "value"}]',
+      'select id from data limit 2',
+      'SQL'
+    )
+    expect(JSON.parse(result as any)).toEqual([{ id: 1 }, { id: 2 }])
+  })
+  it('should returns filtered results with where clause - in - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"id": 1, "field": 42}, {"id": 2, "foo": "bar"},  {"id": 3, "field": "value"}]',
+      'select id from data where id in (1, 3)',
+      'SQL'
+    )
+    expect(JSON.parse(result as any)).toEqual([{ id: 1 }, { id: 3 }])
+  })
+
   it('should rename column whith As keyword correct column SQL query', () => {
     const result = codeEvaluation(
       '{"age": 1, "name": "John Doe", "c": 999}',
@@ -83,6 +100,44 @@ fdescribe('code helpers', () => {
     const result = codeEvaluation(
       '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
       'select name as fullName from data where age = 42',
+      'SQL'
+    )
+    expect(result).toBeDefined()
+    expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }])
+  })
+
+  it('should returns filtered results with where clause- like operator - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+      'select name as fullName from data where name like "Joh%"',
+      'SQL'
+    )
+    expect(result).toBeDefined()
+    expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }])
+  })
+  it('should returns filtered results with where clause- like operator - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+      'select name as fullName from data where name like "%y%"',
+      'SQL'
+    )
+    expect(result).toBeDefined()
+    expect(JSON.parse(result as any)).toEqual([{ fullName: 'Danny de Vito' }])
+  })
+  it('should returns filtered results with where clause- like operator - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+      'select name as fullName from data where name like "%ohn%"',
+      'SQL'
+    )
+    expect(result).toBeDefined()
+    expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }])
+  })
+
+  it('should returns filtered results with where clause- like operator - SQL query', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+      'select name as fullName from data where name like "%oe"',
       'SQL'
     )
     expect(result).toBeDefined()
