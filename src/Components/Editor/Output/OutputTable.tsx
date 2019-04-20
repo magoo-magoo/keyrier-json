@@ -1,20 +1,20 @@
 import * as React from 'react'
-import './OutputTable.css'
+import './OutputTable.scss'
 import { connect } from 'react-redux'
 import OutputTableView from './OutputTableView'
-import { toggleOutputTableModal, ToggleOutputTableModal } from '../../../Actions/actions'
-import { getisOutputTableModalOpen, getOutputObject } from '../../../Store/selectors'
-import { RootState } from '../../../State/State'
+import { toggleOutputTableModal } from 'Actions/actions'
+import { getisOutputTableModalOpen, getOutputObject } from 'Store/selectors'
+import { RootState } from 'State/State'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
-import { memo } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { memo, FC } from 'react'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 
 interface Props {
-  toggleModal: () => ToggleOutputTableModal
+  toggleModal: typeof toggleOutputTableModal
   isModalOpen: boolean
 }
 
-const OutputTable: React.FC<Props> = ({ toggleModal, isModalOpen }) => {
+const OutputTable: FC<Props> = ({ toggleModal, isModalOpen }) => {
   return (
     <div className="output-table">
       <Modal isOpen={isModalOpen} toggle={toggleModal} className="mw-100">

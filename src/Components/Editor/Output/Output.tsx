@@ -1,28 +1,23 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import OutputTable from './OutputTable'
-import { RootState, tabType } from '../../../State/State'
+import { RootState, tabType } from 'State/State'
 
 import classNames from 'classnames'
 
-import {
-  getOutputErrorMessage,
-  getOutputIsArray,
-  getOutputActiveTab,
-  getOutputObjectSize,
-} from '../../../Store/selectors'
+import { getOutputErrorMessage, getOutputIsArray, getOutputActiveTab, getOutputObjectSize } from 'Store/selectors'
 import JsonView from './JsonView'
-import { UpdateOutputTabSelection, updateOutputTabSelection } from '../../../Actions/actions'
+import { updateOutputTabSelection } from 'Actions/actions'
 import { TabContent, TabPane, Alert, Badge } from 'reactstrap'
-import { memo, useCallback } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
-import { prettyPrintBytes } from '../../../helpers/string'
+import { memo, useCallback, FC } from 'react'
+import { prettyPrintBytes } from 'helpers/string'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 
 interface Props {
   isArray: boolean
   activeTab: tabType
   objSize: number
-  setActiveTab: (v: tabType) => UpdateOutputTabSelection
+  setActiveTab: typeof updateOutputTabSelection
   errorMessage?: string
 }
 
@@ -31,7 +26,7 @@ const pointer = {
   fontSize: 'large',
 }
 
-const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, objSize }) => {
+const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, objSize }) => {
   const handleActiveTable = useCallback(() => setActiveTab('Table'), [setActiveTab])
   const handleActiveRawJson = useCallback(() => setActiveTab('RawJson'), [setActiveTab])
   return (
@@ -53,7 +48,7 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
           <div className="col">
             <ul className="nav nav-tabs">
               <li className="nav-item">
-                <a
+                <button
                   className={classNames({
                     active: activeTab === 'RawJson',
                     'nav-link': true,
@@ -62,10 +57,10 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
                   style={pointer}
                 >
                   Raw JSON view
-                </a>
+                </button>
               </li>
               <li className="nav-item" hidden={!isArray}>
-                <a
+                <button
                   className={classNames({
                     active: activeTab === 'Table',
                     'nav-link': true,
@@ -74,7 +69,7 @@ const Output: React.FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTa
                   style={pointer}
                 >
                   Table view
-                </a>
+                </button>
               </li>
             </ul>
           </div>

@@ -1,19 +1,19 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { UpdateSource, updateSource } from '../../../Actions/actions'
-import { RootState } from '../../../State/State'
+import { updateSource } from 'Actions/actions'
+import { RootState } from 'State/State'
 import ImportMenu from './LateralMenu'
-import { AceEditor } from '../../Deferred/DeferredAceEditor'
-import { getSourceText } from '../../../Store/selectors'
-import { memo } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { AceEditor } from 'Components/Deferred/DeferredAceEditor'
+import { getSourceText } from 'Store/selectors'
+import { memo, FC } from 'react'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 
 interface Props {
-  onChange: (val: string) => UpdateSource
+  onChange: typeof updateSource
   sourceText: string
 }
 
-const SourceEditor: React.FC<Props> = ({ onChange, sourceText }) => (
+const SourceEditor: FC<Props> = ({ onChange, sourceText }) => (
   <>
     <div className="row">
       <div className="col-sm-10 offset-sm-2">

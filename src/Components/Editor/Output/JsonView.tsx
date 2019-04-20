@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { getOutputObject, getOutputSearchTerm, getOutputSearchMatch } from '../../../Store/selectors'
-import { RootState } from '../../../State/State'
+import { getOutputObject, getOutputSearchTerm, getOutputSearchMatch } from 'Store/selectors'
+import { RootState } from 'State/State'
 import { connect } from 'react-redux'
 import { DebounceInput } from 'react-debounce-input'
-import { updateSearchTerm, UpdateSearchTerm } from '../../../Actions/actions'
-import { Suspense, lazy, memo, useCallback } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { updateSearchTerm } from 'Actions/actions'
+import { Suspense, lazy, memo, useCallback, FC } from 'react'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 import deepEqual from 'fast-deep-equal'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
@@ -13,14 +13,14 @@ interface Props {
   src: object | null
   searchTerm: string | undefined
   match: boolean
-  onSearchChange: (value: string) => UpdateSearchTerm
+  onSearchChange: typeof updateSearchTerm
 }
 
 const errorStyles = { border: '3px solid red' }
 
 const noop = () => null
 
-const JsonView: React.FC<Props> = ({ src, searchTerm, onSearchChange, match }) => {
+const JsonView: FC<Props> = ({ src, searchTerm, onSearchChange, match }) => {
   const handlechange = useCallback(e => onSearchChange(e.target.value), [onSearchChange])
   return (
     <div id="jsonView">

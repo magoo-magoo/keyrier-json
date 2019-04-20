@@ -1,18 +1,9 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import {
-  UpdateSource,
-  updateSource,
-  ResetEditor,
-  resetEditor,
-  ClearEditor,
-  clearEditor,
-  updateAutoFormatSource,
-  UpdateAutoFormatSource,
-} from '../../../Actions/actions'
+import { updateSource, resetEditor, clearEditor, updateAutoFormatSource } from 'Actions/actions'
 import HttpRequestSource from './RequestSource'
-import { logInfo } from '../../../helpers/logger'
-import { useToggleState } from '../../../Hooks/hooks'
+import { logInfo } from 'helpers/logger'
+import { useToggleState } from 'Hooks/hooks'
 import {
   ButtonDropdown,
   DropdownToggle,
@@ -28,25 +19,25 @@ import {
   Label,
   Input,
 } from 'reactstrap'
-import { memo, useCallback } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
-import { getSourceAutoFormat } from '../../../Store/selectors'
-import { RootState } from '../../../State/State'
+import { memo, useCallback, FC, ChangeEvent } from 'react'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { getSourceAutoFormat } from 'Store/selectors'
+import { RootState } from 'State/State'
 
 interface Props {
-  onFileContentReady: (fileContent: string) => UpdateSource
-  changeAutoFormat: (active: boolean) => UpdateAutoFormatSource
-  onReset: () => ResetEditor
-  onClear: () => ClearEditor
+  onFileContentReady: typeof updateSource
+  changeAutoFormat: typeof updateAutoFormatSource
+  onReset: typeof resetEditor
+  onClear: typeof clearEditor
   autoFormat: boolean
 }
 
-const LateralMenu: React.FC<Props> = ({ onReset, onFileContentReady, onClear, autoFormat, changeAutoFormat }) => {
+const LateralMenu: FC<Props> = ({ onReset, onFileContentReady, onClear, autoFormat, changeAutoFormat }) => {
   const [dropdownIsOpen, toggleDropdown] = useToggleState()
   const [modalIsOpen, toggleModal] = useToggleState()
 
   const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       logInfo('onFileChange')
       toggleDropdown()
       if (e.target.files && e.target.files.length > 0) {

@@ -1,8 +1,8 @@
-import { QueryMode } from '../State/State'
+import { QueryMode } from 'State/State'
 import { sqlEvaluation } from './sql'
 import lodash from 'lodash'
 
-export const codeEvaluation = (sourceString: string, queryString: string, mode: QueryMode): string | null | Error => {
+export const codeEvaluation = (sourceString: string, queryString: string, mode: QueryMode) => {
   if (mode === 'Javascript') {
     return jsEvaluation(sourceString, queryString)
   } else if (mode === 'SQL') {
@@ -12,7 +12,7 @@ export const codeEvaluation = (sourceString: string, queryString: string, mode: 
   return new Error('unsupported mode')
 }
 
-const jsEvaluation = (sourceString: string, queryString: string) => {
+const jsEvaluation = (sourceString: string, queryString: string): null | string | Error => {
   if (!sourceString || sourceString.trim() === '') {
     return null
   }
@@ -26,8 +26,9 @@ const jsEvaluation = (sourceString: string, queryString: string) => {
     const code = `
       
         const data = eval(${sourceString})
-        JSON.stringify(${queryString})
+        JSON.stringify(${queryString}) 
       `
+    // eslint-disable-next-line
     const evaluatedQuery = eval.apply(null, [code]) // DANGEROUS
     const type = typeof evaluatedQuery
     if (type !== 'string') {

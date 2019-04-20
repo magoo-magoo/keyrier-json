@@ -1,35 +1,34 @@
 import * as React from 'react'
-import { customToString, containsIgnoreCase } from '../../../helpers/string'
+import { customToString, containsIgnoreCase } from 'helpers/string'
 import { connect } from 'react-redux'
 import TableAdvancedOptions from './TableAdvancedOptions'
 import { Column, Filter, RowInfo } from 'react-table'
-import { itemType, RootState } from '../../../State/State'
-import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
-import { useState, Suspense, lazy, memo, useCallback } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { itemType, RootState } from 'State/State'
+import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from 'Store/selectors'
+import { useState, Suspense, lazy, memo, useCallback, FC } from 'react'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
 import deepEqual from 'fast-deep-equal'
 
 import 'react-table/react-table.css'
-import './OutputTable.css'
-import { Loading } from '../../Deferred/Loading'
-import { arrayElementName } from '../../../models/array'
+import { Loading } from 'Components/Deferred/Loading'
+import { arrayElementName } from 'models/array'
 
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 const ReactTable = lazy(() => import(/* webpackChunkName: "react-table" */ 'react-table'))
 
 type Props = {
-  data: ReadonlyArray<unknown>
+  data: unknown[]
   displayedColumns: string[]
   groupBy?: string[]
 }
 
-export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, groupBy }) => {
+export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) => {
   const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | null)
 
-  const getTdProps = React.useCallback(
+  const getTdProps = useCallback(
     (_: any, rowInfo?: RowInfo, column?: Column | undefined, __?: any) => ({
-      onClick: (e: React.MouseEvent, original: () => void) => {
+      onClick: (e: MouseEvent, original: () => void) => {
         if (rowInfo && rowInfo.aggregated) {
           original()
         } else if (e && column && column.id && rowInfo && rowInfo.row) {
@@ -51,17 +50,20 @@ export const OutputTableView: React.FC<Props> = ({ data, displayedColumns, group
     return <div />
   }
 
-  const tableColumnConfig = displayedColumns.map<Column>(key => ({
-    Aggregated: () => (row: any) => (row ? row.value : ''),
-    Cell: (cellProps: any) => {
-      const cellContent = cellProps !== null && cellProps !== undefined ? customToString(cellProps.value) : ''
-      return cellContent
-    },
-    Header: key,
-    headerClassName: 'data-test-id-column-name',
-    accessor: key,
-    className: 'text-center btn btn-link data-test-id-cell-data',
-  }))
+  const tableColumnConfig = displayedColumns.map(
+    key =>
+      ({
+        Aggregated: () => (row: any) => (row ? row.value : ''),
+        Cell: (cellProps: any) => {
+          const cellContent = cellProps !== null && cellProps !== undefined ? customToString(cellProps.value) : ''
+          return cellContent
+        },
+        Header: key,
+        headerClassName: 'data-test-id-column-name',
+        accessor: key,
+        className: 'text-center btn btn-link data-test-id-cell-data',
+      } as const)
+  )
 
   return (
     <>

@@ -1,24 +1,24 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 
-import { UpdateQueryAction, updateQuery, updateQueryMode, UpdateQueryMode } from '../../../Actions/actions'
-import { RootState, QueryMode } from '../../../State/State'
-import { AceEditor } from '../../Deferred/DeferredAceEditor'
-import { getQueryText, getQueryMode } from '../../../Store/selectors'
-import { useToggleState } from '../../../Hooks/hooks'
+import { updateQuery, updateQueryMode } from 'Actions/actions'
+import { RootState, QueryMode } from 'State/State'
+import { AceEditor } from 'Components/Deferred/DeferredAceEditor'
+import { getQueryText, getQueryMode } from 'Store/selectors'
+import { useToggleState } from 'Hooks/hooks'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
-import { memo, useCallback } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { memo, useCallback, FC } from 'react'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
 
 interface Props {
-  setQuery: (e: string) => UpdateQueryAction
-  setQueryMode: (e: QueryMode) => UpdateQueryMode
+  setQuery: typeof updateQuery
+  setQueryMode: typeof updateQueryMode
   queryText: string
   mode: QueryMode
 }
 
-const QueryEditor: React.FC<Props> = ({ setQuery, queryText, mode, setQueryMode }) => {
+const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, setQueryMode }) => {
   const [modeOpen, switchModeOpen] = useToggleState()
 
   const setJsMode = useCallback(() => setQueryMode('Javascript'), [setQueryMode])

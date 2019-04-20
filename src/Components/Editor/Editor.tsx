@@ -1,6 +1,5 @@
 import * as React from 'react'
-import './Editor.css'
-import { withErrorBoundary } from '../Common/ErrorBoundary'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 import { lazy, Suspense } from 'react'
 const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ './SourceEditor/SourceEditor'))
 const Output = lazy(() => import(/* webpackChunkName: "Output" */ './Output/Output'))

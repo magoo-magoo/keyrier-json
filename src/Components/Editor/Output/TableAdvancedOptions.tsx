@@ -1,21 +1,15 @@
 import * as React from 'react'
-import './OutputTable.css'
 import { connect } from 'react-redux'
-import {
-  updateTableColumns,
-  UpdateTableColumns,
-  UpdateTableGroupBy,
-  updateTableGroupBy,
-} from '../../../Actions/actions'
-import { itemType, RootState } from '../../../State/State'
+import { updateTableColumns, updateTableGroupBy } from 'Actions/actions'
+import { itemType, RootState } from 'State/State'
 import { ValueType } from 'react-select/lib/types'
-import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from '../../../Store/selectors'
-import { useToggleState } from '../../../Hooks/hooks'
+import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from 'Store/selectors'
+import { useToggleState } from 'Hooks/hooks'
 import { Button, Collapse } from 'reactstrap'
-import { memo, useCallback, Suspense } from 'react'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
-import { lazy } from 'react'
-import { Loading } from '../../Deferred/Loading'
+import { memo, useCallback, Suspense, ChangeEvent } from 'react'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { lazy, FC } from 'react'
+import { Loading } from 'Components/Deferred/Loading'
 
 export const ReactSelect = lazy(() => import(/* webpackChunkName: "react-select" */ 'react-select'))
 
@@ -24,17 +18,11 @@ interface Props {
   displayedColumns: string[]
   groupBy: string[]
   columns: string[]
-  onColumnsChange: (v: string[]) => UpdateTableColumns
-  setTableGroupBy: (v: string[]) => UpdateTableGroupBy
+  onColumnsChange: typeof updateTableColumns
+  setTableGroupBy: typeof updateTableGroupBy
 }
 
-const TableAdvancedOptions: React.FC<Props> = ({
-  onColumnsChange,
-  columns,
-  setTableGroupBy,
-  data,
-  displayedColumns,
-}) => {
+const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGroupBy, data, displayedColumns }) => {
   const [optionsCollapsed, switchOptionsCollapsed] = useToggleState()
 
   const handleColumnChange = useCallback(
@@ -55,10 +43,9 @@ const TableAdvancedOptions: React.FC<Props> = ({
     xlsx.writeFile(workBook, 'export.xlsx')
   }, [data])
 
-  const handleGroupChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => setTableGroupBy([e.target.value]),
-    [setTableGroupBy]
-  )
+  const handleGroupChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => setTableGroupBy([e.target.value]), [
+    setTableGroupBy,
+  ])
 
   if (columns.length <= 0) {
     return <></>

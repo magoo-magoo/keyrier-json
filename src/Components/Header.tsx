@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { version } from '../../package.json'
-import { Theme, availableThemes } from '../Themes/themes'
-import { switchTheme } from '../Actions/actions'
+import { Theme, availableThemes } from 'Themes/themes'
+import { switchTheme } from 'Actions/actions'
 import { connect } from 'react-redux'
-import { getTheme } from '../Store/selectors'
-import { RootState } from '../State/State'
-import { useToggleState } from '../Hooks/hooks'
+import { getTheme } from 'Store/selectors'
+import { RootState } from 'State/State'
+import { useToggleState } from 'Hooks/hooks'
 import {
   Navbar,
   NavbarBrand,
@@ -20,14 +20,14 @@ import {
   Dropdown,
 } from 'reactstrap'
 import { withErrorBoundary } from './Common/ErrorBoundary'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, FC } from 'react'
 
 interface Props {
   setTheme: (theme: Theme) => void
   currentTheme: Theme | null
 }
 
-const Header: React.FC<Props> = ({ setTheme, currentTheme }) => {
+const Header: FC<Props> = ({ setTheme, currentTheme }) => {
   const [isOpen, switchIsOpen] = useToggleState()
   const [dropDownIsOpen, toggleDropdown] = useToggleState()
 
@@ -67,7 +67,7 @@ type ThemeDropDownItemProps = {
   setTheme: (theme: Theme) => void
 }
 
-const ThemeDropDownItem: React.FC<ThemeDropDownItemProps> = ({ theme, active, setTheme }) => {
+const ThemeDropDownItem: FC<ThemeDropDownItemProps> = ({ theme, active, setTheme }) => {
   const onClick = useCallback(() => {
     setTheme(theme)
     setTimeout(() => window.location.reload())

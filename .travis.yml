@@ -16,7 +16,7 @@ install:
   - yarn --frozen-lockfile
 
 script:
-  - yarn test --coverage
+  - yarn test --coverage --watchAll=false
   - yarn cypress:run
   - sonar-scanner
   - yarn build:ci
