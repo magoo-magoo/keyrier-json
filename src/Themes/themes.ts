@@ -1,5 +1,3 @@
-import { DeepReadonly } from 'utility-types'
-
 export const themeDeps = new Map<Theme, () => Promise<unknown>>()
 themeDeps.set('materia', () =>
   import(/* webpackChunkName: "bootswatch/dist/materia" */ 'bootswatch/dist/materia/bootstrap.min.css')
@@ -69,28 +67,7 @@ export const importThemeStyleCustom = (theme: Theme | null) => {
   return Promise.reject('theme is not defined')
 }
 
-export type Theme =
-  | 'materia'
-  | 'darkly'
-  | 'sandstone'
-  | 'cosmo'
-  | 'cyborg'
-  | 'flatly'
-  | 'journal'
-  | 'litera'
-  | 'lumen'
-  | 'lux'
-  | 'minty'
-  | 'pulse'
-  | 'simplex'
-  | 'slate'
-  | 'solar'
-  | 'spacelab'
-  | 'superhero'
-  | 'united'
-  | 'yeti'
-
-export const availableThemes: DeepReadonly<Theme[]> = [
+export const availableThemes = [
   'materia',
   'darkly',
   'sandstone',
@@ -110,4 +87,6 @@ export const availableThemes: DeepReadonly<Theme[]> = [
   'superhero',
   'united',
   'yeti',
-]
+] as const
+
+export type Theme = typeof availableThemes[number]

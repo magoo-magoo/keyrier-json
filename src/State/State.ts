@@ -1,64 +1,60 @@
 import initialStateJson from './default-state.json'
-import { Theme } from '../Themes/themes.js'
+import { Theme } from 'Themes/themes.js'
 import { DeepReadonly } from 'utility-types'
-
-export type QueryState = DeepReadonly<{
-  text: string
-  mode: QueryMode
-}>
-
-export type SourceState = DeepReadonly<{
-  text: string
-  autoFormat: boolean
-}>
-
-export type tabType = 'RawJson' | 'Table'
-
-export type OupoutState = DeepReadonly<{
-  searchTerm: string
-  match: boolean
-  selectedTab: tabType
-  obj: object | null
-  objSize: number
-  errorMessage?: string
-  table: OupoutTableState
-}>
+import { PropType as PropertyTypeOf } from 'helpers/utils.js'
 
 export type itemType = any
 
+export type All = PropertyTypeOf<AppState>
+export type AppState = PropertyTypeOf<RootState, 'app'>
+export type QueryState = PropertyTypeOf<AppState, 'query'>
+export type SourceState = PropertyTypeOf<AppState, 'source'>
+export type OupoutState = PropertyTypeOf<AppState, 'output'>
+export type OupoutTableState = PropertyTypeOf<OupoutState, 'table'>
+export type UserSettingsState = PropertyTypeOf<RootState, 'userSettings'>
+
+export type tabType = 'RawJson' | 'Table'
 export type QueryMode = 'Javascript' | 'SQL'
-
-export type OupoutTableState = DeepReadonly<{
-  isArray: boolean
-  isModalOpen: boolean
-  displayedColumns: ReadonlyArray<string>
-  columns: ReadonlyArray<string>
-  groupBy: ReadonlyArray<string>
-}>
-
-export type UserSettingsState = DeepReadonly<{
-  globalTheme: Theme | null
-}>
-
-export type AppState = DeepReadonly<{
-  source: SourceState
-  query: QueryState
-  output: OupoutState
-  error?: Error
-}>
-
 export type RootState = DeepReadonly<{
-  app: AppState
-  userSettings: UserSettingsState
+  app: {
+    source: {
+      text: string
+      autoFormat: boolean
+    }
+    query: {
+      text: string
+      mode: QueryMode
+    }
+    output: {
+      searchTerm: string
+      match: boolean
+      selectedTab: tabType
+      obj: object | null
+      objSize: number
+      errorMessage?: string
+      table: {
+        isArray: boolean
+        isModalOpen: boolean
+        displayedColumns: string[]
+        columns: string[]
+        groupBy: string[]
+      }
+    }
+    error?: Error
+  }
+  userSettings: {
+    globalTheme: Theme | null
+  }
 }>
 
-export const getInitialAppState = () => initialStateJson as AppState
-export const getInitialUserSettingsState = () => ({
-  globalTheme: 'materia' as Theme,
-  concurrentModeEnable: false,
-})
+export const getDefaultAppState = () => initialStateJson as AppState
+export const getDefaultUserSettingsState = () =>
+  ({
+    globalTheme: 'materia',
+    concurrentModeEnable: false,
+  } as const)
 
-export const emptyState: AppState = {
+export const emptyState = {
   source: { text: '', autoFormat: true },
   query: { text: '', mode: 'Javascript' },
   output: {
@@ -75,4 +71,4 @@ export const emptyState: AppState = {
       groupBy: [],
     },
   },
-}
+} as const

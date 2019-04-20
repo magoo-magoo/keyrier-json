@@ -1,15 +1,15 @@
 import * as React from 'react'
-import { logError } from '../../helpers/logger'
+import { logError } from 'helpers/logger'
 import { toast } from 'react-toastify'
+import { Component, ComponentType } from 'react'
 
 const MISSING_ERROR = 'Error was swallowed during propagation.'
 
-type Props = {}
 type State = {
   error?: Error
 }
 
-class ErrorBoundary extends React.Component<Props, State> {
+class ErrorBoundary extends Component<{}, State> {
   public readonly state: State = {
     error: undefined,
   }
@@ -36,7 +36,7 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 }
 
-export const withErrorBoundary = <T extends {}>(Wrapped: React.ComponentType<T>) => (props: T) => (
+export const withErrorBoundary = <T extends {}>(Wrapped: ComponentType<T>) => (props: T) => (
   <ErrorBoundary>
     <Wrapped {...props} />
   </ErrorBoundary>

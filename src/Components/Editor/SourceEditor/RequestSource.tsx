@@ -1,20 +1,20 @@
 import * as React from 'react'
-import { logError } from '../../../helpers/logger'
+import { logError } from 'helpers/logger'
 import { connect } from 'react-redux'
-import { updateSource } from '../../../Actions/actions'
-import { customToString } from '../../../helpers/string'
+import { updateSource } from 'Actions/actions'
+import { customToString } from 'helpers/string'
 import { RenderHeaderInput } from './RequestHeader'
-import { useState, memo, useCallback } from 'react'
+import { useState, memo, useCallback, FC } from 'react'
 import { Alert, FormGroup, Form, Button } from 'reactstrap'
-import { useToggleState, useChangeEventState } from '../../../Hooks/hooks'
-import { withErrorBoundary } from '../../Common/ErrorBoundary'
+import { useToggleState, useChangeEventState } from 'Hooks/hooks'
+import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 
 interface Props {
   onFinish: () => void
   setSource: (src: string) => void
 }
 
-const HttpRequestSource: React.FC<Props> = ({ onFinish, setSource }) => {
+const HttpRequestSource: FC<Props> = ({ onFinish, setSource }) => {
   const [method, setMethod] = useChangeEventState('GET')
   const [url, setUrl] = useChangeEventState('https://rickandmortyapi.com/api/character/')
   const [body, setBody] = useChangeEventState('')
@@ -114,12 +114,12 @@ type HeaderListProps = {
   onChange: (headers: Array<[string, string]>) => void
 }
 
-const HeaderList: React.FC<HeaderListProps> = ({ headers, onChange }) => {
-  const onRemove = React.useCallback((header: [string, string]) => onChange(headers.filter(h => h !== header)), [
+const HeaderList: FC<HeaderListProps> = ({ headers, onChange }) => {
+  const onRemove = useCallback((header: [string, string]) => onChange(headers.filter(h => h !== header)), [
     headers,
     onChange,
   ])
-  const onChangeCallback = React.useCallback(
+  const onChangeCallback = useCallback(
     (header: [string, string]) => {
       const index = headers.indexOf(header)
       headers[index] = { ...header }

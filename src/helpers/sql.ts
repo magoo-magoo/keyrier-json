@@ -72,13 +72,13 @@ export const sqlEvaluation = (sourceString: string, queryString: string) => {
       return new Error(`${sqlTree.source.name.values[0]} table does not exist`)
     }
 
-    const sourceDataObject: object = jsonParseSafe(sourceString)
+    const sourceDataObject = jsonParseSafe(sourceString)
 
     const result = executeQuery(sqlTree, sourceDataObject)
 
     return JSON.stringify(result)
   } catch (e) {
-    return e
+    return e as Error
   }
 }
 

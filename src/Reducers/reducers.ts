@@ -1,32 +1,24 @@
-import { combineReducers, Reducer } from 'redux'
-import { Action } from '../Actions/actions'
-import { codeEvaluation } from '../helpers/code'
-import { jsonParseSafe, jsonBeautify } from '../helpers/json'
+import { combineReducers } from 'redux'
+import { Action } from 'Actions/actions'
+import { codeEvaluation } from 'helpers/code'
+import { jsonParseSafe, jsonBeautify } from 'helpers/json'
 import {
   OupoutState,
-  QueryState,
-  AppState,
-  SourceState,
-  OupoutTableState,
-  getInitialAppState,
+  getDefaultAppState,
   itemType,
-  UserSettingsState,
-  getInitialUserSettingsState,
+  getDefaultUserSettingsState,
   QueryMode,
   tabType,
   emptyState,
-} from '../State/State'
-import { logError, logWarning } from '../helpers/logger'
-import { containsIgnoreCase } from '../helpers/string'
-import { arrayElementName } from '../models/array'
+  AppState,
+  UserSettingsState,
+} from 'State/State'
+import { containsIgnoreCase } from 'helpers/string'
+import { arrayElementName } from 'models/array'
 
-export const rootReducer = (rootState: AppState = getInitialAppState(), action: Action): AppState => {
+export const rootReducer = (rootState = getDefaultAppState(), action: Action) => {
   if (action.type === 'CLEAR_EDITOR') {
     return emptyState
-  }
-
-  if (!action.type) {
-    return rootState
   }
 
   const newState = {
@@ -45,18 +37,7 @@ export const rootReducer = (rootState: AppState = getInitialAppState(), action: 
   }
 }
 
-export const crashReporter = (rootReducerFn: Reducer<AppState>, state: AppState, action: Action): AppState => {
-  try {
-    return rootReducerFn(state, action)
-  } catch (error) {
-    logError(error, state)
-    logWarning('You may need to clear local storage !!!')
-
-    return { ...state, error }
-  }
-}
-
-export const source = (state: SourceState, action: Action) => {
+export const source = (state = getDefaultAppState().source, action: Action) => {
   switch (action.type) {
     case 'UPDATE_SOURCE_TEXT':
       return {
@@ -69,7 +50,8 @@ export const source = (state: SourceState, action: Action) => {
       return state
   }
 }
-export const userSettings = (state: UserSettingsState = getInitialUserSettingsState(), action: Action) => {
+
+export const userSettings = (state: UserSettingsState = getDefaultUserSettingsState(), action: Action) => {
   switch (action.type) {
     case 'SWITCH_GLOBAL_THEME':
       return { ...state, globalTheme: action.theme }
@@ -78,7 +60,7 @@ export const userSettings = (state: UserSettingsState = getInitialUserSettingsSt
   }
 }
 
-export const query = (state: QueryState, action: Action) => {
+export const query = (state = getDefaultAppState().query, action: Action) => {
   switch (action.type) {
     case 'UPDATE_QUERY':
       return {
@@ -89,14 +71,14 @@ export const query = (state: QueryState, action: Action) => {
       return {
         ...state,
         mode: action.mode,
-        text: action.mode === 'Javascript' ? getInitialAppState().query.text : 'select * from data',
+        text: action.mode === 'Javascript' ? getDefaultAppState().query.text : 'select * from data',
       }
     default:
       return state
   }
 }
 
-export const outputTable = (state: OupoutTableState, action: Action) => {
+export const outputTable = (state = getDefaultAppState().output.table, action: Action) => {
   switch (action.type) {
     case 'UPDATE_TABLE_COLUMNS':
       return { ...state, columns: action.columns }
@@ -105,16 +87,13 @@ export const outputTable = (state: OupoutTableState, action: Action) => {
   }
 }
 
-interface Map<T> {
-  [key: string]: T
-}
 export const computeOutput = (
   previousState: OupoutState,
   sourceString: string,
   queryString: string,
   action: Action,
   mode: QueryMode
-): OupoutState => {
+) => {
   const text = codeEvaluation(sourceString, queryString, mode)
 
   if (text === null) {
@@ -131,7 +110,7 @@ export const computeOutput = (
         columns: [],
         groupBy: [],
       },
-    }
+    } as const
   }
   if (text instanceof Error) {
     return {
@@ -148,13 +127,13 @@ export const computeOutput = (
         columns: [],
         groupBy: [],
       },
-    }
+    } as const
   }
 
   let displayedColumns = new Array<string>()
   const outputObject: itemType[] | object = jsonParseSafe(text)
   if (Array.isArray(outputObject)) {
-    const keyMap: Map<string> = {}
+    const keyMap: { [key: string]: string } = {}
     outputObject
       .filter(d => d !== null && d !== undefined)
       .filter(d => !Object.is(d, {}))
@@ -190,10 +169,10 @@ export const computeOutput = (
       columns: displayedColumns,
       groupBy: [],
     },
-  }
+  } as const
 }
 
-export const output = (previousState: AppState, newState: AppState, action: Action): OupoutState => {
+export const output = (previousState: AppState, newState: AppState, action: Action) => {
   switch (action.type) {
     case '@@INIT':
       return computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
@@ -224,7 +203,7 @@ export const output = (previousState: AppState, newState: AppState, action: Acti
         ...filter(newState.output, action.searchTerm),
         searchTerm: action.searchTerm,
         selectedTab: 'RawJson',
-      }
+      } as const
     default:
       return newState.output
   }
@@ -290,7 +269,7 @@ const filter = (state: OupoutState, searchTerm: string) => {
   return state
 }
 
-export const table = (state: OupoutTableState, action: Action) => {
+export const table = (state = getDefaultAppState().output.table, action: Action) => {
   switch (action.type) {
     case 'UPDATE_TABLE_COLUMNS':
       let groupByList = state.groupBy
@@ -316,9 +295,9 @@ export const table = (state: OupoutTableState, action: Action) => {
   }
 }
 
-export const rootReducerReset = (state: AppState | undefined, action: Action) => {
+export const rootReducerReset = (state = getDefaultAppState(), action: Action) => {
   if (action.type === 'RESET_EDITOR') {
-    return rootReducer({ ...getInitialAppState() }, action)
+    return rootReducer({ ...getDefaultAppState() }, action)
   }
   return rootReducer(state, action)
 }

@@ -1,8 +1,8 @@
-import { AppState, UserSettingsState, getInitialAppState, getInitialUserSettingsState } from '../State/State'
-import { logError } from '../helpers/logger'
+import { AppState, UserSettingsState, getDefaultAppState, getDefaultUserSettingsState } from 'State/State'
+import { logError } from 'helpers/logger'
 import lodash from 'lodash'
 import { toast } from 'react-toastify'
-import { prettyPrintBytes } from '../helpers/string'
+import { prettyPrintBytes } from 'helpers/string'
 
 export const persistAppState = (appstate: AppState) => {
   persist('keyrier-json.app.state', appstate)
@@ -12,8 +12,8 @@ export const persistUserSettings = (userSettings: UserSettingsState) => {
   persist('keyrier-json.user.settings', userSettings)
 }
 
-export const getUserSettings = () => load<UserSettingsState>('keyrier-json.user.settings')
-export const getAppState = () => load<AppState>('keyrier-json.app.state')
+export const getUserSettings = () => load('keyrier-json.user.settings') as UserSettingsState
+export const getAppState = () => load('keyrier-json.app.state') as AppState
 
 type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
 
@@ -42,16 +42,16 @@ const loadFromStorage = (key: StorageKey) => {
 const getDefault = (key: StorageKey) => {
   switch (key) {
     case 'keyrier-json.app.state':
-      return getInitialAppState()
+      return getDefaultAppState()
     case 'keyrier-json.user.settings':
-      return getInitialUserSettingsState()
+      return getDefaultUserSettingsState()
     default:
       throw new Error(`no defaul value for ${key}`)
   }
 }
 
-const load = <T extends UserSettingsState | AppState>(key: StorageKey) => {
-  let state = getDefault(key) as T
+const load = (key: StorageKey) => {
+  let state = getDefault(key)
   try {
     const savedStateString = loadFromStorage(key)
     if (savedStateString) {
