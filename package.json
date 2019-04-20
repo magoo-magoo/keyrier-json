@@ -35,7 +35,7 @@
     "jquery": "3.4.0",
     "lodash": "4.17.11",
     "react": "16.8.6",
-    "react-ace": "6.4.0",
+    "react-ace": "6.5.0",
     "react-debounce-input": "3.2.0",
     "react-dom": "16.8.6",
     "react-json-view": "1.19.1",
