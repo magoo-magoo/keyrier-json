@@ -11,12 +11,14 @@ cache:
     - .cache/electron
     - .cache/electron-builder
     - .cache
+    - .cache/Cypress
 
 before_install:
   - sudo apt-get install -y libgconf-2-4
 
 install:
   - yarn --frozen-lockfile
+  - npx cypress install
 
 script:
   - yarn test --coverage --watchAll=false
