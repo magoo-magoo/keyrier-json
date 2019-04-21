@@ -5,12 +5,12 @@ node_js:
   - '10'
 
 cache:
-  yarn: true
+  npm: true
   directories:
     - node_modules
     - .cache/electron
     - .cache/electron-builder
-    - .cache/Cypress
+    - .cache
 
 install:
   - yarn --frozen-lockfile
