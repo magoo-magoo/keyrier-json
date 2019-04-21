@@ -1,5 +1,5 @@
 import { QueryMode, tabType } from 'State/State'
-import { Theme } from 'Themes/themes'
+import { GeneralTheme, EditorTheme } from 'Themes/themes'
 
 export const updateAutoFormatSource = (active: boolean) =>
   ({
@@ -48,9 +48,13 @@ export const updateTableGroupBy = (groupBy: string[]) =>
     type: 'UPDATE_TABLE_GROUP_BY',
   } as const)
 
-export const switchTheme = (theme: Theme) => ({
+export const switchTheme = (theme: GeneralTheme) => ({
   theme,
   type: 'SWITCH_GLOBAL_THEME' as const,
+})
+export const switchEditorTheme = (theme: EditorTheme) => ({
+  theme,
+  type: 'SWITCH_EDITOR_THEME' as const,
 })
 
 export const updateSearchTerm = (searchTerm: string) =>
@@ -89,3 +93,4 @@ export type Action =
   | ReturnType<typeof updateOutputTabSelection>
   | ReturnType<typeof updateSource>
   | ReturnType<typeof updateAutoFormatSource>
+  | ReturnType<typeof switchEditorTheme>

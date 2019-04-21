@@ -4,21 +4,23 @@ import { connect } from 'react-redux'
 import { updateQuery, updateQueryMode } from 'Actions/actions'
 import { RootState, QueryMode } from 'State/State'
 import { AceEditor } from 'Components/Deferred/DeferredAceEditor'
-import { getQueryText, getQueryMode } from 'Store/selectors'
+import { getQueryText, getQueryMode, getEditorTheme } from 'Store/selectors'
 import { useToggleState } from 'Hooks/hooks'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import { memo, useCallback, FC } from 'react'
 import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
 import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
+import { EditorTheme } from 'Themes/themes'
 
 interface Props {
   setQuery: typeof updateQuery
   setQueryMode: typeof updateQueryMode
   queryText: string
   mode: QueryMode
+  currentEditorTheme: EditorTheme
 }
 
-const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, setQueryMode }) => {
+const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, setQueryMode, currentEditorTheme }) => {
   const [modeOpen, switchModeOpen] = useToggleState()
 
   const setJsMode = useCallback(() => setQueryMode('Javascript'), [setQueryMode])
@@ -57,7 +59,7 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, setQueryMode }) => 
         <div className="col-sm-10">
           <AceEditor
             mode={mode === 'Javascript' ? 'javascript' : 'mysql'}
-            theme="monokai"
+            theme={currentEditorTheme}
             name="queryAceEditor"
             onChange={onChange}
             fontSize={13}
@@ -90,6 +92,7 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, setQueryMode }) => 
 const mapStateToProps = (state: RootState) => ({
   queryText: getQueryText(state),
   mode: getQueryMode(state),
+  currentEditorTheme: getEditorTheme(state),
 })
 
 export default connect(

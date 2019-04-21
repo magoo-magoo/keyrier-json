@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { version } from '../../package.json'
-import { Theme, availableThemes } from 'Themes/themes'
-import { switchTheme } from 'Actions/actions'
+import { GeneralTheme, availableGeneralThemes, availableEditorThemes, EditorTheme } from 'Themes/themes'
+import { switchTheme, switchEditorTheme } from 'Actions/actions'
 import { connect } from 'react-redux'
-import { getTheme } from 'Store/selectors'
+import { getTheme, getEditorTheme } from 'Store/selectors'
 import { RootState } from 'State/State'
 import { useToggleState } from 'Hooks/hooks'
 import {
@@ -23,11 +23,13 @@ import { withErrorBoundary } from './Common/ErrorBoundary'
 import { memo, useCallback, FC } from 'react'
 
 interface Props {
-  setTheme: (theme: Theme) => void
-  currentTheme: Theme | null
+  setGeneralTheme: typeof switchTheme
+  setEditorTheme: typeof switchEditorTheme
+  currentTheme: GeneralTheme | null
+  currentEditorTheme: EditorTheme
 }
 
-const Header: FC<Props> = ({ setTheme, currentTheme }) => {
+const Header: FC<Props> = ({ setGeneralTheme, currentTheme, setEditorTheme, currentEditorTheme }) => {
   const [isOpen, switchIsOpen] = useToggleState()
   const [dropDownIsOpen, toggleDropdown] = useToggleState()
 
@@ -43,8 +45,26 @@ const Header: FC<Props> = ({ setTheme, currentTheme }) => {
                 Theme
               </DropdownToggle>
               <DropdownMenu right={true}>
-                {availableThemes.map((theme, index) => (
-                  <ThemeDropDownItem setTheme={setTheme} key={index} active={currentTheme === theme} theme={theme} />
+                <DropdownItem header={true}>Choose editor theme</DropdownItem>
+                {availableEditorThemes.map((theme, index) => (
+                  <ThemeDropDownItem
+                    setTheme={setEditorTheme}
+                    key={index}
+                    active={currentEditorTheme === theme}
+                    theme={theme}
+                    reloadOnChange={false}
+                  />
+                ))}
+                <DropdownItem header={true}>Choose general theme</DropdownItem>
+
+                {availableGeneralThemes.map((theme, index) => (
+                  <ThemeDropDownItem
+                    setTheme={setGeneralTheme}
+                    key={index}
+                    active={currentTheme === theme}
+                    theme={theme}
+                    reloadOnChange={true}
+                  />
                 ))}
               </DropdownMenu>
             </Dropdown>
@@ -61,17 +81,21 @@ const Header: FC<Props> = ({ setTheme, currentTheme }) => {
   )
 }
 
-type ThemeDropDownItemProps = {
-  theme: Theme
+type ThemeDropDownItemProps<T extends GeneralTheme | EditorTheme> = {
+  theme: T
   active: boolean
-  setTheme: (theme: Theme) => void
+  setTheme: (v: T) => void
+  reloadOnChange: boolean
 }
 
-const ThemeDropDownItem: FC<ThemeDropDownItemProps> = ({ theme, active, setTheme }) => {
+const ThemeDropDownItem = <T extends GeneralTheme | EditorTheme>(props: ThemeDropDownItemProps<T>) => {
+  const { theme, active, setTheme, reloadOnChange } = props
   const onClick = useCallback(() => {
     setTheme(theme)
-    setTimeout(() => window.location.reload())
-  }, [theme, setTheme])
+    if (reloadOnChange) {
+      setTimeout(() => window.location.reload())
+    }
+  }, [theme, setTheme, reloadOnChange])
   return (
     <DropdownItem active={active} onClick={onClick}>
       {theme}
@@ -81,9 +105,10 @@ const ThemeDropDownItem: FC<ThemeDropDownItemProps> = ({ theme, active, setTheme
 
 const mapStateToProps = (state: RootState) => ({
   currentTheme: getTheme(state),
+  currentEditorTheme: getEditorTheme(state),
 })
 
 export default connect(
   mapStateToProps,
-  { setTheme: switchTheme }
+  { setGeneralTheme: switchTheme, setEditorTheme: switchEditorTheme }
 )(memo(withErrorBoundary(Header)))

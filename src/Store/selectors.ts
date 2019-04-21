@@ -11,6 +11,7 @@ export const getOutputSearchMatch = (state: RootState) => state.app.output.match
 export const getisOutputTableModalOpen = (state: RootState) => state.app.output.table.isModalOpen
 
 export const getTheme = (state: RootState) => state.userSettings.globalTheme
+export const getEditorTheme = (state: RootState) => state.userSettings.editorTheme
 
 export const getdisplayedColumns = (state: RootState) => [...state.app.output.table.displayedColumns]
 export const getOutputarray = (state: RootState) =>

@@ -4,16 +4,18 @@ import { updateSource } from 'Actions/actions'
 import { RootState } from 'State/State'
 import ImportMenu from './LateralMenu'
 import { AceEditor } from 'Components/Deferred/DeferredAceEditor'
-import { getSourceText } from 'Store/selectors'
+import { getSourceText, getEditorTheme } from 'Store/selectors'
 import { memo, FC } from 'react'
 import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { EditorTheme } from 'Themes/themes'
 
 interface Props {
   onChange: typeof updateSource
   sourceText: string
+  currentEditorTheme: EditorTheme
 }
 
-const SourceEditor: FC<Props> = ({ onChange, sourceText }) => (
+const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) => (
   <>
     <div className="row">
       <div className="col-sm-10 offset-sm-2">
@@ -27,7 +29,7 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText }) => (
       <div className="col-sm-10">
         <AceEditor
           mode="json"
-          theme="monokai"
+          theme={currentEditorTheme}
           name="sourceAceEditor"
           onChange={onChange}
           fontSize={13}
@@ -56,6 +58,7 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText }) => (
 
 const mapStateToProps = (state: RootState) => ({
   sourceText: getSourceText(state),
+  currentEditorTheme: getEditorTheme(state),
 })
 
 export default connect(

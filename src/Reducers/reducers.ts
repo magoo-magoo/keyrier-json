@@ -55,6 +55,8 @@ export const userSettings = (state: UserSettingsState = getDefaultUserSettingsSt
   switch (action.type) {
     case 'SWITCH_GLOBAL_THEME':
       return { ...state, globalTheme: action.theme }
+    case 'SWITCH_EDITOR_THEME':
+      return { ...state, editorTheme: action.theme }
     default:
       return state
   }
@@ -72,7 +74,7 @@ export const query = (state = getDefaultAppState().query, action: Action) => {
         ...state,
         mode: action.mode,
         text: action.mode === 'Javascript' ? getDefaultAppState().query.text : 'select * from data',
-      }
+      } as const
     default:
       return state
   }
@@ -96,7 +98,7 @@ export const computeOutput = (
 ) => {
   const text = codeEvaluation(sourceString, queryString, mode)
 
-  if (text === null) {
+  if (!text) {
     return {
       selectedTab: 'RawJson',
       obj: null,
@@ -134,18 +136,14 @@ export const computeOutput = (
   const outputObject: itemType[] | object = jsonParseSafe(text)
   if (Array.isArray(outputObject)) {
     const keyMap: { [key: string]: string } = {}
-    outputObject
-      .filter(d => d !== null && d !== undefined)
-      .filter(d => !Object.is(d, {}))
-      .filter(d => !Array.isArray(d))
-      .map(d => (d ? (typeof d === 'object' ? Object.keys(d) : [arrayElementName]) : []))
-      .forEach(keysToAdd => {
+    outputObject.forEach(d => {
+      if (d !== null && d !== undefined && !Object.is(d, {}) && !Array.isArray(d)) {
+        const keysToAdd = d ? (typeof d === 'object' ? Object.keys(d) : [arrayElementName]) : []
         keysToAdd.forEach(key => (keyMap[key] = key))
-      })
+      }
+    })
     displayedColumns = Object.keys(keyMap)
-      .filter(key => key)
-      .filter(key => typeof key === 'string')
-      .filter(key => key.trim() !== '')
+      .filter(key => key && typeof key === 'string' && key.trim() !== '')
       .sort((ax, b) => ax.toLowerCase().localeCompare(b.toLowerCase()))
   }
   const isModalOpen =

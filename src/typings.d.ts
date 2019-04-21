@@ -3,6 +3,9 @@ declare module 'brace/mode/javascript'
 declare module 'brace/mode/mysql'
 declare module 'brace/theme/github'
 declare module 'brace/theme/monokai'
+declare module 'brace/theme/tomorrow'
+declare module 'brace/theme/solarized_dark'
+declare module 'brace/theme/terminal'
 
 // declare module 'bootswatch/dist/sketchy/bootstrap.min.css';
 declare module 'bootswatch/dist/sandstone/bootstrap.min.css'

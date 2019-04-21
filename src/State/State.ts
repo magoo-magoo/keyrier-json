@@ -1,5 +1,5 @@
 import initialStateJson from './default-state.json'
-import { Theme } from 'Themes/themes.js'
+import { GeneralTheme, EditorTheme } from 'Themes/themes.js'
 import { DeepReadonly } from 'utility-types'
 import { PropType as PropertyTypeOf } from 'helpers/utils.js'
 
@@ -43,15 +43,16 @@ export type RootState = DeepReadonly<{
     error?: Error
   }
   userSettings: {
-    globalTheme: Theme | null
+    globalTheme: GeneralTheme
+    editorTheme: EditorTheme
   }
 }>
 
 export const getDefaultAppState = () => initialStateJson as AppState
 export const getDefaultUserSettingsState = () =>
   ({
-    globalTheme: 'materia',
-    concurrentModeEnable: false,
+    globalTheme: 'pulse',
+    editorTheme: 'github',
   } as const)
 
 export const emptyState = {

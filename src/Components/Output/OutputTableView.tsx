@@ -78,9 +78,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) 
             <ReactTable
               noDataText="FRACKING EMPTY!"
               className="data-test-id-output-table -highlight"
-              data={data.map(e =>
-                e !== null && e !== undefined ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {}
-              )}
+              data={data.map(e => (!!e ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {}))}
               defaultPageSize={20}
               columns={tableColumnConfig}
               filterable={true}
