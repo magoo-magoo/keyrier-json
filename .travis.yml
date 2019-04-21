@@ -13,6 +13,7 @@ cache:
     - .cache
 
 install:
+  - apt-get install libgconf-2-4
   - yarn --frozen-lockfile
 
 script:
