@@ -12,8 +12,10 @@ cache:
     - .cache/electron-builder
     - .cache
 
+before_install:
+  - sudo apt-get install -y libgconf-2-4
+
 install:
-  - apt-get install libgconf-2-4
   - yarn --frozen-lockfile
 
 script:
@@ -26,6 +28,8 @@ script:
 addons:
   sonarcloud:
     organization: 'magoo-magoo-github'
+  apt:
+    update: true
 
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
