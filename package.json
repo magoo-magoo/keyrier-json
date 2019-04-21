@@ -18,7 +18,7 @@
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
     "cypress:open": "cypress open",
-    "cypress:run": "concurrently --success first --kill-others \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && cypress run --record\"",
+    "cypress:run": "concurrently --success first --kill-others \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && cypress run\"",
     "lint": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --write && tslint -p . --format codeFrame --fix",
     "deploy": "gh-pages -d build",
     "pack:electron": "electron-builder --linux AppImage --windows nsis --publish never",
