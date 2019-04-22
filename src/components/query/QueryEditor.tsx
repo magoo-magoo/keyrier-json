@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 
-import { updateQuery, updateQueryMode } from 'Actions/actions'
-import { RootState, QueryMode } from 'State/State'
-import { AceEditor } from 'Components/Deferred/DeferredAceEditor'
-import { getQueryText, getQueryMode, getEditorTheme } from 'Store/selectors'
-import { useToggleState } from 'Hooks/hooks'
+import { updateQuery, updateQueryMode } from 'actions/actions'
+import { RootState, QueryMode } from 'state/State'
+import { AceEditor } from 'components/common/DeferredAceEditor'
+import { getQueryText, getQueryMode, getEditorTheme } from 'store/selectors'
+import { useToggleState } from 'hooks/hooks'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import { memo, useCallback, FC } from 'react'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
-import { EditorTheme } from 'Themes/themes'
+import { EditorTheme } from 'themes/themes'
 
 interface Props {
   setQuery: typeof updateQuery

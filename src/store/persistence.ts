@@ -1,4 +1,4 @@
-import { AppState, UserSettingsState, getDefaultAppState, getDefaultUserSettingsState } from 'State/State'
+import { AppState, UserSettingsState, getDefaultAppState, getDefaultUserSettingsState } from 'state/State'
 import { logError } from 'helpers/logger'
 import lodash from 'lodash'
 import { toast } from 'react-toastify'

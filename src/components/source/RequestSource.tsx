@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { logError } from 'helpers/logger'
 import { connect } from 'react-redux'
-import { updateSource } from 'Actions/actions'
+import { updateSource } from 'actions/actions'
 import { customToString } from 'helpers/string'
 import { RenderHeaderInput } from './RequestHeader'
 import { useState, memo, useCallback, FC } from 'react'
 import { Alert, FormGroup, Form, Button } from 'reactstrap'
-import { useToggleState, useChangeEventState } from 'Hooks/hooks'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { useToggleState, useChangeEventState } from 'hooks/hooks'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 
 interface Props {
   onFinish: () => void

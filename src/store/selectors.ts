@@ -1,4 +1,4 @@
-import { RootState } from 'State/State'
+import { RootState } from 'state/State'
 
 export const getOutputErrorMessage = (state: RootState) => state.app.output.errorMessage
 

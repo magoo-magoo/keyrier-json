@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { Action } from 'Actions/actions'
+import { Action } from 'actions/actions'
 import { codeEvaluation } from 'helpers/code'
 import { jsonParseSafe, jsonBeautify } from 'helpers/json'
 import {
@@ -12,7 +12,7 @@ import {
   emptyState,
   AppState,
   UserSettingsState,
-} from 'State/State'
+} from 'state/State'
 import { containsIgnoreCase } from 'helpers/string'
 import { arrayElementName } from 'models/array'
 

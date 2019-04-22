@@ -2,9 +2,9 @@ import * as React from 'react'
 import Header from './Header'
 import { ToastContainer } from 'react-toastify'
 import { lazy, Suspense } from 'react'
-const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ 'Components/SourceEditor/SourceEditor'))
-const Output = lazy(() => import(/* webpackChunkName: "Output" */ 'Components/Output/Output'))
-const QueryEditor = lazy(() => import(/* webpackChunkName: "QueryEditor" */ 'Components/QueryEditor/QueryEditor'))
+const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ 'components/source/SourceEditor'))
+const Output = lazy(() => import(/* webpackChunkName: "Output" */ 'components/output/Output'))
+const QueryEditor = lazy(() => import(/* webpackChunkName: "QueryEditor" */ 'components/query/QueryEditor'))
 
 export const App = () => (
   <>

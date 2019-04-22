@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { updateSource, resetEditor, clearEditor, updateAutoFormatSource } from 'Actions/actions'
+import { updateSource, resetEditor, clearEditor, updateAutoFormatSource } from 'actions/actions'
 import HttpRequestSource from './RequestSource'
 import { logInfo } from 'helpers/logger'
-import { useToggleState } from 'Hooks/hooks'
+import { useToggleState } from 'hooks/hooks'
 import {
   ButtonDropdown,
   DropdownToggle,
@@ -20,9 +20,9 @@ import {
   Input,
 } from 'reactstrap'
 import { memo, useCallback, FC, ChangeEvent } from 'react'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
-import { getSourceAutoFormat } from 'Store/selectors'
-import { RootState } from 'State/State'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
+import { getSourceAutoFormat } from 'store/selectors'
+import { RootState } from 'state/State'
 
 interface Props {
   onFileContentReady: typeof updateSource

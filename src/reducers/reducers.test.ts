@@ -1,9 +1,9 @@
 import { output, query, rootReducerReset, source, containsTerm } from './reducers'
-import { getDefaultAppState, AppState, QueryState, emptyState } from 'State/State'
+import { getDefaultAppState, QueryState, emptyState } from 'state/State'
 
 describe('Reducers', () => {
   it('rootReducers should reset', () => {
-    const state: AppState = {
+    const state = {
       output: {
         text: 'fake o',
         obj: {},
@@ -22,7 +22,7 @@ describe('Reducers', () => {
       query: { text: 'fake q', mode: 'Javascript' },
       source: { text: 'fake s' },
     }
-    const results = rootReducerReset(state, {
+    const results = rootReducerReset(state as any, {
       type: 'RESET_EDITOR',
     })
 
@@ -30,7 +30,7 @@ describe('Reducers', () => {
     expect(results.source).toEqual(getDefaultAppState().source)
   })
   it('clear action', () => {
-    const state: AppState = {
+    const state = {
       output: {
         text: 'fake o',
         obj: {},
@@ -49,7 +49,7 @@ describe('Reducers', () => {
       query: { text: 'fake q', mode: 'Javascript' },
       source: { text: 'fake s' },
     }
-    const results = rootReducerReset(state, {
+    const results = rootReducerReset(state as any, {
       type: 'CLEAR_EDITOR',
     })
 
@@ -67,7 +67,7 @@ describe('Reducers', () => {
   it('update source action should update', () => {
     const state = { text: 'initial' }
 
-    const result = source(state, {
+    const result = source(state as any, {
       source: 'new value',
       type: 'UPDATE_SOURCE_TEXT',
     })
@@ -76,7 +76,7 @@ describe('Reducers', () => {
   })
 
   it('output ', () => {
-    const prevState: AppState = {
+    const prevState = {
       output: {
         text: '{}',
         obj: {},
@@ -95,7 +95,7 @@ describe('Reducers', () => {
       query: { text: 'data.value', mode: 'Javascript' },
       source: { text: '{}' },
     }
-    const state: AppState = {
+    const state = {
       output: {
         obj: {},
         match: false,
@@ -114,7 +114,7 @@ describe('Reducers', () => {
       source: { text: '{"value": "test"}' },
     }
 
-    const result = output(prevState, state, {
+    const result = output(prevState as any, state as any, {
       type: 'EVALUATE_CODE',
     })
 

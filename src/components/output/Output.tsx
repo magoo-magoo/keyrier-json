@@ -1,17 +1,17 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import OutputTable from './OutputTable'
-import { RootState, tabType } from 'State/State'
+import { RootState, tabType } from 'state/State'
 
 import classNames from 'classnames'
 
-import { getOutputErrorMessage, getOutputIsArray, getOutputActiveTab, getOutputObjectSize } from 'Store/selectors'
+import { getOutputErrorMessage, getOutputIsArray, getOutputActiveTab, getOutputObjectSize } from 'store/selectors'
 import JsonView from './JsonView'
-import { updateOutputTabSelection } from 'Actions/actions'
+import { updateOutputTabSelection } from 'actions/actions'
 import { TabContent, TabPane, Alert, Badge } from 'reactstrap'
 import { memo, useCallback, FC } from 'react'
 import { prettyPrintBytes } from 'helpers/string'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 
 interface Props {
   isArray: boolean

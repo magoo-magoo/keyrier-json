@@ -1,5 +1,5 @@
-import { QueryMode, tabType } from 'State/State'
-import { GeneralTheme, EditorTheme } from 'Themes/themes'
+import { QueryMode, tabType } from 'state/State'
+import { GeneralTheme, EditorTheme } from 'themes/themes'
 
 export const updateAutoFormatSource = (active: boolean) =>
   ({
@@ -23,10 +23,12 @@ export const resetEditor = () =>
   ({
     type: 'RESET_EDITOR',
   } as const)
+
 export const clearEditor = () =>
   ({
     type: 'CLEAR_EDITOR',
   } as const)
+
 export const evaluateCode = () =>
   ({
     type: 'EVALUATE_CODE',
@@ -42,6 +44,7 @@ export const updateTableColumns = (columns: string[]) =>
     columns,
     type: 'UPDATE_TABLE_COLUMNS',
   } as const)
+
 export const updateTableGroupBy = (groupBy: string[]) =>
   ({
     groupBy,
@@ -52,6 +55,7 @@ export const switchTheme = (theme: GeneralTheme) => ({
   theme,
   type: 'SWITCH_GLOBAL_THEME' as const,
 })
+
 export const switchEditorTheme = (theme: EditorTheme) => ({
   theme,
   type: 'SWITCH_EDITOR_THEME' as const,
@@ -62,6 +66,7 @@ export const updateSearchTerm = (searchTerm: string) =>
     searchTerm,
     type: 'UPDATE_OUTPUT_SEARCH_TERM',
   } as const)
+
 export const updateQueryMode = (mode: QueryMode) =>
   ({
     mode,

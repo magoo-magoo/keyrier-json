@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { version } from '../../package.json'
-import { GeneralTheme, availableGeneralThemes, availableEditorThemes, EditorTheme } from 'Themes/themes'
-import { switchTheme, switchEditorTheme } from 'Actions/actions'
+import { GeneralTheme, availableGeneralThemes, availableEditorThemes, EditorTheme } from 'themes/themes'
+import { switchTheme, switchEditorTheme } from 'actions/actions'
 import { connect } from 'react-redux'
-import { getTheme, getEditorTheme } from 'Store/selectors'
-import { RootState } from 'State/State'
-import { useToggleState } from 'Hooks/hooks'
+import { getTheme, getEditorTheme } from 'store/selectors'
+import { RootState } from 'state/State'
+import { useToggleState } from 'hooks/hooks'
 import {
   Navbar,
   NavbarBrand,
@@ -19,7 +19,7 @@ import {
   NavLink,
   Dropdown,
 } from 'reactstrap'
-import { withErrorBoundary } from './Common/ErrorBoundary'
+import { withErrorBoundary } from './common/ErrorBoundary'
 import { memo, useCallback, FC } from 'react'
 
 interface Props {

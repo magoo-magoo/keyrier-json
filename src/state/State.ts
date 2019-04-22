@@ -1,7 +1,7 @@
 import initialStateJson from './default-state.json'
-import { GeneralTheme, EditorTheme } from 'Themes/themes.js'
+import { GeneralTheme, EditorTheme } from 'themes/themes'
 import { DeepReadonly } from 'utility-types'
-import { PropType as PropertyTypeOf } from 'helpers/utils.js'
+import { PropType as PropertyTypeOf } from 'helpers/utils'
 
 export type itemType = any
 

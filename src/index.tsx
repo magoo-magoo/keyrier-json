@@ -1,11 +1,11 @@
 import { Provider } from 'react-redux'
 import './index.scss'
 import 'react-toastify/dist/ReactToastify.min.css'
-import { configureStore } from 'Store/store'
+import { configureStore } from 'store/store'
 import * as React from 'react'
-import { getTheme } from 'Store/selectors'
-import { importThemeStyleCustom } from 'Themes/themes'
-import App from 'Components/App'
+import { getTheme } from 'store/selectors'
+import { importThemeStyleCustom } from 'themes/themes'
+import App from 'components/App'
 ;(async () => {
   const store = configureStore()
 

@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { updateTableColumns, updateTableGroupBy } from 'Actions/actions'
-import { itemType, RootState } from 'State/State'
+import { updateTableColumns, updateTableGroupBy } from 'actions/actions'
+import { itemType, RootState } from 'state/State'
 import { ValueType } from 'react-select/lib/types'
-import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from 'Store/selectors'
-import { useToggleState } from 'Hooks/hooks'
+import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from 'store/selectors'
+import { useToggleState } from 'hooks/hooks'
 import { Button, Collapse } from 'reactstrap'
 import { memo, useCallback, Suspense, ChangeEvent } from 'react'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { lazy, FC } from 'react'
-import { Loading } from 'Components/Deferred/Loading'
+import { Loading } from 'components/common/Loading'
 
 export const ReactSelect = lazy(() => import(/* webpackChunkName: "react-select" */ 'react-select'))
 

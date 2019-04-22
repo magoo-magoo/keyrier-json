@@ -1,5 +1,5 @@
 import { createStore, compose } from 'redux'
-import rootReducers from 'Reducers/reducers'
+import rootReducers from 'reducers/reducers'
 import { persistAppState, persistUserSettings, getAppState, getUserSettings } from './persistence'
 
 export const configureStore = () => {

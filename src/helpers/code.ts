@@ -1,4 +1,4 @@
-import { QueryMode } from 'State/State'
+import { QueryMode } from 'state/State'
 import { sqlEvaluation } from './sql'
 import lodash from 'lodash'
 

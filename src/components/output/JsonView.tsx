@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { getOutputObject, getOutputSearchTerm, getOutputSearchMatch } from 'Store/selectors'
-import { RootState } from 'State/State'
+import { getOutputObject, getOutputSearchTerm, getOutputSearchMatch } from 'store/selectors'
+import { RootState } from 'state/State'
 import { connect } from 'react-redux'
 import { DebounceInput } from 'react-debounce-input'
-import { updateSearchTerm } from 'Actions/actions'
+import { updateSearchTerm } from 'actions/actions'
 import { Suspense, lazy, memo, useCallback, FC } from 'react'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import deepEqual from 'fast-deep-equal'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 

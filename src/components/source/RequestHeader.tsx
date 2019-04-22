@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button } from 'reactstrap'
 import { memo, useCallback, ChangeEvent, FC } from 'react'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 interface Props {
   header: [string, string]
   id: number

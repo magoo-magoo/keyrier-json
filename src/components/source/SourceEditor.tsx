@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { updateSource } from 'Actions/actions'
-import { RootState } from 'State/State'
+import { updateSource } from 'actions/actions'
+import { RootState } from 'state/State'
 import ImportMenu from './LateralMenu'
-import { AceEditor } from 'Components/Deferred/DeferredAceEditor'
-import { getSourceText, getEditorTheme } from 'Store/selectors'
+import { AceEditor } from 'components/common/DeferredAceEditor'
+import { getSourceText, getEditorTheme } from 'store/selectors'
 import { memo, FC } from 'react'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
-import { EditorTheme } from 'Themes/themes'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
+import { EditorTheme } from 'themes/themes'
 
 interface Props {
   onChange: typeof updateSource

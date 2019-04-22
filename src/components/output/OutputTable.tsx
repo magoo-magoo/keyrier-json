@@ -2,12 +2,12 @@ import * as React from 'react'
 import './OutputTable.scss'
 import { connect } from 'react-redux'
 import OutputTableView from './OutputTableView'
-import { toggleOutputTableModal } from 'Actions/actions'
-import { getisOutputTableModalOpen, getOutputObject } from 'Store/selectors'
-import { RootState } from 'State/State'
+import { toggleOutputTableModal } from 'actions/actions'
+import { getisOutputTableModalOpen, getOutputObject } from 'store/selectors'
+import { RootState } from 'state/State'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { memo, FC } from 'react'
-import { withErrorBoundary } from 'Components/Common/ErrorBoundary'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 
 interface Props {
   toggleModal: typeof toggleOutputTableModal
