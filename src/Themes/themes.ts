@@ -115,5 +115,5 @@ export const availableGeneralThemes = [
 ] as const
 export type GeneralTheme = typeof availableGeneralThemes[number]
 
-export const availableEditorThemes = ['monokai', 'github', 'tomorrow', 'solarized_dark', 'terminal'] as const
+export const availableEditorThemes = ['github', 'monokai', 'tomorrow', 'solarized_dark', 'terminal'] as const
 export type EditorTheme = typeof availableEditorThemes[number]
