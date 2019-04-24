@@ -10,7 +10,7 @@ import JsonView from './JsonView'
 import { updateOutputTabSelection } from 'actions/actions'
 import { TabContent, TabPane, Alert, Badge } from 'reactstrap'
 import { memo, useCallback, FC } from 'react'
-import { prettyPrintBytes } from 'helpers/string'
+import { prettyPrintBytes } from 'core/converters/string'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 
 interface Props {

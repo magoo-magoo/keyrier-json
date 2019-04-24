@@ -1,4 +1,4 @@
-import { logError } from './logger'
+import { logError } from 'core/logging/logger'
 
 export const jsonBeautify = (str: string) => {
   if (!str || str.trim() === '') {

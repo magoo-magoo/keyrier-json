@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { Action } from 'actions/actions'
-import { codeEvaluation } from 'helpers/code'
-import { jsonParseSafe, jsonBeautify } from 'helpers/json'
+import { codeEvaluation } from 'core/interpreters/code'
+import { jsonParseSafe, jsonBeautify } from 'core/converters/json'
 import {
   OupoutState,
   getDefaultAppState,
@@ -13,7 +13,7 @@ import {
   AppState,
   UserSettingsState,
 } from 'state/State'
-import { containsIgnoreCase } from 'helpers/string'
+import { containsIgnoreCase } from 'core/converters/string'
 import { arrayElementName } from 'models/array'
 
 export const rootReducer = (rootState = getDefaultAppState(), action: Action) => {

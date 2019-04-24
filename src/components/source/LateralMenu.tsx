@@ -2,7 +2,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { updateSource, resetEditor, clearEditor, updateAutoFormatSource } from 'actions/actions'
 import HttpRequestSource from './RequestSource'
-import { logInfo } from 'helpers/logger'
+import { logInfo } from 'core/logging/logger'
 import { useToggleState } from 'hooks/hooks'
 import {
   ButtonDropdown,

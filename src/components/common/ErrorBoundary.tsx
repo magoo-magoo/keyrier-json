@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { logError } from 'helpers/logger'
+import { logError } from 'core/logging/logger'
 import { toast } from 'react-toastify'
 import { Component, ComponentType } from 'react'
 

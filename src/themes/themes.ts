@@ -1,4 +1,4 @@
-import { logError } from 'helpers/logger'
+import { logError } from 'core/logging/logger'
 
 export const themeDeps = new Map([
   [

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { parse, nodes, Op, Field, SQLTree } from 'sql-parser'
-import { jsonParseSafe } from './json'
+import { jsonParseSafe } from '../converters/json'
 
 export const computePath = (path: string[]) => {
   if (!path || path.length === 0) {

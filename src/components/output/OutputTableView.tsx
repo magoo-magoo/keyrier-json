@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { customToString, containsIgnoreCase } from 'helpers/string'
+import { customToString, containsIgnoreCase } from 'core/converters/string'
 import { connect } from 'react-redux'
 import TableAdvancedOptions from './TableAdvancedOptions'
 import { Column, Filter, RowInfo } from 'react-table'

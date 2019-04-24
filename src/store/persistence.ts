@@ -1,8 +1,8 @@
 import { AppState, UserSettingsState, getDefaultAppState, getDefaultUserSettingsState } from 'state/State'
-import { logError } from 'helpers/logger'
+import { logError } from 'core/logging/logger'
 import lodash from 'lodash'
 import { toast } from 'react-toastify'
-import { prettyPrintBytes } from 'helpers/string'
+import { prettyPrintBytes } from 'core/converters/string'
 
 export const persistAppState = (appstate: AppState) => {
   persist('keyrier-json.app.state', appstate)
