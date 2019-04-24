@@ -220,4 +220,54 @@ describe('sql interpreter', () => {
 
     expect(JSON.parse(result as any)).toEqual([{ field1: 42, field2: 'foo' }])
   })
+
+  it('should have a named table for plain object', () => {
+    const result = codeEvaluation(
+      '{"age": 1, "name": "John Doe", "c": 999}',
+      'select d.age, d.name as fullName from data d',
+      'SQL'
+    )
+    expect(JSON.parse(result as any)).toEqual({ age: 1, fullName: 'John Doe' })
+  })
+  it('should have a named table for array', () => {
+    const result = codeEvaluation(
+      '[{"age": 1, "name": "John Doe", "c": 999}]',
+      'select d.age, d.name as fullName from data d',
+      'SQL'
+    )
+    expect(JSON.parse(result as any)).toEqual([{ age: 1, fullName: 'John Doe' }])
+  })
+
+  it('should ignore comments', () => {
+    const result = codeEvaluation(
+      '{"a": 1, "b": 42}',
+      `
+    
+    -- Commentaire
+    --IGNORE ME
+    
+    select * from data`,
+      'SQL'
+    )
+    expect(JSON.parse(result as any)).toEqual({ a: 1, b: 42 })
+  })
+
+  it('should order by age', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+      'select name as fullName from data order by age',
+      'SQL'
+    )
+    expect(result).toBeDefined()
+    expect(JSON.parse(result as any)).toEqual([{ fullName: 'Danny de Vito' }, { fullName: 'John Doe' }])
+  })
+  it('should order by age desc', () => {
+    const result = codeEvaluation(
+      '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+      'select name as fullName from data order by age desc',
+      'SQL'
+    )
+    expect(result).toBeDefined()
+    expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }, { fullName: 'Danny de Vito' }])
+  })
 })

@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { parse, nodes, Op, Field, SQLTree } from 'sql-parser'
+import { parse, nodes, Op, Field, SQLTree, Source } from 'sql-parser'
 import { jsonParseSafe } from '../converters/json'
 
 export const computePath = (path: string[]) => {
@@ -15,16 +15,33 @@ export const computePath = (path: string[]) => {
   return path
 }
 
-const map = (v: object, fields: Field[]) => {
+export const sqlEvaluation = (sourceString: string, queryString: string) => {
+  try {
+    const sqlTree = parse(queryString.replace(/--(.*?)(\n|$)/gm, ''))
+    if (sqlTree.source.name.values[0] !== 'data') {
+      return new Error(`${sqlTree.source.name.values[0]} table does not exist`)
+    }
+
+    const sourceDataObject = jsonParseSafe(sourceString)
+
+    const result = executeQuery(sqlTree, sourceDataObject)
+
+    return JSON.stringify(result)
+  } catch (e) {
+    return e as Error
+  }
+}
+
+const map = (v: object, fields: Field[], source: Source) => {
   if (fields[0].constructor === nodes.Star) {
     return v
   }
 
   if (Array.isArray(v)) {
-    return v.map(x => mapObject(fields, x))
+    return v.map(x => mapObject(fields, x, source))
   }
 
-  return mapObject(fields, v)
+  return mapObject(fields, v, source)
 }
 
 const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
@@ -54,31 +71,17 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
         const operation = sqlTree.where.conditions.operation
         return compareOperands(operation, leftValue, rightValue, v)
       })
-      .map(v => map(v, sqlTree.fields))
+      .orderBy(
+        sqlTree.order ? sqlTree.order.orderings.map(x => x.value.value) : undefined,
+        sqlTree.order ? sqlTree.order.orderings.map(x => x.direction) : undefined
+      )
+      .map(v => map(v, sqlTree.fields, sqlTree.source))
       .take(
         sqlTree.limit && typeof sqlTree.limit.value.value === 'number' ? sqlTree.limit.value.value : 999999999999999
       )
       .value()
   } else {
-    return map(sourceDataObject, sqlTree.fields)
-  }
-}
-
-export const sqlEvaluation = (sourceString: string, queryString: string) => {
-  try {
-    const sqlTree = parse(queryString)
-
-    if (sqlTree.source.name.values[0] !== 'data') {
-      return new Error(`${sqlTree.source.name.values[0]} table does not exist`)
-    }
-
-    const sourceDataObject = jsonParseSafe(sourceString)
-
-    const result = executeQuery(sqlTree, sourceDataObject)
-
-    return JSON.stringify(result)
-  } catch (e) {
-    return e as Error
+    return map(sourceDataObject, sqlTree.fields, sqlTree.source)
   }
 }
 
@@ -165,12 +168,15 @@ const compareOperands = (operation: string | null, left: Op, right: Op, value: o
   return false
 }
 
-const mapObject = (fields: Field[], mapped: object) => {
+const mapObject = (fields: Field[], mapped: object, source: Source) => {
   const temp: {
     [key: string]: any
   } = {}
   fields.forEach(field => {
-    const value = _.get(mapped, field.field.values)
+    const value = _.get(
+      mapped,
+      field.field.values.filter((val, index) => !(index === 0 && source.alias && val === source.alias.value))
+    )
     let key = field.field.value
     if (field.field.value2) {
       key = field.field.value2

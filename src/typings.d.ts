@@ -34,11 +34,9 @@ declare module 'brace/snippets/javascript'
 declare module 'brace/snippets/json'
 
 declare module 'sql-parser' {
-  export interface Name {
-    values: string[]
-  }
   export interface Source {
-    name: Name
+    name: Value
+    alias?: Value
   }
 
   export interface Value {
@@ -71,12 +69,20 @@ declare module 'sql-parser' {
   export interface Limit {
     value: Value
   }
+  export interface OrderArgument {
+    value: Value
+    direction: 'desc' | 'asc'
+  }
+  export interface Order {
+    orderings: OrderArgument[]
+  }
 
   export interface SQLTree {
     source: Source
     where?: Where | null
     fields: Field[]
     limit: Limit | null
+    order?: Order
   }
 
   export class nodes {
