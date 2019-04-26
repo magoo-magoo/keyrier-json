@@ -9,7 +9,7 @@ import { useToggleState } from 'hooks/hooks'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import { memo, useCallback, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
-import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
+import { unstable_runWithPriority, unstable_UserBlockingPriority } from 'scheduler'
 import { EditorTheme } from 'themes/themes'
 
 interface Props {
@@ -27,7 +27,7 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, setQueryMode, curre
   const setSqlMode = useCallback(() => setQueryMode('SQL'), [setQueryMode])
   const onChange = useCallback(
     (a: string) => {
-      unstable_runWithPriority(unstable_IdlePriority, () => setQuery(a))
+      unstable_runWithPriority(unstable_UserBlockingPriority, () => setQuery(a))
     },
     [setQuery]
   )
@@ -51,7 +51,7 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, setQueryMode, curre
                 Javascript
               </DropdownItem>
               <DropdownItem active={mode === 'SQL'} onClick={setSqlMode}>
-                SQL like(experimental)
+                SQL like (experimental)
               </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>

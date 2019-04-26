@@ -79,13 +79,13 @@ const LateralMenu: FC<Props> = ({ onReset, onFileContentReady, onClear, autoForm
             <DropdownItem id="http-request" onClick={toggleModal}>
               <label>HTTP request</label>
             </DropdownItem>
-            <DropdownItem onClick={onReset}>
-              <label>Reset</label>
-            </DropdownItem>
           </DropdownMenu>
         </ButtonDropdown>
         <Button color="primary" onClick={onClear}>
           Clear
+        </Button>
+        <Button color="primary" onClick={onReset}>
+          Reset
         </Button>
       </ButtonGroup>
       <FormGroup className="pt-4" check={true}>

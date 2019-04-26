@@ -22,7 +22,7 @@ install:
 
 script:
   - yarn test --coverage --watchAll=false
-  - yarn cypress:run
+  # - yarn cypress:run
   - sonar-scanner
   - yarn build:ci
   - yarn pack:dockerelectron

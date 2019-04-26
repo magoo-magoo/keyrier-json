@@ -16,8 +16,8 @@
     }
   },
   "query": {
-    "mode": "Javascript",
-    "text": "// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// you can use lodash helper functions. see https://lodash.com/docs/\n// ex: _.chain(data).orderBy('age', 'desc')\n\n      data\n    "
+    "mode": "SQL",
+    "text": "-- Type your SQL-like query\n-- your JSON object is available as a table named data\n\n\nselect * from data"
   },
   "source": {
     "autoFormat": true,

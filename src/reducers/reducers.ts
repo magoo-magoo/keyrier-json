@@ -67,13 +67,16 @@ export const query = (state = getDefaultAppState().query, action: Action) => {
     case 'UPDATE_QUERY':
       return {
         ...state,
-        text: action.query.trim(),
+        text: action.query,
       }
     case 'UPDATE_QUERY_MODE':
       return {
         ...state,
         mode: action.mode,
-        text: action.mode === 'Javascript' ? getDefaultAppState().query.text : 'select * from data',
+        text:
+          action.mode === 'SQL'
+            ? getDefaultAppState().query.text
+            : "// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// you can use lodash helper functions. see https://lodash.com/docs/\n// ex: _.chain(data).orderBy('age', 'desc')\n\n      data\n    ",
       } as const
     default:
       return state
@@ -175,12 +178,12 @@ export const output = (previousState: AppState, newState: AppState, action: Acti
     case '@@INIT':
       return computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
     case 'EVALUATE_CODE':
-    case 'RESET_EDITOR':
     case 'UPDATE_QUERY':
     case 'UPDATE_SOURCE_TEXT':
       return previousState.source.text === newState.source.text && previousState.query.text === newState.query.text
         ? previousState.output
         : computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
+    case 'RESET_EDITOR':
     case 'UPDATE_QUERY_MODE':
       return computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
     case 'TOGGLE_OUTPUT_TABLE_MODAL':
