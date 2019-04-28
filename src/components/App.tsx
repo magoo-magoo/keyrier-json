@@ -1,3 +1,4 @@
+import styles from './App.module.scss'
 import * as React from 'react'
 import Header from './Header'
 import { ToastContainer } from 'react-toastify'
@@ -27,7 +28,7 @@ export const App = () => (
           </div>
         </div>
       </div>
-      <div className="row">
+      <div className={`row ${styles.output}`}>
         <div className="col">
           <Suspense fallback={'loading...'}>
             <Output />

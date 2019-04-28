@@ -60,7 +60,7 @@ export const getDefaultUserSettingsState = () =>
 
 export const emptyState = {
   source: { text: '', autoFormat: true },
-  query: { text: '', mode: 'Javascript' },
+  query: { text: '', mode: 'SQL' },
   output: {
     match: false,
     obj: {},

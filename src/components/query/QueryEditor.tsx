@@ -35,7 +35,7 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, currentEditorTheme 
         theme={currentEditorTheme}
         name="queryAceEditor"
         onChange={onChange}
-        fontSize={13}
+        fontSize={16}
         highlightActiveLine={true}
         value={queryText}
         minLines={10}
@@ -45,15 +45,9 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, currentEditorTheme 
           $blockScrolling: Infinity,
         }}
         setOptions={{
-          showLineNumbers: true,
-          tabSize: 2,
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
           dragEnabled: true,
         }}
         width={'100%'}
-        enableBasicAutocompletion={true}
-        enableLiveAutocompletion={true}
         debounceChangePeriod={250}
       />
     </>

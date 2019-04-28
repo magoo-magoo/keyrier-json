@@ -3,6 +3,9 @@ import { sqlEvaluation } from './sql'
 import lodash from 'lodash'
 
 export const codeEvaluation = (sourceString: string, queryString: string, mode: QueryMode) => {
+  if (!sourceString || !queryString) {
+    return ''
+  }
   if (mode === 'Javascript') {
     return jsEvaluation(sourceString, queryString)
   } else if (mode === 'SQL') {

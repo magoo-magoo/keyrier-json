@@ -1,3 +1,4 @@
+import styles from './Output.module.scss'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import OutputTable from './OutputTable'
@@ -21,11 +22,6 @@ interface Props {
   errorMessage?: string
 }
 
-const pointer = {
-  cursor: 'pointer',
-  fontSize: 'large',
-}
-
 const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, objSize }) => {
   const handleActiveTable = useCallback(() => setActiveTab('Table'), [setActiveTab])
   const handleActiveRawJson = useCallback(() => setActiveTab('RawJson'), [setActiveTab])
@@ -39,7 +35,10 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
       <div hidden={!errorMessage}>
         <div className="row">
           <div className="col-sm-10 offset-sm-2">
-            <Alert color="danger">{errorMessage}</Alert>
+            <Alert className="row align-items-center" color="danger">
+              <i className="material-icons mr-2">error</i>
+              <span>{errorMessage}</span>
+            </Alert>
           </div>
         </div>
       </div>
@@ -52,9 +51,9 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                   className={classNames({
                     active: activeTab === 'RawJson',
                     'nav-link': true,
+                    [styles.pointer]: true,
                   })}
                   onClick={handleActiveRawJson}
-                  style={pointer}
                 >
                   Raw JSON view
                 </button>
@@ -64,9 +63,9 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                   className={classNames({
                     active: activeTab === 'Table',
                     'nav-link': true,
+                    [styles.pointer]: true,
                   })}
                   onClick={handleActiveTable}
-                  style={pointer}
                 >
                   Table view
                 </button>

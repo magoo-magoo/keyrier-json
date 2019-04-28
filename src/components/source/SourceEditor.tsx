@@ -41,8 +41,6 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) =
         debounceChangePeriod={1000}
         minLines={35}
         maxLines={35}
-        enableBasicAutocompletion={false}
-        enableLiveAutocompletion={false}
         wrapEnabled={false}
         setOptions={{
           showLineNumbers: true,
