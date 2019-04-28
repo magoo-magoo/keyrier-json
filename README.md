@@ -9,9 +9,10 @@
 [![coverage](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=coverage)](https://sonarcloud.io/dashboard?id=keyrier-json)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5aa1568f-9fcc-4964-803b-6a3b76e6f0cf/deploy-status)](https://app.netlify.com/sites/keyrier/deploys)
 
-## [Live demo](https://magoo-magoo.github.io/keyrier-json) and [here](https://keyrier.magoo.dev)
+## [Live here](https://keyrier.magoo.dev) and [here](https://magoo-magoo.github.io/keyrier-json)
 
-A web application to perfom query on JSON object. Built with react/redux.
+A web application to perfom query on JSON object.
+![](demo.gif)
 
 ## Desktop
 
