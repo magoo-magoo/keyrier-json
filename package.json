@@ -40,7 +40,7 @@
     "react-debounce-input": "3.2.0",
     "react-dom": "16.8.6",
     "react-json-view": "1.19.1",
-    "react-redux": "7.0.2",
+    "react-redux": "7.0.3",
     "react-select": "2.4.3",
     "react-table": "6.9.2",
     "react-toastify": "5.2.1",
