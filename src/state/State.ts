@@ -2,53 +2,56 @@ import initialStateJson from './default-state.json'
 import { GeneralTheme, EditorTheme } from 'themes/themes'
 import { DeepReadonly } from 'utility-types'
 import { PropType as PropertyTypeOf } from 'core/misc/utils'
+import { StateWithHistory } from 'redux-undo'
 
 export type itemType = any
 
 export type All = PropertyTypeOf<AppState>
-export type AppState = PropertyTypeOf<RootState, 'app'>
-export type QueryState = PropertyTypeOf<AppState, 'query'>
-export type SourceState = PropertyTypeOf<AppState, 'source'>
-export type OupoutState = PropertyTypeOf<AppState, 'output'>
-export type OupoutTableState = PropertyTypeOf<OupoutState, 'table'>
-export type UserSettingsState = PropertyTypeOf<RootState, 'userSettings'>
+export type AppState = DeepReadonly<{
+  source?: SourceState
+  query?: QueryState
+  output?: OupoutState
+  error?: Error
+}>
+export type QueryState = DeepReadonly<{
+  text?: string
+  mode?: QueryMode
+}>
+export type SourceState = DeepReadonly<{
+  text?: string
+  autoFormat?: boolean
+}>
+export type OupoutState = DeepReadonly<{
+  searchTerm?: string
+  match?: boolean
+  selectedTab?: tabType
+  obj?: object | null
+  objSize?: number
+  errorMessage?: string
+  table?: OupoutTableState
+}>
+export type OupoutTableState = DeepReadonly<{
+  isArray?: boolean
+  isModalOpen?: boolean
+  displayedColumns?: readonly string[]
+  columns?: readonly string[]
+  groupBy?: readonly string[]
+}>
+export type UserSettingsState = DeepReadonly<{
+  globalTheme?: GeneralTheme
+  editorTheme?: EditorTheme
+}>
 
 export type tabType = 'RawJson' | 'Table'
 export type QueryMode = 'Javascript' | 'SQL'
+
 export type RootState = DeepReadonly<{
-  app: {
-    source: {
-      text: string
-      autoFormat: boolean
-    }
-    query: {
-      text: string
-      mode: QueryMode
-    }
-    output: {
-      searchTerm: string
-      match: boolean
-      selectedTab: tabType
-      obj: object | null
-      objSize: number
-      errorMessage?: string
-      table: {
-        isArray: boolean
-        isModalOpen: boolean
-        displayedColumns: string[]
-        columns: string[]
-        groupBy: string[]
-      }
-    }
-    error?: Error
-  }
-  userSettings: {
-    globalTheme: GeneralTheme
-    editorTheme: EditorTheme
-  }
+  app?: StateWithHistory<AppState>
+  userSettings?: UserSettingsState
 }>
 
 export const getDefaultAppState = () => initialStateJson as AppState
+export const defaultAppState = initialStateJson as AppState
 export const getDefaultUserSettingsState = () =>
   ({
     globalTheme: 'pulse',

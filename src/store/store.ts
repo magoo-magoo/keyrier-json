@@ -11,10 +11,25 @@ export const configureStore = () => {
       ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
       : compose
 
-  const store = createStore(rootReducers, { app: appState, userSettings: userSettingsState }, composeEnhancers())
+  const store = createStore(
+    rootReducers,
+    {
+      app: {
+        past: [],
+        present: appState,
+        future: [],
+        _latestUnfiltered: appState,
+        group: undefined,
+        index: undefined,
+        limit: undefined,
+      },
+      userSettings: userSettingsState,
+    },
+    composeEnhancers()
+  )
 
   store.subscribe(() => {
-    persistAppState(store.getState().app)
+    persistAppState(store.getState().app.present)
     persistUserSettings(store.getState().userSettings)
   })
 

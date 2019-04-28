@@ -6,6 +6,7 @@ import * as React from 'react'
 import { getTheme } from 'store/selectors'
 import { importThemeStyleCustom } from 'themes/themes'
 import App from 'components/App'
+import { unregister } from 'registerServiceWorker'
 ;(async () => {
   const store = configureStore()
 
@@ -26,5 +27,5 @@ import App from 'components/App'
     </Concurrent>
   )
 
-  // registerServiceWorker()
+  unregister()
 })()

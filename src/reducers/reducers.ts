@@ -12,46 +12,62 @@ import {
   emptyState,
   AppState,
   UserSettingsState,
+  OupoutTableState,
+  defaultAppState,
+  SourceState,
+  QueryState,
 } from 'state/State'
 import { containsIgnoreCase } from 'core/converters/string'
 import { arrayElementName } from 'models/array'
+import undoable from 'redux-undo'
 
 export const rootReducer = (rootState = getDefaultAppState(), action: Action) => {
   if (action.type === 'CLEAR_EDITOR') {
     return emptyState
   }
 
-  const newState = {
-    ...rootState,
-    query: query(rootState.query, action),
-    source: source(rootState.source, action),
-  }
+  const newState =
+    rootState && rootState.query && rootState.source
+      ? {
+          ...rootState,
+          query: query(rootState.query, action),
+          source: source(rootState.source, action),
+        }
+      : {}
 
   const newOutputState = output(rootState, newState, action)
   return {
     ...newState,
     output: {
       ...newOutputState,
-      table: table(newOutputState.table, action),
+      table: table(newOutputState ? newOutputState.table : {}, action),
     },
   }
 }
 
-export const source = (state = getDefaultAppState().source, action: Action) => {
+export const source = (state: SourceState, action: Action) => {
   switch (action.type) {
     case 'UPDATE_SOURCE_TEXT':
       return {
         ...state,
-        text: state.autoFormat ? jsonBeautify(action.source.trim()) : action.source,
+        text: state && state.autoFormat ? jsonBeautify(action.source.trim()) : action.source,
       }
     case 'UPDATE_AUTOFORMAT_SOURCE':
-      return { ...state, text: action.active ? jsonBeautify(state.text.trim()) : state.text, autoFormat: action.active }
+      return {
+        ...state,
+        text: action.active
+          ? state && state.text && jsonBeautify(state.text.trim())
+          : state && state.text
+          ? state.text
+          : '',
+        autoFormat: action.active,
+      }
     default:
       return state
   }
 }
 
-export const userSettings = (state: UserSettingsState = getDefaultUserSettingsState(), action: Action) => {
+export const userSettings = (state: UserSettingsState | undefined = getDefaultUserSettingsState(), action: Action) => {
   switch (action.type) {
     case 'SWITCH_GLOBAL_THEME':
       return { ...state, globalTheme: action.theme }
@@ -62,7 +78,7 @@ export const userSettings = (state: UserSettingsState = getDefaultUserSettingsSt
   }
 }
 
-export const query = (state = getDefaultAppState().query, action: Action) => {
+export const query = (state: QueryState, action: Action) => {
   switch (action.type) {
     case 'UPDATE_QUERY':
       return {
@@ -75,18 +91,11 @@ export const query = (state = getDefaultAppState().query, action: Action) => {
         mode: action.mode,
         text:
           action.mode === 'SQL'
-            ? getDefaultAppState().query.text
+            ? defaultAppState && defaultAppState.query
+              ? defaultAppState.query.text
+              : ''
             : "// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// you can use lodash helper functions. see https://lodash.com/docs/\n// ex: _.chain(data).orderBy('age', 'desc')\n\n      data\n    ",
       } as const
-    default:
-      return state
-  }
-}
-
-export const outputTable = (state = getDefaultAppState().output.table, action: Action) => {
-  switch (action.type) {
-    case 'UPDATE_TABLE_COLUMNS':
-      return { ...state, columns: action.columns }
     default:
       return state
   }
@@ -150,7 +159,11 @@ export const computeOutput = (
       .sort((ax, b) => ax.toLowerCase().localeCompare(b.toLowerCase()))
   }
   const isModalOpen =
-    action.type === 'TOGGLE_OUTPUT_TABLE_MODAL' ? !previousState.table.isModalOpen : previousState.table.isModalOpen
+    previousState && previousState.table && action.type === 'TOGGLE_OUTPUT_TABLE_MODAL'
+      ? previousState && !previousState.table.isModalOpen
+      : previousState && previousState.table
+      ? previousState.table.isModalOpen
+      : false
 
   let selectedTab: tabType = Array.isArray(outputObject) ? 'Table' : 'RawJson'
 
@@ -175,39 +188,71 @@ export const computeOutput = (
 
 export const output = (previousState: AppState, newState: AppState, action: Action) => {
   switch (action.type) {
-    case '@@INIT':
-      return computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
     case 'EVALUATE_CODE':
     case 'UPDATE_QUERY':
     case 'UPDATE_SOURCE_TEXT':
-      return previousState.source.text === newState.source.text && previousState.query.text === newState.query.text
-        ? previousState.output
-        : computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
-    case 'RESET_EDITOR':
-    case 'UPDATE_QUERY_MODE':
-      return computeOutput(newState.output, newState.source.text, newState.query.text, action, newState.query.mode)
+      if (
+        previousState &&
+        previousState.source &&
+        newState &&
+        newState.source &&
+        previousState.query &&
+        newState.query &&
+        previousState.source.text === newState.source.text &&
+        previousState.query.text === newState.query.text
+      ) {
+        return previousState.output
+      }
+      if (newState && newState.output) {
+        return computeOutput(
+          newState.output,
+          newState.source && newState.source.text ? newState.source.text : '',
+          newState.query && newState.query.text ? newState.query.text : '',
+          action,
+          newState.query && newState.query.mode ? newState.query.mode : 'SQL'
+        )
+      }
+      break
     case 'TOGGLE_OUTPUT_TABLE_MODAL':
-      return {
-        ...newState.output,
-        table: {
-          ...newState.output.table,
-          isModalOpen: !newState.output.table.isModalOpen,
-        },
-      }
+      return newState
+        ? {
+            ...newState.output,
+            table: {
+              ...(newState.output ? newState.output.table : {}),
+              isModalOpen: newState.output && newState.output.table ? !newState.output.table.isModalOpen : false,
+            },
+          }
+        : {}
     case 'UPDATE_OUTPUT_TAB_SELECTION':
-      return {
-        ...newState.output,
-        selectedTab: action.tab,
+      if (newState) {
+        return {
+          ...newState.output,
+          selectedTab: action.tab,
+        }
       }
+      break
     case 'UPDATE_OUTPUT_SEARCH_TERM':
-      return {
-        ...filter(newState.output, action.searchTerm),
-        searchTerm: action.searchTerm,
-        selectedTab: 'RawJson',
-      } as const
+      if (newState && newState.output) {
+        return {
+          ...filter(newState.output, action.searchTerm),
+          searchTerm: action.searchTerm,
+          selectedTab: 'RawJson',
+        } as const
+      }
+      break
     default:
-      return newState.output
+      if (newState && newState.output) {
+        return computeOutput(
+          newState.output,
+          newState.source && newState.source.text ? newState.source.text : '',
+          newState.query && newState.query.text ? newState.query.text : '',
+          action,
+          newState.query && newState.query.mode ? newState.query.mode : 'SQL'
+        )
+      }
+      break
   }
+  return {}
 }
 
 export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
@@ -259,7 +304,7 @@ export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
 }
 
 const filter = (state: OupoutState, searchTerm: string) => {
-  if (!searchTerm && searchTerm.trim() === '') {
+  if (!searchTerm || searchTerm.trim() === '' || !state) {
     return { ...state, match: false }
   }
   const { filteredObj, match } = containsTerm(state.obj, searchTerm)
@@ -270,10 +315,10 @@ const filter = (state: OupoutState, searchTerm: string) => {
   return state
 }
 
-export const table = (state = getDefaultAppState().output.table, action: Action) => {
+export const table = (state: OupoutTableState | undefined, action: Action) => {
   switch (action.type) {
     case 'UPDATE_TABLE_COLUMNS':
-      let groupByList = state.groupBy
+      let groupByList = state && state.groupBy ? state.groupBy : []
       groupByList.forEach(groupBy => {
         if (action.columns.indexOf(groupBy) === -1) {
           groupByList = groupByList.filter(gb => action.columns.indexOf(gb) !== -1)
@@ -288,7 +333,7 @@ export const table = (state = getDefaultAppState().output.table, action: Action)
       return {
         ...state,
         groupBy: action.groupBy
-          .filter(gb => state.displayedColumns.indexOf(gb) !== -1)
+          .filter(gb => state && state.displayedColumns && state.displayedColumns.indexOf(gb) !== -1)
           .filter(gb => gb !== 'Group by...'),
       }
     default:
@@ -303,7 +348,7 @@ export const rootReducerReset = (state = getDefaultAppState(), action: Action) =
   return rootReducer(state, action)
 }
 const rootReducers = combineReducers({
-  app: rootReducerReset,
+  app: undoable(rootReducerReset, { undoType: 'APP_UNDO', redoType: 'APP_REDO' }),
   userSettings,
 })
 export default rootReducers

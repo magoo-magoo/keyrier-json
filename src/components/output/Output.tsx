@@ -79,7 +79,7 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
             <div className="row">
               <div className="col-sm-2 pt-5">
                 <h3>
-                  <Badge id="badgeSize" color="secondary" pill={true}>
+                  <Badge id="badgeSize" color="info" pill={true}>
                     {prettyPrintBytes(objSize)}
                   </Badge>
                 </h3>

@@ -24,6 +24,16 @@ export const resetEditor = () =>
     type: 'RESET_EDITOR',
   } as const)
 
+export const undo = () =>
+  ({
+    type: 'APP_UNDO',
+  } as const)
+
+export const redo = () =>
+  ({
+    type: 'APP_REDO',
+  } as const)
+
 export const clearEditor = () =>
   ({
     type: 'CLEAR_EDITOR',
@@ -99,3 +109,5 @@ export type Action =
   | ReturnType<typeof updateSource>
   | ReturnType<typeof updateAutoFormatSource>
   | ReturnType<typeof switchEditorTheme>
+  | ReturnType<typeof undo>
+  | ReturnType<typeof redo>

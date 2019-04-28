@@ -17,7 +17,7 @@ export const getAppState = () => load('keyrier-json.app.state') as AppState
 
 type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
 
-const persist = (key: StorageKey, value: object) => {
+const persist = (key: StorageKey, value: object | undefined) => {
   const storage = getStorage()
   if (!storage) {
     toast.warn("Browser does'nt support required storage")
