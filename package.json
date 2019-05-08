@@ -73,7 +73,7 @@
     "node-sass": "4.11.0",
     "prettier": "1.17.0",
     "pretty-quick": "1.10.0",
-    "react-scripts": "3.0.0",
+    "react-scripts": "3.0.1",
     "react-testing-library": "6.1.2",
     "redux-devtools": "3.5.0",
     "source-map-explorer": "^1.8.0",
