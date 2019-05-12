@@ -30,3 +30,5 @@ yarn-error.log*
 cypress/screenshots/
 cypress/videos/
 source-map-explorer.html
+.pnp
+.pnp.js
