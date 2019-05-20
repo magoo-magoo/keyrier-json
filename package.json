@@ -73,7 +73,7 @@
     "husky": "2.2.0",
     "node-sass": "4.12.0",
     "prettier": "1.17.0",
-    "pretty-quick": "1.10.0",
+    "pretty-quick": "1.11.0",
     "react-scripts": "3.0.1",
     "react-testing-library": "7.0.1",
     "redux-devtools": "3.5.0",
