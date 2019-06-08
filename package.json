@@ -75,7 +75,7 @@
     "prettier": "1.17.0",
     "pretty-quick": "1.10.0",
     "react-scripts": "3.0.1",
-    "react-testing-library": "7.0.1",
+    "react-testing-library": "8.0.1",
     "redux-devtools": "3.5.0",
     "source-map-explorer": "1.8.0",
     "tslint": "5.16.0",
