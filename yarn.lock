@@ -2933,7 +2933,7 @@ check-more-types@2.24.0:
   resolved "https://registry.yarnpkg.com/check-more-types/-/check-more-types-2.24.0.tgz#1420ffb10fd444dcfc79b43891bbfffd32a84600"
   integrity sha1-FCD/sQ/URNz8ebQ4kbv//TKoRgA=
 
-chevrotain@^4.3.3:
+chevrotain@4.3.3:
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-4.3.3.tgz#4b02541d9c414ecd0490db48664be7304d798b80"
   integrity sha512-DsmAmF5urXboHHXqEr26Ot//S+l3yrOr7UwwgWQ+aNNlYpmnYK1flxplwJ5cIUgP9toKFsJ0VeLT1sq350A9Hg==
