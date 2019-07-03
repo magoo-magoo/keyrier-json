@@ -25,7 +25,9 @@
     "pack:dockerelectron": "bash -c \"docker run --rm --env GH_TOKEN=$GITHUB_TOKEN --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') -v ${PWD}:/project -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine /bin/bash -c \\\"npm run pack:electron\\\"\"",
     "postinstall": "electron-builder install-app-deps",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "analyze": "yarn build && source-map-explorer --html 'build/static/**/*.*' > source-map-explorer.html"
+    "analyze": "yarn build && source-map-explorer --html 'build/static/**/*.*' > source-map-explorer.html",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "bootswatch": "4.3.1",
@@ -49,7 +51,8 @@
     "redux-undo": "1.0.0-beta9-9-7",
     "sql-parser": "0.5.0",
     "utility-types": "3.7.0",
-    "xlsx": "0.14.3"
+    "xlsx": "0.14.3",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@types/classnames": "2.2.7",
@@ -146,5 +149,6 @@
     "win": {
       "icon": "build/logo_512.png"
     }
-  }
+  },
+  "snyk": true
 }
