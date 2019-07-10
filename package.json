@@ -45,7 +45,7 @@
     "react-table": "6.9.2",
     "react-toastify": "5.3.1",
     "reactstrap": "8.0.0",
-    "redux": "4.0.1",
+    "redux": "4.0.4",
     "redux-undo": "1.0.0-beta9-9-7",
     "sql-parser": "0.5.0",
     "utility-types": "3.7.0",
