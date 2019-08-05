@@ -1493,10 +1493,10 @@
     "@types/react" "*"
     redux "^4.0.0"
 
-"@types/react-select@2.0.16":
-  version "2.0.16"
-  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-2.0.16.tgz#2f79dfa5cd1ac7b28773d0e2c8844e67e3a8beb7"
-  integrity sha512-bO3GH4FJ8UmZSV058Ky4d1rCieOwwXPHwZ3a9/rJP6V/IR4E3FZzttaxOZ1db1x+prAGaBh9FHma1CilrHT9bw==
+"@types/react-select@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-3.0.2.tgz#7b1f93967668e89f50fe00b48e6ee8bd8dea773c"
+  integrity sha512-9OrprBJqwJkFanyITQq65r36CjjDt+H5zJYh9C81MnUqH4Dulk5WZSLR77kwlw/yXd8jMii4Dz519amr6IMCfQ==
   dependencies:
     "@types/react" "*"
     "@types/react-dom" "*"
