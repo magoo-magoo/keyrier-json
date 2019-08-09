@@ -2,5 +2,15 @@
   "trailingComma": "es5",
   "singleQuote": true,
   "semi": false,
-  "printWidth": 120
+  "printWidth": 120,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "useTabs": false,
+  "tabWidth": 4,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "htmlWhitespaceSensitivity": "css",
+  "jsxSingleQuote": false,
+  "jsxBracketSameLine": false
 }
