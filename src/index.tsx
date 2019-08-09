@@ -17,14 +17,11 @@ import { unregister } from 'registerServiceWorker'
 
   const ReactDOM = promises[0]
 
-  const Concurrent = (React as any).unstable_ConcurrentMode
-  const root = (ReactDOM as any).unstable_createRoot(document.getElementById('root'))
-  root.render(
-    <Concurrent>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </Concurrent>
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('root')
   )
 
   unregister()
