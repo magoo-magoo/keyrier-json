@@ -62,7 +62,7 @@
     "@types/react-loadable": "5.5.1",
     "@types/react-redux": "7.0.6",
     "@types/react-select": "2.0.19",
-    "@types/react-table": "6.8.1",
+    "@types/react-table": "6.8.5",
     "@types/reactstrap": "8.0.1",
     "@types/scheduler": "0.12.1",
     "concurrently": "4.1.1",
