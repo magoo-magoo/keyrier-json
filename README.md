@@ -12,6 +12,7 @@
 ## [Live here](https://keyrier.magoo.dev) and [here](https://magoo-magoo.github.io/keyrier-json)
 
 A web application to perfom query on JSON object.
+SQL like syntax or javascript.
 ![](demo.gif)
 
 ## Desktop
