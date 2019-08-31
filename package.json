@@ -36,7 +36,7 @@
     "fast-deep-equal": "2.0.1",
     "lodash": "4.17.15",
     "react": "16.9.0",
-    "react-ace": "7.0.2",
+    "react-ace": "7.0.4",
     "react-debounce-input": "3.2.0",
     "react-dom": "16.9.0",
     "react-json-view": "1.19.1",
