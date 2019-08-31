@@ -737,14 +737,6 @@
     "@babel/helper-regex" "^7.4.4"
     regexpu-core "^4.5.4"
 
-"@babel/polyfill@^7.4.4":
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.4.4.tgz#78801cf3dbe657844eeabf31c1cae3828051e893"
-  integrity sha512-WlthFLfhQQhh+A2Gn5NSFl0Huxz36x86Jn+E9OW7ibK8edKPq+KLy4apM1yDpQ8kJOVi1OVjpP4vSDLdrI04dg==
-  dependencies:
-    core-js "^2.6.5"
-    regenerator-runtime "^0.13.2"
-
 "@babel/preset-env@7.5.5", "@babel/preset-env@^7.4.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.5.5.tgz#bc470b53acaa48df4b8db24a570d6da1fef53c9a"
@@ -9802,12 +9794,11 @@ rc@^1.1.6, rc@^1.2.1, rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-ace@7.0.2:
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-7.0.2.tgz#bbb6ec12b97c9928a0696484bf4820f8b94f8114"
-  integrity sha512-+TFuO1nO6dme/q+qEHjb7iOuWI8jRDzeALs9JyH8HoyHb9+A2bC8WHuJyNU3pmPo8623bytgAgzEJAzDMkzjlw==
+react-ace@7.0.4:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-7.0.4.tgz#92fccafc0dda11824172bf5c1a3c633313e36800"
+  integrity sha512-Otk0c2aLr1ZqPQaUEONc4UGAEA/h/P7vAUPLHbEPUVFX67G8Ke6yoe390AQun3NlWdNvpVZ/N7lOJHz0yUl6Fg==
   dependencies:
-    "@babel/polyfill" "^7.4.4"
     brace "^0.11.1"
     diff-match-patch "^1.0.4"
     lodash.get "^4.4.2"
