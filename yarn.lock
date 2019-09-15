@@ -3217,10 +3217,10 @@ check-more-types@2.24.0:
   resolved "https://registry.yarnpkg.com/check-more-types/-/check-more-types-2.24.0.tgz#1420ffb10fd444dcfc79b43891bbfffd32a84600"
   integrity sha1-FCD/sQ/URNz8ebQ4kbv//TKoRgA=
 
-chevrotain@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-5.0.0.tgz#80aa81c731861d8dc02f877a9b9fab82a8dfdd61"
-  integrity sha512-hKhIpmvXOOYAOP5Qc+mXeXJugjdyQAVps3DLmPq2EKSbas6UuDhWd4VAYCYndtdNItRDnzDKKDo9VF3M4KQ45w==
+chevrotain@6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-6.4.0.tgz#b70ad85a7aab3fa33439c7901a18d24f3adc292b"
+  integrity sha512-C2Aq3/daPSOt6RTzFwXIIjQ3tW7wYUtsZC9juyT0N5T99aw+DI+jyUDGJvkF62KuCiOR98kD+XprD3qetCkeVw==
   dependencies:
     regexp-to-ast "0.4.0"
 
