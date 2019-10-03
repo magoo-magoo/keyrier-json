@@ -1775,10 +1775,10 @@
     "@types/react" "*"
     popper.js "^1.14.1"
 
-"@types/scheduler@0.12.1":
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.12.1.tgz#3204ac7ac5c639b3d152a8a5e1ed5f3206d3c7b0"
-  integrity sha512-XyL0jqjNrtC5evlPzAx25XCUxyrP5PFgsWwbCNkj6CPlABEd9ikr1B3wGd9KiCad7wbLd7MpL3KKe2dGpLKnZw==
+"@types/scheduler@0.16.0":
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.0.tgz#0375e7f8ff3c75d0dc1c6cef5bfabc2a514f9ca4"
+  integrity sha512-Ru6zqw+j3Rhn6Dgg7j/SSKOC+2Rpm92V6f+tvXMZTZ8KgAqtOdD2fHWUYvcU2zrsciw46oTIWjeJ86Hun9AuZg==
 
 "@types/semver@^6.0.1":
   version "6.0.1"
