@@ -2,7 +2,7 @@
     "description": "Keyrier JSON",
     "name": "keyrier-json",
     "author": "magoo",
-  "version": "0.5.153",
+    "version": "0.5.154",
     "private": true,
     "homepage": "./",
     "repository": {
