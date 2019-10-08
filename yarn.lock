@@ -1443,7 +1443,7 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@now/node@^1.0.1":
+"@now/node@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@now/node/-/node-1.0.1.tgz#519e137a7b0da913ee409d1613ecab8b8d0e4a8c"
   integrity sha512-unClfFk4s7q31AyE6D+8LjQTeFRG+YKfeCCMXT+/KXIuCzCx/uqCtlP/rp9sCdxayVM93iPg9x1Ttbn3ySg7zQ==
@@ -1717,7 +1717,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-grid-layout@^0.16.7":
+"@types/react-grid-layout@0.16.7":
   version "0.16.7"
   resolved "https://registry.yarnpkg.com/@types/react-grid-layout/-/react-grid-layout-0.16.7.tgz#53d5f5034deb0c60e25a0fa578141e9a0982011f"
   integrity sha512-A3tW9xySd03KGONkp8gP4+QRLuT1Mcx++m0hO0nZIM4H/Qwz8GsiDv+9okbmHk5HcsHwY5Jdsn6Cv50hwoNG+A==
@@ -10252,7 +10252,7 @@ react-error-overlay@^6.0.3:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.3.tgz#c378c4b0a21e88b2e159a3e62b2f531fd63bf60d"
   integrity sha512-bOUvMWFQVk5oz8Ded9Xb7WVdEi3QGLC8tH7HmYP0Fdp4Bn3qw0tRFmr5TW6mvahzvmrK4a6bqWGfCevBflP+Xw==
 
-react-grid-layout@^0.16.6:
+react-grid-layout@0.16.6:
   version "0.16.6"
   resolved "https://registry.yarnpkg.com/react-grid-layout/-/react-grid-layout-0.16.6.tgz#9b2407a2b946c2260ebaf66f13b556e1da4efeb2"
   integrity sha512-h2EsYgsqcESLJeevQSJsEKp8hhh+phOlXDJoMhlV2e7T3VWQL+S6iCF3iD/LK19r4oyRyOMDEir0KV+eLXrAyw==
