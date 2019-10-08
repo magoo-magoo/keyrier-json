@@ -1,0 +1,11 @@
+.draggable {
+    .grabber {
+        opacity: 0;
+    }
+    &:hover {
+        .grabber {
+            opacity: 0.5;
+            cursor: move;
+        }
+    }
+}

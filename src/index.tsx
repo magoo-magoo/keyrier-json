@@ -8,21 +8,21 @@ import { importThemeStyleCustom } from 'themes/themes'
 import App from 'components/App'
 import { unregister } from 'registerServiceWorker'
 ;(async () => {
-  const store = configureStore()
+    const store = configureStore()
 
-  const promises = await Promise.all([
-    import(/* webpackChunkName: "react-dom" */ 'react-dom'),
-    importThemeStyleCustom(getTheme(store.getState())),
-  ])
+    const promises = await Promise.all([
+        import(/* webpackChunkName: "react-dom" */ 'react-dom'),
+        importThemeStyleCustom(getTheme(store.getState())),
+    ])
 
-  const ReactDOM = promises[0]
+    const ReactDOM = promises[0]
 
-  ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-  )
+    ReactDOM.render(
+        <Provider store={store}>
+            <App />
+        </Provider>,
+        document.getElementById('root')
+    )
 
-  unregister()
+    unregister()
 })()

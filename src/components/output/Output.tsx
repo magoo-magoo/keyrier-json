@@ -15,96 +15,91 @@ import { prettyPrintBytes } from 'core/converters/string'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 
 interface Props {
-  isArray: boolean
-  activeTab: tabType
-  objSize: number
-  setActiveTab: typeof updateOutputTabSelection
-  errorMessage?: string
+    isArray: boolean
+    activeTab: tabType
+    objSize: number
+    setActiveTab: typeof updateOutputTabSelection
+    errorMessage?: string
 }
 
 const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, objSize }) => {
-  const handleActiveTable = useCallback(() => setActiveTab('Table'), [setActiveTab])
-  const handleActiveRawJson = useCallback(() => setActiveTab('RawJson'), [setActiveTab])
-  return (
-    <>
-      <div className="row">
-        <div className="col-sm-10 offset-sm-2">
-          <h3>3. View your results:</h3>
-        </div>
-      </div>
-      <div hidden={!errorMessage}>
-        <div className="row">
-          <div className="col-sm-10 offset-sm-2">
-            <Alert className="row align-items-center" color="danger">
-              <i className="material-icons mr-2">error</i>
-              <span>{errorMessage}</span>
-            </Alert>
-          </div>
-        </div>
-      </div>
-      <>
-        <div className="row">
-          <div className="col">
-            <ul className="nav nav-tabs">
-              <li className="nav-item">
-                <button
-                  className={classNames({
-                    active: activeTab === 'RawJson',
-                    'nav-link': true,
-                    [styles.pointer]: true,
-                  })}
-                  onClick={handleActiveRawJson}
-                >
-                  Raw JSON view
-                </button>
-              </li>
-              <li className="nav-item" hidden={!isArray}>
-                <button
-                  className={classNames({
-                    active: activeTab === 'Table',
-                    'nav-link': true,
-                    [styles.pointer]: true,
-                  })}
-                  onClick={handleActiveTable}
-                >
-                  Table view
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <TabContent activeTab={activeTab}>
-          <TabPane tabId="RawJson">
-            <div className="row">
-              <div className="col-sm-2 pt-5">
-                <h3>
-                  <Badge id="badgeSize" color="info" pill={true}>
-                    {prettyPrintBytes(objSize)}
-                  </Badge>
-                </h3>
-              </div>
-              <div className="col-sm-10">
-                <JsonView />
-              </div>
+    const handleActiveTable = useCallback(() => setActiveTab('Table'), [setActiveTab])
+    const handleActiveRawJson = useCallback(() => setActiveTab('RawJson'), [setActiveTab])
+    return (
+        <>
+            <div hidden={!errorMessage}>
+                <div className="row">
+                    <div className="col-sm-10 offset-sm-2">
+                        <Alert className="row align-items-center" color="danger">
+                            <i className="material-icons mr-2">error</i>
+                            <span>{errorMessage}</span>
+                        </Alert>
+                    </div>
+                </div>
             </div>
-          </TabPane>
-          <TabPane tabId="Table">
-            <OutputTable />
-          </TabPane>
-        </TabContent>
-      </>
-    </>
-  )
+            <>
+                <div className="row">
+                    <div className="col">
+                        <ul className="nav nav-tabs">
+                            <li className="nav-item">
+                                <button
+                                    className={classNames({
+                                        active: activeTab === 'RawJson',
+                                        'nav-link': true,
+                                        [styles.pointer]: true,
+                                    })}
+                                    onClick={handleActiveRawJson}
+                                >
+                                    Raw JSON view
+                                </button>
+                            </li>
+                            <li className="nav-item" hidden={!isArray}>
+                                <button
+                                    className={classNames({
+                                        active: activeTab === 'Table',
+                                        'nav-link': true,
+                                        [styles.pointer]: true,
+                                    })}
+                                    onClick={handleActiveTable}
+                                >
+                                    Table view
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <TabContent activeTab={activeTab}>
+                    <TabPane tabId="RawJson">
+                        <div className="row">
+                            <div className="col-sm-2 pt-5">
+                                <h3>
+                                    <Badge id="badgeSize" color="info" pill={true}>
+                                        {prettyPrintBytes(objSize)}
+                                    </Badge>
+                                </h3>
+                            </div>
+                            <div className="col-sm-10">
+                                <JsonView />
+                            </div>
+                        </div>
+                    </TabPane>
+                    <TabPane tabId="Table">
+                        <OutputTable />
+                    </TabPane>
+                </TabContent>
+            </>
+        </>
+    )
 }
 
 const mapStateToProps = (state: RootState) => ({
-  errorMessage: getOutputErrorMessage(state),
-  isArray: getOutputIsArray(state),
-  activeTab: getOutputActiveTab(state),
-  objSize: getOutputObjectSize(state),
+    errorMessage: getOutputErrorMessage(state),
+    isArray: getOutputIsArray(state),
+    activeTab: getOutputActiveTab(state),
+    objSize: getOutputObjectSize(state),
 })
 
 export default connect(
-  mapStateToProps,
-  { setActiveTab: updateOutputTabSelection }
+    mapStateToProps,
+    { setActiveTab: updateOutputTabSelection }
 )(memo(withErrorBoundary(Output)))
