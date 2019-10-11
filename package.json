@@ -84,7 +84,7 @@
         "tslint": "5.20.0",
         "tslint-config-prettier": "1.18.0",
         "tslint-react": "4.1.0",
-        "typescript": "3.7.0-beta",
+        "typescript": "3.7.0-dev.20191011",
         "unfetch": "4.1.0",
         "wait-on": "3.3.0"
     },
