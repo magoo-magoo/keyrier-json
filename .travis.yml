@@ -2,56 +2,60 @@ dist: xenial
 services: docker
 language: node_js
 node_js:
-  - '11'
+    - '11'
 
 cache:
-  npm: true
-  directories:
-    - node_modules
-    - .cache/electron
-    - .cache/electron-builder
-    - .cache
-    - .cache/Cypress
+    npm: true
+    directories:
+        - node_modules
+        - .cache/electron
+        - .cache/electron-builder
+        - .cache
+        - .cache/Cypress
 
 before_install:
-  - sudo apt-get install -y libgconf-2-4
+    - sudo apt-get install -y libgconf-2-4
 
 install:
-  - yarn --frozen-lockfile
-  - npx cypress install
+    - yarn --frozen-lockfile
+    - npx cypress install
 
 script:
-  - yarn test --coverage --watchAll=false
-  # - yarn cypress:run
-  - sonar-scanner
-  - yarn build:ci
-  - yarn pack:dockerelectron
+    - yarn test --coverage --watchAll=false
+    # - yarn cypress:run
+    - sonar-scanner
+    - yarn build:ci
+    - yarn pack:dockerelectron
+
+after_success:
+    - ./deploy.sh # TODO(you): deploy the PR changes to your staging server.
+    - yarn lh https://deploy-preview-`echo $TRAVIS_PULL_REQUEST`--keyrier.netlify.com/
 
 addons:
-  sonarcloud:
-    organization: 'magoo-magoo-github'
-  apt:
-    update: true
+    sonarcloud:
+        organization: 'magoo-magoo-github'
+    apt:
+        update: true
 
 before_cache:
-  - rm -rf $HOME/.cache/electron-builder/wine
+    - rm -rf $HOME/.cache/electron-builder/wine
 
 before_deploy:
-  - git config --local user.name "Travis CI" && git config --local user.email "travis@travis-ci.org" && git config --global push.default matching && git config credential.helper "store --file=.git/credentials" && echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
-  - git checkout -- . && git status && git push origin HEAD:$TRAVIS_BRANCH && git push --tags
+    - git config --local user.name "Travis CI" && git config --local user.email "travis@travis-ci.org" && git config --global push.default matching && git config credential.helper "store --file=.git/credentials" && echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
+    - git checkout -- . && git status && git push origin HEAD:$TRAVIS_BRANCH && git push --tags
 
 deploy:
-  - provider: pages
-    local-dir: build
-    skip-cleanup: true
-    github-token: $GITHUB_TOKEN
-    keep-history: true
-    on:
-      branch: master
-  - provider: releases
-    api_key: $GITHUB_TOKEN
-    file_glob: true
-    file: dist/*
-    skip_cleanup: true
-    on:
-      branch: master
+    - provider: pages
+      local-dir: build
+      skip-cleanup: true
+      github-token: $GITHUB_TOKEN
+      keep-history: true
+      on:
+          branch: master
+    - provider: releases
+      api_key: $GITHUB_TOKEN
+      file_glob: true
+      file: dist/*
+      skip_cleanup: true
+      on:
+          branch: master
