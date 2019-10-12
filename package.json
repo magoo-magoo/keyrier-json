@@ -17,7 +17,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "predeploy": "yarn build",
-        "lh": "lighthousebot",
+        "lh": "lighthousebot --runner=wpt",
         "cypress:open": "cypress open",
         "cypress:run": "concurrently --success first --kill-others \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && cypress run\"",
         "lint": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --write && tslint -p . --format codeFrame --fix",
