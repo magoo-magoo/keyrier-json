@@ -2,180 +2,180 @@ import { output, query, rootReducerReset, source, containsTerm } from './reducer
 import { getDefaultAppState, QueryState, emptyState } from 'state/State'
 
 describe('Reducers', () => {
-  it('rootReducers should reset', () => {
-    const state = {
-      output: {
-        text: 'fake o',
-        obj: {},
-        searchTerm: '',
-        match: false,
-        selectedTab: 'RawJson',
-        table: {
-          array: [],
-          isArray: false,
-          isModalOpen: false,
-          displayedColumns: [],
-          columns: [],
-          groupBy: [],
-        },
-      },
-      query: { text: 'fake q', mode: 'Javascript' },
-      source: { text: 'fake s' },
-    }
-    const results = rootReducerReset(state as any, {
-      type: 'RESET_EDITOR',
+    it('rootReducers should reset', () => {
+        const state = {
+            output: {
+                text: 'fake o',
+                obj: {},
+                searchTerm: '',
+                match: false,
+                selectedTab: 'RawJson',
+                table: {
+                    array: [],
+                    isArray: false,
+                    isModalOpen: false,
+                    displayedColumns: [],
+                    columns: [],
+                    groupBy: [],
+                },
+            },
+            query: { text: 'fake q', mode: 'Javascript' },
+            source: { text: 'fake s' },
+        }
+        const results = rootReducerReset(state as any, {
+            type: 'RESET_EDITOR',
+        })
+
+        expect(results.query).toEqual(getDefaultAppState().query)
+        expect(results.source).toEqual(getDefaultAppState().source)
+    })
+    it('clear action', () => {
+        const state = {
+            output: {
+                text: 'fake o',
+                obj: {},
+                searchTerm: '',
+                match: false,
+                selectedTab: 'RawJson',
+                table: {
+                    array: ['fake'],
+                    isArray: false,
+                    isModalOpen: true,
+                    displayedColumns: [],
+                    columns: ['1'],
+                    groupBy: [],
+                },
+            },
+            query: { text: 'fake q', mode: 'Javascript' },
+            source: { text: 'fake s' },
+        }
+        const results = rootReducerReset(state as any, {
+            type: 'CLEAR_EDITOR',
+        })
+
+        expect(results).toEqual(emptyState)
     })
 
-    expect(results.query).toEqual(getDefaultAppState().query)
-    expect(results.source).toEqual(getDefaultAppState().source)
-  })
-  it('clear action', () => {
-    const state = {
-      output: {
-        text: 'fake o',
-        obj: {},
-        searchTerm: '',
-        match: false,
-        selectedTab: 'RawJson',
-        table: {
-          array: ['fake'],
-          isArray: false,
-          isModalOpen: true,
-          displayedColumns: [],
-          columns: ['1'],
-          groupBy: [],
-        },
-      },
-      query: { text: 'fake q', mode: 'Javascript' },
-      source: { text: 'fake s' },
-    }
-    const results = rootReducerReset(state as any, {
-      type: 'CLEAR_EDITOR',
+    it('update query action should update', () => {
+        const state: QueryState = { text: 'initial', mode: 'Javascript' }
+
+        const result = query(state, { query: 'new value', type: 'UPDATE_QUERY' })
+
+        expect(result).toEqual({ text: 'new value', mode: 'Javascript' })
     })
 
-    expect(results).toEqual(emptyState)
-  })
+    it('update source action should update', () => {
+        const state = { text: 'initial' }
 
-  it('update query action should update', () => {
-    const state: QueryState = { text: 'initial', mode: 'Javascript' }
+        const result = source(state as any, {
+            source: 'new value',
+            type: 'UPDATE_SOURCE_TEXT',
+        })
 
-    const result = query(state, { query: 'new value', type: 'UPDATE_QUERY' })
-
-    expect(result).toEqual({ text: 'new value', mode: 'Javascript' })
-  })
-
-  it('update source action should update', () => {
-    const state = { text: 'initial' }
-
-    const result = source(state as any, {
-      source: 'new value',
-      type: 'UPDATE_SOURCE_TEXT',
+        expect(result).toEqual({ text: 'new value' })
     })
 
-    expect(result).toEqual({ text: 'new value' })
-  })
+    it('output ', () => {
+        const prevState = {
+            output: {
+                text: '{}',
+                obj: {},
+                match: false,
+                searchTerm: '',
+                selectedTab: 'RawJson',
+                table: {
+                    array: [],
+                    isArray: false,
+                    isModalOpen: false,
+                    displayedColumns: [],
+                    columns: [],
+                    groupBy: [],
+                },
+            },
+            query: { text: 'data.value', mode: 'Javascript' },
+            source: { text: '{}' },
+        }
+        const state = {
+            output: {
+                obj: {},
+                match: false,
+                searchTerm: '',
+                selectedTab: 'RawJson',
+                table: {
+                    array: [],
+                    isArray: false,
+                    isModalOpen: false,
+                    displayedColumns: [],
+                    columns: [],
+                    groupBy: [],
+                },
+            },
+            query: { text: 'data.value', mode: 'Javascript' },
+            source: { text: '{"value": "test"}' },
+        }
 
-  it('output ', () => {
-    const prevState = {
-      output: {
-        text: '{}',
-        obj: {},
-        match: false,
-        searchTerm: '',
-        selectedTab: 'RawJson',
-        table: {
-          array: [],
-          isArray: false,
-          isModalOpen: false,
-          displayedColumns: [],
-          columns: [],
-          groupBy: [],
-        },
-      },
-      query: { text: 'data.value', mode: 'Javascript' },
-      source: { text: '{}' },
-    }
-    const state = {
-      output: {
-        obj: {},
-        match: false,
-        searchTerm: '',
-        selectedTab: 'RawJson',
-        table: {
-          array: [],
-          isArray: false,
-          isModalOpen: false,
-          displayedColumns: [],
-          columns: [],
-          groupBy: [],
-        },
-      },
-      query: { text: 'data.value', mode: 'Javascript' },
-      source: { text: '{"value": "test"}' },
-    }
+        const result = output(prevState as any, state as any, {
+            type: 'EVALUATE_CODE',
+        })
 
-    const result = output(prevState as any, state as any, {
-      type: 'EVALUATE_CODE',
+        expect(result.table.isArray).toEqual(false)
+        expect(result.errorMessage).toBeUndefined()
     })
 
-    expect(result.table.isArray).toEqual(false)
-    expect(result.errorMessage).toBeUndefined()
-  })
+    it('should filter object from tree if search term is not found', () => {
+        const { filteredObj, match } = containsTerm(
+            {
+                field1: {
+                    field3: 42,
+                    field4: 'val',
+                    field5: 'la tête à toTo est tombée.',
+                },
+                field2: {
+                    filed6: {},
+                },
+                field7: {
+                    field8Toto: { a: 42 },
+                },
+                field9: {
+                    field10Array: [{ field11: 'toto' }, { field12: { field13: 'éà' } }],
+                },
+            },
+            'toto'
+        )
 
-  it('should filter object from tree if search term is not found', () => {
-    const { filteredObj, match } = containsTerm(
-      {
-        field1: {
-          field3: 42,
-          field4: 'val',
-          field5: 'la tête à toTo est tombée.',
-        },
-        field2: {
-          filed6: {},
-        },
-        field7: {
-          field8Toto: { a: 42 },
-        },
-        field9: {
-          field10Array: [{ field11: 'toto' }, { field12: { field13: 'éà' } }],
-        },
-      },
-      'toto'
-    )
-
-    expect(match).toBeTruthy()
-    expect(filteredObj).toEqual({
-      field1: {
-        field5: 'la tête à toTo est tombée.',
-      },
-      field7: {
-        field8Toto: { a: 42 },
-      },
-      field9: {
-        field10Array: [{ field11: 'toto' }],
-      },
+        expect(match).toBeTruthy()
+        expect(filteredObj).toEqual({
+            field1: {
+                field5: 'la tête à toTo est tombée.',
+            },
+            field7: {
+                field8Toto: { a: 42 },
+            },
+            field9: {
+                field10Array: [{ field11: 'toto' }],
+            },
+        })
     })
-  })
 
-  test('should not match if search term is not found', () => {
-    const { filteredObj, match } = containsTerm(
-      {
-        field1: {
-          field3: 42,
-          field4: 'val',
-          field5: 'la tête est tombée.',
-        },
-        field2: {
-          filed6: {},
-        },
-        field7: {
-          field8Momo: { a: 42 },
-        },
-      },
-      'toto'
-    )
+    test('should not match if search term is not found', () => {
+        const { filteredObj, match } = containsTerm(
+            {
+                field1: {
+                    field3: 42,
+                    field4: 'val',
+                    field5: 'la tête est tombée.',
+                },
+                field2: {
+                    filed6: {},
+                },
+                field7: {
+                    field8Momo: { a: 42 },
+                },
+            },
+            'toto'
+        )
 
-    expect(match).toBeFalsy()
-    expect(filteredObj).toEqual({})
-  })
+        expect(match).toBeFalsy()
+        expect(filteredObj).toEqual({})
+    })
 })

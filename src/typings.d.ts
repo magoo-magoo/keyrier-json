@@ -34,61 +34,61 @@ declare module 'brace/snippets/javascript'
 declare module 'brace/snippets/json'
 
 declare module 'sql-parser' {
-  export interface Source {
-    name: Value
-    alias?: Value
-  }
+    export interface Source {
+        name: Value
+        alias?: Value
+    }
 
-  export interface Value {
-    value: string | number
-    values: string[]
-    value2: string
-  }
+    export interface Value {
+        value: string | number
+        values: string[]
+        value2: string
+    }
 
-  export interface Field {
-    field: Value
-    name: Value
-  }
+    export interface Field {
+        field: Value
+        name: Value
+    }
 
-  export interface Op {
-    value: string | number | Value[] | null
-    values: string[]
-    operation: string | null
-    left: Op
-    right: Op
-  }
-  export interface Conditions {
-    left: Op
-    right: Op
-    operation: string | null
-  }
-  export interface Where {
-    conditions: Conditions
-  }
+    export interface Op {
+        value: string | number | Value[] | null
+        values: string[]
+        operation: string | null
+        left: Op
+        right: Op
+    }
+    export interface Conditions {
+        left: Op
+        right: Op
+        operation: string | null
+    }
+    export interface Where {
+        conditions: Conditions
+    }
 
-  export interface Limit {
-    value: Value
-  }
-  export interface OrderArgument {
-    value: Value
-    direction: 'desc' | 'asc'
-  }
-  export interface Order {
-    orderings: OrderArgument[]
-  }
+    export interface Limit {
+        value: Value
+    }
+    export interface OrderArgument {
+        value: Value
+        direction: 'desc' | 'asc'
+    }
+    export interface Order {
+        orderings: OrderArgument[]
+    }
 
-  export interface SQLTree {
-    source: Source
-    where?: Where | null
-    fields: Field[]
-    limit: Limit | null
-    order?: Order
-  }
+    export interface SQLTree {
+        source: Source
+        where?: Where | null
+        fields: Field[]
+        limit: Limit | null
+        order?: Order
+    }
 
-  export class nodes {
-    public static readonly Star: Function
-  }
+    export class nodes {
+        public static readonly Star: Function
+    }
 
-  export type ParseFunction = (s: string) => SQLTree
-  export const parse: ParseFunction
+    export type ParseFunction = (s: string) => SQLTree
+    export const parse: ParseFunction
 }

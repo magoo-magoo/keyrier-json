@@ -3,14 +3,15 @@ import Header from './Header'
 import { ToastContainer } from 'react-toastify'
 import { lazy, Suspense, FC } from 'react'
 import LateralMenu from './LateralMenu'
-import GridLayout from 'react-grid-layout'
 import grabbleStyles from './common/GrabbleHeader.module.scss'
 import { GrabbleHeader } from './common/GrabbleHeader'
 import 'react-grid-layout/css/styles.css'
 import { connect } from 'react-redux'
 import { getQueryMode } from 'store/selectors'
 import { QueryMode } from 'state/State'
+import { Responsive, WidthProvider } from 'react-grid-layout'
 
+const ResponsiveGridLayout = WidthProvider(Responsive)
 const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ 'components/source/SourceEditor'))
 const Output = lazy(() => import(/* webpackChunkName: "Output" */ 'components/output/Output'))
 const QueryEditor = lazy(() => import(/* webpackChunkName: "QueryEditor" */ 'components/query/QueryEditor'))
@@ -19,57 +20,88 @@ type Props = {
     mode: QueryMode
 }
 
+const lateralMenuKey = 'LateralMenu'
+const sourceEditorKey = 'SourceEditor'
+const queryEditorKey = 'QueryEditor'
+const outputKey = 'Output'
+
 const App: FC<Props> = ({ mode }) => {
-    const layout = [
-        { i: 'LateralMenu', x: 0, y: 0, w: 6, h: 7, minW: 5 },
-        { i: 'SourceEditor', x: 6, y: 0, w: 14, h: 8, minW: 10, minH: 8 },
-        { i: 'QueryEditor', x: 20, y: 0, w: 28, h: 4, minW: 8, minH: 4 },
-        { i: 'Output', x: 20, y: 8, w: 28, h: 16, minW: 10, minH: 16 },
-    ]
+    const layouts = {
+        lg: [
+            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 7, minW: 5, minH: 7 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 8, minW: 10, minH: 8 },
+            { i: queryEditorKey, x: 20, y: 0, w: 28, h: 4, minW: 8, minH: 4 },
+            { i: outputKey, x: 20, y: 8, w: 28, h: 16, minW: 10, minH: 16 },
+        ],
+        md: [
+            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 12, h: 8, minW: 10, minH: 8 },
+            { i: queryEditorKey, x: 20, y: 0, w: 20, h: 4, minW: 8, minH: 4 },
+            { i: outputKey, x: 20, y: 8, w: 22, h: 16, minW: 10, minH: 16 },
+        ],
+        sm: [
+            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 10, h: 8, minW: 10, minH: 8 },
+            { i: queryEditorKey, x: 20, y: 0, w: 8, h: 4, minW: 8, minH: 4 },
+            { i: outputKey, x: 20, y: 8, w: 10, h: 16, minW: 10, minH: 16 },
+        ],
+        xs: [
+            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 10, h: 8, minW: 10, minH: 8 },
+            { i: queryEditorKey, x: 20, y: 0, w: 8, h: 4, minW: 8, minH: 4 },
+            { i: outputKey, x: 20, y: 8, w: 10, h: 16, minW: 10, minH: 16 },
+        ],
+        xxs: [
+            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 10, h: 8, minW: 10, minH: 8 },
+            { i: queryEditorKey, x: 20, y: 0, w: 8, h: 4, minW: 8, minH: 4 },
+            { i: outputKey, x: 20, y: 8, w: 10, h: 16, minW: 10, minH: 16 },
+        ],
+    }
     return (
         <>
             <Header />
             <div className="container-fluid">
                 <h1 className="my-5">Paste your JSON and Query it.</h1>
-                <GridLayout
+                <ResponsiveGridLayout
                     autoSize={true}
                     className="layout"
                     isResizable={true}
+                    layouts={layouts}
                     draggableHandle={`.${grabbleStyles.grabber}`}
-                    layout={layout}
-                    cols={48}
-                    width={1800}
+                    breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+                    cols={{ lg: 48, md: 36, sm: 24, xs: 12, xxs: 6 }}
                     margin={[20, 20]}
                     containerPadding={[0, 0]}
                     rowHeight={50}
                 >
-                    <div key="LateralMenu">
+                    <div key={lateralMenuKey}>
                         <GrabbleHeader title="Keyrier">
                             <LateralMenu />
                         </GrabbleHeader>
                     </div>
-                    <div key="SourceEditor">
+                    <div key={sourceEditorKey}>
                         <GrabbleHeader title="1. Paste your JSON:">
                             <Suspense fallback={'loading...'}>
                                 <SourceEditor />
                             </Suspense>
                         </GrabbleHeader>
                     </div>
-                    <div key="QueryEditor">
+                    <div key={queryEditorKey}>
                         <GrabbleHeader title={`2. Type your ${mode} query:`}>
                             <Suspense fallback={'loading...'}>
                                 <QueryEditor />
                             </Suspense>
                         </GrabbleHeader>
                     </div>
-                    <div key="Output">
+                    <div key={outputKey}>
                         <GrabbleHeader title="3. View your results:">
                             <Suspense fallback={'loading...'}>
                                 <Output />
                             </Suspense>
                         </GrabbleHeader>
                     </div>
-                </GridLayout>
+                </ResponsiveGridLayout>
             </div>
             <ToastContainer />
         </>

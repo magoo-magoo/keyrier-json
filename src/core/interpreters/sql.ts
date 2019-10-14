@@ -18,7 +18,6 @@ export const computePath = (path: string[]) => {
 export const sqlEvaluation = (sourceString: string, queryString: string) => {
     try {
         const sqlTree = parse(queryString.replace(/--(.*?)(\n|$)/gm, ''))
-        console.log({ sqlTree })
         if (sqlTree.source.name.values[0] !== 'data') {
             return new Error(`${sqlTree.source.name.values[0]} table does not exist`)
         }

@@ -28,7 +28,6 @@ script:
     - yarn pack:dockerelectron
 
 after_success:
-    - ./deploy.sh # TODO(you): deploy the PR changes to your staging server.
     - yarn lh https://deploy-preview-`echo $TRAVIS_PULL_REQUEST`--keyrier.netlify.com/
 
 addons:

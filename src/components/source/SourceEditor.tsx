@@ -47,6 +47,7 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) =
                 editorProps={{ $blockScrolling: Infinity }}
                 annotations={[]}
                 width={'100%'}
+                height={'100%'}
             />
         </>
     )
