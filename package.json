@@ -67,7 +67,7 @@
         "@types/react-select": "2.0.19",
         "@types/react-table": "6.8.5",
         "@types/reactstrap": "8.0.5",
-        "@types/scheduler": "0.16.0",
+        "@types/scheduler": "0.16.1",
         "concurrently": "5.0.0",
         "cypress": "3.4.1",
         "electron": "6.0.11",
