@@ -54,7 +54,7 @@
         "xlsx": "0.15.1"
     },
     "devDependencies": {
-        "@now/node": "1.0.1",
+        "@now/node": "1.0.2",
         "@types/classnames": "2.2.9",
         "@types/jest": "24.0.18",
         "@types/lodash": "4.14.123",
