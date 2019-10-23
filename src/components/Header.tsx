@@ -37,37 +37,39 @@ const Header: FC<Props> = ({ setGeneralTheme, currentTheme, setEditorTheme, curr
         <>
             <Navbar color="dark" dark={true} expand="md">
                 <NavbarBrand href="/">Keyrier JSON</NavbarBrand>
-                <NavbarToggler onClick={switchIsOpen} />
+                <NavbarToggler role="presentation" onClick={switchIsOpen} />
                 <Collapse isOpen={isOpen} navbar={true}>
                     <Nav className="ml-auto" navbar={true}>
-                        <Dropdown isOpen={dropDownIsOpen} toggle={toggleDropdown}>
-                            <DropdownToggle nav={true} caret={true}>
-                                Theme
-                            </DropdownToggle>
-                            <DropdownMenu right={true}>
-                                <DropdownItem header={true}>Choose editor theme</DropdownItem>
-                                {availableEditorThemes.map((theme, index) => (
-                                    <ThemeDropDownItem
-                                        setTheme={setEditorTheme}
-                                        key={index}
-                                        active={currentEditorTheme === theme}
-                                        theme={theme}
-                                        reloadOnChange={false}
-                                    />
-                                ))}
-                                <DropdownItem header={true}>Choose general theme</DropdownItem>
+                        <NavItem>
+                            <Dropdown isOpen={dropDownIsOpen} toggle={toggleDropdown}>
+                                <DropdownToggle nav={true} caret={true}>
+                                    Theme
+                                </DropdownToggle>
+                                <DropdownMenu right={true}>
+                                    <DropdownItem header={true}>Choose editor theme</DropdownItem>
+                                    {availableEditorThemes.map((theme, index) => (
+                                        <ThemeDropDownItem
+                                            setTheme={setEditorTheme}
+                                            key={index}
+                                            active={currentEditorTheme === theme}
+                                            theme={theme}
+                                            reloadOnChange={false}
+                                        />
+                                    ))}
+                                    <DropdownItem header={true}>Choose general theme</DropdownItem>
 
-                                {availableGeneralThemes.map((theme, index) => (
-                                    <ThemeDropDownItem
-                                        setTheme={setGeneralTheme}
-                                        key={index}
-                                        active={currentTheme === theme}
-                                        theme={theme}
-                                        reloadOnChange={true}
-                                    />
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
+                                    {availableGeneralThemes.map((theme, index) => (
+                                        <ThemeDropDownItem
+                                            setTheme={setGeneralTheme}
+                                            key={index}
+                                            active={currentTheme === theme}
+                                            theme={theme}
+                                            reloadOnChange={true}
+                                        />
+                                    ))}
+                                </DropdownMenu>
+                            </Dropdown>
+                        </NavItem>
                         <NavItem>
                             <NavLink href="https://github.com/magoo-magoo/keyrier-json/releases/latest">
                                 v{version}

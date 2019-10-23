@@ -31,7 +31,7 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) =
                 theme={currentEditorTheme}
                 name="sourceAceEditor"
                 onChange={onChangeCallback}
-                fontSize={13}
+                fontSize={16}
                 cursorStart={1}
                 showPrintMargin={false}
                 showGutter={true}
