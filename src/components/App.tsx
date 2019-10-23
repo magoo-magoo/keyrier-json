@@ -28,34 +28,34 @@ const outputKey = 'Output'
 const App: FC<Props> = ({ mode }) => {
     const layouts = {
         lg: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 7, minW: 5, minH: 7 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 8, minW: 10, minH: 8 },
-            { i: queryEditorKey, x: 20, y: 0, w: 28, h: 4, minW: 8, minH: 4 },
+            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 12, minW: 10, minH: 12 },
+            { i: queryEditorKey, x: 20, y: 0, w: 28, h: 5, minW: 8, minH: 5 },
             { i: outputKey, x: 20, y: 8, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         md: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 12, h: 8, minW: 10, minH: 8 },
-            { i: queryEditorKey, x: 20, y: 0, w: 20, h: 4, minW: 8, minH: 4 },
-            { i: outputKey, x: 20, y: 8, w: 22, h: 16, minW: 10, minH: 16 },
+            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         sm: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 10, h: 8, minW: 10, minH: 8 },
-            { i: queryEditorKey, x: 20, y: 0, w: 8, h: 4, minW: 8, minH: 4 },
-            { i: outputKey, x: 20, y: 8, w: 10, h: 16, minW: 10, minH: 16 },
+            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         xs: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 10, h: 8, minW: 10, minH: 8 },
-            { i: queryEditorKey, x: 20, y: 0, w: 8, h: 4, minW: 8, minH: 4 },
-            { i: outputKey, x: 20, y: 8, w: 10, h: 16, minW: 10, minH: 16 },
+            { i: lateralMenuKey, x: 0, y: 0, w: 16, h: 11, minW: 5, minH: 11 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         xxs: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 5, h: 7, minW: 5, minH: 7 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 10, h: 8, minW: 10, minH: 8 },
-            { i: queryEditorKey, x: 20, y: 0, w: 8, h: 4, minW: 8, minH: 4 },
-            { i: outputKey, x: 20, y: 8, w: 10, h: 16, minW: 10, minH: 16 },
+            { i: lateralMenuKey, x: 0, y: 0, w: 16, h: 11, minW: 5, minH: 11 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
     }
     return (
@@ -73,7 +73,7 @@ const App: FC<Props> = ({ mode }) => {
                     cols={{ lg: 48, md: 36, sm: 24, xs: 12, xxs: 6 }}
                     margin={[20, 20]}
                     containerPadding={[0, 0]}
-                    rowHeight={50}
+                    rowHeight={25}
                 >
                     <div key={lateralMenuKey}>
                         <GrabbleHeader title="Keyrier">

@@ -80,9 +80,10 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) 
                             noDataText="FRACKING EMPTY!"
                             className="data-test-id-output-table -highlight"
                             data={data.map(e => (!!e ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {}))}
-                            defaultPageSize={10}
                             columns={tableColumnConfig}
                             filterable={true}
+                            pageSize={10}
+                            pageSizeOptions={[10]}
                             pivotBy={groupBy}
                             defaultFilterMethod={defaultFilterMethod}
                             getTdProps={getTdProps}
