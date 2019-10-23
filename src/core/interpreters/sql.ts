@@ -55,13 +55,13 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
         }
     }
 
-    let result = _.chain(sourceDataObject)
+    let result = _.chain<any>(sourceDataObject)
 
     if (fromPath && fromPath.length > 0) {
-        result = result.get(fromPath)
+        result = _.chain<any>(result.get(fromPath))
     }
-    sourceDataObject = result.value()
-    if (_.isArray(sourceDataObject)) {
+    const value = result.value()
+    if (_.isArray(value)) {
         return result
             .filter(v => {
                 if (!sqlTree.where || !sqlTree.where.conditions) {
@@ -83,9 +83,8 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
                     : 999999999999999
             )
             .value()
-    } else {
-        return map(sourceDataObject, sqlTree.fields, sqlTree.source)
     }
+    return map(value, sqlTree.fields, sqlTree.source)
 }
 
 const compareOperands = (operation: string | null, left: Op, right: Op, value: object): boolean => {
