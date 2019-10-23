@@ -70,7 +70,7 @@
         "@types/scheduler": "0.16.1",
         "concurrently": "5.0.0",
         "cypress": "3.5.0",
-        "electron": "6.1.0",
+        "electron": "6.1.1",
         "electron-builder": "21.2.0",
         "gh-pages": "2.1.1",
         "husky": "3.0.9",
