@@ -1,5 +1,9 @@
 {
   "extends": ["config:base"],
   "packageRules": [
+    {
+      "packagePatterns": ["^@types"],
+      "groupName": "typings packages"
+    }
   ]
 }
