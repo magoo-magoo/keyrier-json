@@ -10290,10 +10290,10 @@ react-error-overlay@^6.0.3:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.3.tgz#c378c4b0a21e88b2e159a3e62b2f531fd63bf60d"
   integrity sha512-bOUvMWFQVk5oz8Ded9Xb7WVdEi3QGLC8tH7HmYP0Fdp4Bn3qw0tRFmr5TW6mvahzvmrK4a6bqWGfCevBflP+Xw==
 
-react-grid-layout@0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/react-grid-layout/-/react-grid-layout-0.17.0.tgz#123e7fe50fb2c31eca1dcbdd15b1aada7bca5bc4"
-  integrity sha512-UE/qYlFuc274GNphsYfP2lyeE6j213mjHAFcj7rEV4wbwxXxmrsM1zFIrS7voLTq4qVqgiYItAr4OHqjsAeG2A==
+react-grid-layout@0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/react-grid-layout/-/react-grid-layout-0.17.1.tgz#0b75c72e5b7d7085f0f0054e160b31298971c5e2"
+  integrity sha512-L+wHFevK+klKvoAHuHn4Q5qHtrW+4zCj0F3QnpR7wZbkZPmrdaWC7cztFLXwINq6WnOWGE22BCTCDCHJi7dVDw==
   dependencies:
     classnames "2.x"
     lodash.isequal "^4.0.0"
