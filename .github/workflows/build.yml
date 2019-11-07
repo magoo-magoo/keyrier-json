@@ -18,7 +18,6 @@ jobs:
       with:
         version: ${{ matrix.node_version }}
 
-    - run: npm install -g yarn
     - run: yarn --frozen-lockfile
     - run: yarn test --coverage --watchAll=false
     - run: yarn build
