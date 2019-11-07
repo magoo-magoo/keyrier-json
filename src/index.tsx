@@ -6,7 +6,7 @@ import * as React from 'react'
 import { getTheme } from 'store/selectors'
 import { importThemeStyleCustom } from 'themes/themes'
 import App from 'components/App'
-import { register } from 'registerServiceWorker'
+import { unregister } from 'registerServiceWorker'
 ;(async () => {
     const store = configureStore()
 
@@ -16,13 +16,11 @@ import { register } from 'registerServiceWorker'
     ])
 
     const ReactDOM = promises[0]
-
-    ReactDOM.render(
+    ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Provider store={store}>
             <App />
-        </Provider>,
-        document.getElementById('root')
+        </Provider>
     )
 
-    register()
+    unregister()
 })()

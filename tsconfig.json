@@ -2,7 +2,6 @@
     "compilerOptions": {
         "outDir": "build/dist",
         "baseUrl": "src",
-
         "module": "esnext",
         "target": "es5",
         "lib": ["es6", "dom"],
@@ -10,14 +9,12 @@
         "jsx": "preserve",
         "noEmit": true,
         "isolatedModules": true,
-
         "moduleResolution": "node",
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "esModuleInterop": false,
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,
-
         "strict": true,
         "allowJs": false,
         "forceConsistentCasingInFileNames": true,
@@ -33,7 +30,11 @@
         "strictPropertyInitialization": true,
         "strictBindCallApply": true,
         "alwaysStrict": true,
-        "suppressImplicitAnyIndexErrors": false
+        "suppressImplicitAnyIndexErrors": false,
+        "allowUnusedLabels": false,
+        "allowUnreachableCode": false,
+        "noStrictGenericChecks": false,
+        "types": ["react-dom/experimental", "react/experimental"]
     },
     "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
     "include": ["src"]

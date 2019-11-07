@@ -76,7 +76,7 @@ const App: FC<Props> = ({ mode }) => {
                     rowHeight={25}
                 >
                     <div key={lateralMenuKey}>
-                        <GrabbleHeader title="Keyrier">
+                        <GrabbleHeader title="Options">
                             <LateralMenu />
                         </GrabbleHeader>
                     </div>
