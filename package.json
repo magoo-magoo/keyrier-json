@@ -11,7 +11,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "react-scripts build --profile",
         "version:ci": "npm version patch --force -m \"release v%s [skip ci]\"",
         "build:ci": "npm run-script version:ci && npm run-script build",
         "test": "react-scripts test",
