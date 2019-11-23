@@ -9367,7 +9367,7 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-perfume.js@^4.0.0-rc13:
+perfume.js@4.0.0-rc13:
   version "4.0.0-rc13"
   resolved "https://registry.yarnpkg.com/perfume.js/-/perfume.js-4.0.0-rc13.tgz#47d390d29c7839883d2a052a98b3990bb6fad4d8"
   integrity sha512-2od5F1PVfqaFwyRfr7DXBV6djJ/nNnGHlEzDatKIr0ZlZ8F//fbY5Schdy0PSwTKQcdCNpbbEv0PHu1MMhSpnw==
@@ -10728,7 +10728,7 @@ react-transition-group@^4:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-use@^13.8.2:
+react-use@13.8.2:
   version "13.8.2"
   resolved "https://registry.yarnpkg.com/react-use/-/react-use-13.8.2.tgz#1665adb037c7c44214aa6ee210d7abd2322c1ef1"
   integrity sha512-I0xjVQrdiP592107vqfrGD4OGtTqTpo/TuQluWtFweeJm95kg3JmPQ79Ltv4hr9rKmU5MaSBj33vwMaL6x8KkQ==
