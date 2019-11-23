@@ -1,12 +1,21 @@
 import * as React from 'react'
-import { getOutputObject, getOutputSearchTerm, getOutputSearchMatch, getOutputObjectSize } from 'store/selectors'
+import {
+    getOutputObject,
+    getOutputSearchTerm,
+    getOutputSearchMatch,
+    getOutputObjectSize,
+    getDebugMode,
+} from 'store/selectors'
 import { RootState } from 'state/State'
 import { connect } from 'react-redux'
 import { DebounceInput } from 'react-debounce-input'
 import { updateSearchTerm } from 'actions/actions'
-import { Suspense, lazy, memo, useCallback, FC } from 'react'
+import { Suspense, lazy, memo, useCallback, FC, useState } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import deepEqual from 'fast-deep-equal'
+import { FormGroup, Label, CustomInput } from 'reactstrap'
+import { prettyPrintBytes } from 'core/converters/string'
+import { withPerformance } from 'core/logging/performance'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {
@@ -15,14 +24,16 @@ interface Props {
     match: boolean
     onSearchChange: typeof updateSearchTerm
     size: number
+    debugMode: boolean
 }
 
 const errorStyles = { border: '3px solid red' }
 
 const noop = () => null
 
-const JsonView: FC<Props> = ({ src, searchTerm, onSearchChange, match, size }) => {
-    const isTooBig = size > 10000000000000
+const JsonView: FC<Props> = ({ src, searchTerm, onSearchChange, match, size, debugMode }) => {
+    const [bigSize, setBigSize] = useState(4683932)
+    const isTooBig = size > bigSize
     const handlechange = useCallback(e => onSearchChange(e.target.value), [onSearchChange])
     return (
         <div id="jsonView">
@@ -35,6 +46,23 @@ const JsonView: FC<Props> = ({ src, searchTerm, onSearchChange, match, size }) =
                 placeholder="Type your search term..."
             />
             <Suspense fallback={<div>Loading...</div>}>
+                {debugMode ? (
+                    <FormGroup>
+                        <Label for="exampleCustomRange">heavy object size: {prettyPrintBytes(bigSize)}</Label>
+                        <CustomInput
+                            type="range"
+                            id="exampleCustomRange"
+                            name="customRange"
+                            value={bigSize}
+                            steps={1024 * 100}
+                            min={1024 * 100}
+                            max={1024 * 1024}
+                            onChange={e => setBigSize(parseInt(e.currentTarget.value, 10))}
+                        />
+                    </FormGroup>
+                ) : (
+                    <></>
+                )}
                 {isTooBig ? (
                     <></>
                 ) : (
@@ -60,10 +88,10 @@ const mapStateToProps = (state: RootState) => {
         searchTerm: getOutputSearchTerm(state),
         match: getOutputSearchMatch(state),
         size: getOutputObjectSize(state),
+        debugMode: getDebugMode(state),
     }
 }
 
-export default connect(
-    mapStateToProps,
-    { onSearchChange: updateSearchTerm }
-)(withErrorBoundary(memo(JsonView, (prev, next) => deepEqual(prev, next))))
+export default connect(mapStateToProps, { onSearchChange: updateSearchTerm })(
+    withErrorBoundary(memo(withPerformance(JsonView, 'JsonView'), (prev, next) => deepEqual(prev, next)))
+)

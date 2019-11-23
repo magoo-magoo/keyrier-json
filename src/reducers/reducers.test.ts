@@ -1,4 +1,4 @@
-import { output, query, rootReducerReset, source, containsTerm } from './reducers'
+import { output, query, resetApp, source, containsTerm } from './reducers'
 import { getDefaultAppState, QueryState, emptyState } from 'state/State'
 
 describe('Reducers', () => {
@@ -22,7 +22,7 @@ describe('Reducers', () => {
             query: { text: 'fake q', mode: 'Javascript' },
             source: { text: 'fake s' },
         }
-        const results = rootReducerReset(state as any, {
+        const results = resetApp(state as any, {
             type: 'RESET_EDITOR',
         })
 
@@ -49,7 +49,7 @@ describe('Reducers', () => {
             query: { text: 'fake q', mode: 'Javascript' },
             source: { text: 'fake s' },
         }
-        const results = rootReducerReset(state as any, {
+        const results = resetApp(state as any, {
             type: 'CLEAR_EDITOR',
         })
 

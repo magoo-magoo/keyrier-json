@@ -1,3 +1,5 @@
+import 'react-table/react-table.css'
+
 import * as React from 'react'
 import { customToString, containsIgnoreCase } from 'core/converters/string'
 import { connect } from 'react-redux'
@@ -9,10 +11,9 @@ import { useState, Suspense, lazy, memo, useCallback, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
 import deepEqual from 'fast-deep-equal'
-
-import 'react-table/react-table.css'
-import { Loading } from 'components/common/Loading'
+import Loading from 'components/common/Loading'
 import { arrayElementName } from 'models/array'
+import { withPerformance } from 'core/logging/performance'
 
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 const ReactTable = lazy(() => import(/* webpackChunkName: "react-table" */ 'react-table'))
@@ -25,7 +26,6 @@ type Props = {
 
 export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) => {
     const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | null)
-
     const getTdProps = useCallback(
         (_: any, rowInfo?: RowInfo, column?: Column | undefined, __?: any) => ({
             onClick: (e: MouseEvent, original: () => void) => {
@@ -36,10 +36,10 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) 
                 }
             },
         }),
-        [setDetailsCellValue]
+        []
     )
 
-    const handleCloseDetail = useCallback(() => setDetailsCellValue(null), [setDetailsCellValue])
+    const handleCloseDetail = useCallback(() => setDetailsCellValue(null), [])
 
     if (
         !data ||
@@ -131,4 +131,6 @@ const mapStateToProps = (state: RootState) => {
     }
 }
 
-export default connect(mapStateToProps)(withErrorBoundary(memo(OutputTableView, (prev, next) => deepEqual(prev, next))))
+export default connect(mapStateToProps)(
+    withErrorBoundary(memo(withPerformance(OutputTableView, 'OutputTableView'), (prev, next) => deepEqual(prev, next)))
+)

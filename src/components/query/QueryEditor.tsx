@@ -9,6 +9,7 @@ import { memo, useCallback, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
 import { EditorTheme } from 'themes/themes'
+import { withPerformance } from 'core/logging/performance'
 
 interface Props {
     setQuery: typeof updateQuery
@@ -59,7 +60,6 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-export default connect(
-    mapStateToProps,
-    { setQuery: updateQuery }
-)(withErrorBoundary(memo(QueryEditor)))
+export default connect(mapStateToProps, { setQuery: updateQuery })(
+    withErrorBoundary(memo(withPerformance(QueryEditor, 'QueryEditor')))
+)

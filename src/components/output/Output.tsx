@@ -13,6 +13,7 @@ import { TabContent, TabPane, Alert, Badge } from 'reactstrap'
 import { memo, useCallback, FC } from 'react'
 import { prettyPrintBytes } from 'core/converters/string'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
+import { withPerformance } from 'core/logging/performance'
 
 interface Props {
     isArray: boolean
@@ -27,16 +28,18 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
     const handleActiveRawJson = useCallback(() => setActiveTab('RawJson'), [setActiveTab])
     return (
         <>
-            <div hidden={!errorMessage}>
-                <div className="row">
-                    <div className="col-sm-10 offset-sm-2">
-                        <Alert className="row align-items-center" color="danger">
-                            <i className="material-icons mr-2">error</i>
-                            <span>{errorMessage}</span>
-                        </Alert>
+            {errorMessage && (
+                <div>
+                    <div className="row">
+                        <div className="col-sm-10 offset-sm-2">
+                            <Alert className="row align-items-center" color="danger">
+                                <i className="material-icons mr-2">error</i>
+                                <span>{errorMessage}</span>
+                            </Alert>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
             <>
                 <div className="row">
                     <div className="col">
@@ -99,7 +102,6 @@ const mapStateToProps = (state: RootState) => ({
     objSize: getOutputObjectSize(state),
 })
 
-export default connect(
-    mapStateToProps,
-    { setActiveTab: updateOutputTabSelection }
-)(memo(withErrorBoundary(Output)))
+export default connect(mapStateToProps, { setActiveTab: updateOutputTabSelection })(
+    memo(withErrorBoundary(withPerformance(Output, 'Output')))
+)

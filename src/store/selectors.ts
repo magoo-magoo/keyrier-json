@@ -76,3 +76,5 @@ export const getCanRedo = (state: RootState) =>
     state && state.app && state.app.future ? state.app.future.length !== 0 : false
 export const getCanUndo = (state: RootState) =>
     state && state.app && state.app.past ? state.app.past.length > 1 : false
+
+export const getDebugMode = (state: RootState) => (state && state.userSettings ? !!state.userSettings.debugMode : false)

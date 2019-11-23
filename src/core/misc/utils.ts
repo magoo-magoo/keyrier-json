@@ -1,3 +1,5 @@
+import { version } from '../../../package.json'
+
 export const nameof = <T>(name: keyof T) => name
 export const nameofFactory = <T>() => (name: keyof T) => name
 
@@ -19,3 +21,5 @@ export const objectToMap = <T>(obj: T) => {
 
     return map
 }
+
+export const getAppVersion = () => version

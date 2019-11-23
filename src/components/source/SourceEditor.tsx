@@ -8,6 +8,7 @@ import { memo, FC, useCallback } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { EditorTheme } from 'themes/themes'
 import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
+import { withPerformance } from 'core/logging/performance'
 
 interface Props {
     onChange: typeof updateSource
@@ -58,7 +59,6 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-export default connect(
-    mapStateToProps,
-    { onChange: updateSource }
-)(withErrorBoundary(memo(SourceEditor)))
+export default connect(mapStateToProps, { onChange: updateSource })(
+    withErrorBoundary(memo(withPerformance(SourceEditor, 'SourceEditor')))
+)

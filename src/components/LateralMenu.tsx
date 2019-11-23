@@ -10,7 +10,7 @@ import {
     updateQueryMode,
 } from 'actions/actions'
 import HttpRequestSource from './source/RequestSource'
-import { logInfo } from 'core/logging/logger'
+import { logDebug } from 'core/logging/logger'
 import { useToggleState } from 'hooks/hooks'
 import {
     ButtonDropdown,
@@ -29,6 +29,7 @@ import { memo, useCallback, FC, ChangeEvent } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { getSourceAutoFormat, getCanUndo, getCanRedo, getQueryMode } from 'store/selectors'
 import { RootState, QueryMode } from 'state/State'
+import { withPerformance } from 'core/logging/performance'
 
 interface Props {
     onFileContentReady: typeof updateSource
@@ -61,11 +62,11 @@ const LateralMenu: FC<Props> = ({
     const [modalIsOpen, toggleModal] = useToggleState()
     const handleFileChange = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
-            logInfo('onFileChange')
+            logDebug('onFileChange')
             toggleDropdown()
             if (e.target.files && e.target.files.length > 0) {
                 const fileReader = new FileReader()
-                logInfo('e.target.files', e.target.files[0].name)
+                logDebug('e.target.files', e.target.files[0].name)
                 fileReader.onload = () => {
                     if (fileReader.result) {
                         onFileContentReady(fileReader.result.toString())
@@ -219,15 +220,12 @@ const mapStateToProps = (state: RootState) => ({
     mode: getQueryMode(state),
 })
 
-export default connect(
-    mapStateToProps,
-    {
-        onFileContentReady: updateSource,
-        onReset: resetEditor,
-        onClear: clearEditor,
-        onUndo: undo,
-        onRedo: redo,
-        changeAutoFormat: updateAutoFormatSource,
-        setQueryMode: updateQueryMode,
-    }
-)(memo(withErrorBoundary(LateralMenu)))
+export default connect(mapStateToProps, {
+    onFileContentReady: updateSource,
+    onReset: resetEditor,
+    onClear: clearEditor,
+    onUndo: undo,
+    onRedo: redo,
+    changeAutoFormat: updateAutoFormatSource,
+    setQueryMode: updateQueryMode,
+})(memo(withErrorBoundary(withPerformance(LateralMenu, 'LateralMenu'))))

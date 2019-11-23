@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { getQueryMode } from 'store/selectors'
 import { QueryMode } from 'state/State'
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import { withPerformance } from 'core/logging/performance'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ 'components/source/SourceEditor'))
@@ -108,4 +109,4 @@ const App: FC<Props> = ({ mode }) => {
     )
 }
 
-export default connect(state => ({ mode: getQueryMode(state) }))(App)
+export default connect(state => ({ mode: getQueryMode(state) }))(withPerformance(App, 'App'))

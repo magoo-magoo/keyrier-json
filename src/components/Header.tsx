@@ -21,6 +21,7 @@ import {
 } from 'reactstrap'
 import { withErrorBoundary } from './common/ErrorBoundary'
 import { memo, useCallback, FC } from 'react'
+import { withPerformance } from 'core/logging/performance'
 
 interface Props {
     setGeneralTheme: typeof switchTheme
@@ -112,7 +113,6 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-export default connect(
-    mapStateToProps,
-    { setGeneralTheme: switchTheme, setEditorTheme: switchEditorTheme }
-)(memo(withErrorBoundary(Header)))
+export default connect(mapStateToProps, { setGeneralTheme: switchTheme, setEditorTheme: switchEditorTheme })(
+    memo(withErrorBoundary(withPerformance(Header, 'Header')))
+)
