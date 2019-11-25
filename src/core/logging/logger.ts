@@ -27,9 +27,8 @@ export const logDebug = (message: string, payload?: any) => {
 export const logPerf = (name: string, duration?: number, customProperties?: any) => {
     if (isDebugMode()) {
         const appVersion = getAppVersion()
-        const payload = { name, duration, appVersion, ...customProperties }
+        const payload = { name, duration, appVersion, ...customProperties, location: window.location.href }
         logEvents.enqueue(payload)
-        console.log(`${name} ${`${duration ? `- duration: ${duration}` : ''}`}`, payload)
     }
 }
 
@@ -86,5 +85,5 @@ class Queue<T = any> {
     }
 }
 
-const logEvents = new Queue()
+export const logEvents = new Queue()
 ;(window as any).__PERF_EVENT_LOGS = logEvents

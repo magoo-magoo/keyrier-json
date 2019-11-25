@@ -7,8 +7,7 @@ import { getTheme } from 'store/selectors'
 import { importThemeStyleCustom } from 'themes/themes'
 import App from 'components/App'
 import { unregister } from 'registerServiceWorker'
-
-import { perfStart, perfEnd } from 'core/logging/performance'
+import { perfStart, perfEnd, logPerfPeriodically } from 'core/logging/performance'
 
 perfStart('Bootstrap.React')
 ;(async () => {
@@ -24,7 +23,10 @@ perfStart('Bootstrap.React')
         <Provider store={store}>
             <App />
         </Provider>,
-        () => perfEnd('Bootstrap.React')
+        () => {
+            setInterval(logPerfPeriodically, 5000)
+            return perfEnd('Bootstrap.React')
+        }
     )
     unregister()
 })()
