@@ -70,7 +70,7 @@
         "@types/react-table": "6.8.6",
         "@types/reactstrap": "8.4.0",
         "@types/scheduler": "0.16.1",
-        "concurrently": "5.0.0",
+        "concurrently": "5.0.2",
         "cypress": "3.8.2",
         "electron": "7.1.2",
         "electron-builder": "22.2.0",
