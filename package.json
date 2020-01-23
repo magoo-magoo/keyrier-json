@@ -75,7 +75,7 @@
         "electron": "8.0.0",
         "electron-builder": "22.2.0",
         "gh-pages": "2.2.0",
-        "husky": "4.0.10",
+        "husky": "4.2.1",
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
         "node-sass": "4.13.1",
         "prettier": "1.19.1",
