@@ -73,7 +73,7 @@
         "concurrently": "5.0.2",
         "cypress": "3.8.2",
         "electron": "8.0.0",
-        "electron-builder": "22.2.0",
+        "electron-builder": "22.3.2",
         "gh-pages": "2.2.0",
         "husky": "4.2.1",
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
