@@ -49,8 +49,8 @@
         "react-toastify": "5.5.0",
         "react-use": "13.26.1",
         "reactstrap": "8.4.1",
-        "redux": "4.0.4",
         "redux-undo": "1.0.0",
+        "redux": "4.0.5",
         "sql-parser": "0.5.0",
         "utility-types": "3.10.0",
         "xlsx": "0.15.5"
