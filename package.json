@@ -34,7 +34,7 @@
         "classnames": "2.2.6",
         "electron-log": "4.0.6",
         "electron-updater": "4.2.0",
-        "fast-deep-equal": "2.0.1",
+        "fast-deep-equal": "3.1.1",
         "lodash": "4.17.15",
         "perfume.js": "4.6.0",
         "react": "experimental",
