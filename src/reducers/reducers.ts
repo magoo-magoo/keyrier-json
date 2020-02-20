@@ -20,13 +20,13 @@ import {
 import { containsIgnoreCase } from 'core/converters/string'
 import { arrayElementName } from 'models/array'
 import undoable from 'redux-undo'
+import { perfStart, perfEnd } from 'core/logging/performance'
 
 export const rootReducer = (rootState = getDefaultAppState(), action: Action) => {
     if (action.type === 'CLEAR_EDITOR') {
         return emptyState
     }
 
-    console.time('rootReducer')
     const newState =
         rootState && rootState.query && rootState.source
             ? {
@@ -45,7 +45,6 @@ export const rootReducer = (rootState = getDefaultAppState(), action: Action) =>
         },
     }
 
-    console.timeEnd('rootReducer')
     return ret
 }
 
@@ -346,14 +345,22 @@ export const table = (state: OupoutTableState | undefined, action: Action) => {
     }
 }
 
-export const rootReducerReset = (state = getDefaultAppState(), action: Action) => {
+export const resetApp = (state = getDefaultAppState(), action: Action) => {
     if (action.type === 'RESET_EDITOR') {
         return rootReducer({ ...getDefaultAppState() }, action)
     }
     return rootReducer(state, action)
 }
+
+const perf = (state = getDefaultAppState(), action: Action) => {
+    perfStart(`reduce - action: ${action.type}`)
+    const newState = resetApp(state, action)
+    perfEnd(`reduce - action: ${action.type}`)
+    return newState
+}
+
 const rootReducers = combineReducers({
-    app: undoable(rootReducerReset, { undoType: 'APP_UNDO', redoType: 'APP_REDO' }),
+    app: undoable(perf, { undoType: 'APP_UNDO', redoType: 'APP_REDO' }),
     userSettings,
 })
 export default rootReducers

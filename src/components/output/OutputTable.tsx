@@ -8,6 +8,7 @@ import { RootState } from 'state/State'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { memo, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
+import { withPerformance } from 'core/logging/performance'
 
 interface Props {
     toggleModal: typeof toggleOutputTableModal
@@ -49,9 +50,6 @@ const mapStateToProps = (state: RootState) => ({
     isModalOpen: getisOutputTableModalOpen(state),
 })
 
-export default connect(
-    mapStateToProps,
-    {
-        toggleModal: toggleOutputTableModal,
-    }
-)(withErrorBoundary(memo(OutputTable)))
+export default connect(mapStateToProps, {
+    toggleModal: toggleOutputTableModal,
+})(withErrorBoundary(memo(withPerformance(OutputTable, 'OutputTable'))))

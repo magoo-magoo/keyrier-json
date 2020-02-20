@@ -1,12 +1,10 @@
 import initialStateJson from './default-state.json'
 import { GeneralTheme, EditorTheme } from 'themes/themes'
 import { DeepReadonly } from 'utility-types'
-import { PropType as PropertyTypeOf } from 'core/misc/utils'
 import { StateWithHistory } from 'redux-undo'
 
 export type itemType = any
 
-export type All = PropertyTypeOf<AppState>
 export type AppState = DeepReadonly<{
     source?: SourceState
     query?: QueryState
@@ -40,6 +38,7 @@ export type OupoutTableState = DeepReadonly<{
 export type UserSettingsState = DeepReadonly<{
     globalTheme?: GeneralTheme
     editorTheme?: EditorTheme
+    debugMode?: boolean
 }>
 
 export type tabType = 'RawJson' | 'Table'
@@ -56,6 +55,7 @@ export const getDefaultUserSettingsState = () =>
     ({
         globalTheme: 'pulse',
         editorTheme: 'github',
+        debugMode: false,
     } as const)
 
 export const emptyState = {

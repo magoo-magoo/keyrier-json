@@ -9,8 +9,9 @@ import { Button, Collapse } from 'reactstrap'
 import { memo, useCallback, Suspense, ChangeEvent } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { lazy, FC } from 'react'
-import { Loading } from 'components/common/Loading'
+import Loading from 'components/common/Loading'
 import _ from 'lodash'
+import { withPerformance } from 'core/logging/performance'
 
 export const ReactSelect = lazy(() => import(/* webpackChunkName: "react-select" */ 'react-select'))
 
@@ -39,9 +40,12 @@ const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGro
     const handleExport = useCallback(async () => {
         const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx')
         const workBook = xlsx.utils.book_new()
-        const workSheet = xlsx.utils.json_to_sheet(data.map(x => _.pick(x, displayedColumns)), {
-            header: displayedColumns,
-        })
+        const workSheet = xlsx.utils.json_to_sheet(
+            data.map(x => _.pick(x, displayedColumns)),
+            {
+                header: displayedColumns,
+            }
+        )
         xlsx.utils.book_append_sheet(workBook, workSheet, 'keyrier-json')
         xlsx.writeFile(workBook, `export-${new Date().toISOString()}.xlsx`)
     }, [displayedColumns, data])
@@ -103,7 +107,6 @@ const mapStateToProps = (state: RootState) => {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    { onColumnsChange: updateTableColumns, setTableGroupBy: updateTableGroupBy }
-)(memo(withErrorBoundary(TableAdvancedOptions)))
+export default connect(mapStateToProps, { onColumnsChange: updateTableColumns, setTableGroupBy: updateTableGroupBy })(
+    memo(withErrorBoundary(withPerformance(TableAdvancedOptions, 'TableAdvancedOptions')))
+)

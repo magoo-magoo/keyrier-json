@@ -42,7 +42,7 @@ const HttpRequestSource: FC<Props> = ({ onFinish, setSource }) => {
         }
         setSource(customToString(json))
         onFinish()
-    }, [method, url, body, headers, hasBody, setError, setSource, onFinish])
+    }, [method, url, body, headers, hasBody, setSource, onFinish])
 
     return (
         <div id="HttpRequestSource">
@@ -147,7 +147,4 @@ const HeaderList: FC<HeaderListProps> = ({ headers, onChange }) => {
     )
 }
 
-export default connect(
-    null,
-    { setSource: updateSource }
-)(withErrorBoundary(memo(HttpRequestSource)))
+export default connect(null, { setSource: updateSource })(withErrorBoundary(memo(HttpRequestSource)))

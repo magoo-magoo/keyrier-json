@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { getQueryMode } from 'store/selectors'
 import { QueryMode } from 'state/State'
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import { withPerformance } from 'core/logging/performance'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ 'components/source/SourceEditor'))
@@ -29,32 +30,32 @@ const App: FC<Props> = ({ mode }) => {
     const layouts = {
         lg: [
             { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 12, minW: 10, minH: 12 },
-            { i: queryEditorKey, x: 20, y: 0, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
+            { i: queryEditorKey, x: 20, y: 0, w: 28, h: 6, minW: 8, minH: 6 },
             { i: outputKey, x: 20, y: 8, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         md: [
             { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
             { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
             { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         sm: [
             { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
             { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
             { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         xs: [
             { i: lateralMenuKey, x: 0, y: 0, w: 16, h: 11, minW: 5, minH: 11 },
             { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
             { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
         xxs: [
             { i: lateralMenuKey, x: 0, y: 0, w: 16, h: 11, minW: 5, minH: 11 },
             { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 5, minW: 8, minH: 5 },
+            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
             { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
         ],
     }
@@ -108,4 +109,4 @@ const App: FC<Props> = ({ mode }) => {
     )
 }
 
-export default connect(state => ({ mode: getQueryMode(state) }))(App)
+export default connect(state => ({ mode: getQueryMode(state) }))(withPerformance(App, 'App'))
