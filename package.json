@@ -2,7 +2,7 @@
     "description": "Keyrier JSON",
     "name": "keyrier-json",
     "author": "magoo",
-    "version": "0.5.207",
+    "version": "0.5.208",
     "private": true,
     "homepage": "./",
     "repository": {
@@ -51,7 +51,6 @@
         "reactstrap": "8.4.1",
         "redux": "4.0.5",
         "redux-undo": "1.0.0",
-        "redux": "4.0.5",
         "sql-parser": "0.5.0",
         "utility-types": "3.10.0",
         "xlsx": "0.15.5"
