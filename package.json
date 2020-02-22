@@ -36,7 +36,7 @@
         "electron-updater": "4.2.2",
         "fast-deep-equal": "3.1.1",
         "lodash": "4.17.15",
-        "perfume.js": "4.7.1",
+        "perfume.js": "4.7.3",
         "react": "experimental",
         "react-ace": "8.0.0",
         "react-debounce-input": "3.2.2",
