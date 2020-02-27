@@ -89,7 +89,7 @@
         "tslint-react": "4.1.0",
         "typescript": "3.8.2",
         "unfetch": "4.1.0",
-        "wait-on": "4.0.0"
+        "wait-on": "4.0.1"
     },
     "jest": {
         "collectCoverageFrom": [
