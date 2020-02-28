@@ -71,7 +71,7 @@
         "@types/reactstrap": "8.4.1",
         "@types/scheduler": "0.16.1",
         "concurrently": "5.1.0",
-        "cypress": "4.0.2",
+        "cypress": "4.1.0",
         "electron": "8.0.1",
         "electron-builder": "22.3.2",
         "gh-pages": "2.2.0",
