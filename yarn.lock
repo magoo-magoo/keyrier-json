@@ -2361,10 +2361,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.2.tgz#c4e63af5e8823ce9cc3f0b34f7b998c2171f0c44"
   integrity sha512-dyYO+f6ihZEtNPDcWNR1fkoTDf3zAK3lAABDze3mz6POyIercH0lEUawUFXlG8xaQZmm1yEBON/4TsYv/laDYg==
 
-"@types/node@12.12.28":
-  version "12.12.28"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.28.tgz#3a2b5f8d21f96ace690a8832ae9779114612575f"
-  integrity sha512-g73GJYJDXgf0jqg+P9S8h2acWbDXNkoCX8DLtJVu7Fkn788pzQ/oJsrdJz/2JejRf/SjfZaAhsw+3nd1D5EWGg==
+"@types/node@12.12.29":
+  version "12.12.29"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.29.tgz#46275f028b4e463b9ac5fefc1d08bc66cc193f25"
+  integrity sha512-yo8Qz0ygADGFptISDj3pOC9wXfln/5pQaN/ysDIzOaAWXt73cNHmtEC8zSO2Y+kse/txmwIAJzkYZ5fooaS5DQ==
 
 "@types/node@^12.0.12":
   version "12.11.5"
@@ -2456,18 +2456,18 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@16.9.22":
-  version "16.9.22"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.22.tgz#f0288c92d94e93c4b43e3f5633edf788b2c040ae"
-  integrity sha512-7OSt4EGiLvy0h5R7X+r0c7S739TCU/LvWbkNOrm10lUwNHe7XPz5OLhLOSZeCkqO9JSCly1NkYJ7ODTUqVnHJQ==
+"@types/react@16.9.23":
+  version "16.9.23"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.23.tgz#1a66c6d468ba11a8943ad958a8cb3e737568271c"
+  integrity sha512-SsGVT4E7L2wLN3tPYLiF20hmZTPGuzaayVunfgXzUn1x4uHVsKH6QDJQ/TdpHqwsTLd4CwrmQ2vOgxN7gE24gw==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/reactstrap@8.4.1":
-  version "8.4.1"
-  resolved "https://registry.yarnpkg.com/@types/reactstrap/-/reactstrap-8.4.1.tgz#6dff4d1fdf59233877925e3caec406272050b632"
-  integrity sha512-7c0JDBTizNmKbf9yeqqO8eTmuqEW/RKuhJXnp7bDhF1SVfairXaHI69xRFT0GNHRuXrBkWQV4V+9BduNq6MJjg==
+"@types/reactstrap@8.4.2":
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/@types/reactstrap/-/reactstrap-8.4.2.tgz#e7066d0e67e2924dab0a52c6aedcf922f2be53b6"
+  integrity sha512-ag4hfFqBZaeoNSSTKjCtedvdcO68QqqlBrFd3obg94JSmhgNTmHz50BvNJkf9NjSzx1yGTW4l/OyP/khLPKqww==
   dependencies:
     "@types/react" "*"
     popper.js "^1.14.1"
