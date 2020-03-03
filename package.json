@@ -47,7 +47,7 @@
         "react-select": "3.0.8",
         "react-table": "6.11.5",
         "react-toastify": "5.5.0",
-        "react-use": "13.26.1",
+        "react-use": "13.27.0",
         "reactstrap": "8.4.1",
         "redux": "4.0.5",
         "redux-undo": "1.0.0",
