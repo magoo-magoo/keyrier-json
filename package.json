@@ -50,7 +50,7 @@
         "react-use": "13.27.0",
         "reactstrap": "8.4.1",
         "redux": "4.0.5",
-        "redux-undo": "1.0.0",
+        "redux-undo": "1.0.1",
         "sql-parser": "0.5.0",
         "utility-types": "3.10.0",
         "xlsx": "0.15.5"
