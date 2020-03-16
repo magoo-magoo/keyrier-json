@@ -41,7 +41,7 @@
         "react-ace": "8.0.0",
         "react-debounce-input": "3.2.2",
         "react-dom": "experimental",
-        "react-grid-layout": "0.17.1",
+        "react-grid-layout": "0.18.3",
         "react-json-view": "1.19.1",
         "react-redux": "7.2.0",
         "react-select": "3.0.8",
