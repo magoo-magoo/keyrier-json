@@ -44,7 +44,7 @@
         "react-grid-layout": "0.18.3",
         "react-json-view": "1.19.1",
         "react-redux": "7.2.0",
-        "react-select": "3.0.8",
+        "react-select": "3.1.0",
         "react-table": "6.11.5",
         "react-toastify": "5.5.0",
         "react-use": "13.27.0",
