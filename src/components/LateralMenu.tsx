@@ -64,7 +64,7 @@ const LateralMenu: FC<Props> = ({
         (e: ChangeEvent<HTMLInputElement>) => {
             logDebug('onFileChange')
             toggleDropdown()
-            if (e.target.files && e.target.files.length > 0) {
+            if (e.target.files && e.target?.files?.length > 0) {
                 const fileReader = new FileReader()
                 logDebug('e.target.files', e.target.files[0].name)
                 fileReader.onload = () => {

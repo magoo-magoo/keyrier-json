@@ -31,7 +31,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) 
             onClick: (e: MouseEvent, original: () => void) => {
                 if (rowInfo && rowInfo.aggregated) {
                     original()
-                } else if (e && column && column.id && rowInfo && rowInfo.row) {
+                } else if (e && column?.id && rowInfo?.row) {
                     setDetailsCellValue(rowInfo.row[column.id])
                 }
             },

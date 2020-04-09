@@ -47,7 +47,7 @@ const map = (v: object, fields: Field[], source: Source) => {
 const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
     let fromPath: string[] = []
 
-    if (sqlTree.source.name.values && sqlTree.source.name.values.length > 1) {
+    if ((sqlTree.source.name.values?.length ?? 0) > 1) {
         if (sqlTree.source.name.values[0] === 'data') {
             fromPath = [...sqlTree.source.name.values]
             fromPath.shift()
