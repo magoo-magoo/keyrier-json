@@ -78,7 +78,7 @@
         "electron-builder": "22.3.2",
         "eslint-config-prettier": "^6.10.1",
         "gh-pages": "2.2.0",
-        "husky": "4.2.3",
+        "husky": "4.2.5",
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
         "node-sass": "4.13.1",
         "prettier": "2.0.4",
