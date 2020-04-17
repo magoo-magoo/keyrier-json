@@ -20,8 +20,8 @@
         "lh": "lighthousebot --runner=wpt",
         "cypress:open": "cypress open",
         "cypress:run": "concurrently --success first --kill-others \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && cypress run\"",
-        "lint": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --write && tslint -p . --format codeFrame --fix",
-        "eslint": "eslint",
+        "format": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --write",
+        "lint": "eslint",
         "deploy": "gh-pages -d build",
         "pack:electron": "electron-builder --linux AppImage --windows nsis --publish never",
         "pack:dockerelectron": "bash -c \"docker run --rm --env GH_TOKEN=$GITHUB_TOKEN --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') -v ${PWD}:/project -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine /bin/bash -c \\\"npm run pack:electron\\\"\"",
@@ -81,15 +81,12 @@
         "husky": "4.2.3",
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
         "node-sass": "4.13.1",
-        "prettier": "1.19.1",
+        "prettier": "2.0.4",
         "pretty-quick": "2.0.1",
         "react-scripts": "3.4.1",
         "react-testing-library": "8.0.1",
         "redux-devtools": "3.5.0",
         "source-map-explorer": "2.4.0",
-        "tslint": "5.20.1",
-        "tslint-config-prettier": "1.18.0",
-        "tslint-react": "4.1.0",
         "typescript": "3.8.3",
         "unfetch": "4.1.0",
         "wait-on": "4.0.1"
@@ -135,7 +132,6 @@
     "lint-staged": {
         "*.{ts,tsx,js,css,md}": [
             "prettier --write",
-            "tslint --fix",
             "git add"
         ]
     },

@@ -65,10 +65,7 @@ export const importThemeStyleCustom = (theme: GeneralTheme | null) => {
 
     logError(`${theme}: theme is not defined`)
 
-    return themeDeps
-        .values()
-        .next()
-        .value()
+    return themeDeps.values().next().value()
 }
 
 export const availableGeneralThemes = [

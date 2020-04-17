@@ -7,12 +7,8 @@ import { getTheme } from 'store/selectors'
 import { importThemeStyleCustom } from 'themes/themes'
 import App from 'components/App'
 import { unregister } from 'registerServiceWorker'
-import { perfStart, perfEnd, logPerfPeriodically } from 'core/logging/performance'
-
-perfStart('Bootstrap.React')
 ;(async () => {
     const store = configureStore()
-
     const promises = await Promise.all([
         import(/* webpackChunkName: "react-dom" */ 'react-dom'),
         importThemeStyleCustom(getTheme(store.getState())),
@@ -22,11 +18,7 @@ perfStart('Bootstrap.React')
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Provider store={store}>
             <App />
-        </Provider>,
-        () => {
-            setInterval(logPerfPeriodically, 5000)
-            return perfEnd('Bootstrap.React')
-        }
+        </Provider>
     )
     unregister()
 })()
