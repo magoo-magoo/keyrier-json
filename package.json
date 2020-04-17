@@ -86,7 +86,7 @@
         "react-scripts": "3.4.1",
         "react-testing-library": "8.0.1",
         "redux-devtools": "3.5.0",
-        "source-map-explorer": "2.4.0",
+        "source-map-explorer": "2.4.2",
         "typescript": "3.8.3",
         "unfetch": "4.1.0",
         "wait-on": "4.0.1"
