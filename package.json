@@ -89,7 +89,7 @@
         "source-map-explorer": "2.4.2",
         "typescript": "3.8.3",
         "unfetch": "4.1.0",
-        "wait-on": "4.0.1"
+        "wait-on": "4.0.2"
     },
     "jest": {
         "collectCoverageFrom": [
