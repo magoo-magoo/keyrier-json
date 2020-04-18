@@ -75,7 +75,7 @@
         "concurrently": "5.1.0",
         "cypress": "4.1.0",
         "electron": "8.2.3",
-        "electron-builder": "22.3.2",
+        "electron-builder": "22.5.1",
         "eslint-config-prettier": "6.10.1",
         "gh-pages": "2.2.0",
         "husky": "4.2.5",
