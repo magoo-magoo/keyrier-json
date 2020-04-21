@@ -81,7 +81,7 @@
         "husky": "4.2.5",
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
         "node-sass": "4.13.1",
-        "prettier": "2.0.4",
+        "prettier": "2.0.5",
         "pretty-quick": "2.0.1",
         "react-scripts": "3.4.1",
         "react-testing-library": "8.0.1",
