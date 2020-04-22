@@ -4,6 +4,20 @@
     {
       "packagePatterns": ["^@types"],
       "groupName": "typings packages"
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "updateTypes": ["patch", "minor"],
+      "groupName": "devDependencies (non-major)"
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "updateTypes": ["major"],
+      "groupName": "devDependencies (major)"
+    },
+    {
+      "packagePatterns": ["^electron"],
+      "groupName": "typings packages"
     }
   ]
 }
