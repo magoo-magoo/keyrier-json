@@ -16,6 +16,16 @@ export const customToString = (obj: {}): string => {
     return ''
 }
 
+export const takeFirst = (str: string | null | undefined, n: number) => {
+    if (typeof str !== 'string') {
+        return null
+    }
+    if (str.length < n) {
+        return str
+    }
+    return `${str.substring(0, n)}...`
+}
+
 export const containsIgnoreCase = (str: string, part: string) => {
     if (!str || !part) {
         return false

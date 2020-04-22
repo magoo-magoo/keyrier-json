@@ -1,46 +1,95 @@
-import 'react-table/react-table.css'
+// import 'react-table/react-table.css'
 
 import * as React from 'react'
-import { customToString, containsIgnoreCase } from 'core/converters/string'
 import { connect } from 'react-redux'
 import TableAdvancedOptions from './TableAdvancedOptions'
-import { Column, Filter, RowInfo } from 'react-table'
 import { itemType, RootState } from 'state/State'
 import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from 'store/selectors'
-import { useState, Suspense, lazy, memo, useCallback, FC } from 'react'
+import { useState, Suspense, lazy, memo, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
 import deepEqual from 'fast-deep-equal'
 import Loading from 'components/common/Loading'
 import { arrayElementName } from 'models/array'
 import { withPerformance } from 'core/logging/performance'
-
+import { useTable, Cell } from 'react-table'
+import { customToString, takeFirst } from 'core/converters/string'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
-const ReactTable = lazy(() => import(/* webpackChunkName: "react-table" */ 'react-table'))
 
-type Props = {
-    data: unknown[]
-    displayedColumns: string[]
-    groupBy?: string[]
+type CellProps = {
+    cell: Cell<any, itemType>
+    onClick: (value: itemType) => void
+}
+const CellComponent: FC<CellProps> = ({ cell, onClick }) => {
+    if (!cell) {
+        return <></>
+    }
+    const stringValue = customToString(cell.value)
+    const isTooLong = stringValue.length > 50
+    const displayValue = isTooLong ? takeFirst(stringValue, 50) : stringValue
+    const onCellClick = isTooLong
+        ? () => {
+              onClick(cell.value)
+          }
+        : undefined
+    return (
+        <td onClick={onCellClick} className={`text-center text-nowrap data-test-id-cell-data`}>
+            {isTooLong ? <button className="btn">{displayValue}</button> : displayValue}
+        </td>
+    )
 }
 
-export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) => {
+type DetailModalProps = {
+    value: itemType
+    onClose: () => void
+}
+const DetailModal: FC<DetailModalProps> = ({ value, onClose }) => (
+    <Modal<ModalProps> isOpen={!!value} toggle={onClose} size="lg">
+        <ModalHeader>Details</ModalHeader>
+        <ModalBody>
+            {typeof value === 'object' ? (
+                <Suspense fallback={<Loading componentName="ReactJson" />}>
+                    <ReactJson
+                        src={value ? value : {}}
+                        name="data"
+                        iconStyle="triangle"
+                        indentWidth={8}
+                        onAdd={() => null}
+                        onDelete={() => null}
+                        onEdit={() => null}
+                        onSelect={() => null}
+                    />
+                </Suspense>
+            ) : (
+                value
+            )}
+        </ModalBody>
+    </Modal>
+)
+
+type Props = {
+    data: itemType[]
+    displayedColumns: string[]
+}
+export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
     const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | null)
-    const getTdProps = useCallback(
-        (_: any, rowInfo?: RowInfo, column?: Column | undefined, __?: any) => ({
-            onClick: (e: MouseEvent, original: () => void) => {
-                if (rowInfo && rowInfo.aggregated) {
-                    original()
-                } else if (e && column?.id && rowInfo?.row) {
-                    setDetailsCellValue(rowInfo.row[column.id])
+    const tableData = data.map(e => (!!e ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {}))
+    const columns = React.useMemo(
+        () =>
+            displayedColumns.map(name => {
+                return {
+                    header: name,
+                    accessor: name,
                 }
-            },
-        }),
-        []
+            }),
+        [displayedColumns]
     )
 
-    const handleCloseDetail = useCallback(() => setDetailsCellValue(null), [])
-
+    const onCloseDetailModal = () => setDetailsCellValue(null)
+    const { headerGroups, rows, prepareRow } = useTable({
+        columns,
+        data: tableData,
+    })
     if (
         !data ||
         !Array.isArray(data) ||
@@ -49,22 +98,6 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) 
     ) {
         return <div />
     }
-
-    const tableColumnConfig = displayedColumns.map(
-        key =>
-            ({
-                Aggregated: () => (row: any) => (row ? row.value : ''),
-                Cell: (cellProps: any) => {
-                    const cellContent =
-                        cellProps !== null && cellProps !== undefined ? customToString(cellProps.value) : ''
-                    return cellContent
-                },
-                Header: key,
-                headerClassName: 'data-test-id-column-name',
-                accessor: key,
-                className: 'text-center btn btn-link data-test-id-cell-data',
-            } as const)
-    )
 
     return (
         <>
@@ -76,51 +109,60 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns, groupBy }) 
             <div className="row">
                 <div className="col">
                     <Suspense fallback={<Loading componentName="ReactTable" />}>
-                        <ReactTable
-                            noDataText="FRACKING EMPTY!"
-                            className="data-test-id-output-table -highlight"
-                            data={data.map(e => (!!e ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {}))}
-                            columns={tableColumnConfig}
-                            filterable={true}
-                            pageSize={10}
-                            pageSizeOptions={[10]}
-                            pivotBy={groupBy}
-                            defaultFilterMethod={defaultFilterMethod}
-                            getTdProps={getTdProps}
-                        />
+                        <table className="table table-bordered table-hover table-responsive data-test-id-output-table">
+                            <thead>
+                                {headerGroups.map(headerGroup => (
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            className="shadow-sm text-capitalize text-center data-test-id-column-name"
+                                        ></th>
+                                        {headerGroup.headers.map(column => (
+                                            <th
+                                                scope="col"
+                                                className="shadow-sm text-capitalize text-center data-test-id-column-name"
+                                            >
+                                                {column.render('header')}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </thead>
+                            <tbody>
+                                {rows.map(row => {
+                                    prepareRow(row)
+                                    return (
+                                        <tr>
+                                            <th scope="row">
+                                                <button
+                                                    onClick={() => setDetailsCellValue(row.original)}
+                                                    className="btn btn-link"
+                                                >
+                                                    <i className="material-icons">open_in_browser</i>
+                                                </button>
+                                            </th>
+                                            {row.cells.map(cell => (
+                                                <CellComponent
+                                                    key={cell.column.id}
+                                                    cell={cell}
+                                                    onClick={setDetailsCellValue}
+                                                />
+                                            ))}
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
                     </Suspense>
                 </div>
             </div>
             <div id="data-test-id-output-table-length" className="mx-3 align-items-center justify-content-end d-flex">
                 <h4>Number of elements: {data.length}</h4>
             </div>
-            <Modal<ModalProps> isOpen={!!detailsCellValue} toggle={handleCloseDetail} size="lg">
-                <ModalHeader>Details</ModalHeader>
-                <ModalBody>
-                    {typeof detailsCellValue === 'object' ? (
-                        <Suspense fallback={<Loading componentName="ReactJson" />}>
-                            <ReactJson
-                                src={detailsCellValue ? detailsCellValue : {}}
-                                name="data"
-                                iconStyle="triangle"
-                                indentWidth={8}
-                                onAdd={() => null}
-                                onDelete={() => null}
-                                onEdit={() => null}
-                                onSelect={() => null}
-                            />
-                        </Suspense>
-                    ) : (
-                        detailsCellValue
-                    )}
-                </ModalBody>
-            </Modal>
+            <DetailModal value={detailsCellValue} onClose={onCloseDetailModal} />
         </>
     )
 }
-
-const defaultFilterMethod = (filter: Filter, row: itemType) =>
-    filter && row && containsIgnoreCase(customToString(row[filter.id]), filter.value)
 
 const mapStateToProps = (state: RootState) => {
     return {

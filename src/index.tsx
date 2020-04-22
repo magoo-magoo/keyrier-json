@@ -15,10 +15,13 @@ import { unregister } from 'registerServiceWorker'
     ])
 
     const ReactDOM = promises[0]
-    ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-        <Provider store={store}>
-            <App />
-        </Provider>
+    ReactDOM.render(
+        <React.StrictMode>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </React.StrictMode>,
+        document.getElementById('root') as HTMLElement
     )
     unregister()
 })()

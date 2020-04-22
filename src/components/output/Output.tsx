@@ -72,23 +72,23 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                     </div>
                 </div>
                 <TabContent activeTab={activeTab}>
-                    <TabPane tabId="RawJson">
-                        <div className="row">
-                            <div className="col-sm-2 pt-5">
-                                <h3>
-                                    <Badge id="badgeSize" color="info" pill={true}>
-                                        {prettyPrintBytes(objSize)}
-                                    </Badge>
-                                </h3>
+                    {activeTab === 'RawJson' && (
+                        <TabPane tabId="RawJson">
+                            <div className="row">
+                                <div className="col-sm-2 pt-5">
+                                    <h3>
+                                        <Badge id="badgeSize" color="info" pill={true}>
+                                            {prettyPrintBytes(objSize)}
+                                        </Badge>
+                                    </h3>
+                                </div>
+                                <div className="col-sm-10">
+                                    <JsonView />
+                                </div>
                             </div>
-                            <div className="col-sm-10">
-                                <JsonView />
-                            </div>
-                        </div>
-                    </TabPane>
-                    <TabPane tabId="Table">
-                        <OutputTable />
-                    </TabPane>
+                        </TabPane>
+                    )}
+                    <TabPane tabId="Table">{activeTab === 'Table' && <OutputTable />}</TabPane>
                 </TabContent>
             </>
         </>
