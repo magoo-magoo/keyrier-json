@@ -11,6 +11,7 @@
       "groupName": "devDependencies (non-major)"
     },
     {
+      "packagePatterns": ["^(?!@types).*"],
       "depTypeList": ["devDependencies"],
       "updateTypes": ["major"],
       "groupName": "devDependencies (major)"
