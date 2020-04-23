@@ -16,11 +16,9 @@ import { unregister } from 'registerServiceWorker'
 
     const ReactDOM = promises[0]
     ReactDOM.render(
-        <React.StrictMode>
-            <Provider store={store}>
-                <App />
-            </Provider>
-        </React.StrictMode>,
+        <Provider store={store}>
+            <App />
+        </Provider>,
         document.getElementById('root') as HTMLElement
     )
     unregister()
