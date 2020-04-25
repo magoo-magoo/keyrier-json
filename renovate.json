@@ -6,13 +6,13 @@
       "groupName": "typings packages"
     },
     {
-      "excludePackagePatterns": ["^@types/"]
+      "excludePackagePatterns": ["^@types/"],
       "depTypeList": ["devDependencies"],
       "updateTypes": ["patch", "minor"],
       "groupName": "devDependencies (non-major)"
     },
     {
-      "excludePackagePatterns": ["^@types/"]
+      "excludePackagePatterns": ["^@types/"],
       "depTypeList": ["devDependencies"],
       "updateTypes": ["major"],
       "groupName": "devDependencies (major)"
