@@ -1,53 +1,11 @@
-import { SelectParser } from './parser'
 import { CstNode, ICstVisitor, IToken } from 'chevrotain'
-import { lex } from './lexer'
+import { Conditions, Field, Limit, nodes, Order, OrderArgument, Source, SQLTree } from 'sql-parser'
+import { Integer, lex } from './lexer'
+import { SelectParser } from './parser'
 
 const parserInstance = new SelectParser([])
 // The base visitor class can be accessed via the a parser instance.
-const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, Node> = parserInstance.getBaseCstVisitorConstructor()
-
-export type TreeType = 'SELECT_STMT' | 'SELECT_CLAUSE' | 'FROM_CLAUSE' | 'WHERE_CLAUSE' | 'EXPRESSION' | 'COLUMNS'
-
-export type Node = SelectClause | ExpressionNode | FromClause | WhereClause | SelectClause | Columns
-
-export type TreeNode = {
-    type: TreeType
-}
-
-export type SelectClause = {
-    columns: Columns
-} & TreeNode
-
-export type Columns = {
-    values: readonly string[]
-    names: readonly string[]
-} & TreeNode
-
-export type ExpressionNode = {
-    lhs: string
-    rhs: string
-    operator: string
-} & TreeNode
-
-export type FromClause = { table: string } & TreeNode
-
-export type WhereClause = { condition: Condition } & TreeNode
-
-export type Condition = {
-    rhs: string | number | Condition
-    lhs: string | number | Condition
-    operator: ConditionOperator
-    type: ConditionType
-}
-
-export type ConditionType = 'EXPRESSION'
-export type ConditionOperator = '<' | '>' | '<=' | '>=' | '<>' | 'and' | 'or'
-
-export type SelectStatementTree = {
-    selectClause: SelectClause
-    fromClause: FromClause
-    whereClause: WhereClause
-} & TreeNode
+const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, any> = parserInstance.getBaseCstVisitorConstructor()
 
 class SQLToAstVisitor extends BaseSQLVisitor {
     constructor() {
@@ -59,23 +17,21 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         selectClause: CstNode | CstNode[]
         fromClause: CstNode | CstNode[]
         whereClause: CstNode | CstNode[]
+        orderByClause: CstNode | CstNode[]
+        limitClause: CstNode | CstNode[]
     }) {
-        // "this.visit" can be used to visit none-terminals and will invoke the correct visit method for the CstNode passed.
         const select = this.visit(ctx.selectClause)
-
-        //  "this.visit" can work on either a CstNode or an Array of CstNodes.
-        //  If an array is passed (ctx.fromClause is an array) it is equivalent
-        //  to passing the first element of that array
         const from = this.visit(ctx.fromClause)
-
-        // "whereClause" is optional, "this.visit" will ignore empty arrays (optional)
         const where = this.visit(ctx.whereClause)
-
+        const order = this.visit(ctx.orderByClause)
+        const limit = this.visit(ctx.limitClause)
         return {
             type: 'SELECT_STMT',
-            selectClause: select,
-            fromClause: from,
-            whereClause: where,
+            fields: select,
+            source: from,
+            where,
+            order,
+            limit,
         } as const
     }
 
@@ -84,10 +40,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         // an array with the same name(key) in the ctx object.
         //         const columns = ctx.Identifier.map(identToken => identToken.image)
         const columns = this.visit(ctx.projection)
-        return {
-            type: 'SELECT_CLAUSE',
-            columns,
-        }
+        return columns
     }
 
     public columns$both() {}
@@ -99,83 +52,208 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         }
     }
 
-    public projection(ctx: { cols: CstNode[] }): Columns {
-        const cols = ctx.cols.map(x => this.visit(x)) as any
-        return {
-            type: 'COLUMNS',
-            values: cols.map((x: { value: any }) => x.value),
-            names: cols.map((x: { name: any }) => x.name),
-        } as const
+    public projection(ctx: { cols: CstNode[]; Star: CstNode }) {
+        const cols: { value: string; name: string }[] = (ctx.cols?.map(x => this.visit(x)) ?? []) as any
+        if (ctx.Star) {
+            return [new nodes.Star()]
+        }
+        const fields: Field[] = []
+        cols.forEach(({ name, value }) => {
+            const { pathArray: namePathArray, propertyName: namePropertyName } = splitPropertyPath(name)
+            const { pathArray: fieldPathArray, propertyName: fieldPropertyName } = splitPropertyPath(value)
+            const field: Field = {
+                name: {
+                    value: namePropertyName,
+                    values: namePathArray,
+                    value2: name,
+                },
+                field: {
+                    value: fieldPropertyName,
+                    values: fieldPathArray,
+                    value2: value,
+                },
+            }
+            fields.push(field)
+        })
+        return fields
     }
 
-    public fromClause(ctx: { Identifier: Array<{ image: string }> }): FromClause {
+    public fromClause(ctx: { Identifier: Array<IToken>; alias: Array<IToken> }): Source {
         const tableName: string = ctx.Identifier[0].image
-
+        const alias = ctx.alias?.length ? ctx.alias[0].image : tableName
         return {
-            type: 'FROM_CLAUSE',
-            table: tableName,
-        } as const
+            name: {
+                value: tableName,
+                values: splitPropertyPath(tableName).pathArray,
+                value2: tableName,
+            },
+            alias: {
+                value: alias,
+                values: splitPropertyPath(alias).pathArray,
+            },
+        }
     }
 
     public whereClause(ctx: { expression: CstNode | CstNode[] }) {
-        const condition = this.visit(ctx.expression)
+        const conditions = this.visit(ctx.expression)
 
         return {
             type: 'WHERE_CLAUSE',
-            condition,
+            conditions,
         } as const
     }
 
-    public expression(ctx: {
-        lhs: Array<CstNode | CstNode[]>
-        relationalOperator: CstNode | CstNode[]
-        rhs: Array<CstNode | CstNode[]>
-    }) {
-        // Note the usage of the "rhs" and "lhs" labels defined in step 2 in the expression rule.
-        const lhs = this.visit(ctx.lhs[0])
-        const operator = this.visit(ctx.relationalOperator)
-        const rhs = this.visit(ctx.rhs[0])
+    public limitClause(ctx: { Integer: IToken[] }): Limit {
+        const limit = parseInt(ctx.Integer[0].image)
+        return {
+            value: {
+                value: limit,
+                values: [limit],
+            },
+        }
+    }
+    public orderByClause(ctx: { OrderBy: IToken[]; Identifier: IToken[]; OrderByDirection: IToken[] }): Order {
+        const { pathArray, propertyName } = splitPropertyPath(ctx.Identifier[0].image)
+        const direction =
+            ctx.OrderByDirection && ctx.OrderByDirection?.length
+                ? ctx.OrderByDirection[0].image === 'asc'
+                    ? 'asc'
+                    : 'desc'
+                : 'asc'
+        const order: OrderArgument = {
+            value: {
+                value: propertyName,
+                values: pathArray,
+                value2: propertyName,
+            },
+            direction,
+        }
 
         return {
-            type: 'EXPRESSION',
-            lhs,
-            operator,
-            rhs,
-        } as const
+            orderings: [order],
+        }
+    }
+
+    public expression(
+        ctx: {
+            subExpression: Array<CstNode | CstNode[]>
+            OrAnd: Array<IToken>
+            right: Array<CstNode | CstNode[]>
+        },
+        i: number = 0
+    ): Conditions {
+        if (ctx.subExpression?.length - i === 1) {
+            const left = this.visit(ctx.subExpression[i])
+            return left
+        }
+        const left = this.visit(ctx.subExpression[i])
+
+        const operation = this.OrAnd(ctx.OrAnd[i])
+        const right = this.expression(ctx, ++i)
+
+        return {
+            left,
+            right,
+            operation,
+        }
+    }
+
+    public subExpression(ctx: {
+        left: Array<CstNode | CstNode[]>
+        relationalOperator: CstNode | CstNode[]
+        right: Array<CstNode | CstNode[]>
+    }) {
+        // Note the usage of the "rhs" and "lhs" labels defined in step 2 in the expression rule.
+        const left = this.visit(ctx.left[0])
+        const operation = this.visit(ctx.relationalOperator)
+        const right = this.visit(ctx.right[0])
+
+        return {
+            left: { value: left, values: splitPropertyPath(left).pathArray },
+            operation,
+            right: { value: right, values: splitPropertyPath(right).pathArray },
+        }
     }
 
     // these two visitor methods will return a string.
     public atomicExpression(ctx: {
-        Integer: Array<{ image: any }>
-        Identifier: Array<{ image: any }>
-        StringToken: Array<{ image: any }>
+        Integer: Array<IToken>
+        Identifier: Array<IToken>
+        StringToken: Array<IToken>
+        in: Array<IToken>
+        Null: Array<IToken>
     }) {
+        if (ctx.in) {
+            return ctx.in
+                .map(x => {
+                    if (x.tokenType === Integer) {
+                        return parseInt(x.image)
+                    }
+                    return x.image
+                })
+                .map(value => ({ value }))
+        }
         if (ctx.Integer) {
-            return ctx.Integer[0].image
+            return parseInt(ctx.Integer[0].image)
+        }
+        if (ctx.Null) {
+            return null
         }
         if (ctx.Identifier) {
             return ctx.Identifier[0].image
         }
         if (ctx.StringToken) {
-            return ctx.StringToken[0].image
+            return ctx.StringToken[0].image.substring(1, ctx.StringToken[0].image.length - 1)
         }
+        throw new Error('unknown atomicExpression')
     }
 
     public relationalOperator(ctx: {
-        GreaterThan: Array<{ image: any }>
-        LessThan: Array<{ image: any }>
-        Equal: Array<{ image: any }>
+        GreaterThan: Array<IToken>
+        GreaterOrEqualThan: Array<IToken>
+        LessThan: Array<IToken>
+        LessOrEqualThan: Array<IToken>
+        Equal: Array<IToken>
+        NotEqual: Array<IToken>
+        Like: Array<IToken>
+        In: Array<IToken>
+        Is: Array<IToken>
+        IsNot: Array<IToken>
     }) {
         if (ctx.GreaterThan) {
             return ctx.GreaterThan[0].image
         }
-
+        if (ctx.GreaterOrEqualThan) {
+            return ctx.GreaterOrEqualThan[0].image
+        }
         if (ctx.LessThan) {
             return ctx.LessThan[0].image
+        }
+        if (ctx.LessOrEqualThan) {
+            return ctx.LessOrEqualThan[0].image
         }
         if (ctx.Equal) {
             return ctx.Equal[0].image
         }
+        if (ctx.NotEqual) {
+            return ctx.NotEqual[0].image
+        }
+        if (ctx.Like) {
+            return ctx.Like[0].image
+        }
+        if (ctx.In) {
+            return ctx.In[0].image
+        }
+        if (ctx.Is) {
+            return ctx.Is[0].image
+        }
+        if (ctx.IsNot) {
+            return ctx.IsNot[0].image
+        }
+        throw new Error('unknown relationalOperator')
+    }
+    public OrAnd(token: IToken) {
+        return token.image
     }
 }
 
@@ -187,16 +265,36 @@ const toAst = (inputText: string) => {
 
     // ".input" is a setter which will reset the parser's internal's state.
     parserInstance.input = lexResult.tokens
+    let cst: CstNode[] | CstNode
 
+    try {
+        cst = parserInstance.selectStatement()
+    } catch (error) {
+        console.log(error)
+        throw Error(JSON.stringify(error))
+    }
     // Automatic CST created when parsing
-    const cst = parserInstance.selectStatement()
 
     if (parserInstance.errors.length > 0) {
+        console.log(parserInstance.errors)
         throw Error(JSON.stringify(parserInstance.errors))
     }
+    try {
+        const ast = toAstVisitorInstance.visit(cst)
+        return (ast as unknown) as SQLTree
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
 
-    const ast = toAstVisitorInstance.visit(cst)
-    return (ast as unknown) as SelectStatementTree
+const splitPropertyPath = (stringPath: string) => {
+    if (typeof stringPath !== 'string') {
+        return { propertyName: '', pathArray: [] }
+    }
+    const pathArray = stringPath.split('.')
+
+    return { propertyName: pathArray[pathArray.length - 1], pathArray }
 }
 
 export { toAst }

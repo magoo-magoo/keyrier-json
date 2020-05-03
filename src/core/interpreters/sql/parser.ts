@@ -1,23 +1,34 @@
-import { Parser, CstNode } from 'chevrotain'
+import { CstNode, CstParser } from 'chevrotain'
 import {
-    lex as selectLexer,
-    tokenVocabulary,
-    Select,
-    Comma,
-    Identifier,
-    From,
-    Where,
-    Integer,
-    GreaterThan,
-    LessThan,
     As,
-    Star,
-    GreaterOrEqualThan,
-    LessOrEqualThan,
+    Comma,
     Equal,
-    And,
+    From,
+    GreaterOrEqualThan,
+    GreaterThan,
+    Identifier,
+    Integer,
+    LessOrEqualThan,
+    LessThan,
+    lex as selectLexer,
+    OrAnd,
+    Select,
+    Star,
     // Or,
     StringToken,
+    tokenVocabulary,
+    Where,
+    Like,
+    OrderBy,
+    OrderByDirection,
+    Limit,
+    OpenParenthesis,
+    CloseParenthesis,
+    In,
+    Is,
+    Null,
+    NotEqual,
+    IsNot,
 } from './lexer'
 
 export const labels = {
@@ -27,14 +38,17 @@ export const labels = {
 } as const
 
 // ----------------- parser -----------------
-class SelectParser extends Parser {
+class SelectParser extends CstParser {
     public selectStatement: (idxInCallingRule?: number | undefined, ...args: any[]) => CstNode | CstNode[]
     public fromClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public selectClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public whereClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public relationalOperator: (idxInCallingRule?: number | undefined, ...args: any[]) => any
+    public orderByClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
+    public limitClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public atomicExpression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public expression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
+    public subExpression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public projection: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public cols: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     // A config object as a constructor argument is normally not needed.
@@ -71,6 +85,12 @@ class SelectParser extends Parser {
             this.OPTION(() => {
                 this.SUBRULE(this.whereClause)
             })
+            this.OPTION2(() => {
+                this.SUBRULE(this.orderByClause)
+            })
+            this.OPTION3(() => {
+                this.SUBRULE(this.limitClause)
+            })
         })
 
         this.selectClause = this.RULE('selectClause', () => {
@@ -81,6 +101,7 @@ class SelectParser extends Parser {
         this.fromClause = this.RULE('fromClause', () => {
             this.CONSUME(From)
             this.CONSUME(Identifier)
+            this.OPTION(() => this.CONSUME2(Identifier, { LABEL: 'alias' }))
         })
 
         this.whereClause = this.RULE('whereClause', () => {
@@ -88,32 +109,56 @@ class SelectParser extends Parser {
             this.SUBRULE(this.expression)
         })
 
-        // The "rhs" and "lhs" (Right/Left Hand Side) labels will provide easy
-        // to use names during CST Visitor (step 3a).
         this.expression = this.RULE('expression', () => {
-            this.OR([
-                {
-                    ALT: () =>
-                        this.AT_LEAST_ONE_SEP({
-                            SEP: And,
-                            DEF: () => {
-                                this.SUBRULE(this.atomicExpression, { LABEL: 'lhs' })
-                                this.SUBRULE(this.relationalOperator)
-                                this.SUBRULE2(this.atomicExpression, { LABEL: 'rhs' }) // note the '2' suffix to distinguish
-                                // from the 'SUBRULE(atomicExpression)'
-                                // 2 lines above.
-                                return And.name
-                            },
-                        }),
+            this.MANY_SEP({
+                SEP: OrAnd,
+                DEF: () => {
+                    this.SUBRULE(this.subExpression)
+
+                    this.OPTION({
+                        DEF: () => {
+                            //   this.SUBRULE(this.logicOperator, { LABEL: 'logicperator' })
+                            this.SUBRULE2(this.subExpression, { LABEL: 'right' }) // note the '2' suffix to distinguish
+                        },
+                    })
+                    // from the 'SUBRULE(atomicExpression)'
+                    // 2 lines above.
+                    return OrAnd.name
                 },
-            ])
+            })
+        })
+
+        this.subExpression = this.RULE('subExpression', () => {
+            this.SUBRULE(this.atomicExpression, { LABEL: 'left' })
+            this.SUBRULE(this.relationalOperator)
+            this.SUBRULE2(this.atomicExpression, { LABEL: 'right' })
         })
 
         this.atomicExpression = this.RULE('atomicExpression', () => {
             this.OR([
                 { ALT: () => this.CONSUME(Integer) },
+                { ALT: () => this.CONSUME(Null) },
                 { ALT: () => this.CONSUME(Identifier) },
                 { ALT: () => this.CONSUME(StringToken) },
+                {
+                    ALT: () => {
+                        this.CONSUME(OpenParenthesis)
+                        this.MANY_SEP({
+                            SEP: Comma,
+                            DEF: () => {
+                                this.OR1([
+                                    {
+                                        ALT: () => this.CONSUME1(Integer, { LABEL: 'in' }),
+                                    },
+                                    {
+                                        ALT: () => this.CONSUME1(Identifier, { LABEL: 'in' }),
+                                    },
+                                ])
+                            },
+                        })
+                        this.CONSUME(CloseParenthesis)
+                    },
+                },
             ])
         })
 
@@ -124,12 +169,27 @@ class SelectParser extends Parser {
                 { ALT: () => this.CONSUME(LessOrEqualThan) },
                 { ALT: () => this.CONSUME(LessThan) },
                 { ALT: () => this.CONSUME(Equal) },
+                { ALT: () => this.CONSUME(NotEqual) },
+                { ALT: () => this.CONSUME(Like) },
+                { ALT: () => this.CONSUME(In) },
+                { ALT: () => this.CONSUME(IsNot) },
+                { ALT: () => this.CONSUME(Is) },
             ])
         })
 
-        // very important to call this after all the rules have been defined.
-        // otherwise the parser may not work correctly as it will lack information
-        // derived during the self analysis phase.
+        this.orderByClause = this.RULE('orderByClause', () => {
+            this.CONSUME(OrderBy)
+            this.CONSUME(Identifier)
+            this.OPTION({
+                DEF: () => this.CONSUME(OrderByDirection),
+            })
+        })
+
+        this.limitClause = this.RULE('limitClause', () => {
+            this.CONSUME(Limit)
+            this.CONSUME(Integer)
+        })
+
         this.performSelfAnalysis()
     }
 }
