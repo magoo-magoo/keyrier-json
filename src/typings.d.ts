@@ -32,8 +32,8 @@ declare module 'sql-parser' {
 
     export interface Value {
         value: string | number
-        values: string[]
-        value2: string
+        values: (string | numer)[]
+        value2?: string
     }
 
     export interface Field {
@@ -42,16 +42,16 @@ declare module 'sql-parser' {
     }
 
     export interface Op {
-        value: string | number | Value[] | null
-        values: string[]
-        operation: string | null
-        left: Op
-        right: Op
+        value?: string | number | Value[] | null
+        values?: string[]
+        operation?: string | null
+        left?: Op
+        right?: Op
     }
     export interface Conditions {
-        left: Op
-        right: Op
-        operation: string | null
+        left?: Op
+        right?: Op
+        operation?: string | null
     }
     export interface Where {
         conditions: Conditions
@@ -77,7 +77,7 @@ declare module 'sql-parser' {
     }
 
     export class nodes {
-        public static readonly Star: Function
+        public static readonly Star: class
     }
 
     export type ParseFunction = (s: string) => SQLTree

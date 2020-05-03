@@ -77,6 +77,105 @@ describe('sql interpreter', () => {
         expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }])
     })
 
+    it('should returns filtered results with where clause - SQL query - =', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21 }]),
+            'select * from data where age = 42',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 42 }])
+    })
+    it('should returns filtered results with where clause - SQL query - !=', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21 }]),
+            'select * from data where age != 42',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 21 }])
+    })
+
+    it('should returns filtered results with where clause - SQL query - <>', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21 }]),
+            'select * from data where age <> 42',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 21 }])
+    })
+
+    it('should returns filtered results with where clause - SQL query - >', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21 }]),
+            'select * from data where age > 41',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 42 }])
+    })
+
+    it('should returns filtered results with where clause - SQL query - >=', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21 }]),
+            'select * from data where age >= 42',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 42 }])
+    })
+
+    it('should returns filtered results with where clause - SQL query - <', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21 }]),
+            'select * from data where age < 41',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 21 }])
+    })
+    it('should returns filtered results with where clause - SQL query - <=', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21 }]),
+            'select * from data where age <= 21',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 21 }])
+    })
+    it('should returns filtered results with where clause - SQL query - is', () => {
+        const result = codeEvaluation(
+            JSON.stringify([{ age: 42 }, { age: 21, v: null }]),
+            'select * from data where v is null',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 21, v: null }])
+    })
+
+    it('should returns filtered results with where clause - SQL query - is not', () => {
+        const result = codeEvaluation(
+            JSON.stringify([
+                { age: 42, v: {} },
+                { age: 21, v: null },
+            ]),
+            'select age from data where v is not null',
+            'SQL'
+        )
+        expect(result).not.toBeNull()
+
+        expect(JSON.parse(result as any)).toEqual([{ age: 42 }])
+    })
+
     it('should returns filtered results with where clause- like operator - SQL query', () => {
         const result = codeEvaluation(
             '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
@@ -86,6 +185,7 @@ describe('sql interpreter', () => {
         expect(result).toBeDefined()
         expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }])
     })
+
     it('should returns filtered results with where clause- like operator - SQL query', () => {
         const result = codeEvaluation(
             '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
@@ -246,7 +346,11 @@ describe('sql interpreter', () => {
     -- Commentaire
     --IGNORE ME
     
-    select * from data`,
+    select * from data
+    --IGNORE ME
+    
+    --IGNORE ME`,
+
             'SQL'
         )
         expect(JSON.parse(result as any)).toEqual({ a: 1, b: 42 })
@@ -271,3 +375,8 @@ describe('sql interpreter', () => {
         expect(JSON.parse(result as any)).toEqual([{ fullName: 'John Doe' }, { fullName: 'Danny de Vito' }])
     })
 })
+function ddd(result: string | Error | null) {
+    if (typeof result !== 'string') {
+        throw new Error()
+    }
+}

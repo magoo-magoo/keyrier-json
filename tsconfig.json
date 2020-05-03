@@ -34,7 +34,7 @@
         "allowUnusedLabels": false,
         "allowUnreachableCode": false,
         "noStrictGenericChecks": false,
-        "types": ["react-dom/experimental", "react/experimental"]
+        "types": ["react-dom/experimental", "react/experimental", "jest"]
     },
     "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
     "include": ["src"]
