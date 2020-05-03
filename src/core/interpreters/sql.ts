@@ -1,8 +1,9 @@
 import _ from 'lodash'
-import { parse, nodes, Op, Field, SQLTree, Source } from 'sql-parser'
+import { Field, nodes, Op, Source, SQLTree } from 'sql-parser'
 import { jsonParseSafe } from '../converters/json'
+import { toAst } from './sql/actions-visitor'
 
-export const computePath = (path: string[]) => {
+export const computePath = (path: string[] | undefined) => {
     if (!path || path.length === 0) {
         return []
     }
@@ -17,8 +18,9 @@ export const computePath = (path: string[]) => {
 
 export const sqlEvaluation = (sourceString: string, queryString: string) => {
     try {
-        const sqlTree = parse(queryString.replace(/--(.*?)(\n|$)/gm, ''))
-        if (sqlTree.source.name.values[0] !== 'data') {
+        // const sqlTree = parse(queryString.replace(/--(.*?)(\n|$)/gm, ''))
+        const sqlTree = toAst(cleanComment(queryString))
+        if (sqlTree.source.name.values && sqlTree.source.name.values[0] !== 'data') {
             return new Error(`${sqlTree.source.name.values[0]} table does not exist`)
         }
 
@@ -31,6 +33,8 @@ export const sqlEvaluation = (sourceString: string, queryString: string) => {
         return e as Error
     }
 }
+
+const cleanComment = (str: string) => str.replace(/--(.*?)(\n|$)/gm, '')
 
 const map = (v: object, fields: Field[], source: Source) => {
     if (fields[0].constructor === nodes.Star) {
@@ -45,10 +49,10 @@ const map = (v: object, fields: Field[], source: Source) => {
 }
 
 const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
-    let fromPath: string[] = []
+    let fromPath: (string | number)[] = []
 
     if ((sqlTree.source.name.values?.length ?? 0) > 1) {
-        if (sqlTree.source.name.values[0] === 'data') {
+        if (sqlTree.source.name.values && sqlTree.source.name.values[0] === 'data') {
             fromPath = [...sqlTree.source.name.values]
             fromPath.shift()
         }
@@ -86,79 +90,85 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
     return map(value, sqlTree.fields, sqlTree.source)
 }
 
-const compareOperands = (operation: string | null, left: Op, right: Op, value: object): boolean => {
+const compareOperands = (
+    operation: string | null | undefined,
+    left: Op | undefined,
+    right: Op | undefined,
+    value: object
+): boolean => {
     if (!operation) {
         return false
     }
 
     if (operation.toLowerCase() === 'or') {
         return (
-            compareOperands(left.operation, left.left, left.right, value) ||
-            compareOperands(right.operation, right.left, right.right, value)
+            compareOperands(left?.operation, left?.left, left?.right, value) ||
+            compareOperands(right?.operation, right?.left, right?.right, value)
         )
     }
 
     if (operation.toLowerCase() === 'and') {
         return (
-            compareOperands(left.operation, left.left, left.right, value) &&
-            compareOperands(right.operation, right.left, right.right, value)
+            compareOperands(left?.operation, left?.left, left?.right, value) &&
+            compareOperands(right?.operation, right?.left, right?.right, value)
         )
     }
 
-    if (!left.value) {
+    if (!left?.value) {
         return false
     }
 
-    const leftValue = _.get(value, computePath(left.values))
+    const leftValue = _.get(value, computePath(left?.values))
 
-    if (operation === '=' && leftValue === right.value) {
+    if (operation === '=' && leftValue === right?.value) {
         return true
     }
-    if (operation.toLowerCase() === 'is' && leftValue === right.value) {
+    if (operation.toLowerCase() === 'is' && leftValue === right?.value) {
         return true
     }
-    if (operation === '!=' && leftValue !== right.value) {
+    if (operation === '!=' && leftValue !== right?.value) {
         return true
     }
-    if (operation.toLowerCase() === 'is not' && leftValue !== right.value) {
+    if (operation.toLowerCase() === 'is not' && leftValue !== right?.value) {
         return true
     }
-    if (operation === '<>' && leftValue !== right.value) {
+    if (operation === '<>' && leftValue !== right?.value) {
         return true
-    }
-
-    if (operation.toLocaleLowerCase() === 'like' && typeof right.value === 'string' && typeof leftValue === 'string') {
-        if (right.value.startsWith('%') && right.value.endsWith('%')) {
-            if (leftValue.includes(right.value.substring(1, right.value.length - 1))) {
-                return true
-            }
-        } else if (right.value.startsWith('%')) {
-            if (leftValue.endsWith(right.value.substring(right.value.indexOf('%') + 1))) {
-                return true
-            }
-        } else if (right.value.endsWith('%')) {
-            if (leftValue.startsWith(right.value.substring(0, right.value.indexOf('%')))) {
-                return true
-            }
-        }
     }
 
-    if (right.value) {
-        if (operation === '>' && leftValue > right.value) {
+    if (operation.toLocaleLowerCase() === 'like' && typeof right?.value === 'string' && typeof leftValue === 'string') {
+        if (right?.value.startsWith('%') && right?.value.endsWith('%')) {
+            if (leftValue.includes(right?.value.substring(1, right?.value.length - 1))) {
+                return true
+            }
+        } else if (right?.value.startsWith('%')) {
+            if (leftValue.endsWith(right?.value.substring(right?.value.indexOf('%') + 1))) {
+                return true
+            }
+        } else if (right?.value.endsWith('%')) {
+            if (leftValue.startsWith(right?.value.substring(0, right?.value.indexOf('%')))) {
+                return true
+            }
+        }
+    }
+
+    if (right?.value) {
+        if (operation === '>' && leftValue > right?.value) {
             return true
         }
-        if (operation === '>=' && leftValue >= right.value) {
+        if (operation === '>=' && leftValue >= right?.value) {
             return true
         }
-        if (operation === '<' && leftValue < right.value) {
+        if (operation === '<' && leftValue < right?.value) {
             return true
         }
-        if (operation === '<=' && leftValue <= right.value) {
+        if (operation === '<=' && leftValue <= right?.value) {
             return true
         }
     }
 
     if (
+        right &&
         operation.toLowerCase() === 'in' &&
         Array.isArray(right.value) &&
         right.value.filter(x => x.value === leftValue).length > 0

@@ -1,84 +1,18 @@
-// import 'react-table/react-table.css'
-
-import * as React from 'react'
-import { connect } from 'react-redux'
-import TableAdvancedOptions from './TableAdvancedOptions'
-import { itemType, RootState } from 'state/State'
-import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from 'store/selectors'
-import { useState, Suspense, lazy, memo, FC, useMemo } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
-import { Modal, ModalProps, ModalHeader, ModalBody } from 'reactstrap'
-import deepEqual from 'fast-deep-equal'
 import Loading from 'components/common/Loading'
-import { arrayElementName } from 'models/array'
 import { withPerformance } from 'core/logging/performance'
-import { useTable, Cell, useSortBy, useFilters } from 'react-table'
-import { customToString, takeFirst } from 'core/converters/string'
-const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
-
-type CellProps = {
-    cell: Cell<any, itemType>
-    onClick: (value: itemType) => void
-}
-const CellComponent: FC<CellProps> = ({ cell, onClick }) => {
-    if (!cell) {
-        return <></>
-    }
-    const stringValue = customToString(cell.value)
-    const isTooLong = stringValue.length > 50
-    const displayValue = isTooLong ? takeFirst(stringValue, 50) : stringValue
-    const onCellClick = isTooLong
-        ? () => {
-              onClick(cell.value)
-          }
-        : undefined
-    return (
-        <td onClick={onCellClick} className={`text-center text-nowrap data-test-id-cell-data`}>
-            {isTooLong ? <button className="btn">{displayValue}</button> : displayValue}
-        </td>
-    )
-}
-
-type DetailModalProps = {
-    value: itemType
-    onClose: () => void
-}
-const DetailModal: FC<DetailModalProps> = ({ value, onClose }) => (
-    <Modal<ModalProps> isOpen={!!value} toggle={onClose} size="lg">
-        <ModalHeader>Details</ModalHeader>
-        <ModalBody>
-            {typeof value === 'object' ? (
-                <Suspense fallback={<Loading componentName="ReactJson" />}>
-                    <ReactJson
-                        src={value ? value : {}}
-                        name="data"
-                        iconStyle="triangle"
-                        indentWidth={8}
-                        onAdd={() => null}
-                        onDelete={() => null}
-                        onEdit={() => null}
-                        onSelect={() => null}
-                    />
-                </Suspense>
-            ) : (
-                value
-            )}
-        </ModalBody>
-    </Modal>
-)
-const DefaultColumnFilter: FC<any> = ({ column: { filterValue, setFilter } }) => {
-    return (
-        <div>
-            <input
-                className="form-control form-control-sm"
-                value={filterValue || ''}
-                onChange={e => {
-                    setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
-                }}
-            />
-        </div>
-    )
-}
+import deepEqual from 'fast-deep-equal'
+import { arrayElementName } from 'models/array'
+import * as React from 'react'
+import { FC, memo, Suspense, useMemo, useState } from 'react'
+import { connect } from 'react-redux'
+import { useFilters, useSortBy, useTable } from 'react-table'
+import { itemType, RootState } from 'state/State'
+import { getColumns, getdisplayedColumns, getGroupBy, getOutputarray } from 'store/selectors'
+import TableAdvancedOptions from './TableAdvancedOptions'
+import { TableCellComponent } from './TableCellComponent'
+import { TableDetailModal } from './TableDetailModal'
+import { DefaultColumnFilter } from './DefaultColumnFilter'
 
 type Props = {
     data: itemType[]
@@ -143,7 +77,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
                                                 key={ci}
                                                 scope="col"
                                                 className="shadow-sm text-capitalize text-center data-test-id-column-name min-vw-10"
-                                                style={{ minWidth: '50vh' }}
+                                                style={{ minWidth: '40vh' }}
                                             >
                                                 <div {...column.getHeaderProps((column as any).getSortByToggleProps())}>
                                                     {column.render('header')}
@@ -176,7 +110,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
                                                 </button>
                                             </th>
                                             {row.cells.map(cell => (
-                                                <CellComponent
+                                                <TableCellComponent
                                                     key={cell.column.id}
                                                     cell={cell}
                                                     onClick={setDetailsCellValue}
@@ -193,7 +127,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
             <div id="data-test-id-output-table-length" className="mx-3 align-items-center justify-content-end d-flex">
                 <h4>Number of elements: {tableData.length}</h4>
             </div>
-            <DetailModal value={detailsCellValue} onClose={onCloseDetailModal} />
+            <TableDetailModal value={detailsCellValue} onClose={onCloseDetailModal} />
         </>
     )
 }
