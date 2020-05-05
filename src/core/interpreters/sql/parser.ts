@@ -32,9 +32,12 @@ import {
 } from './lexer'
 
 export const labels = {
-    valueAndName: 'valueAndName',
     value: 'value',
     name: 'name',
+    alias: 'alias',
+    left: 'left',
+    right: 'right',
+    in: 'in',
 } as const
 
 // ----------------- parser -----------------
@@ -101,7 +104,7 @@ class SelectParser extends CstParser {
         this.fromClause = this.RULE('fromClause', () => {
             this.CONSUME(From)
             this.CONSUME(Identifier)
-            this.OPTION(() => this.CONSUME2(Identifier, { LABEL: 'alias' }))
+            this.OPTION(() => this.CONSUME2(Identifier, { LABEL: labels.alias }))
         })
 
         this.whereClause = this.RULE('whereClause', () => {
@@ -115,12 +118,12 @@ class SelectParser extends CstParser {
                 DEF: () => {
                     this.SUBRULE(this.subExpression)
 
-                    this.OPTION({
-                        DEF: () => {
-                            //   this.SUBRULE(this.logicOperator, { LABEL: 'logicperator' })
-                            this.SUBRULE2(this.subExpression, { LABEL: 'right' }) // note the '2' suffix to distinguish
-                        },
-                    })
+                    // this.OPTION({
+                    //     DEF: () => {
+                    //         //   this.SUBRULE(this.logicOperator, { LABEL: 'logicperator' })
+                    //         // this.SUBRULE2(this.subExpression) // note the '2' suffix to distinguish
+                    //     },
+                    // })
                     // from the 'SUBRULE(atomicExpression)'
                     // 2 lines above.
                     return OrAnd.name
@@ -129,9 +132,9 @@ class SelectParser extends CstParser {
         })
 
         this.subExpression = this.RULE('subExpression', () => {
-            this.SUBRULE(this.atomicExpression, { LABEL: 'left' })
+            this.SUBRULE(this.atomicExpression, { LABEL: labels.left })
             this.SUBRULE(this.relationalOperator)
-            this.SUBRULE2(this.atomicExpression, { LABEL: 'right' })
+            this.SUBRULE2(this.atomicExpression, { LABEL: labels.right })
         })
 
         this.atomicExpression = this.RULE('atomicExpression', () => {
@@ -148,10 +151,10 @@ class SelectParser extends CstParser {
                             DEF: () => {
                                 this.OR1([
                                     {
-                                        ALT: () => this.CONSUME1(Integer, { LABEL: 'in' }),
+                                        ALT: () => this.CONSUME1(Integer, { LABEL: labels.in }),
                                     },
                                     {
-                                        ALT: () => this.CONSUME1(Identifier, { LABEL: 'in' }),
+                                        ALT: () => this.CONSUME1(StringToken, { LABEL: labels.in }),
                                     },
                                 ])
                             },
@@ -207,7 +210,7 @@ const parse = (inputText: string) => {
     parserInstance.selectStatement()
 
     if (parserInstance.errors.length > 0) {
-        throw Error('Sad sad panda, parsing errors detected!\n' + parserInstance.errors[0].message)
+        throw Error(parserInstance.errors[0].message)
     }
 }
 

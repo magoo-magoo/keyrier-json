@@ -59,6 +59,9 @@
     },
     "devDependencies": {
         "@now/node": "1.5.1",
+        "@stryker-mutator/core": "^3.1.0",
+        "@stryker-mutator/jest-runner": "^3.1.0",
+        "@stryker-mutator/typescript": "^3.1.0",
         "@types/classnames": "2.2.10",
         "@types/jest": "24.9.1",
         "@types/lodash": "4.14.149",
@@ -95,16 +98,10 @@
     },
     "jest": {
         "collectCoverageFrom": [
-            "src/**/*.{ts}",
-            "!/src/Components/*.{tsx}",
-            "!src/data/*.{ts,tsx}",
-            "!src/registerServiceWorker.ts",
-            "!/node_modules/"
-        ],
-        "coverageReporters": [
-            "json",
-            "lcov",
-            "text"
+            "src/**/*.{js,ts}",
+            "!src/**/*.d.ts",
+            "!<rootDir>/node_modules/",
+            "!<rootDir>/path/to/dir/"
         ]
     },
     "coverageThreshold": {

@@ -1,4 +1,4 @@
-import { jsonParseSafe, jsonBeautify } from './json'
+import { jsonBeautify, jsonParseSafe } from './json'
 
 describe('json helpers', () => {
     it('should parse simple object', () => {
@@ -30,6 +30,11 @@ describe('json helpers', () => {
         const result = jsonParseSafe(undefined as any)
         expect(result).toBeNull()
     })
+
+    it('should parse special char', () => {
+        const result = jsonParseSafe(' [\r\n  {"foo": "str\' &"   }   ]  \t  ')
+        expect(result).toEqual([{ foo: "str' &" }])
+    })
     it('should parse json string with special character', () => {
         const result = jsonParseSafe(`
     {
@@ -40,6 +45,35 @@ describe('json helpers', () => {
     }
     `)
         expect(result).toEqual({ x: 'Hello', '1': 'World', foo: '' })
+    })
+
+    it.each`
+        input          | expected
+        ${''}          | ${''}
+        ${'     '}     | ${''}
+        ${null}        | ${''}
+        ${undefined}   | ${''}
+        ${'hello'}     | ${'hello'}
+        ${1}           | ${''}
+        ${BigInt('1')} | ${''}
+    `('jsonBeautify $input should return "$expected"', ({ input, expected }) => {
+        const result = jsonBeautify(input)
+
+        expect(result).toEqual(expected)
+    })
+    it.each`
+        input          | expected
+        ${''}          | ${null}
+        ${'     '}     | ${null}
+        ${null}        | ${null}
+        ${undefined}   | ${null}
+        ${'hello'}     | ${'hello'}
+        ${1}           | ${null}
+        ${BigInt('1')} | ${null}
+    `('jsonParseSafe $input should return "$expected"', ({ input, expected }) => {
+        const result = jsonParseSafe(input)
+
+        expect(result).toEqual(expected)
     })
 
     it('jsonBeautify should not change semantic', () => {
@@ -54,7 +88,7 @@ describe('json helpers', () => {
             field3: 3,
         })
     })
-    it('jsonBeautify should returns string', () => {
+    it('jsonBeautify should return string', () => {
         const result = jsonBeautify(`toto`)
 
         expect(result).toEqual('toto')

@@ -39,11 +39,6 @@ export const clearEditor = () =>
         type: 'CLEAR_EDITOR',
     } as const)
 
-export const evaluateCode = () =>
-    ({
-        type: 'EVALUATE_CODE',
-    } as const)
-
 export const toggleOutputTableModal = () =>
     ({
         type: 'TOGGLE_OUTPUT_TABLE_MODAL',
@@ -90,7 +85,6 @@ export const updateOutputTabSelection = (tab: tabType) =>
     } as const)
 
 export type Action =
-    | ReturnType<typeof evaluateCode>
     | ReturnType<typeof resetEditor>
     | ReturnType<typeof clearEditor>
     | ReturnType<typeof updateQuery>

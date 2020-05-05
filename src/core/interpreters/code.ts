@@ -4,8 +4,17 @@ import lodash from 'lodash'
 
 export const codeEvaluation = (sourceString: string, queryString: string, mode: QueryMode) => {
     if (!sourceString || !queryString) {
-        return ''
+        return null
     }
+
+    if (sourceString.trim() === '') {
+        return null
+    }
+
+    if (queryString.trim() === '') {
+        return null
+    }
+
     if (mode === 'Javascript') {
         return jsEvaluation(sourceString, queryString)
     } else if (mode === 'SQL') {
@@ -16,31 +25,17 @@ export const codeEvaluation = (sourceString: string, queryString: string, mode: 
 }
 
 const jsEvaluation = (sourceString: string, queryString: string): null | string | Error => {
-    if (!sourceString || sourceString.trim() === '') {
-        return null
-    }
-
-    if (!queryString || queryString.trim() === '') {
-        return null
-    }
-    const currentWindow: any = typeof window === 'undefined' ? {} : window
     try {
-        currentWindow._ = lodash
+        window._ = lodash
         const code = `
       
         const data = eval(${sourceString})
         JSON.stringify(${queryString}) 
       `
         // eslint-disable-next-line
-        const evaluatedQuery = eval.apply(null, [code]) // DANGEROUS
-        const type = typeof evaluatedQuery
-        if (type !== 'string') {
-            return null
-        }
-        return evaluatedQuery as string
+        const evaluatedQuery = eval(code) // DANGEROUS
+        return evaluatedQuery
     } catch (error) {
         return error
-    } finally {
-        currentWindow._ = undefined
     }
 }

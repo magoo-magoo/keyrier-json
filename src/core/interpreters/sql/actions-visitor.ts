@@ -1,9 +1,9 @@
 import { CstNode, ICstVisitor, IToken } from 'chevrotain'
-import { Conditions, Field, Limit, nodes, Order, OrderArgument, Source, SQLTree } from 'sql-parser'
-import { Integer, lex } from './lexer'
+import { Field, nodes, Op, Order, OrderArgument, Source, SQLTree } from 'sql-parser'
+import { Integer, lex, Token } from './lexer'
 import { SelectParser } from './parser'
 
-const parserInstance = new SelectParser([])
+const parserInstance = new SelectParser()
 // The base visitor class can be accessed via the a parser instance.
 const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, any> = parserInstance.getBaseCstVisitorConstructor()
 
@@ -26,7 +26,6 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const order = this.visit(ctx.orderByClause)
         const limit = this.visit(ctx.limitClause)
         return {
-            type: 'SELECT_STMT',
             fields: select,
             source: from,
             where,
@@ -53,10 +52,10 @@ class SQLToAstVisitor extends BaseSQLVisitor {
     }
 
     public projection(ctx: { cols: CstNode[]; Star: CstNode }) {
-        const cols: { value: string; name: string }[] = (ctx.cols?.map(x => this.visit(x)) ?? []) as any
         if (ctx.Star) {
             return [new nodes.Star()]
         }
+        const cols: { value: string; name: string }[] = ctx.cols.map(x => this.visit(x)) as any
         const fields: Field[] = []
         cols.forEach(({ name, value }) => {
             const { pathArray: namePathArray, propertyName: namePropertyName } = splitPropertyPath(name)
@@ -65,12 +64,12 @@ class SQLToAstVisitor extends BaseSQLVisitor {
                 name: {
                     value: namePropertyName,
                     values: namePathArray,
-                    value2: name,
+                    // value2: name,
                 },
                 field: {
                     value: fieldPropertyName,
                     values: fieldPathArray,
-                    value2: value,
+                    // value2: value,
                 },
             }
             fields.push(field)
@@ -85,7 +84,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
             name: {
                 value: tableName,
                 values: splitPropertyPath(tableName).pathArray,
-                value2: tableName,
+                // value2: tableName,
             },
             alias: {
                 value: alias,
@@ -98,33 +97,31 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const conditions = this.visit(ctx.expression)
 
         return {
-            type: 'WHERE_CLAUSE',
             conditions,
         } as const
     }
 
-    public limitClause(ctx: { Integer: IToken[] }): Limit {
+    public limitClause(ctx: { Integer: IToken[] }) {
         const limit = parseInt(ctx.Integer[0].image)
         return {
             value: {
                 value: limit,
-                values: [limit],
             },
         }
     }
     public orderByClause(ctx: { OrderBy: IToken[]; Identifier: IToken[]; OrderByDirection: IToken[] }): Order {
         const { pathArray, propertyName } = splitPropertyPath(ctx.Identifier[0].image)
-        const direction =
-            ctx.OrderByDirection && ctx.OrderByDirection?.length
-                ? ctx.OrderByDirection[0].image === 'asc'
-                    ? 'asc'
-                    : 'desc'
-                : 'asc'
+        const direction = ctx.OrderByDirection && (ctx.OrderByDirection[0].image as 'asc' | 'desc')
+
+        // const direction =
+        //     ctx.OrderByDirection && ctx.OrderByDirection?.length
+        //         ? (ctx.OrderByDirection[0].image as 'asc' | 'desc')
+        //         : 'asc'
         const order: OrderArgument = {
             value: {
                 value: propertyName,
                 values: pathArray,
-                value2: propertyName,
+                // value2: propertyName,
             },
             direction,
         }
@@ -141,7 +138,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
             right: Array<CstNode | CstNode[]>
         },
         i: number = 0
-    ): Conditions {
+    ) {
         if (ctx.subExpression?.length - i === 1) {
             const left = this.visit(ctx.subExpression[i])
             return left
@@ -149,7 +146,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const left = this.visit(ctx.subExpression[i])
 
         const operation = this.OrAnd(ctx.OrAnd[i])
-        const right = this.expression(ctx, ++i)
+        const right: Op = this.expression(ctx, ++i)
 
         return {
             left,
@@ -176,82 +173,40 @@ class SQLToAstVisitor extends BaseSQLVisitor {
     }
 
     // these two visitor methods will return a string.
-    public atomicExpression(ctx: {
-        Integer: Array<IToken>
-        Identifier: Array<IToken>
-        StringToken: Array<IToken>
-        in: Array<IToken>
-        Null: Array<IToken>
-    }) {
-        if (ctx.in) {
-            return ctx.in
-                .map(x => {
-                    if (x.tokenType === Integer) {
-                        return parseInt(x.image)
-                    }
-                    return x.image
-                })
-                .map(value => ({ value }))
+    public atomicExpression(context: Record<Token | 'in', Array<IToken>>) {
+        const entries = Object.entries(context) as [keyof typeof context, Array<IToken>][]
+        for (let [key, value] of entries) {
+            if (key === 'in') {
+                return value
+                    .map(x => {
+                        if (x.tokenType === Integer) {
+                            return parseInt(x.image)
+                        }
+                        return convertStringTokenToJsString(x.image)
+                    })
+                    .map(value => ({ value }))
+            }
+            if (key === 'Integer') {
+                return parseInt(value[0].image)
+            }
+            if (key === 'Null') {
+                return null
+            }
+            if (key === 'Identifier') {
+                return value[0].image
+            }
+            if (key === 'StringToken') {
+                return convertStringTokenToJsString(value[0].image)
+            }
         }
-        if (ctx.Integer) {
-            return parseInt(ctx.Integer[0].image)
-        }
-        if (ctx.Null) {
-            return null
-        }
-        if (ctx.Identifier) {
-            return ctx.Identifier[0].image
-        }
-        if (ctx.StringToken) {
-            return ctx.StringToken[0].image.substring(1, ctx.StringToken[0].image.length - 1)
-        }
-        throw new Error('unknown atomicExpression')
+        return null
     }
 
-    public relationalOperator(ctx: {
-        GreaterThan: Array<IToken>
-        GreaterOrEqualThan: Array<IToken>
-        LessThan: Array<IToken>
-        LessOrEqualThan: Array<IToken>
-        Equal: Array<IToken>
-        NotEqual: Array<IToken>
-        Like: Array<IToken>
-        In: Array<IToken>
-        Is: Array<IToken>
-        IsNot: Array<IToken>
-    }) {
-        if (ctx.GreaterThan) {
-            return ctx.GreaterThan[0].image
-        }
-        if (ctx.GreaterOrEqualThan) {
-            return ctx.GreaterOrEqualThan[0].image
-        }
-        if (ctx.LessThan) {
-            return ctx.LessThan[0].image
-        }
-        if (ctx.LessOrEqualThan) {
-            return ctx.LessOrEqualThan[0].image
-        }
-        if (ctx.Equal) {
-            return ctx.Equal[0].image
-        }
-        if (ctx.NotEqual) {
-            return ctx.NotEqual[0].image
-        }
-        if (ctx.Like) {
-            return ctx.Like[0].image
-        }
-        if (ctx.In) {
-            return ctx.In[0].image
-        }
-        if (ctx.Is) {
-            return ctx.Is[0].image
-        }
-        if (ctx.IsNot) {
-            return ctx.IsNot[0].image
-        }
-        throw new Error('unknown relationalOperator')
+    public relationalOperator(ctx: Record<Token, Array<IToken>>) {
+        const values = Object.values(ctx)
+        return values[0][0].image
     }
+
     public OrAnd(token: IToken) {
         return token.image
     }
@@ -267,34 +222,26 @@ const toAst = (inputText: string) => {
     parserInstance.input = lexResult.tokens
     let cst: CstNode[] | CstNode
 
-    try {
-        cst = parserInstance.selectStatement()
-    } catch (error) {
-        console.log(error)
-        throw Error(JSON.stringify(error))
-    }
+    cst = parserInstance.selectStatement()
     // Automatic CST created when parsing
 
     if (parserInstance.errors.length > 0) {
-        console.log(parserInstance.errors)
         throw Error(JSON.stringify(parserInstance.errors))
     }
-    try {
-        const ast = toAstVisitorInstance.visit(cst)
-        return (ast as unknown) as SQLTree
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
+    const ast = toAstVisitorInstance.visit(cst)
+    return (ast as unknown) as SQLTree
 }
 
-const splitPropertyPath = (stringPath: string) => {
-    if (typeof stringPath !== 'string') {
-        return { propertyName: '', pathArray: [] }
-    }
-    const pathArray = stringPath.split('.')
+const splitPropertyPath = (stringPath: string | number) => {
+    // if (typeof stringPath !== 'string') {
+    //     return { propertyName: stringPath, pathArray: [stringPath] }
+    // }
+
+    const pathArray = String(stringPath).split('.')
 
     return { propertyName: pathArray[pathArray.length - 1], pathArray }
 }
+
+const convertStringTokenToJsString = (str: string) => str.substring(1, str.length - 1)
 
 export { toAst }
