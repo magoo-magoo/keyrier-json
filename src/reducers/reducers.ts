@@ -1,39 +1,38 @@
-import { combineReducers } from 'redux'
 import { Action } from 'actions/actions'
-import { codeEvaluation } from 'core/interpreters/code'
-import { jsonParseSafe, jsonBeautify } from 'core/converters/json'
-import {
-    OupoutState,
-    getDefaultAppState,
-    itemType,
-    getDefaultUserSettingsState,
-    QueryMode,
-    tabType,
-    emptyState,
-    AppState,
-    UserSettingsState,
-    OupoutTableState,
-    defaultAppState,
-    SourceState,
-    QueryState,
-} from 'state/State'
+import { jsonBeautify, jsonParseSafe } from 'core/converters/json'
 import { containsIgnoreCase } from 'core/converters/string'
+import { codeEvaluation } from 'core/interpreters/code'
+import { perfEnd, perfStart } from 'core/logging/performance'
 import { arrayElementName } from 'models/array'
+import { combineReducers } from 'redux'
 import undoable from 'redux-undo'
-import { perfStart, perfEnd } from 'core/logging/performance'
+import initialStateJson from 'state/default-state.json'
+import {
+    AppState,
+    emptyState,
+    getDefaultAppState,
+    getDefaultUserSettingsState,
+    itemType,
+    OupoutState,
+    OupoutTableState,
+    QueryMode,
+    QueryState,
+    SourceState,
+    tabType,
+    UserSettingsState,
+} from 'state/State'
 
 export const rootReducer = (rootState = getDefaultAppState(), action: Action) => {
     if (action.type === 'CLEAR_EDITOR') {
         return emptyState
     }
-
     const newState =
-        rootState && rootState.query && rootState.source
-            ? {
+        rootState?.query && rootState?.source
+            ? ({
                   ...rootState,
                   query: query(rootState.query, action),
                   source: source(rootState.source, action),
-              }
+              } as const)
             : {}
 
     const newOutputState = output(rootState, newState, action)
@@ -41,7 +40,7 @@ export const rootReducer = (rootState = getDefaultAppState(), action: Action) =>
         ...newState,
         output: {
             ...newOutputState,
-            table: table(newOutputState ? newOutputState.table : {}, action),
+            table: table(newOutputState?.table ?? {}, action),
         },
     }
 
@@ -53,16 +52,12 @@ export const source = (state: SourceState, action: Action) => {
         case 'UPDATE_SOURCE_TEXT':
             return {
                 ...state,
-                text: state && state.autoFormat ? jsonBeautify(action.source.trim()) : action.source,
+                text: state?.autoFormat ? jsonBeautify(action.source.trim()) : action.source,
             }
         case 'UPDATE_AUTOFORMAT_SOURCE':
             return {
                 ...state,
-                text: action.active
-                    ? state && state.text && jsonBeautify(state.text.trim())
-                    : state && state.text
-                    ? state.text
-                    : '',
+                text: action.active ? jsonBeautify(state?.text?.trim()) : state?.text ?? '',
                 autoFormat: action.active,
             }
         default:
@@ -94,9 +89,7 @@ export const query = (state: QueryState, action: Action) => {
                 mode: action.mode,
                 text:
                     action.mode === 'SQL'
-                        ? defaultAppState && defaultAppState.query
-                            ? defaultAppState.query.text
-                            : ''
+                        ? initialStateJson.query.text
                         : "// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// you can use lodash helper functions. see https://lodash.com/docs/\n// ex: _.chain(data).orderBy('age', 'desc')\n\n      data\n    ",
             } as const
         default:
@@ -113,22 +106,22 @@ export const computeOutput = (
 ) => {
     const text = codeEvaluation(sourceString, queryString, mode)
 
-    if (!text) {
-        return {
-            selectedTab: 'RawJson',
-            obj: null,
-            objSize: 0,
-            searchTerm: '',
-            match: false,
-            table: {
-                isArray: false,
-                isModalOpen: false,
-                displayedColumns: [],
-                columns: [],
-                groupBy: [],
-            },
-        } as const
-    }
+    // if (!text) {
+    //     return {
+    //         selectedTab: 'RawJson',
+    //         obj: null,
+    //         objSize: 0,
+    //         searchTerm: '',
+    //         match: false,
+    //         table: {
+    //             isArray: false,
+    //             isModalOpen: false,
+    //             displayedColumns: [],
+    //             columns: [],
+    //             groupBy: [],
+    //         },
+    //     } as const
+    // }
     if (text instanceof Error) {
         return {
             selectedTab: 'RawJson',
@@ -189,30 +182,25 @@ export const computeOutput = (
     } as const
 }
 
-export const output = (previousState: AppState, newState: AppState, action: Action) => {
+export const output = (previousState: AppState, newState: AppState | null, action: Action) => {
     switch (action.type) {
-        case 'EVALUATE_CODE':
         case 'UPDATE_QUERY':
         case 'UPDATE_SOURCE_TEXT':
+        case 'UPDATE_TABLE_COLUMNS':
+        case 'UPDATE_TABLE_GROUP_BY':
             if (
-                previousState &&
-                previousState.source &&
-                newState &&
-                newState.source &&
-                previousState.query &&
-                newState.query &&
-                previousState.source.text === newState.source.text &&
-                previousState.query.text === newState.query.text
+                previousState?.source?.text === newState?.source?.text &&
+                previousState?.query?.text === newState?.query?.text
             ) {
                 return previousState.output
             }
-            if (newState && newState.output) {
+            if (newState) {
                 return computeOutput(
-                    newState.output,
-                    newState.source && newState.source.text ? newState.source.text : '',
-                    newState.query && newState.query.text ? newState.query.text : '',
+                    newState.output ?? {},
+                    newState.source?.text ? newState.source.text : '',
+                    newState.query?.text ? newState.query.text : '',
                     action,
-                    newState.query && newState.query.mode ? newState.query.mode : 'SQL'
+                    newState.query?.mode ? newState.query.mode : 'SQL'
                 )
             }
             break
@@ -222,8 +210,7 @@ export const output = (previousState: AppState, newState: AppState, action: Acti
                       ...newState.output,
                       table: {
                           ...(newState.output ? newState.output.table : {}),
-                          isModalOpen:
-                              newState.output && newState.output.table ? !newState.output.table.isModalOpen : false,
+                          isModalOpen: newState.output?.table ? !newState.output.table.isModalOpen : false,
                       },
                   }
                 : {}
@@ -245,13 +232,13 @@ export const output = (previousState: AppState, newState: AppState, action: Acti
             }
             break
         default:
-            if (newState && newState.output) {
+            if (newState?.output) {
                 return computeOutput(
                     newState.output,
-                    newState.source && newState.source.text ? newState.source.text : '',
-                    newState.query && newState.query.text ? newState.query.text : '',
+                    newState.source?.text ? newState.source.text : '',
+                    newState.query?.text ? newState.query.text : '',
                     action,
-                    newState.query && newState.query.mode ? newState.query.mode : 'SQL'
+                    newState.query?.mode ? newState.query.mode : 'SQL'
                 )
             }
             break
@@ -319,10 +306,10 @@ const filter = (state: OupoutState, searchTerm: string) => {
     return state
 }
 
-export const table = (state: OupoutTableState | undefined, action: Action) => {
+const table = (state: OupoutTableState | undefined, action: Action) => {
     switch (action.type) {
         case 'UPDATE_TABLE_COLUMNS':
-            let groupByList = state && state.groupBy ? state.groupBy : []
+            let groupByList = state?.groupBy ? state.groupBy : []
             groupByList.forEach(groupBy => {
                 if (action.columns.indexOf(groupBy) === -1) {
                     groupByList = groupByList.filter(gb => action.columns.indexOf(gb) !== -1)
