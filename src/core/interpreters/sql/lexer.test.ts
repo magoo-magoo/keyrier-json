@@ -1,5 +1,5 @@
-import { lex, tokenVocabulary } from './lexer'
 import { tokenMatcher } from 'chevrotain'
+import { lex, tokenVocabulary } from './lexer'
 
 describe('Lexer', () => {
     it('Can Lex a simple input', () => {
@@ -19,7 +19,6 @@ describe('Lexer', () => {
         expect(tokens[6].image).toEqual('=')
         expect(tokens[7].image).toEqual('42')
 
-        // tokenMatcher acts as an "instanceof" check for Tokens
         expect(tokenMatcher(tokens[0], tokenVocabulary.Select)).toBeTruthy()
         expect(tokenMatcher(tokens[1], tokenVocabulary.Identifier)).toBeTruthy()
         expect(tokenMatcher(tokens[2], tokenVocabulary.From)).toBeTruthy()
@@ -279,7 +278,7 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[5], tokenVocabulary.Identifier)).toBeTruthy()
         expect(tokenMatcher(tokens[6], tokenVocabulary.Equal)).toBeTruthy()
         expect(tokenMatcher(tokens[7], tokenVocabulary.Integer)).toBeTruthy()
-        // expect(tokenMatcher(tokens[8], tokenVocabulary.Or)).toBeTruthy()
+        expect(tokenMatcher(tokens[8], tokenVocabulary.OrAnd)).toBeTruthy()
         expect(tokenMatcher(tokens[9], tokenVocabulary.Identifier)).toBeTruthy()
         expect(tokenMatcher(tokens[10], tokenVocabulary.Equal)).toBeTruthy()
         expect(tokenMatcher(tokens[11], tokenVocabulary.Integer)).toBeTruthy()
@@ -314,7 +313,7 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[5], tokenVocabulary.Identifier)).toBeTruthy()
         expect(tokenMatcher(tokens[6], tokenVocabulary.Equal)).toBeTruthy()
         expect(tokenMatcher(tokens[7], tokenVocabulary.Integer)).toBeTruthy()
-        // expect(tokenMatcher(tokens[8], tokenVocabulary.And)).toBeTruthy()
+        expect(tokenMatcher(tokens[8], tokenVocabulary.OrAnd)).toBeTruthy()
         expect(tokenMatcher(tokens[9], tokenVocabulary.Identifier)).toBeTruthy()
         expect(tokenMatcher(tokens[10], tokenVocabulary.Equal)).toBeTruthy()
         expect(tokenMatcher(tokens[11], tokenVocabulary.Integer)).toBeTruthy()

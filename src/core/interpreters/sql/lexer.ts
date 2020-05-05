@@ -33,10 +33,8 @@ export const NotEqual = createToken({ name: 'NotEqual', pattern: /(!=|<>)/ })
 export const OpenParenthesis = createToken({ name: 'OpenParenthesis', pattern: /\(/ })
 export const CloseParenthesis = createToken({ name: 'CloseParenthesis', pattern: /\)/ })
 
-// The order of tokens is important
 export const tokenVocabulary = {
     WhiteSpace,
-    // "keywords" appear before the Identifier
     Select,
     From,
     Where,
@@ -52,11 +50,13 @@ export const tokenVocabulary = {
     OrderByDirection,
     As,
     OrAnd,
-    // The Identifier must appear after the keywords because all keywords are valid identifiers.
+
     Identifier,
+
     Star,
     Integer,
     StringToken,
+
     Equal,
     NotEqual,
     GreaterOrEqualThan,

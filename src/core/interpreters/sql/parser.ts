@@ -14,7 +14,6 @@ import {
     OrAnd,
     Select,
     Star,
-    // Or,
     StringToken,
     tokenVocabulary,
     Where,
@@ -40,7 +39,6 @@ export const labels = {
     in: 'in',
 } as const
 
-// ----------------- parser -----------------
 class SelectParser extends CstParser {
     public selectStatement: (idxInCallingRule?: number | undefined, ...args: any[]) => CstNode | CstNode[]
     public fromClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
@@ -54,8 +52,6 @@ class SelectParser extends CstParser {
     public subExpression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public projection: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public cols: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    // A config object as a constructor argument is normally not needed.
-    // Our tutorial scenario requires a dynamic configuration to support step3 without duplicating code.
     constructor(config?: any) {
         super(tokenVocabulary, config)
 
@@ -118,14 +114,6 @@ class SelectParser extends CstParser {
                 DEF: () => {
                     this.SUBRULE(this.subExpression)
 
-                    // this.OPTION({
-                    //     DEF: () => {
-                    //         //   this.SUBRULE(this.logicOperator, { LABEL: 'logicperator' })
-                    //         // this.SUBRULE2(this.subExpression) // note the '2' suffix to distinguish
-                    //     },
-                    // })
-                    // from the 'SUBRULE(atomicExpression)'
-                    // 2 lines above.
                     return OrAnd.name
                 },
             })
@@ -197,16 +185,13 @@ class SelectParser extends CstParser {
     }
 }
 
-// We only ever need one as the parser internal state is reset for each new input.
 const parserInstance = new SelectParser()
 
 const parse = (inputText: string) => {
     const lexResult = selectLexer(inputText)
 
-    // ".input" is a setter which will reset the parser's internal's state.
     parserInstance.input = lexResult.tokens
 
-    // No semantic actions so this won't return anything yet.
     parserInstance.selectStatement()
 
     if (parserInstance.errors.length > 0) {
