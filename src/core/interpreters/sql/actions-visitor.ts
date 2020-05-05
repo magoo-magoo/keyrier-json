@@ -4,7 +4,6 @@ import { Integer, lex, Token } from './lexer'
 import { SelectParser } from './parser'
 
 const parserInstance = new SelectParser()
-// The base visitor class can be accessed via the a parser instance.
 const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, any> = parserInstance.getBaseCstVisitorConstructor()
 
 class SQLToAstVisitor extends BaseSQLVisitor {
@@ -35,9 +34,6 @@ class SQLToAstVisitor extends BaseSQLVisitor {
     }
 
     public selectClause(ctx: { projection: CstNode | CstNode[] }) {
-        // Each Terminal or Non-Terminal in a grammar rule are collected into
-        // an array with the same name(key) in the ctx object.
-        //         const columns = ctx.Identifier.map(identToken => identToken.image)
         const columns = this.visit(ctx.projection)
         return columns
     }
@@ -64,12 +60,10 @@ class SQLToAstVisitor extends BaseSQLVisitor {
                 name: {
                     value: namePropertyName,
                     values: namePathArray,
-                    // value2: name,
                 },
                 field: {
                     value: fieldPropertyName,
                     values: fieldPathArray,
-                    // value2: value,
                 },
             }
             fields.push(field)
@@ -84,7 +78,6 @@ class SQLToAstVisitor extends BaseSQLVisitor {
             name: {
                 value: tableName,
                 values: splitPropertyPath(tableName).pathArray,
-                // value2: tableName,
             },
             alias: {
                 value: alias,
@@ -113,15 +106,10 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const { pathArray, propertyName } = splitPropertyPath(ctx.Identifier[0].image)
         const direction = ctx.OrderByDirection && (ctx.OrderByDirection[0].image as 'asc' | 'desc')
 
-        // const direction =
-        //     ctx.OrderByDirection && ctx.OrderByDirection?.length
-        //         ? (ctx.OrderByDirection[0].image as 'asc' | 'desc')
-        //         : 'asc'
         const order: OrderArgument = {
             value: {
                 value: propertyName,
                 values: pathArray,
-                // value2: propertyName,
             },
             direction,
         }
@@ -160,7 +148,6 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         relationalOperator: CstNode | CstNode[]
         right: Array<CstNode | CstNode[]>
     }) {
-        // Note the usage of the "rhs" and "lhs" labels defined in step 2 in the expression rule.
         const left = this.visit(ctx.left[0])
         const operation = this.visit(ctx.relationalOperator)
         const right = this.visit(ctx.right[0])
@@ -172,7 +159,6 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         }
     }
 
-    // these two visitor methods will return a string.
     public atomicExpression(context: Record<Token | 'in', Array<IToken>>) {
         const entries = Object.entries(context) as [keyof typeof context, Array<IToken>][]
         for (let [key, value] of entries) {
@@ -212,18 +198,15 @@ class SQLToAstVisitor extends BaseSQLVisitor {
     }
 }
 
-// Our visitor has no state, so a single instance is sufficient.
 const toAstVisitorInstance = new SQLToAstVisitor()
 
 const toAst = (inputText: string) => {
     const lexResult = lex(inputText)
 
-    // ".input" is a setter which will reset the parser's internal's state.
     parserInstance.input = lexResult.tokens
     let cst: CstNode[] | CstNode
 
     cst = parserInstance.selectStatement()
-    // Automatic CST created when parsing
 
     if (parserInstance.errors.length > 0) {
         throw Error(JSON.stringify(parserInstance.errors))
@@ -233,10 +216,6 @@ const toAst = (inputText: string) => {
 }
 
 const splitPropertyPath = (stringPath: string | number) => {
-    // if (typeof stringPath !== 'string') {
-    //     return { propertyName: stringPath, pathArray: [stringPath] }
-    // }
-
     const pathArray = String(stringPath).split('.')
 
     return { propertyName: pathArray[pathArray.length - 1], pathArray }
