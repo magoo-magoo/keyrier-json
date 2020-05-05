@@ -23,7 +23,7 @@ export const As = createToken({ name: 'As', pattern: /AS/i, longer_alt: Identifi
 export const OrAnd = createToken({ name: 'OrAnd', pattern: /(AND|OR)/i, longer_alt: Identifier })
 export const Star = createToken({ name: 'Star', pattern: /\*/ })
 export const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ })
-export const StringToken = createToken({ name: 'StringToken', pattern: /('[a-zA-Z0-9%]*')|("[a-zA-Z0-9%]*")/ })
+export const StringToken = createToken({ name: 'StringToken', pattern: /('[a-zA-Z0-9%\s-]*')|("[a-zA-Z0-9%\s-]*")/ })
 export const GreaterOrEqualThan = createToken({ name: 'GreaterOrEqualThan', pattern: />=/ })
 export const GreaterThan = createToken({ name: 'GreaterThan', pattern: />/ })
 export const LessOrEqualThan = createToken({ name: 'LessOrEqualThan', pattern: /<=/ })
@@ -67,6 +67,8 @@ export const tokenVocabulary = {
     OpenParenthesis,
     CloseParenthesis,
 } as const
+
+export type Token = keyof typeof tokenVocabulary
 
 const SelectLexer = new Lexer(Object.values(tokenVocabulary))
 

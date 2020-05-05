@@ -4,20 +4,21 @@ import lodash from 'lodash'
 import { toast } from 'react-toastify'
 import { prettyPrintBytes } from 'core/converters/string'
 
-export const persistAppState = (appstate: AppState) => {
+const persistAppState = (appstate: AppState) => {
     persist('keyrier-json.app.state', appstate)
 }
 
-export const persistUserSettings = (userSettings: UserSettingsState) => {
+const persistUserSettings = (userSettings: UserSettingsState) => {
     persist('keyrier-json.user.settings', userSettings)
 }
 
-export const getUserSettings = () => load('keyrier-json.user.settings') as UserSettingsState
-export const getAppState = () => load('keyrier-json.app.state') as AppState
+const getUserSettings = () => load('keyrier-json.user.settings') as UserSettingsState
+const getAppState = () => load('keyrier-json.app.state') as AppState
 
 type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
 
 const persist = (key: StorageKey, value: object | undefined) => {
+    console.log({ key })
     const storage = getStorage()
     if (!storage) {
         toast.warn("Browser does'nt support required storage")
@@ -73,4 +74,11 @@ const getStorage = () => {
         return window.sessionStorage
     }
     return null
+}
+
+export default {
+    getAppState,
+    getUserSettings,
+    persistAppState,
+    persistUserSettings,
 }

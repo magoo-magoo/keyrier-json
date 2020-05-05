@@ -1,13 +1,10 @@
-export const customToString = (obj: {}): string => {
+export const customToString = (obj: any | null | undefined): string => {
     if (Array.isArray(obj)) {
         const array: any[] = obj
         return array.map(e => customToString(e)).join(',')
     }
     if (typeof obj === 'object') {
         return JSON.stringify(obj)
-    }
-    if (typeof obj === 'undefined') {
-        return ''
     }
     if (obj !== null && obj !== undefined) {
         return obj.toString()
@@ -20,7 +17,7 @@ export const takeFirst = (str: string | null | undefined, n: number) => {
     if (typeof str !== 'string') {
         return null
     }
-    if (str.length < n) {
+    if (str.length <= n) {
         return str
     }
     return `${str.substring(0, n)}...`

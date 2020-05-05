@@ -7,12 +7,12 @@ describe('Chevrotain Tutorial', () => {
 
         expect(ast.fields).toHaveLength(2)
         expect(ast.fields[0]).toEqual({
-            name: { value: 'column1', values: ['column1'], value2: 'column1' },
-            field: { value: 'column1', values: ['column1'], value2: 'column1' },
+            name: { value: 'column1', values: ['column1'] },
+            field: { value: 'column1', values: ['column1'] },
         })
         expect(ast.fields[1]).toEqual({
-            name: { value: 'column2', values: ['column2'], value2: 'column2' },
-            field: { value: 'column2', values: ['column2'], value2: 'column2' },
+            name: { value: 'column2', values: ['column2'] },
+            field: { value: 'column2', values: ['column2'] },
         })
 
         expect(ast.source.name.value).toEqual('table2')
@@ -26,8 +26,8 @@ describe('Chevrotain Tutorial', () => {
         const inputText = "SELECT foo FROM bar WHERE foo = 'val' and truc < 42 or prop = 99"
         const ast = toAstVisitor(inputText)
         expect(ast.fields[0]).toEqual({
-            name: { value: 'foo', values: ['foo'], value2: 'foo' },
-            field: { value: 'foo', values: ['foo'], value2: 'foo' },
+            name: { value: 'foo', values: ['foo'] },
+            field: { value: 'foo', values: ['foo'] },
         })
 
         expect(ast.source.name.value).toEqual('bar')
@@ -54,18 +54,36 @@ describe('Chevrotain Tutorial', () => {
         const ast = toAstVisitor(inputText)
 
         expect(ast.fields[0]).toEqual({
-            name: { value: 'foo', values: ['foo'], value2: 'foo' },
-            field: { value: 'column1', values: ['column1'], value2: 'column1' },
+            name: { value: 'foo', values: ['foo'] },
+            field: { value: 'column1', values: ['column1'] },
         })
         expect(ast.fields[1]).toEqual({
-            name: { value: 'column2', values: ['column2'], value2: 'column2' },
-            field: { value: 'column2', values: ['column2'], value2: 'column2' },
+            name: { value: 'column2', values: ['column2'] },
+            field: { value: 'column2', values: ['column2'] },
         })
         expect(ast.fields[2]).toEqual({
-            name: { value: 'bar', values: ['bar'], value2: 'bar' },
-            field: { value: 'column3', values: ['column3'], value2: 'column3' },
+            name: { value: 'bar', values: ['bar'] },
+            field: { value: 'column3', values: ['column3'] },
         })
 
         expect(ast.source.name.value).toEqual('table')
+    })
+
+    it.each`
+        input
+        ${''}
+        ${'select'}
+        ${'select *'}
+        ${'select null from table'}
+        ${'select * from'}
+        ${'select * from like'}
+        ${'select * from null'}
+        ${'select * from table limit'}
+        ${'select * from table order by'}
+        ${'select * from table order by null'}
+        ${'select * from table order by limit'}
+        ${'select * from table limit "2"'}
+    `('should throw an error if input is not invalid', ({ input }) => {
+        expect(() => toAstVisitor(input)).toThrow()
     })
 })

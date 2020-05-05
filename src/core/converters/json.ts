@@ -1,7 +1,5 @@
-import { logError } from '../../core/logging/logger'
-
-export const jsonBeautify = (str: string) => {
-    if (!str || str.trim() === '') {
+export const jsonBeautify = (str: string | undefined) => {
+    if (typeof str !== 'string') {
         return ''
     }
 
@@ -10,16 +8,15 @@ export const jsonBeautify = (str: string) => {
         return parsed
     }
 
-    try {
-        return JSON.stringify(parsed, null, 2)
-    } catch (error) {
-        logError(error, str)
+    if (parsed === null) {
+        return ''
     }
-    return str
+
+    return JSON.stringify(parsed, null, 2)
 }
 
-export const jsonParseSafe = (str: string) => {
-    if (!str || str.trim() === '') {
+export const jsonParseSafe = (str: string | null) => {
+    if (typeof str !== 'string' || str.trim() === '') {
         return null
     }
 
@@ -32,7 +29,6 @@ export const jsonParseSafe = (str: string) => {
         .replace(/\\t/g, '\\t')
         .replace(/\\b/g, '\\b')
         .replace(/\\f/g, '\\f')
-    // .replace(/[\u0000-\u0019]+/g, '')
 
     try {
         return JSON.parse(safeStr)

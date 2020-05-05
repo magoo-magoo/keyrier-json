@@ -319,4 +319,8 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[10], tokenVocabulary.Equal)).toBeTruthy()
         expect(tokenMatcher(tokens[11], tokenVocabulary.Integer)).toBeTruthy()
     })
+
+    it('should throw an error if input is not invalid', () => {
+        expect(() => lex('{')).toThrow()
+    })
 })

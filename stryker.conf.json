@@ -1,0 +1,12 @@
+{
+    "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker/master/packages/api/schema/stryker-core.json",
+    "comment": "This config was generated using a preset. Please see the handbook for more information: https://github.com/stryker-mutator/stryker-handbook/blob/master/stryker/guides/react.md#react",
+    "mutate": ["src/@(core)/**/*.ts?(x)", "!src/**/*@(.test|.spec|Spec).ts?(x)"],
+    "mutator": "typescript",
+    "testRunner": "jest",
+    "reporters": ["progress", "clear-text", "html"],
+    "coverageAnalysis": "off",
+    "jest": {
+        "projectType": "create-react-app"
+    }
+}
