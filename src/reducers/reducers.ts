@@ -106,22 +106,6 @@ export const computeOutput = (
 ) => {
     const text = codeEvaluation(sourceString, queryString, mode)
 
-    // if (!text) {
-    //     return {
-    //         selectedTab: 'RawJson',
-    //         obj: null,
-    //         objSize: 0,
-    //         searchTerm: '',
-    //         match: false,
-    //         table: {
-    //             isArray: false,
-    //             isModalOpen: false,
-    //             displayedColumns: [],
-    //             columns: [],
-    //             groupBy: [],
-    //         },
-    //     } as const
-    // }
     if (text instanceof Error) {
         return {
             selectedTab: 'RawJson',
