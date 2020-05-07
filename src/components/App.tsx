@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify'
 import { useMeasure } from 'react-use'
 import { QueryMode } from 'state/State'
 import { getQueryMode } from 'store/selectors'
+import appStyles from './App.module.scss'
 import { GrabbleHeader } from './common/GrabbleHeader'
 import grabbleStyles from './common/GrabbleHeader.module.scss'
 import Header from './Header'
@@ -31,8 +32,8 @@ const App: FC<Props> = ({ mode }) => {
     const layouts = {
         lg: [
             { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 20, minW: 6, minH: 20 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 20, minW: 14, minH: 20 },
-            { i: queryEditorKey, x: 20, y: 0, w: 28, h: 20, minW: 28, minH: 20 },
+            { i: sourceEditorKey, x: 6, y: 0, w: 21, h: 20, minW: 21, minH: 20 },
+            { i: queryEditorKey, x: 28, y: 0, w: 21, h: 20, minW: 21, minH: 20 },
             { i: outputKey, x: 0, y: 8, w: 48, h: 32, minW: 48, minH: 32 },
         ],
         md: [
@@ -61,8 +62,6 @@ const App: FC<Props> = ({ mode }) => {
         ],
     }
     const [ref, { width, height }] = useMeasure()
-    console.log({ width })
-    console.log({ height })
     return (
         <>
             <Header />
@@ -74,32 +73,36 @@ const App: FC<Props> = ({ mode }) => {
                     isResizable={true}
                     layouts={layouts}
                     draggableHandle={`.${grabbleStyles.grabber}`}
-                    breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+                    breakpoints={{ lg: 0 }}
                     cols={{ lg: 48, md: 36, sm: 24, xs: 12, xxs: 6 }}
                     margin={[0, 0]}
                     containerPadding={[10, 10]}
                     rowHeight={25}
                 >
-                    <div key={lateralMenuKey} className="border rounded overflow-auto grid-border-5">
+                    <div
+                        key={lateralMenuKey}
+                        className={`rounded overflow-auto ${appStyles.gridborder}`}
+                        style={{ borderWidth: '5px !important' }}
+                    >
                         <GrabbleHeader title="Options">
                             <LateralMenu />
                         </GrabbleHeader>
                     </div>
-                    <div ref={ref} key={sourceEditorKey} className="border rounded overflow-auto grid-border-5">
+                    <div ref={ref} key={sourceEditorKey} className={`rounded overflow-auto ${appStyles.gridborder}`}>
                         <GrabbleHeader title="1. Paste your JSON:">
                             <Suspense fallback={'loading...'}>
                                 <SourceEditor width={width} height={height} />
                             </Suspense>
                         </GrabbleHeader>
                     </div>
-                    <div key={queryEditorKey} className="border rounded overflow-auto grid-border-5">
+                    <div key={queryEditorKey} className={`rounded overflow-auto ${appStyles.gridborder}`}>
                         <GrabbleHeader title={`2. Type your ${mode} query:`}>
                             <Suspense fallback={'loading...'}>
                                 <QueryEditor />
                             </Suspense>
                         </GrabbleHeader>
                     </div>
-                    <div key={outputKey} className="border rounded grid-border-5">
+                    <div key={outputKey} className={`rounded ${appStyles.gridborder} ${appStyles.output}`}>
                         <GrabbleHeader title="3. View your results:">
                             <Suspense fallback={'loading...'}>
                                 <Output />
