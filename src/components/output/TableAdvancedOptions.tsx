@@ -1,17 +1,16 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { updateTableColumns, updateTableGroupBy } from 'actions/actions'
-import { itemType, RootState } from 'state/State'
-import { ValueType } from 'react-select/lib/types'
-import { getdisplayedColumns, getColumns, getGroupBy, getOutputarray } from 'store/selectors'
-import { useToggleState } from 'hooks/hooks'
-import { Button, Collapse } from 'reactstrap'
-import { memo, useCallback, Suspense, ChangeEvent } from 'react'
+import { toggleOutputTableModal, updateTableColumns, updateTableGroupBy } from 'actions/actions'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
-import { lazy, FC } from 'react'
 import Loading from 'components/common/Loading'
-import _ from 'lodash'
 import { withPerformance } from 'core/logging/performance'
+import { useToggleState } from 'hooks/hooks'
+import _ from 'lodash'
+import * as React from 'react'
+import { ChangeEvent, FC, lazy, memo, Suspense, useCallback } from 'react'
+import { connect } from 'react-redux'
+import { ValueType } from 'react-select/lib/types'
+import { Button, Collapse } from 'reactstrap'
+import { itemType, RootState } from 'state/State'
+import { getColumns, getdisplayedColumns, getGroupBy, getOutputarray } from 'store/selectors'
 
 export const ReactSelect = lazy(() => import(/* webpackChunkName: "react-select" */ 'react-select'))
 
@@ -22,9 +21,17 @@ interface Props {
     columns: string[]
     onColumnsChange: typeof updateTableColumns
     setTableGroupBy: typeof updateTableGroupBy
+    toggleModal: typeof toggleOutputTableModal
 }
 
-const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGroupBy, data, displayedColumns }) => {
+const TableAdvancedOptions: FC<Props> = ({
+    onColumnsChange,
+    columns,
+    setTableGroupBy,
+    data,
+    displayedColumns,
+    toggleModal,
+}) => {
     const [optionsCollapsed, switchOptionsCollapsed] = useToggleState()
 
     const handleColumnChange = useCallback(
@@ -61,9 +68,9 @@ const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGro
     const columnOptions = columns.map(k => ({ value: k, label: k }))
 
     return (
-        <div className="row">
-            <div className="col">
-                <Button className={'float-left'} color="primary" block={true} onClick={switchOptionsCollapsed}>
+        <div className="row py-1">
+            <div className="col-2">
+                <Button className={'float-left col my-1'} color="primary" block={true} onClick={switchOptionsCollapsed}>
                     {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
                 </Button>
                 <Collapse isOpen={optionsCollapsed}>
@@ -78,8 +85,11 @@ const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGro
                             <option key={key}>{key}</option>
                         ))}
                     </select>
-                    <Button color={'success'} onClick={handleExport}>
+                    <Button className="col my-1" color={'success'} onClick={handleExport}>
                         Export to Excel (.xlsx)
+                    </Button>
+                    <Button className="col my-1" block={true} color="dark" outline={true} onClick={toggleModal}>
+                        Display results table fullscreen
                     </Button>
                     <Suspense fallback={<Loading componentName="ReactSelect" />}>
                         <ReactSelect
@@ -107,6 +117,8 @@ const mapStateToProps = (state: RootState) => {
     }
 }
 
-export default connect(mapStateToProps, { onColumnsChange: updateTableColumns, setTableGroupBy: updateTableGroupBy })(
-    memo(withErrorBoundary(withPerformance(TableAdvancedOptions, 'TableAdvancedOptions')))
-)
+export default connect(mapStateToProps, {
+    onColumnsChange: updateTableColumns,
+    setTableGroupBy: updateTableGroupBy,
+    toggleModal: toggleOutputTableModal,
+})(memo(withErrorBoundary(withPerformance(TableAdvancedOptions, 'TableAdvancedOptions'))))

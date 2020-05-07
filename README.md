@@ -8,6 +8,7 @@
 [![technical debt](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=sqale_index)](https://sonarcloud.io/dashboard?id=keyrier-json)
 [![coverage](https://sonarcloud.io/api/project_badges/measure?project=keyrier-json&metric=coverage)](https://sonarcloud.io/dashboard?id=keyrier-json)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5aa1568f-9fcc-4964-803b-6a3b76e6f0cf/deploy-status)](https://app.netlify.com/sites/keyrier/deploys)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmagoo-magoo%2Fkeyrier-json%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/magoo-magoo/keyrier-json/master)
 
 ## [Live here](https://keyrier.magoo.dev) and [here](https://magoo-magoo.github.io/keyrier-json)
 
@@ -21,11 +22,11 @@ A desktop version is available. Last version [here](https://github.com/magoo-mag
 
 ## Development
 
-- Run locally:
-  ```bash
-  yarn start
-  ```
-- Build:
-  ```bash
-  yarn build
-  ```
+-   Run locally:
+    ```bash
+    yarn start
+    ```
+-   Build:
+    ```bash
+    yarn build
+    ```

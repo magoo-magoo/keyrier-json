@@ -32,8 +32,8 @@ describe('json helpers', () => {
     })
 
     it('should parse special char', () => {
-        const result = jsonParseSafe(' [\r\n  {"foo": "str\' &"   }   ]  \t  ')
-        expect(result).toEqual([{ foo: "str' &" }])
+        const result = jsonParseSafe(' [\r\n  {"foo": "s\'t\\"r\'\\t             \\n &\\b"   }   ]  \t  ')
+        expect(result).toEqual([{ foo: "s't\"r'\t             \n &\b" }])
     })
     it('should parse json string with special character', () => {
         const result = jsonParseSafe(`

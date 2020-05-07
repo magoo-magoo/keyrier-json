@@ -1,8 +1,7 @@
 import _ from 'lodash'
-import { Field, nodes, Op, Source, SQLTree } from 'sql-parser'
+import { Field, Op, Source, SQLTree } from 'sql-parser'
 import { jsonParseSafe } from '../converters/json'
 import { toAst } from './sql/actions-visitor'
-
 export const computePath = (path: string[] | undefined) => {
     if (!path) {
         return []
@@ -36,7 +35,7 @@ export const sqlEvaluation = (sourceString: string, queryString: string) => {
 const cleanComment = (str: string) => str.replace(/--(.*?)(\n|$)/gm, '')
 
 const map = (v: object, fields: Field[], source: Source) => {
-    if (fields[0].constructor === nodes.Star) {
+    if (fields.some(x => x.field.value === '*')) {
         return v
     }
 
@@ -100,7 +99,7 @@ const compareOperands = (operation: string, left: Op, right: Op, value: object):
         case 'is not':
         case '<>':
             return leftValue !== right.value
-        case 'like':
+        case 'like': {
             const leftStr = String(leftValue)
             const rightStr = String(right.value)
             if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
@@ -117,7 +116,25 @@ const compareOperands = (operation: string, left: Op, right: Op, value: object):
                 }
             }
             return false
-
+        }
+        case 'not like': {
+            const leftStr = String(leftValue)
+            const rightStr = String(right.value)
+            if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
+                if (leftStr.includes(rightStr.substring(1, rightStr.length - 1))) {
+                    return false
+                }
+            } else if (rightStr.startsWith(operators.modulo)) {
+                if (leftStr.endsWith(rightStr.substring(rightStr.indexOf(operators.modulo) + 1))) {
+                    return false
+                }
+            } else if (rightStr.endsWith(operators.modulo)) {
+                if (leftStr.startsWith(rightStr.substring(0, rightStr.indexOf(operators.modulo)))) {
+                    return false
+                }
+            }
+            return true
+        }
         case '>':
             return !!right.value && leftValue > right.value
         case '>=':
