@@ -43,27 +43,19 @@ describe('string helpers', () => {
         const result = containsIgnoreCase('une longue phrase', 'PhrasE')
         expect(result).toBeTruthy()
     })
-    it('should return false when does not contain part', () => {
-        const result = containsIgnoreCase('une longue phrase', 'JAVA')
-        expect(result).toBeFalsy()
-    })
 
-    it('should print 0 B when size is 0 byte', () => {
-        const result = prettyPrintBytes(0)
-        expect(result).toEqual('0 B')
-    })
-    it('should print 0 B when size is 1 byte', () => {
-        const result = prettyPrintBytes(1)
-        expect(result).toEqual('1 B')
-    })
-    it('should print -1 kB when size is -1024 bytes', () => {
-        const result = prettyPrintBytes(-1024)
-        expect(result).toEqual('-1 kB')
-    })
+    it.each`
+        str                    | part        | expected
+        ${''}                  | ${'some'}   | ${false}
+        ${'value'}             | ${''}       | ${false}
+        ${null}                | ${'test'}   | ${false}
+        ${'test'}              | ${null}     | ${false}
+        ${'une longue phrase'} | ${'JAVA'}   | ${false}
+        ${'une longue phrase'} | ${'PhrasE'} | ${true}
+    `('containsIgnoreCase($input, $take) should return $expected', ({ str, part, expected }) => {
+        const result = containsIgnoreCase(str, part)
 
-    it('should print 1 mB when size is 1048576 bytes', () => {
-        const result = prettyPrintBytes(1048576)
-        expect(result).toEqual('1 MB')
+        expect(result).toEqual(expected)
     })
 
     it.each`
@@ -80,5 +72,31 @@ describe('string helpers', () => {
         const result = takeFirst(input, take)
 
         expect(result).toEqual(expected)
+    })
+
+    it.each`
+        input         | expected
+        ${-1024}      | ${'-1 kB'}
+        ${0}          | ${'0 B'}
+        ${0.1}        | ${'0.1 B'}
+        ${1}          | ${'1 B'}
+        ${1024}       | ${'1 kB'}
+        ${1048576}    | ${'1 MB'}
+        ${1073741824} | ${'1 GB'}
+    `('prettyPrintBytes($input, $take) should return $expected', ({ input, expected }) => {
+        const result = prettyPrintBytes(input)
+
+        expect(result).toEqual(expected)
+    })
+    it.each`
+        input
+        ${undefined}
+        ${null}
+        ${'foo'}
+        ${'1'}
+        ${Infinity}
+        ${-Infinity}
+    `('prettyPrintBytes($input, $take) should throw', ({ input }) => {
+        expect(() => prettyPrintBytes(input)).toThrow()
     })
 })

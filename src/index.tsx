@@ -7,7 +7,8 @@ import { getTheme } from 'store/selectors'
 import { importThemeStyleCustom } from 'themes/themes'
 import App from 'components/App'
 import { unregister } from 'registerServiceWorker'
-;(async () => {
+import { logDebug, logError } from 'core/logging/logger'
+const bootstrap = async () => {
     const store = configureStore()
     const promises = await Promise.all([
         import(/* webpackChunkName: "react-dom" */ 'react-dom'),
@@ -22,4 +23,8 @@ import { unregister } from 'registerServiceWorker'
         document.getElementById('root') as HTMLElement
     )
     unregister()
-})()
+}
+
+bootstrap()
+    .then(() => logDebug('loaded'))
+    .catch(e => logError('boostrap error', e))

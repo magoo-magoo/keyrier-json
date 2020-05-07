@@ -1,6 +1,6 @@
 import { CstNode, ICstVisitor, IToken } from 'chevrotain'
-import { Field, nodes, Op, Order, OrderArgument, Source, SQLTree } from 'sql-parser'
-import { Integer, lex, Token } from './lexer'
+import { Field, Op, Order, OrderArgument, Source, SQLTree } from 'sql-parser'
+import { Integer, lex, Token, tokenVocabulary } from './lexer'
 import { SelectParser } from './parser'
 
 const parserInstance = new SelectParser()
@@ -38,19 +38,25 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return columns
     }
 
-    public columns$both() {}
-    public columns$single() {}
     public cols(ctx: { name: IToken[]; value: IToken[] }) {
+        let value = ctx.value[0].image
+
+        if (ctx.value[0].tokenType === tokenVocabulary.StringToken) {
+            value = convertStringTokenToJsString(value)
+        }
+
+        let name = ctx.name && ctx.name[0] ? ctx.name[0].image : value
+
+        if (ctx.name && ctx.name[0].tokenType === tokenVocabulary.StringToken) {
+            name = convertStringTokenToJsString(name)
+        }
         return {
-            name: ctx.name && ctx.name[0] ? ctx.name[0].image : ctx.value[0].image,
-            value: ctx.value[0].image,
+            name,
+            value,
         }
     }
 
-    public projection(ctx: { cols: CstNode[]; Star: CstNode }) {
-        if (ctx.Star) {
-            return [new nodes.Star()]
-        }
+    public projection(ctx: { cols: CstNode[] }) {
         const cols: { value: string; name: string }[] = ctx.cols.map(x => this.visit(x)) as any
         const fields: Field[] = []
         cols.forEach(({ name, value }) => {
@@ -71,8 +77,11 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return fields
     }
 
-    public fromClause(ctx: { Identifier: Array<IToken>; alias: Array<IToken> }): Source {
-        const tableName: string = ctx.Identifier[0].image
+    public fromClause(ctx: { table: Array<IToken>; alias: Array<IToken> }): Source {
+        let tableName: string = ctx.table[0].image
+        if (ctx.table[0].tokenType === tokenVocabulary.StringToken) {
+            tableName = convertStringTokenToJsString(tableName)
+        }
         const alias = ctx.alias?.length ? ctx.alias[0].image : tableName
         return {
             name: {

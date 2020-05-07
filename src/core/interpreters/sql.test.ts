@@ -41,6 +41,24 @@ describe('sql interpreter', () => {
             expect(JSON.parse(result as any)).toEqual({ a: 1, b: 42 })
         })
 
+        it('should return a simple object for select star from string data SQL query', () => {
+            const result = codeEvaluation('{"a": 1, "b": 42}', 'select * from "data"', 'SQL')
+            expect(JSON.parse(result as any)).toEqual({ a: 1, b: 42 })
+        })
+
+        it('should return a simple object for select string from data SQL query', () => {
+            const result = codeEvaluation(
+                '{"a": 1, "b": 42, "c": 5}',
+                'select "b", \'a\' , "b" as col, \'a\' as "col2" from data',
+                'SQL'
+            )
+            expect(JSON.parse(result as any)).toEqual({ a: 1, b: 42, col2: 1, col: 42 })
+        })
+        it('should return a simple object for select star and column name from data SQL query', () => {
+            const result = codeEvaluation('{"a": 1, "b": 42}', 'select *, a from data', 'SQL')
+            expect(JSON.parse(result as any)).toEqual({ a: 1, b: 42 })
+        })
+
         it('should select correct column SQL query', () => {
             const result = codeEvaluation('{"a": 1, "b": 42, "c": 999}', 'select a, c from data', 'SQL')
             expect(JSON.parse(result as any)).toEqual({ a: 1, c: 999 })
@@ -324,6 +342,44 @@ describe('sql interpreter', () => {
             )
             expect(JSON.parse(result as any)).toEqual([])
         })
+        it('should return result with where clause- not like operator - SQL query', () => {
+            const result = codeEvaluation(
+                '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+                'select * from data where name not like "Joh%"',
+                'SQL'
+            )
+            expect(JSON.parse(result as any)).toEqual([{ age: 21, name: 'Danny de Vito' }])
+        })
+
+        it('should return result with where clause- not like operator - SQL query', () => {
+            const result = codeEvaluation(
+                '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+                'select * from data where name not like "%Doe"',
+                'SQL'
+            )
+            expect(JSON.parse(result as any)).toEqual([{ age: 21, name: 'Danny de Vito' }])
+        })
+
+        it('should return result with where clause- not like operator - SQL query', () => {
+            const result = codeEvaluation(
+                '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+                'select * from data where name not like "% Do%"',
+                'SQL'
+            )
+            expect(JSON.parse(result as any)).toEqual([{ age: 21, name: 'Danny de Vito' }])
+        })
+        it('should return no result with where clause- not like operator - SQL query', () => {
+            const result = codeEvaluation(
+                '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+                'select * from data where name not like "D"',
+                'SQL'
+            )
+            expect(JSON.parse(result as any)).toEqual([
+                { age: 42, name: 'John Doe' },
+                { age: 21, name: 'Danny de Vito' },
+            ])
+        })
+
         it('should return filtered results with where clause - SQL query', () => {
             const result = codeEvaluation(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
