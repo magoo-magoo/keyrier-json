@@ -4,7 +4,7 @@ import { getAppVersion } from 'core/misc/utils'
 // tslint:disable:no-console
 
 export const logError = (error: string | Error, payload?: any) => {
-    console.error('Keyrier error', error)
+    console.error('Keyrier', error)
     if (typeof payload !== 'undefined') {
         console.error(payload)
     }
@@ -12,16 +12,14 @@ export const logError = (error: string | Error, payload?: any) => {
 
 export const logWarning = (message: string, payload?: any) => {
     if (typeof payload === 'undefined') {
-        console.warn(message)
-    }
-    console.warn(message, payload)
+        console.warn('Keyrier', message)
+    } else console.warn('Keyrier', message, payload)
 }
 
 export const logDebug = (message: string, payload?: any) => {
     if (typeof payload === 'undefined') {
-        console.info(message)
-    }
-    console.info(message, payload)
+        console.debug('Keyrier', message)
+    } else console.debug('Keyrier', message, payload)
 }
 
 export const logPerf = (name: string, duration?: number, customProperties?: any) => {

@@ -1,37 +1,39 @@
 import { CstNode, CstParser } from 'chevrotain'
 import {
     As,
+    CloseParenthesis,
     Comma,
     Equal,
     From,
     GreaterOrEqualThan,
     GreaterThan,
     Identifier,
+    In,
     Integer,
+    Is,
+    IsNot,
     LessOrEqualThan,
     LessThan,
     lex as selectLexer,
+    Like,
+    Limit,
+    NotEqual,
+    NotLike,
+    Null,
+    OpenParenthesis,
     OrAnd,
+    OrderBy,
+    OrderByDirection,
     Select,
     Star,
     StringToken,
     tokenVocabulary,
     Where,
-    Like,
-    OrderBy,
-    OrderByDirection,
-    Limit,
-    OpenParenthesis,
-    CloseParenthesis,
-    In,
-    Is,
-    Null,
-    NotEqual,
-    IsNot,
 } from './lexer'
 
 export const labels = {
     value: 'value',
+    table: 'table',
     name: 'name',
     alias: 'alias',
     left: 'left',
@@ -56,16 +58,36 @@ class SelectParser extends CstParser {
         super(tokenVocabulary, config)
 
         this.cols = this.RULE('cols', () => {
-            this.CONSUME(Identifier, { LABEL: labels.value })
-            this.OPTION(() => {
-                this.CONSUME(As)
-                this.CONSUME2(Identifier, { LABEL: labels.name })
-            })
+            this.OR([
+                { ALT: () => this.CONSUME(Star, { LABEL: labels.value }) },
+                {
+                    ALT: () => {
+                        this.OR1([
+                            {
+                                ALT: () => this.CONSUME(StringToken, { LABEL: labels.value }),
+                            },
+                            {
+                                ALT: () => this.CONSUME(Identifier, { LABEL: labels.value }),
+                            },
+                        ])
+                        this.OPTION(() => {
+                            this.CONSUME(As)
+                            this.OR2([
+                                {
+                                    ALT: () => this.CONSUME1(StringToken, { LABEL: labels.name }),
+                                },
+                                {
+                                    ALT: () => this.CONSUME1(Identifier, { LABEL: labels.name }),
+                                },
+                            ])
+                        })
+                    },
+                },
+            ])
         })
 
         this.projection = this.RULE('projection', () => {
             this.OR([
-                { ALT: () => this.CONSUME(Star) },
                 {
                     ALT: () =>
                         this.AT_LEAST_ONE_SEP({
@@ -99,7 +121,14 @@ class SelectParser extends CstParser {
 
         this.fromClause = this.RULE('fromClause', () => {
             this.CONSUME(From)
-            this.CONSUME(Identifier)
+            this.OR([
+                {
+                    ALT: () => this.CONSUME(Identifier, { LABEL: labels.table }),
+                },
+                {
+                    ALT: () => this.CONSUME(StringToken, { LABEL: labels.table }),
+                },
+            ])
             this.OPTION(() => this.CONSUME2(Identifier, { LABEL: labels.alias }))
         })
 
@@ -162,6 +191,7 @@ class SelectParser extends CstParser {
                 { ALT: () => this.CONSUME(Equal) },
                 { ALT: () => this.CONSUME(NotEqual) },
                 { ALT: () => this.CONSUME(Like) },
+                { ALT: () => this.CONSUME(NotLike) },
                 { ALT: () => this.CONSUME(In) },
                 { ALT: () => this.CONSUME(IsNot) },
                 { ALT: () => this.CONSUME(Is) },

@@ -1,22 +1,24 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
 import { updateSource } from 'actions/actions'
-import { RootState } from 'state/State'
 import { AceEditor } from 'components/common/DeferredAceEditor'
-import { getSourceText, getEditorTheme } from 'store/selectors'
-import { memo, FC, useCallback } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
-import { EditorTheme } from 'themes/themes'
-import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
 import { withPerformance } from 'core/logging/performance'
+import * as React from 'react'
+import { FC, memo, useCallback } from 'react'
+import { connect } from 'react-redux'
+import { unstable_IdlePriority, unstable_runWithPriority } from 'scheduler'
+import { RootState } from 'state/State'
+import { getEditorTheme, getSourceText } from 'store/selectors'
+import { EditorTheme } from 'themes/themes'
 
 interface Props {
     onChange: typeof updateSource
     sourceText: string
     currentEditorTheme: EditorTheme
+    width: number
+    height: number
 }
 
-const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) => {
+const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme, width }) => {
     const onChangeCallback = useCallback(
         (s: string) => {
             if (sourceText !== s) {
@@ -35,20 +37,19 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) =
                 fontSize={16}
                 cursorStart={1}
                 showPrintMargin={false}
-                showGutter={true}
+                showGutter={false}
                 highlightActiveLine={true}
                 value={sourceText}
                 debounceChangePeriod={1000}
                 minLines={35}
-                maxLines={35}
+                maxLines={Infinity}
                 wrapEnabled={false}
                 setOptions={{
                     showLineNumbers: true,
+                    animatedScroll: true,
                 }}
-                editorProps={{ $blockScrolling: Infinity }}
                 annotations={[]}
-                width={'100%'}
-                height={'100%'}
+                width={`${width}`}
             />
         </>
     )
@@ -59,6 +60,8 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-export default connect(mapStateToProps, { onChange: updateSource })(
+const ConnectedSourceEditor = connect(mapStateToProps, { onChange: updateSource })(
     withErrorBoundary(memo(withPerformance(SourceEditor, 'SourceEditor')))
 )
+
+export default ConnectedSourceEditor

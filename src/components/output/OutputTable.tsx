@@ -1,14 +1,14 @@
-import * as React from 'react'
-import './OutputTable.scss'
-import { connect } from 'react-redux'
-import OutputTableView from './OutputTableView'
 import { toggleOutputTableModal } from 'actions/actions'
-import { getisOutputTableModalOpen, getOutputObject } from 'store/selectors'
-import { RootState } from 'state/State'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
-import { memo, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { withPerformance } from 'core/logging/performance'
+import * as React from 'react'
+import { FC, memo } from 'react'
+import { connect } from 'react-redux'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import { RootState } from 'state/State'
+import { getisOutputTableModalOpen, getOutputObject } from 'store/selectors'
+import './OutputTable.scss'
+import OutputTableView from './OutputTableView'
 
 interface Props {
     toggleModal: typeof toggleOutputTableModal
@@ -29,13 +29,7 @@ const OutputTable: FC<Props> = ({ toggleModal, isModalOpen }) => {
                     </Button>
                 </ModalFooter>
             </Modal>
-            <div className="row">
-                <div className="col">
-                    <Button block={true} color="dark" outline={true} onClick={toggleModal}>
-                        Display results table fullscreen
-                    </Button>
-                </div>
-            </div>
+
             <div className="row">
                 <div className="col">
                     <OutputTableView />

@@ -39,8 +39,9 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, currentEditorTheme 
                 highlightActiveLine={true}
                 value={queryText}
                 minLines={10}
-                maxLines={25}
+                maxLines={Infinity}
                 showPrintMargin={false}
+                showGutter={false}
                 editorProps={{
                     $blockScrolling: Infinity,
                 }}

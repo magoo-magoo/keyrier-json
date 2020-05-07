@@ -1,5 +1,10 @@
 import { createToken, Lexer } from 'chevrotain'
 
+const stringTokenCharacterRegexString = 'a-zA-Z0-9%\\s-&(){}\\[\\]$\\*!\\\\@/,;:=ë#+-<>?^'
+const stringTokenRegex = new RegExp(
+    `("[${stringTokenCharacterRegexString}']*")|('[${stringTokenCharacterRegexString}"]*')`
+)
+
 export const Identifier = createToken({ name: 'Identifier', pattern: /[a-zA-Z]+[\w.]*/ })
 export const WhiteSpace = createToken({ name: 'WhiteSpace', pattern: /\s+/, group: Lexer.SKIPPED })
 export const Select = createToken({ name: 'Select', pattern: /SELECT/i, longer_alt: Identifier })
@@ -10,7 +15,7 @@ export const Like = createToken({ name: 'Like', pattern: /like/i, longer_alt: Id
 export const Limit = createToken({ name: 'Limit', pattern: /limit/i, longer_alt: Identifier })
 export const Null = createToken({ name: 'Null', pattern: /NULL/i, longer_alt: Identifier })
 export const In = createToken({ name: 'In', pattern: /in/i, longer_alt: Identifier })
-export const IsNot = createToken({ name: 'IsNot', pattern: /is not/i, longer_alt: Identifier })
+export const IsNot = createToken({ name: 'IsNot', pattern: /is\s+not/i, longer_alt: Identifier })
 export const Is = createToken({ name: 'Is', pattern: /is/i, longer_alt: Identifier })
 export const NotLike = createToken({ name: 'NotLike', pattern: /NOT\s+LIKE/i })
 export const OrderBy = createToken({ name: 'OrderBy', pattern: /ORDER\s+BY+/i })
@@ -23,7 +28,7 @@ export const As = createToken({ name: 'As', pattern: /AS/i, longer_alt: Identifi
 export const OrAnd = createToken({ name: 'OrAnd', pattern: /(AND|OR)/i, longer_alt: Identifier })
 export const Star = createToken({ name: 'Star', pattern: /\*/ })
 export const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ })
-export const StringToken = createToken({ name: 'StringToken', pattern: /('[a-zA-Z0-9%\s-]*')|("[a-zA-Z0-9%\s-]*")/ })
+export const StringToken = createToken({ name: 'StringToken', pattern: stringTokenRegex })
 export const GreaterOrEqualThan = createToken({ name: 'GreaterOrEqualThan', pattern: />=/ })
 export const GreaterThan = createToken({ name: 'GreaterThan', pattern: />/ })
 export const LessOrEqualThan = createToken({ name: 'LessOrEqualThan', pattern: /<=/ })
