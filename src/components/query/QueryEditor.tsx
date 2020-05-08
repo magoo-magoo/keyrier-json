@@ -1,15 +1,14 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-
 import { updateQuery } from 'actions/actions'
-import { RootState, QueryMode } from 'state/State'
 import { AceEditor } from 'components/common/DeferredAceEditor'
-import { getQueryText, getQueryMode, getEditorTheme } from 'store/selectors'
-import { memo, useCallback, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
-import { unstable_runWithPriority, unstable_IdlePriority } from 'scheduler'
-import { EditorTheme } from 'themes/themes'
 import { withPerformance } from 'core/logging/performance'
+import * as React from 'react'
+import { FC, memo, useCallback } from 'react'
+import { connect } from 'react-redux'
+import { unstable_IdlePriority, unstable_runWithPriority } from 'scheduler'
+import { QueryMode, RootState } from 'state/State'
+import { getEditorTheme, getQueryMode, getQueryText } from 'store/selectors'
+import { EditorTheme } from 'themes/themes'
 
 interface Props {
     setQuery: typeof updateQuery
@@ -27,7 +26,6 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, currentEditorTheme 
         },
         [setQuery, queryText]
     )
-
     return (
         <>
             <AceEditor
@@ -35,21 +33,7 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, currentEditorTheme 
                 theme={currentEditorTheme}
                 name="queryAceEditor"
                 onChange={onChange}
-                fontSize={16}
-                highlightActiveLine={true}
                 value={queryText}
-                minLines={10}
-                maxLines={Infinity}
-                showPrintMargin={false}
-                showGutter={false}
-                editorProps={{
-                    $blockScrolling: Infinity,
-                }}
-                setOptions={{
-                    dragEnabled: true,
-                }}
-                width={'100%'}
-                debounceChangePeriod={500}
             />
         </>
     )
