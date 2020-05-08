@@ -1,8 +1,8 @@
-import { AppState, UserSettingsState, getDefaultAppState, getDefaultUserSettingsState } from 'state/State'
+import { prettyPrintBytes } from 'core/converters/string'
 import { logError } from 'core/logging/logger'
 import lodash from 'lodash'
 import { toast } from 'react-toastify'
-import { prettyPrintBytes } from 'core/converters/string'
+import { AppState, getDefaultAppState, getDefaultUserSettingsState, UserSettingsState } from 'state/State'
 
 const persistAppState = (appstate: AppState) => {
     persist('keyrier-json.app.state', appstate)
@@ -18,7 +18,6 @@ const getAppState = () => load('keyrier-json.app.state') as AppState
 type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
 
 const persist = (key: StorageKey, value: object | undefined) => {
-    console.log({ key })
     const storage = getStorage()
     if (!storage) {
         toast.warn("Browser does'nt support required storage")
