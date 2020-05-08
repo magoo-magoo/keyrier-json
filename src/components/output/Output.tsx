@@ -1,19 +1,17 @@
-import styles from './Output.module.scss'
-import * as React from 'react'
-import { connect } from 'react-redux'
-import OutputTable from './OutputTable'
-import { RootState, tabType } from 'state/State'
-
-import classNames from 'classnames'
-
-import { getOutputErrorMessage, getOutputIsArray, getOutputActiveTab, getOutputObjectSize } from 'store/selectors'
-import JsonView from './JsonView'
 import { updateOutputTabSelection } from 'actions/actions'
-import { TabContent, TabPane, Alert, Badge } from 'reactstrap'
-import { memo, useCallback, FC } from 'react'
-import { prettyPrintBytes } from 'core/converters/string'
+import classNames from 'classnames'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
+import { prettyPrintBytes } from 'core/converters/string'
 import { withPerformance } from 'core/logging/performance'
+import * as React from 'react'
+import { FC, memo, useCallback } from 'react'
+import { connect } from 'react-redux'
+import { Alert, Badge, Button, TabContent, TabPane } from 'reactstrap'
+import { RootState, tabType } from 'state/State'
+import { getOutputActiveTab, getOutputErrorMessage, getOutputIsArray, getOutputObjectSize } from 'store/selectors'
+import JsonView from './JsonView'
+import styles from './Output.module.scss'
+import OutputTable from './OutputTable'
 
 interface Props {
     isArray: boolean
@@ -45,7 +43,7 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                     <div className="col">
                         <ul className="nav nav-tabs">
                             <li className="nav-item">
-                                <button
+                                <Button
                                     className={classNames({
                                         active: activeTab === 'RawJson',
                                         'nav-link': true,
@@ -53,11 +51,11 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                                     })}
                                     onClick={handleActiveRawJson}
                                 >
-                                    Raw JSON view
-                                </button>
+                                    View raw JSON
+                                </Button>
                             </li>
                             <li className="nav-item" hidden={!isArray}>
-                                <button
+                                <Button
                                     className={classNames({
                                         active: activeTab === 'Table',
                                         'nav-link': true,
@@ -65,8 +63,8 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                                     })}
                                     onClick={handleActiveTable}
                                 >
-                                    Table view
-                                </button>
+                                    View table
+                                </Button>
                             </li>
                         </ul>
                     </div>

@@ -18,7 +18,7 @@ interface Props {
     height: number
 }
 
-const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme, width }) => {
+const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) => {
     const onChangeCallback = useCallback(
         (s: string) => {
             if (sourceText !== s) {
@@ -34,22 +34,7 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme, wid
                 theme={currentEditorTheme}
                 name="sourceAceEditor"
                 onChange={onChangeCallback}
-                fontSize={16}
-                cursorStart={1}
-                showPrintMargin={false}
-                showGutter={false}
-                highlightActiveLine={true}
                 value={sourceText}
-                debounceChangePeriod={1000}
-                minLines={35}
-                maxLines={Infinity}
-                wrapEnabled={false}
-                setOptions={{
-                    showLineNumbers: true,
-                    animatedScroll: true,
-                }}
-                annotations={[]}
-                width={`${width}`}
             />
         </>
     )

@@ -75,34 +75,30 @@ const App: FC<Props> = ({ mode }) => {
                     draggableHandle={`.${grabbleStyles.grabber}`}
                     breakpoints={{ lg: 0 }}
                     cols={{ lg: 48, md: 36, sm: 24, xs: 12, xxs: 6 }}
-                    margin={[0, 0]}
+                    margin={[1, 1]}
                     containerPadding={[10, 10]}
                     rowHeight={25}
                 >
-                    <div
-                        key={lateralMenuKey}
-                        className={`rounded overflow-auto ${appStyles.gridborder}`}
-                        style={{ borderWidth: '5px !important' }}
-                    >
+                    <div key={lateralMenuKey} className={`rounded ${appStyles.gridborder}`}>
                         <GrabbleHeader title="Options">
                             <LateralMenu />
                         </GrabbleHeader>
                     </div>
-                    <div ref={ref} key={sourceEditorKey} className={`rounded overflow-auto ${appStyles.gridborder}`}>
+                    <div ref={ref} key={sourceEditorKey} className={`rounded ${appStyles.gridborder}`}>
                         <GrabbleHeader title="1. Paste your JSON:">
                             <Suspense fallback={'loading...'}>
                                 <SourceEditor width={width} height={height} />
                             </Suspense>
                         </GrabbleHeader>
                     </div>
-                    <div key={queryEditorKey} className={`rounded overflow-auto ${appStyles.gridborder}`}>
+                    <div key={queryEditorKey} className={`rounded ${appStyles.gridborder}`}>
                         <GrabbleHeader title={`2. Type your ${mode} query:`}>
                             <Suspense fallback={'loading...'}>
                                 <QueryEditor />
                             </Suspense>
                         </GrabbleHeader>
                     </div>
-                    <div key={outputKey} className={`rounded ${appStyles.gridborder} ${appStyles.output}`}>
+                    <div key={outputKey} className={`rounded ${appStyles.gridborder}`}>
                         <GrabbleHeader title="3. View your results:">
                             <Suspense fallback={'loading...'}>
                                 <Output />
