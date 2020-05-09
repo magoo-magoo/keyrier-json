@@ -14,8 +14,6 @@ interface Props {
     onChange: typeof updateSource
     sourceText: string
     currentEditorTheme: EditorTheme
-    width: number
-    height: number
 }
 
 const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) => {

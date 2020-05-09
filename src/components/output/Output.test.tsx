@@ -6,7 +6,7 @@ import Output from './Output'
 
 describe('Output', () => {
     it('Smoke test', async () => {
-        const store = configureStore()
+        const store = await configureStore()
 
         const result = render(
             <Provider store={store}>

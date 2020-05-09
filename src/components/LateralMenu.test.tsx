@@ -6,7 +6,7 @@ import LateralMenu from './LateralMenu'
 
 describe('LateralMenu', () => {
     it('Smoke test', async () => {
-        const store = configureStore()
+        const store = await configureStore()
 
         const result = render(
             <Provider store={store}>

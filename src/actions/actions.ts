@@ -66,6 +66,11 @@ export const switchEditorTheme = (theme: EditorTheme) => ({
     type: 'SWITCH_EDITOR_THEME' as const,
 })
 
+export const updateLayouts = (layouts: ReactGridLayout.Layouts) => ({
+    layouts,
+    type: 'UPDATE_LAYOUTS' as const,
+})
+
 export const updateSearchTerm = (searchTerm: string) =>
     ({
         searchTerm,
@@ -94,6 +99,7 @@ export type Action =
     | ReturnType<typeof switchTheme>
     | ReturnType<typeof updateSearchTerm>
     | ReturnType<typeof updateQueryMode>
+    | ReturnType<typeof updateLayouts>
     | ReturnType<typeof updateOutputTabSelection>
     | ReturnType<typeof updateSource>
     | ReturnType<typeof updateAutoFormatSource>
