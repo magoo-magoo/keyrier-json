@@ -45,9 +45,9 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
                     margin={[1, 1]}
                     containerPadding={[10, 10]}
                     rowHeight={25}
-                    preventCollision={true}
                     onLayoutChange={onLayoutChange}
-                    verticalCompact={false}
+                    verticalCompact={true}
+                    compactType="vertical"
                 >
                     <div key={configuration.layout.keys.lateralMenuKey} className={`rounded ${appStyles.gridborder}`}>
                         <GrabbleHeader title="Options">
