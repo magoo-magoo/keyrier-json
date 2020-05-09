@@ -19,7 +19,7 @@
     },
     {
       "packagePatterns": ["^electron"],
-      "groupName": "typings packages"
+      "groupName": "electron packages"
     }
   ]
 }
