@@ -15,9 +15,9 @@ export const GrabbleHeader: FC<Props> = ({ title, children }) => {
 
     const height = parentHeight - headerHeight * 2 - 2
     return (
-        <div ref={parentref} className={`${styles.draggable} h-100 px-2`}>
-            <div>
-                <CardHeader className="border-0" style={{ background: 'transparent' }}>
+        <div ref={parentref} className={`${styles.draggable} h-100 `}>
+            <div className="px-2">
+                <CardHeader className="border-0 pr-0" style={{ background: 'transparent' }}>
                     <div ref={headerRef}>
                         <u className="font-weight-bold text-large h5">{title}</u>
                         <span className={`float-right ${styles.grabber}`}>

@@ -19,48 +19,23 @@ const SourceEditor = lazy(() => import(/* webpackChunkName: "SourceEditor" */ 'c
 const Output = lazy(() => import(/* webpackChunkName: "Output" */ 'components/output/Output'))
 const QueryEditor = lazy(() => import(/* webpackChunkName: "QueryEditor" */ 'components/query/QueryEditor'))
 
-type Props = {
-    mode: QueryMode
-}
-
 const lateralMenuKey = 'LateralMenu'
 const sourceEditorKey = 'SourceEditor'
 const queryEditorKey = 'QueryEditor'
 const outputKey = 'Output'
+const layouts = {
+    lg: [
+        { i: lateralMenuKey, x: 18, y: 0, w: 3, h: 20, minW: 3, minH: 20 },
+        { i: sourceEditorKey, x: 3, y: 0, w: 7, h: 15, minW: 5, minH: 10 },
+        { i: queryEditorKey, x: 10, y: 0, w: 7, h: 15, minW: 5, minH: 10 },
+        { i: outputKey, x: 3, y: 24, w: 14, h: 30, minW: 12, minH: 15 },
+    ],
+}
 
+type Props = {
+    mode: QueryMode
+}
 const App: FC<Props> = ({ mode }) => {
-    const layouts = {
-        lg: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 20, minW: 6, minH: 20 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 21, h: 20, minW: 21, minH: 20 },
-            { i: queryEditorKey, x: 28, y: 0, w: 21, h: 20, minW: 21, minH: 20 },
-            { i: outputKey, x: 0, y: 8, w: 48, h: 32, minW: 48, minH: 32 },
-        ],
-        md: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
-            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
-        ],
-        sm: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 6, h: 11, minW: 5, minH: 11 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
-            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
-        ],
-        xs: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 16, h: 11, minW: 5, minH: 11 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
-            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
-        ],
-        xxs: [
-            { i: lateralMenuKey, x: 0, y: 0, w: 16, h: 11, minW: 5, minH: 11 },
-            { i: sourceEditorKey, x: 6, y: 0, w: 14, h: 14, minW: 10, minH: 14 },
-            { i: queryEditorKey, x: 0, y: 14, w: 28, h: 6, minW: 8, minH: 6 },
-            { i: outputKey, x: 0, y: 19, w: 28, h: 16, minW: 10, minH: 16 },
-        ],
-    }
     const [ref, { width, height }] = useMeasure()
     return (
         <>
@@ -74,10 +49,11 @@ const App: FC<Props> = ({ mode }) => {
                     layouts={layouts}
                     draggableHandle={`.${grabbleStyles.grabber}`}
                     breakpoints={{ lg: 0 }}
-                    cols={{ lg: 48, md: 36, sm: 24, xs: 12, xxs: 6 }}
+                    cols={{ lg: 24 }}
                     margin={[1, 1]}
                     containerPadding={[10, 10]}
                     rowHeight={25}
+                    preventCollision={true}
                 >
                     <div key={lateralMenuKey} className={`rounded ${appStyles.gridborder}`}>
                         <GrabbleHeader title="Options">
