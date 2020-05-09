@@ -1457,7 +1457,7 @@
     surrial "~2.0.2"
     tslib "~1.11.1"
 
-"@stryker-mutator/core@^3.1.0":
+"@stryker-mutator/core@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/core/-/core-3.1.0.tgz#8e0842534c75359832a5b67852bbdb0716d9124c"
   integrity sha512-riO2ccmOklvR5qXVrcEtUBqkryNY27lL85ZkFfcnPtOon0y1XtDClLz/DogLr4FH414RqHBL5ZMjrk0Bf/sKug==
@@ -1487,7 +1487,7 @@
     typed-inject "~2.1.1"
     typed-rest-client "~1.7.1"
 
-"@stryker-mutator/jest-runner@^3.1.0":
+"@stryker-mutator/jest-runner@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/jest-runner/-/jest-runner-3.1.0.tgz#97051a9a81b620e6f09a9821f88ef4b1ce821b0f"
   integrity sha512-IbnMjMEAiKmSuXJRYeScGEI1sssM4hNj82X0UGHfUlDbz8k1HWxfYjueHQ/DXurf6qXPd0LXwKh5rW1WLEYF6A==
@@ -1495,7 +1495,7 @@
     "@stryker-mutator/api" "^3.1.0"
     semver "~6.3.0"
 
-"@stryker-mutator/typescript@^3.1.0":
+"@stryker-mutator/typescript@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/typescript/-/typescript-3.1.0.tgz#beb4f220acded7c8c6498975c673dba5ca57e2b4"
   integrity sha512-HExZsNguVD93V4x1nzq+qZqpeGJ7qujGeW+vHLSVX7l3O0hmUNDAW48JA69Q1R9X9drVExNsfVfWNbQH1IEXUQ==
@@ -1632,7 +1632,7 @@
     dom-accessibility-api "^0.4.2"
     pretty-format "^25.1.0"
 
-"@testing-library/react@^10.0.4":
+"@testing-library/react@10.0.4":
   version "10.0.4"
   resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.0.4.tgz#8e0e299cd91acc626d81ed8489fdc13df864c31d"
   integrity sha512-2e1B5debfuiIGbvUuiSXybskuh7ZTVJDDvG/IxlzLOY9Co/mKFj9hIklAe2nGZYcOUxFaiqWrRZ9vCVGzJfRlQ==
@@ -7841,7 +7841,7 @@ jest-environment-jsdom-fourteen@1.0.1:
     jest-util "^24.0.0"
     jsdom "^14.1.0"
 
-jest-environment-jsdom-sixteen@^1.0.3:
+jest-environment-jsdom-sixteen@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/jest-environment-jsdom-sixteen/-/jest-environment-jsdom-sixteen-1.0.3.tgz#e222228fac537ef15cca5ad470b19b47d9690165"
   integrity sha512-CwMqDUUfSl808uGPWXlNA1UFkWFgRmhHvyAjhCmCry6mYq4b/nn80MMN7tglqo5XgrANIs/w+mzINPzbZ4ZZrQ==
@@ -8670,7 +8670,7 @@ loader-utils@^1.1.0, loader-utils@^1.2.3, loader-utils@^1.4.0:
     emojis-list "^3.0.0"
     json5 "^1.0.1"
 
-localforage@^1.7.3:
+localforage@1.7.3:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.7.3.tgz#0082b3ca9734679e1bd534995bdd3b24cf10f204"
   integrity sha512-1TulyYfc4udS7ECSBT2vwJksWbkwwTX8BzeUIiq8Y07Riy7bDAAnxDaPU/tWyOVmQAcWJIEIFP9lPfBGqVoPgQ==
