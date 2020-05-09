@@ -1,10 +1,10 @@
-import { createStore, compose } from 'redux'
 import rootReducers from 'reducers/reducers'
+import { compose, createStore } from 'redux'
 import persistence from './persistence'
 
-export const configureStore = () => {
-    const appState = persistence.getAppState()
-    const userSettingsState = persistence.getUserSettings()
+export const configureStore = async () => {
+    const appState = await persistence.getAppState()
+    const userSettingsState = await persistence.getUserSettings()
 
     const composeEnhancers =
         typeof window === 'object' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -15,9 +15,9 @@ export const configureStore = () => {
         rootReducers,
         {
             app: {
-                past: [],
-                present: appState,
-                future: [],
+                past: appState.past ?? [],
+                present: appState.present,
+                future: appState.future ?? [],
             },
             userSettings: userSettingsState,
         },
@@ -25,7 +25,7 @@ export const configureStore = () => {
     )
 
     store.subscribe(() => {
-        persistence.persistAppState(store.getState().app.present)
+        persistence.persistAppState(store.getState().app)
         persistence.persistUserSettings(store.getState().userSettings)
     })
 

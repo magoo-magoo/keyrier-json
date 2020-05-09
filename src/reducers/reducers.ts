@@ -1,4 +1,5 @@
 import { Action } from 'actions/actions'
+import { configuration } from 'config'
 import { jsonBeautify, jsonParseSafe } from 'core/converters/json'
 import { containsIgnoreCase } from 'core/converters/string'
 import { codeEvaluation } from 'core/interpreters/code'
@@ -71,6 +72,8 @@ export const userSettings = (state: UserSettingsState | undefined = getDefaultUs
             return { ...state, globalTheme: action.theme }
         case 'SWITCH_EDITOR_THEME':
             return { ...state, editorTheme: action.theme }
+        case 'UPDATE_LAYOUTS':
+            return { ...state, layouts: action.layouts }
         default:
             return state
     }
@@ -331,7 +334,7 @@ const perf = (state = getDefaultAppState(), action: Action) => {
 }
 
 const rootReducers = combineReducers({
-    app: undoable(perf, { undoType: 'APP_UNDO', redoType: 'APP_REDO' }),
+    app: undoable(perf, { undoType: 'APP_UNDO', redoType: 'APP_REDO', limit: configuration.limitUndo }),
     userSettings,
 })
 export default rootReducers

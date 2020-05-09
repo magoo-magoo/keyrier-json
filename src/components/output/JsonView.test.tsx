@@ -6,7 +6,7 @@ import JsonView from './JsonView'
 
 describe('JsonView', () => {
     it('Smoke test', async () => {
-        const store = configureStore()
+        const store = await configureStore()
 
         const result = render(
             <Provider store={store}>
