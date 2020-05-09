@@ -1,78 +1,62 @@
-import { prettyPrintBytes } from 'core/converters/string'
+import { configuration } from 'config'
 import { logError } from 'core/logging/logger'
+import localForage from 'localforage'
 import lodash from 'lodash'
 import { toast } from 'react-toastify'
+import { StateWithHistory } from 'redux-undo'
 import { AppState, getDefaultAppState, getDefaultUserSettingsState, UserSettingsState } from 'state/State'
 
-const persistAppState = (appstate: AppState) => {
-    persist('keyrier-json.app.state', appstate)
+const persistAppState = (appstate: StateWithHistory<AppState>) => {
+    persist(configuration.storageKey.appState, appstate)
 }
 
 const persistUserSettings = (userSettings: UserSettingsState) => {
-    persist('keyrier-json.user.settings', userSettings)
+    persist(configuration.storageKey.userSettings, userSettings)
 }
 
-const getUserSettings = () => load('keyrier-json.user.settings') as UserSettingsState
-const getAppState = () => load('keyrier-json.app.state') as AppState
+const getUserSettings = () => loadUserSettings(configuration.storageKey.userSettings) as Promise<UserSettingsState>
+const getAppState = () => loadAppState(configuration.storageKey.appState) as Promise<StateWithHistory<AppState>>
 
-type StorageKey = 'keyrier-json.app.state' | 'keyrier-json.user.settings'
-
-const persist = (key: StorageKey, value: object | undefined) => {
-    const storage = getStorage()
-    if (!storage) {
-        toast.warn("Browser does'nt support required storage")
-        return
-    }
-    const toBeSaved = JSON.stringify(value)
+const persist = async (key: string, value: object | undefined) => {
     try {
-        storage.setItem(key, toBeSaved)
+        await localForage.setItem(key, value)
     } catch (error) {
-        toast.warn(`Error while saving ${key} to storage. size: ${prettyPrintBytes(toBeSaved.length)}`)
+        toast.warn(`Error while saving ${key} to storage. ${error}`)
     }
 }
 
-const loadFromStorage = (key: StorageKey) => {
-    const storage = getStorage()
-    if (storage) {
-        return storage.getItem(key)
-    }
-    return null
-}
-
-const getDefault = (key: StorageKey) => {
+const getDefault = (key: string) => {
     switch (key) {
-        case 'keyrier-json.app.state':
+        case configuration.storageKey.appState:
             return getDefaultAppState()
-        case 'keyrier-json.user.settings':
+        case configuration.storageKey.userSettings:
             return getDefaultUserSettingsState()
         default:
             throw new Error(`no defaul value for ${key}`)
     }
 }
 
-const load = (key: StorageKey) => {
-    let state = getDefault(key)
+const loadAppState = async (key: string) => {
+    let present = getDefault(key)
     try {
-        const savedStateString = loadFromStorage(key)
-        if (savedStateString) {
-            state = JSON.parse(savedStateString)
-            state = lodash.merge({}, state)
-        }
+        const savedState = await localForage.getItem<StateWithHistory<AppState>>(key)
+        return lodash.merge({ present }, savedState ?? {})
     } catch (error) {
         logError(error)
     }
 
-    return state
+    return {}
 }
+const loadUserSettings = async (key: string) => {
+    let state = getDefault(key)
+    try {
+        const savedState = await localForage.getItem<UserSettingsState>(key)
+        return lodash.merge(state, savedState ?? {})
+    } catch (error) {
+        logError(error)
+    }
 
-const getStorage = () => {
-    if (window.localStorage) {
-        return window.localStorage
-    }
-    if (window.sessionStorage) {
-        return window.sessionStorage
-    }
-    return null
+    return {}
 }
 
 export default {

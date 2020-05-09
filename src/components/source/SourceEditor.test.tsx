@@ -6,7 +6,7 @@ import SourceEditor from './SourceEditor'
 
 describe('SourceEditor', () => {
     it('Smoke test', async () => {
-        const store = configureStore()
+        const store = await configureStore()
 
         const { baseElement } = render(
             <Provider store={store}>
