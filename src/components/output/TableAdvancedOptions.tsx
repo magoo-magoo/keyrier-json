@@ -7,10 +7,10 @@ import _ from 'lodash'
 import * as React from 'react'
 import { ChangeEvent, FC, lazy, memo, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { ValueType } from 'react-select/lib/types'
 import { Button, Collapse } from 'reactstrap'
 import { itemType, RootState } from 'state/State'
 import { getColumns, getdisplayedColumns, getGroupBy, getOutputarray } from 'store/selectors'
+import { ValueType } from 'react-select'
 
 export const ReactSelect = lazy(() => import(/* webpackChunkName: "react-select" */ 'react-select'))
 

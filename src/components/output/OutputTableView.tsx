@@ -77,7 +77,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
                                                 key={ci}
                                                 scope="col"
                                                 className="shadow-sm text-capitalize text-center data-test-id-column-name min-vw-10"
-                                                style={{ minWidth: '40vh' }}
+                                                style={{ minWidth: '20vh' }}
                                             >
                                                 <div {...column.getHeaderProps((column as any).getSortByToggleProps())}>
                                                     {column.render('header')}
