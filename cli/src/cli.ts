@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { sqlQuery } from '@keyrier/core'
 import fs from 'fs'
 import meow from 'meow'
@@ -34,6 +36,11 @@ Examples
                 alias: 'o',
                 default: 'stdout',
             },
+            input: {
+                type: 'string',
+                alias: 'f',
+                default: '',
+            },
         },
     }
 )
@@ -42,6 +49,7 @@ if (cli.input.length !== 2) {
     cli.showHelp(1)
 }
 const [queryArg, filePathArg] = cli.input
+const { output } = cli.flags
 
 const exec = (query: string, filepath: string, outputFile: string) => {
     logDebug({ query })
@@ -62,15 +70,11 @@ const exec = (query: string, filepath: string, outputFile: string) => {
     logDebug({ resultIsArray })
 
     if (outputFile === 'stdout') {
-        if (resultIsArray) {
-            console.table(result)
-        } else {
-            console.log(result)
-        }
+        console.table(result)
     } else {
         fs.writeFileSync(outputFile, JSON.stringify(result), { encoding: 'utf-8' })
     }
 
     logDebug('execution finished')
 }
-exec(queryArg, filePathArg, cli.flags.output)
+exec(queryArg, filePathArg, output)
