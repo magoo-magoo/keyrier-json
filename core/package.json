@@ -1,0 +1,27 @@
+{
+  "name": "@keyrier/core",
+  "version": "1.0.0",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.umd.js",
+  "scripts": {
+    "test": "jest",
+    "build": "microbundle",
+    "dev": "microbundle watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/lodash": "4.14.150",
+    "@types/node": "12.12.38",
+    "microbundle": "next",
+    "ts-jest": "^25.5.1",
+    "typescript": "3.8.3"
+  },
+  "dependencies": {
+    "chevrotain": "7.0.1",
+    "lodash": "4.17.15"
+  }
+}
