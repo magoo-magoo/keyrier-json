@@ -1,0 +1,161 @@
+{
+    "description": "Keyrier JSON",
+    "name": "@keyrier/ui",
+    "author": "magoo",
+    "version": "1.0.0",
+    "private": true,
+    "homepage": "./",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/magoo-magoo/keyrier-json"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build --profile",
+        "version:ci": "npm version patch --force -m \"release v%s [skip ci]\"",
+        "build:ci": "npm run-script version:ci && npm run-script build",
+        "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+        "eject": "react-scripts eject",
+        "predeploy": "yarn build",
+        "lh": "lighthousebot --runner=wpt",
+        "cypress:open": "cypress open",
+        "cypress:run": "concurrently --success first --kill-others \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && cypress run\"",
+        "format": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --write",
+        "lint": "eslint",
+        "deploy": "gh-pages -d build",
+        "pack:electron": "electron-builder --linux AppImage --windows nsis --publish never",
+        "pack:dockerelectron": "bash -c \"docker run --rm --env GH_TOKEN=$GITHUB_TOKEN --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') -v ${PWD}:/project -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine /bin/bash -c \\\"npm run pack:electron\\\"\"",
+        "postinstall": "electron-builder install-app-deps",
+        "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+        "analyze": "yarn build && source-map-explorer --html 'build/static/**/*.*' > source-map-explorer.html"
+    },
+    "dependencies": {
+        "bootswatch": "4.4.1",
+        "chevrotain": "7.0.1",
+        "classnames": "2.2.6",
+        "electron-log": "4.1.1",
+        "electron-updater": "4.2.5",
+        "fast-deep-equal": "3.1.1",
+        "localforage": "^1.7.3",
+        "lodash": "4.17.15",
+        "match-sorter": "4.1.0",
+        "perfume.js": "4.8.1",
+        "react": "16.13.1",
+        "react-ace": "8.1.0",
+        "react-debounce-input": "3.2.2",
+        "react-dom": "16.13.1",
+        "react-grid-layout": "0.18.3",
+        "react-json-view": "1.19.1",
+        "react-redux": "7.2.0",
+        "react-select": "3.1.0",
+        "react-table": "7.0.4",
+        "react-toastify": "5.5.0",
+        "react-use": "14.1.1",
+        "reactstrap": "8.4.1",
+        "redux": "4.0.5",
+        "redux-undo": "1.0.1",
+        "utility-types": "3.10.0",
+        "xlsx": "0.15.6",
+        "@keyrier/core": "1.0.0"
+    },
+    "devDependencies": {
+        "@now/node": "1.5.1",
+        "@stryker-mutator/core": "^3.1.0",
+        "@stryker-mutator/jest-runner": "^3.1.0",
+        "@stryker-mutator/typescript": "^3.1.0",
+        "@testing-library/react": "^10.0.4",
+        "@types/classnames": "2.2.10",
+        "@types/jest": "25.2.1",
+        "@types/lodash": "4.14.150",
+        "@types/match-sorter": "4.0.0",
+        "@types/node": "12.12.38",
+        "@types/react": "16.9.34",
+        "@types/react-dom": "16.9.7",
+        "@types/react-grid-layout": "0.17.1",
+        "@types/react-loadable": "5.5.3",
+        "@types/react-redux": "7.1.8",
+        "@types/react-select": "3.0.12",
+        "@types/react-table": "7.0.17",
+        "@types/reactstrap": "8.4.2",
+        "@types/scheduler": "0.16.1",
+        "@typescript-eslint/eslint-plugin": "2.28.0",
+        "concurrently": "5.1.0",
+        "cypress": "4.1.0",
+        "electron": "8.2.3",
+        "electron-builder": "22.3.2",
+        "eslint-config-prettier": "6.10.1",
+        "gh-pages": "2.2.0",
+        "husky": "4.2.5",
+        "jest-environment-jsdom-sixteen": "^1.0.3",
+        "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
+        "node-sass": "4.13.1",
+        "prettier": "2.0.4",
+        "pretty-quick": "2.0.1",
+        "react-scripts": "3.4.1",
+        "react-testing-library": "8.0.1",
+        "redux-devtools": "3.5.0",
+        "source-map-explorer": "2.4.2",
+        "typescript": "3.8.3",
+        "unfetch": "4.1.0",
+        "wait-on": "4.0.2"
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.{js,jsx,ts,tsx}",
+            "!src/**/*.d.ts",
+            "!src/registerServiceWorker.ts",
+            "!<rootDir>/node_modules/",
+            "!<rootDir>/path/to/dir/"
+        ],
+        "moduleNameMapper": {
+            "ace-builds": "<rootDir>/node_modules/ace-builds"
+        },
+        "coverageThreshold": {
+            "global": {
+                "branches": 40,
+                "lines": 40,
+                "statements": 40
+            }
+        }
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,css,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "main": "public/electron.js",
+    "build": {
+        "appId": "com.github.magoo.keyrier.json",
+        "productName": "Keyrier JSON",
+        "copyright": "Copyright © ${author}",
+        "publish": [
+            "github"
+        ],
+        "linux": {
+            "maintainer": "mael.gouacide@gmail.com",
+            "executableName": "keyrier-json",
+            "icon": "build/logo_512.png"
+        },
+        "win": {
+            "icon": "build/logo_512.png"
+        }
+    }
+}

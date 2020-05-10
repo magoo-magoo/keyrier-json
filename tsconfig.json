@@ -36,6 +36,6 @@
         "noStrictGenericChecks": false,
         "types": ["react-dom/experimental", "react/experimental", "jest"]
     },
-    "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
-    "include": ["src"]
+    "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "ui/setupTests.ts"],
+    "include": ["src", "core/code.test.ts", "core/sql.ts", "core/code.ts", "core/sql.test.ts", "ui/config.ts", "ui/index.tsx", "ui/react-app-env.d.ts", "ui/registerServiceWorker.ts", "ui/setupTests.ts", "ui/typings.d.ts"]
 }
