@@ -1,0 +1,27 @@
+{
+  "name": "@keyrier/cli",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/cli.js",
+  "source": "src/cli.ts",
+  "module": "dist/cli.module.js",
+  "types": "dist/cli.d.ts",
+  "unpkg": "dist/cli.umd.js",
+  "scripts": {
+    "test": "jest",
+    "build": "microbundle",
+    "dev": "microbundle watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "12.12.38",
+    "@types/yargs": "^15.0.4",
+    "microbundle": "next",
+    "ts-jest": "^25.5.1",
+    "typescript": "3.8.3"
+  },
+  "dependencies": {
+    "@keyrier/core": "1.0.0",
+    "meow": "7.0.0"
+  }
+}

@@ -1,0 +1,170 @@
+[
+    {
+        "_id": "5c69793d391abc9e9506a163",
+        "guid": "c016ad93-0763-4fea-887a-1d60662482ef",
+        "isActive": true,
+        "balance": "$2,388.85",
+        "age": 28,
+        "eyeColor": "green",
+        "name": "Bonita Frye",
+        "tags": [
+            "quis",
+            "qui",
+            "ad"
+        ],
+        "friends": [
+            {
+                "id": 0,
+                "name": "Odonnell Nieves"
+            },
+            {
+                "id": 1,
+                "name": "Hurst Bonner"
+            },
+            {
+                "id": 2,
+                "name": "Florine Sullivan"
+            }
+        ]
+    },
+    {
+        "_id": "5c69793db0b97bb35739b95b",
+        "guid": "32a064a0-5c72-4369-9fd9-99dc5734ae4e",
+        "isActive": false,
+        "balance": "$1,070.37",
+        "age": 35,
+        "eyeColor": "brown",
+        "name": "Marcia Barker",
+        "tags": [
+            "tempor",
+            "laborum",
+            "Lorem"
+        ],
+        "friends": [
+            {
+                "id": 0,
+                "name": "Kate Howard"
+            },
+            {
+                "id": 1,
+                "name": "Dena Barnes"
+            },
+            {
+                "id": 2,
+                "name": "Duffy Kelley"
+            }
+        ]
+    },
+    {
+        "_id": "5c69793dd0fe69ee37e3ed32",
+        "guid": "f50182d4-52bc-4b1a-a8b8-dd0f00b160e7",
+        "isActive": false,
+        "balance": "$2,732.52",
+        "age": 31,
+        "eyeColor": "blue",
+        "name": "Davenport Suarez",
+        "tags": [
+            "culpa",
+            "officia",
+            "incididunt"
+        ],
+        "friends": [
+            {
+                "id": 0,
+                "name": "Leonard Spencer"
+            },
+            {
+                "id": 1,
+                "name": "Marissa Dunlap"
+            },
+            {
+                "id": 2,
+                "name": "Gould Blair"
+            }
+        ]
+    },
+    {
+        "_id": "5c69793d05fc5c520356a51a",
+        "guid": "6357b8dd-1881-44af-818e-dc6260516029",
+        "isActive": false,
+        "balance": "$2,902.90",
+        "age": 21,
+        "eyeColor": "green",
+        "name": "Davis Vincent",
+        "tags": [
+            "ad",
+            "incididunt",
+            "dolore"
+        ],
+        "friends": [
+            {
+                "id": 0,
+                "name": "Deanna Vinson"
+            },
+            {
+                "id": 1,
+                "name": "Kidd Wilder"
+            },
+            {
+                "id": 2,
+                "name": "Martinez Foley"
+            }
+        ]
+    },
+    {
+        "_id": "5c69793d808000d0700c69e0",
+        "guid": "3694c060-b55c-49c1-b036-a978b2685424",
+        "isActive": false,
+        "balance": "$1,269.85",
+        "age": 36,
+        "eyeColor": "blue",
+        "name": "Chaney Russo",
+        "tags": [
+            "cillum",
+            "fugiat",
+            "duis"
+        ],
+        "friends": [
+            {
+                "id": 0,
+                "name": "Snider Finch"
+            },
+            {
+                "id": 1,
+                "name": "Velazquez Rowe"
+            },
+            {
+                "id": 2,
+                "name": "Patricia Rasmussen"
+            }
+        ]
+    },
+    {
+        "_id": "5c69793dc31d32a958a70548",
+        "guid": "47d1cef6-3404-4e60-9c05-e82b428b81b8",
+        "isActive": false,
+        "balance": "$1,759.68",
+        "age": 29,
+        "eyeColor": "green",
+        "name": "Carmela Mayer",
+        "tags": [
+            "enim",
+            "occaecat",
+            "consequat"
+        ],
+        "friends": [
+            {
+                "id": 0,
+                "name": "Jones Melton"
+            },
+            {
+                "id": 1,
+                "name": "Battle Durham"
+            },
+            {
+                "id": 2,
+                "name": "House Wagner"
+            }
+        ]
+    }
+]
