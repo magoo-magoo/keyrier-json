@@ -18,14 +18,18 @@ before_install:
 
 install:
     - yarn --frozen-lockfile
-    - npx cypress install
 
 script:
-    - yarn test --coverage --watchAll=false
-    # - yarn cypress:run
-    - sonar-scanner
-    - yarn build:ci
-    - yarn pack:dockerelectron
+    - yarn workspace @keyrier/core build
+    - yarn workspace @keyrier/cli build
+    - yarn workspace @keyrier/ui build
+
+    - yarn workspace @keyrier/core test --coverage --watchAll=false
+    - yarn workspace @keyrier/cli test --coverage --watchAll=false
+    - yarn workspace @keyrier/ui test --coverage --watchAll=false
+
+    - yarn workspace @keyrier/ui sonar-scanner
+    - yarn workspace @keyrier/ui pack:dockerelectron
 
 after_success:
     - yarn lh https://deploy-preview-`echo $TRAVIS_PULL_REQUEST`--keyrier.netlify.com/

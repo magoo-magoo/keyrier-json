@@ -1,6 +1,13 @@
-import { codeEvaluation } from '../core/code'
 import { combineReducers } from 'redux'
 import undoable from 'redux-undo'
+import { Action } from '../actions/actions'
+import { configuration } from '../config'
+import { codeEvaluation } from '../core/code'
+import { jsonBeautify } from '../core/converters/json'
+import { containsIgnoreCase } from '../core/converters/string'
+import { perfEnd, perfStart } from '../core/logging/performance'
+import { arrayElementName } from '../models/array'
+import initialStateJson from '../state/default-state.json'
 import {
     AppState,
     emptyState,
@@ -15,13 +22,6 @@ import {
     tabType,
     UserSettingsState,
 } from '../state/State'
-import { Action } from '../actions/actions'
-import { configuration } from '../config'
-import { jsonBeautify, jsonParseSafe } from '@keyrier/core'
-import { containsIgnoreCase } from '@keyrier/core'
-import { perfEnd, perfStart } from '../core/logging/performance'
-import { arrayElementName } from '../models/array'
-import initialStateJson from '../state/default-state.json'
 
 export const rootReducer = (rootState = getDefaultAppState(), action: Action) => {
     if (action.type === 'CLEAR_EDITOR') {
@@ -107,16 +107,16 @@ export const computeOutput = (
     action: Action,
     mode: QueryMode
 ) => {
-    const text = codeEvaluation(sourceString, queryString, mode)
+    const evaluation = codeEvaluation(sourceString, queryString, mode)
 
-    if (text instanceof Error) {
+    if (evaluation instanceof Error) {
         return {
             selectedTab: 'RawJson',
             obj: null,
             objSize: 0,
             searchTerm: '',
             match: false,
-            errorMessage: text.message,
+            errorMessage: evaluation.message,
             table: {
                 isArray: false,
                 isModalOpen: false,
@@ -127,8 +127,9 @@ export const computeOutput = (
         } as const
     }
 
+    const { text, obj } = evaluation ?? { text: null, obj: null }
     let displayedColumns = new Array<string>()
-    const outputObject: itemType[] | object = jsonParseSafe(text)
+    const outputObject: itemType[] | object = obj as any
     if (Array.isArray(outputObject)) {
         const keyMap: { [key: string]: string } = {}
         outputObject.forEach(d => {

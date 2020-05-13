@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
-import { customToString, takeFirst } from '@keyrier/core'
 import { Cell } from 'react-table'
+import { customToString, takeFirst } from '../../core/converters/string'
 import { itemType } from '../../state/State'
 
 type CellProps = {

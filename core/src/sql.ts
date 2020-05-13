@@ -1,40 +1,38 @@
-import * as _ from 'lodash'
+import { filter, flow, get, map, orderBy, take } from 'lodash'
 import { jsonParseSafe } from './converters/json'
 import { toAst } from './sql/actions-visitor'
 import { Field, From, Operand, SQLTree } from './sql/SqlTree'
+
+const allowedSourceNames = ['data', 'json'] as const
+
 export const computePath = (path: string[] | undefined) => {
     if (!path) {
         return []
     }
-    if (path[0] === 'data') {
-        const newPath = [...path]
-        newPath.shift()
-        return newPath
+    if (allowedSourceNames.some(x => x === path[0]?.toLowerCase())) {
+        return [...path].slice(1)
     }
 
     return path
 }
 
-export const sqlEvaluation = (sourceString: string, queryString: string) => {
+export const sqlQuery = (sourceString: string, queryString: string) => {
     try {
-        const sqlTree = toAst(cleanComment(queryString))
-        if (sqlTree.source.name.values && sqlTree.source.name.values[0] !== 'data') {
+        const sqlTree = toAst(queryString)
+
+        if (!allowedSourceNames.some(x => x === String(sqlTree.source.name.values[0]).toLowerCase())) {
             return new SyntaxError(String(sqlTree.source.name.values[0]))
         }
 
         const sourceDataObject = jsonParseSafe(sourceString)
 
-        const result = executeQuery(sqlTree, sourceDataObject)
-
-        return JSON.stringify(result)
+        return executeQuery(sqlTree, sourceDataObject)
     } catch (e) {
         return e as Error
     }
 }
 
-const cleanComment = (str: string) => str.replace(/--(.*?)(\n|$)/gm, '')
-
-const map = (v: object, fields: Field[], source: From) => {
+const mapper = (v: object, fields: Field[], source: From) => {
     if (fields.some(x => x.field.value === '*')) {
         return v
     }
@@ -43,18 +41,22 @@ const map = (v: object, fields: Field[], source: From) => {
 }
 
 const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
-    let fromPath: (string | number)[] = [...sqlTree.source.name.values]
+    const fromPath = [...sqlTree.source.name.values]
     fromPath.shift()
 
-    let result = _.chain<any>(sourceDataObject)
+    let data = sourceDataObject
 
-    if (fromPath && fromPath.length > 0) {
-        result = _.chain<any>(result.get(fromPath))
+    if (fromPath.length > 0) {
+        data = get(data, fromPath.slice(0))
     }
-    const value = result.value()
-    if (_.isArray(value)) {
-        return result
-            .filter(v => {
+
+    if (!Array.isArray(data)) {
+        return mapper(data, sqlTree.fields, sqlTree.source)
+    }
+
+    const lodashFlow = flow(
+        items =>
+            filter(items, v => {
                 if (!sqlTree.where || !sqlTree.where.conditions) {
                     return true
                 }
@@ -63,22 +65,29 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
                 const operation = sqlTree.where.conditions.operation
 
                 return compareOperands(operation, leftValue, rightValue, v)
-            })
-            .orderBy(
-                sqlTree.order ? sqlTree.order.orderings.map(x => x.value.value) : undefined,
-                sqlTree.order ? sqlTree.order.orderings.map(x => x.direction) : undefined
-            )
-            .map(v => map(v, sqlTree.fields, sqlTree.source))
-            .take(sqlTree.limit?.value?.value ? parseInt(sqlTree.limit.value.value.toString()) : 999999999999999)
-            .value()
-    }
-    return map(value, sqlTree.fields, sqlTree.source)
+            }),
+        filtered =>
+            orderBy(
+                filtered,
+                sqlTree.order ? sqlTree.order.orderings.map(x => x.value.value) : [],
+                sqlTree.order ? sqlTree.order.orderings.map(x => x.direction) : []
+            ),
+        ordered =>
+            take(
+                ordered,
+                sqlTree.limit?.value?.value ? parseInt(sqlTree.limit.value.value.toString()) : 999999999999999
+            ),
+        limited => map(limited, v => mapper(v, sqlTree.fields, sqlTree.source))
+    )
+
+    return lodashFlow(data)
 }
+
 const operators = {
     modulo: '%',
 } as const
 const compareOperands = (operation: string, left: Operand, right: Operand, value: object): boolean => {
-    const leftValue = _.get(value, computePath(left?.values))
+    const leftValue = get(value, computePath(left?.values))
 
     switch (operation.toLowerCase()) {
         case 'or':
@@ -154,12 +163,11 @@ const mapObject = (fields: Field[], mapped: object, source: From) => {
         [key: string]: any
     } = {}
     fields.forEach(field => {
-        const value = _.get(
+        const value = get(
             mapped,
             field.field.values.filter(val => val !== source.alias?.value)
         )
         temp[field.name.value] = value
     })
-    mapped = temp
-    return mapped
+    return temp
 }

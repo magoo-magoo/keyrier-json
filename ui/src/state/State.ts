@@ -40,7 +40,7 @@ export type UserSettingsState = DeepReadonly<{
     globalTheme?: GeneralTheme
     editorTheme?: EditorTheme
     debugMode?: boolean
-    layouts: ReactGridLayout.Layouts
+    layouts?: ReactGridLayout.Layouts
 }>
 
 export type tabType = 'RawJson' | 'Table'
