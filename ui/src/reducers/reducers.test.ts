@@ -14,11 +14,11 @@ import {
     updateSource,
     updateTableColumns,
     updateTableGroupBy,
-} from 'actions/actions'
-import { arrayElementName } from 'models/array'
-import { emptyState, getDefaultAppState, QueryState } from 'state/State'
-import { availableEditorThemes, availableGeneralThemes } from 'themes/themes'
-import rootReducers, { containsTerm, output, query, resetApp, source } from './reducers'
+} from '../actions/actions'
+import { arrayElementName } from '../models/array'
+import { emptyState, getDefaultAppState, QueryState } from '../state/State'
+import { availableEditorThemes, availableGeneralThemes } from '../themes/themes'
+import rootReducers, { containsTerm, query, resetApp, source } from './reducers'
 
 describe('Reducers', () => {
     it('rootReducers should reset', () => {
@@ -588,7 +588,7 @@ describe('Reducers', () => {
 
         // assert
         expect(result.app.present.error).toBeUndefined()
-        expect(result.app.present.output?.table?.displayedColumns).toEqual(['foo'])
+        expect(result.app.present.output?.table?.displayedColumns).toEqual(['field2', 'foo'])
     })
     it('should map correctly displayed columns for non object array item', () => {
         // arrange
@@ -658,53 +658,6 @@ describe('Reducers', () => {
         expect(result.app.present.error).toBeUndefined()
         expect(result.app.present.query?.text).toEqual(getDefaultAppState().query?.text)
         expect(result.app.present.query?.mode).toEqual('SQL')
-    })
-
-    it('output ', () => {
-        const prevState = {
-            output: {
-                text: '{}',
-                obj: {},
-                match: false,
-                searchTerm: '',
-                selectedTab: 'RawJson',
-                table: {
-                    array: [],
-                    isArray: false,
-                    isModalOpen: false,
-                    displayedColumns: [],
-                    columns: [],
-                    groupBy: [],
-                },
-            },
-            query: { text: 'data.value', mode: 'Javascript' },
-            source: { text: '{}' },
-        }
-        const state = {
-            output: {
-                obj: {},
-                match: false,
-                searchTerm: '',
-                selectedTab: 'RawJson',
-                table: {
-                    array: [],
-                    isArray: false,
-                    isModalOpen: false,
-                    displayedColumns: [],
-                    columns: [],
-                    groupBy: [],
-                },
-            },
-            query: { text: 'data.value', mode: 'Javascript' },
-            source: { text: '{"value": "test98"}' },
-        }
-
-        const result = output(prevState as any, state as any, {
-            type: 'EVALUATE_CODE',
-        })
-
-        expect(result?.table?.isArray).toEqual(false)
-        expect(result?.errorMessage).toBeUndefined()
     })
 
     it('should filter object from tree if search term is not found', () => {

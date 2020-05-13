@@ -2,11 +2,12 @@
   "name": "keyrier-json",
   "version": "1.0.0",
   "repository": "git@github.com:magoo-magoo/keyrier-json.git",
-  "author": "magoo <mael.gouacide@gmail.com>",
+  "author": "magoo <contact@magoo.dev>",
   "license": "MIT",
   "private": true,
   "workspaces": [
     "core",
-    "ui"
+    "ui",
+    "cli"
   ]
 }

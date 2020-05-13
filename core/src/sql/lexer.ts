@@ -1,12 +1,13 @@
 import { createToken, Lexer } from 'chevrotain'
 
-const stringTokenCharacterRegexString = 'a-zA-Z0-9%\\s-&(){}\\[\\]$\\*!\\\\@/,;:=ë#+-<>?^'
+const stringTokenCharacterRegexString = 'a-zA-Z0-9%\\s-&(){}\\[\\]$\\*!\\\\@/,;:=ë#+-<>?^_'
 const stringTokenRegex = new RegExp(
     `("[${stringTokenCharacterRegexString}']*")|('[${stringTokenCharacterRegexString}"]*')`
 )
 
-export const Identifier = createToken({ name: 'Identifier', pattern: /[a-zA-Z]+[\w.]*/ })
+export const Identifier = createToken({ name: 'Identifier', pattern: /[a-zA-Z_]+[\w.]*/ })
 export const WhiteSpace = createToken({ name: 'WhiteSpace', pattern: /\s+/, group: Lexer.SKIPPED })
+export const Comment = createToken({ name: 'Comment', pattern: /--.*/, group: Lexer.SKIPPED })
 export const Select = createToken({ name: 'Select', pattern: /SELECT/i, longer_alt: Identifier })
 export const From = createToken({ name: 'From', pattern: /FROM/i, longer_alt: Identifier })
 export const Where = createToken({ name: 'Where', pattern: /WHERE/i, longer_alt: Identifier })
@@ -28,7 +29,7 @@ export const As = createToken({ name: 'As', pattern: /AS/i, longer_alt: Identifi
 export const OrAnd = createToken({ name: 'OrAnd', pattern: /(AND|OR)/i, longer_alt: Identifier })
 export const Star = createToken({ name: 'Star', pattern: /\*/ })
 export const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ })
-export const StringToken = createToken({ name: 'StringToken', pattern: stringTokenRegex })
+export const StringToken = createToken({ name: 'StringToken', pattern: stringTokenRegex, line_breaks: true })
 export const GreaterOrEqualThan = createToken({ name: 'GreaterOrEqualThan', pattern: />=/ })
 export const GreaterThan = createToken({ name: 'GreaterThan', pattern: />/ })
 export const LessOrEqualThan = createToken({ name: 'LessOrEqualThan', pattern: /<=/ })
@@ -39,6 +40,7 @@ export const OpenParenthesis = createToken({ name: 'OpenParenthesis', pattern: /
 export const CloseParenthesis = createToken({ name: 'CloseParenthesis', pattern: /\)/ })
 
 export const tokenVocabulary = {
+    Comment,
     WhiteSpace,
     Select,
     From,

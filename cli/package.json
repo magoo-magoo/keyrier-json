@@ -1,6 +1,6 @@
 {
   "name": "@keyrier/cli",
-  "version": "1.0.4-beta3",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "dist/cli.js",
   "source": "src/cli.ts",
@@ -13,18 +13,25 @@
     "test": "jest",
     "build": "microbundle --target=node",
     "dev": "microbundle --target=node watch",
+    "make-big-file": "ncc run src/bigfile.ts",
     "build-release": "yarn build && npm version patch && npm publish --access=public"
   },
   "devDependencies": {
+    "@types/faker": "^4.1.11",
     "@types/jest": "^25.2.1",
     "@types/node": "12.12.38",
+    "@types/update-notifier": "^4.1.0",
     "@types/yargs": "^15.0.4",
+    "@zeit/ncc": "^0.22.1",
+    "faker": "^4.1.0",
     "microbundle": "next",
     "ts-jest": "^25.5.1",
-    "typescript": "3.8.3"
+    "typescript": "3.8.3",
+    "update-notifier": "^4.1.0"
   },
   "dependencies": {
-    "@keyrier/core": "1.0.4",
-    "meow": "7.0.0"
+    "@keyrier/core": "1.0.5",
+    "meow": "7.0.0",
+    "update-notifier": "^4.1.0"
   }
 }

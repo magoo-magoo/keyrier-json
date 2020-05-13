@@ -1,21 +1,21 @@
-import * as React from 'react'
-import {
-    getOutputObject,
-    getOutputSearchTerm,
-    getOutputSearchMatch,
-    getOutputObjectSize,
-    getDebugMode,
-} from '../../store/selectors'
-import { RootState } from '../../state/State'
-import { connect } from 'react-redux'
-import { DebounceInput } from 'react-debounce-input'
-import { updateSearchTerm } from '../../actions/actions'
-import { Suspense, lazy, memo, useCallback, FC, useState } from 'react'
-import { withErrorBoundary } from '../../components/common/ErrorBoundary'
 import deepEqual from 'fast-deep-equal'
-import { FormGroup, Label, CustomInput } from 'reactstrap'
-import { prettyPrintBytes } from '@keyrier/core'
+import * as React from 'react'
+import { FC, lazy, memo, Suspense, useCallback, useState } from 'react'
+import { DebounceInput } from 'react-debounce-input'
+import { connect } from 'react-redux'
+import { CustomInput, FormGroup, Label } from 'reactstrap'
+import { updateSearchTerm } from '../../actions/actions'
+import { withErrorBoundary } from '../../components/common/ErrorBoundary'
+import { prettyPrintBytes } from '../../core/converters/string'
 import { withPerformance } from '../../core/logging/performance'
+import { RootState } from '../../state/State'
+import {
+    getDebugMode,
+    getOutputObject,
+    getOutputObjectSize,
+    getOutputSearchMatch,
+    getOutputSearchTerm,
+} from '../../store/selectors'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {

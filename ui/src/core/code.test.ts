@@ -3,7 +3,7 @@ import { codeEvaluation } from './code'
 describe('javascript interpreter helpers', () => {
     it('should eval simple object', () => {
         const result = codeEvaluation('{"a": 1}', 'data.a', 'Javascript')
-        expect(result).toEqual('1')
+        expect(result.text).toEqual('1')
     })
 
     it.each`
@@ -25,7 +25,8 @@ describe('javascript interpreter helpers', () => {
 
     it('should eval empty array', () => {
         const result = codeEvaluation('[]', 'data', 'Javascript')
-        expect(result).toEqual('[]')
+        expect(result.text).toEqual('[]')
+        expect(result.obj).toEqual([])
     })
 
     it('should return an error with bad code', () => {
@@ -39,11 +40,12 @@ describe('javascript interpreter helpers', () => {
             `
     _.chain(data)
     .get('results')
-    .map(d => _.pick(d, ['val' ]))
+    .map(d => _.pick(d, ['val' ])).value()
     
     `,
             'Javascript'
         )
-        expect(result).toBe('[{"val":42}]')
+        expect(result.text).toEqual('[{"val":42}]')
+        expect(result.obj).toEqual([{ val: 42 }])
     })
 })

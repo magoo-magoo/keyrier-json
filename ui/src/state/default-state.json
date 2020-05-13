@@ -17,7 +17,7 @@
   },
   "query": {
     "mode": "SQL",
-    "text": "-- Type your SQL-like query\n-- your JSON object is available as a table named data\n\n\nselect * from data"
+    "text": "-- Type your SQL-like query\n-- your JSON object is available as a table named json\n\n\nselect * from json"
   },
   "source": {
     "autoFormat": true,

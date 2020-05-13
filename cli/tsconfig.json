@@ -2,6 +2,9 @@
     "extends": "../tsconfig.prod.json",
     "compilerOptions": {
         "module": "ESNext",
-        "target": "ESNext"
+        "target": "ESNext",
+        "types": [
+            "node"
+        ]
     }
 }
