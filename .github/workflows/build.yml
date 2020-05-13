@@ -3,7 +3,7 @@ name: Node CI
 on: [push]
 
 jobs:
-    build:
+    build-core:
         name: core build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
 
@@ -26,7 +26,7 @@ jobs:
               env:
                   CI: true
 
-    build:
+    build-ui:
         name: ui build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
 
@@ -49,7 +49,7 @@ jobs:
               env:
                   CI: true
 
-    build:
+    build-cli:
         name: cli build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
 
