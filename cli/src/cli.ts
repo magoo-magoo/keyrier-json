@@ -7,8 +7,7 @@ import updateNotifier from 'update-notifier'
 import pkg from '../package.json'
 
 // check for update
-const notifier = updateNotifier({ pkg, distTag: 'latest' })
-notifier.notify({ isGlobal: true })
+updateNotifier({ pkg, distTag: 'latest' }).notify({ isGlobal: true })
 
 const logDebug = (message: string | object) => {
     if (cli.flags.verbose) {
@@ -29,7 +28,7 @@ const readStdin = () => {
         stdin.setEncoding('utf8')
 
         stdin.on('readable', () => {
-            let chunk
+            let chunk: string
 
             while ((chunk = stdin.read())) {
                 result += chunk
@@ -55,7 +54,9 @@ Options
 
 Examples
   $ keyrier "select * from json" users.json
+  $ keyrier "select firstname, lastname, phoneNumber as phone from json" users.json
   $ keyrier "select name from json where age < 30" users.json --output youngins.json
+  $ wget -qO- https://jsonplaceholder.typicode.com/users | keyrier "select name as Nom, address.city as Ville from json" 
 `,
     {
         flags: {
@@ -118,7 +119,7 @@ const exec = async (query: string, filepath: string, outputFile: string) => {
     }
     if (typeof result !== 'object') {
         console.log(`
-        provide a valid input
+        provide a valid JSON input
         keyrier --help
         `)
         process.exit(4)
@@ -132,3 +133,5 @@ const exec = async (query: string, filepath: string, outputFile: string) => {
     logDebug('execution finished')
 }
 exec(queryArg, filePathArg ?? 'stdin', output)
+.then(() => logDebug('exiting with no issue'))
+.catch(() => logDebug('crashed!'))
