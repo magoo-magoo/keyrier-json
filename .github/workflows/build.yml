@@ -3,8 +3,8 @@ name: Node CI
 on: [push]
 
 jobs:
-    build-core:
-        name: core build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    build:
+        name: Build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
 
         strategy:
@@ -21,56 +21,9 @@ jobs:
             - name: yarn install, build, and test
               run: |
                   yarn --frozen-lockfile
-                  yarn workspace @keyrier/core test --coverage --watchAll=false
-                  yarn workspace @keyrier/core build
-              env:
-                  CI: true
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    build-ui:
-        name: ui build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
-        runs-on: ${{ matrix.os }}
-
-        strategy:
-            matrix:
-                node-version: [14.x]
-                os: [ubuntu-latest, macOS-latest]
-
-        steps:
-            - uses: actions/checkout@v1
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node-version }}
-            - name: yarn install, build, and test
-              run: |
-                  yarn --frozen-lockfile
-                  yarn workspace @keyrier/ui test --coverage --watchAll=false
-                  yarn workspace @keyrier/ui build
-              env:
-                  CI: true
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    build-cli:
-        name: cli build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
-        runs-on: ${{ matrix.os }}
-
-        strategy:
-            matrix:
-                node-version: [14.x]
-                os: [ubuntu-latest, macOS-latest]
-
-        steps:
-            - uses: actions/checkout@v1
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node-version }}
-            - name: yarn install, build, and test
-              run: |
-                  yarn --frozen-lockfile
-                  yarn workspace @keyrier/cli test --coverage --watchAll=false
-                  yarn workspace @keyrier/cli build
+                  yarn lerna bootstrap
+                  yarn lerna run test -- --coverage --watchAll=false
+                  yarn lerna run build
               env:
                   CI: true
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

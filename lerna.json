@@ -1,0 +1,14 @@
+{
+  "npmClient": "yarn",
+  "packages": [
+    "core",
+    "ui",
+    "cli"
+  ],
+  "version": "1.0.5",
+  "command": {
+    "version": {
+      "message": "chore(release): publish %s"
+    }
+  }
+}
