@@ -108,7 +108,7 @@
             "!<rootDir>/path/to/dir/"
         ],
         "moduleNameMapper": {
-            "ace-builds": "<rootDir>/../node_modules/ace-builds"
+            "ace-builds": "<rootDir>/node_modules/ace-builds"
         },
         "coverageThreshold": {
             "global": {
