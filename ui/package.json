@@ -30,6 +30,7 @@
         "analyze": "yarn build && source-map-explorer --html 'build/static/**/*.*' > source-map-explorer.html"
     },
     "dependencies": {
+        "@keyrier/core": "1.0.5",
         "bootswatch": "4.4.1",
         "chevrotain": "7.0.1",
         "classnames": "2.2.6",
@@ -55,8 +56,7 @@
         "redux": "4.0.5",
         "redux-undo": "1.0.1",
         "utility-types": "3.10.0",
-        "xlsx": "0.15.6",
-        "@keyrier/core": "1.0.5"
+        "xlsx": "0.15.6"
     },
     "devDependencies": {
         "@now/node": "1.5.1",

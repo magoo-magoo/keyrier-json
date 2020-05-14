@@ -27,7 +27,7 @@ script:
 
     - yarn lerna run test -- -- --coverage --watchAll=false
 
-    - yarn lerna run sonar-scanner
+    - yarn lerna command sonar-scanner
 
 after_success:
     - yarn lh https://deploy-preview-`echo $TRAVIS_PULL_REQUEST`--keyrier.netlify.com/
