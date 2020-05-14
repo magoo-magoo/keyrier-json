@@ -18,6 +18,7 @@
     "@types/jest": "^25.2.1",
     "@types/lodash": "4.14.150",
     "@types/node": "12.12.38",
+    "jest": "^26.0.1",
     "microbundle": "next",
     "ts-jest": "^25.5.1",
     "typescript": "3.9.2"

@@ -22,8 +22,9 @@ install:
 
 script:
     - yarn lerna run build
-    - yarn lerna run test -- --coverage --watchAll=false
-    - yarn workspace @keyrier/ui pack:dockerelectron
+    - yarn lerna run pack:dockerelectron
+
+    - yarn lerna run test -- -- --coverage --watchAll=false
 
     - yarn lerna run sonar-scanner
 
