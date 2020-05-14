@@ -4,7 +4,10 @@
         "baseUrl": "src",
         "module": "esnext",
         "target": "es5",
-        "lib": ["es6", "dom"],
+        "lib": [
+            "es6",
+            "dom"
+        ],
         "sourceMap": true,
         "jsx": "preserve",
         "noEmit": true,
@@ -34,8 +37,30 @@
         "allowUnusedLabels": false,
         "allowUnreachableCode": false,
         "noStrictGenericChecks": false,
-        "types": ["react-dom/experimental", "react/experimental", "jest"]
+        "types": [
+            "jest"
+        ]
     },
-    "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "ui/setupTests.ts"],
-    "include": ["src", "core/code.test.ts", "core/sql.ts", "core/code.ts", "core/sql.test.ts", "ui/config.ts", "ui/index.tsx", "ui/react-app-env.d.ts", "ui/registerServiceWorker.ts", "ui/setupTests.ts", "ui/typings.d.ts"]
+    "exclude": [
+        "node_modules",
+        "build",
+        "scripts",
+        "acceptance-tests",
+        "webpack",
+        "jest",
+        "ui/setupTests.ts"
+    ],
+    "include": [
+        "src",
+        "core/code.test.ts",
+        "core/sql.ts",
+        "core/code.ts",
+        "core/sql.test.ts",
+        "ui/config.ts",
+        "ui/index.tsx",
+        "ui/react-app-env.d.ts",
+        "ui/registerServiceWorker.ts",
+        "ui/setupTests.ts",
+        "ui/typings.d.ts"
+    ]
 }

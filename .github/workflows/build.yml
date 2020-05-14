@@ -21,6 +21,7 @@ jobs:
             - name: yarn install, build, and test
               run: |
                   yarn --frozen-lockfile
+                  yarn lerna info
                   yarn lerna bootstrap
                   yarn lerna run build
                   yarn lerna run test -- -- --coverage --watchAll=false
