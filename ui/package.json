@@ -3,8 +3,8 @@
     "name": "@keyrier/ui",
     "author": "magoo",
     "version": "1.0.0",
-    "private": true,
     "homepage": "./",
+    "readme": "./README.md",
     "repository": {
         "type": "git",
         "url": "https://github.com/magoo-magoo/keyrier-json"

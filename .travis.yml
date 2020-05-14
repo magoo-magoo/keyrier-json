@@ -18,18 +18,14 @@ before_install:
 
 install:
     - yarn --frozen-lockfile
+    - yarn lerna bootstrap
 
 script:
-    - yarn workspace @keyrier/core build
-    - yarn workspace @keyrier/cli build
-    - yarn workspace @keyrier/ui build
-
-    - yarn workspace @keyrier/core test --coverage --watchAll=false
-    - yarn workspace @keyrier/cli test --coverage --watchAll=false
-    - yarn workspace @keyrier/ui test --coverage --watchAll=false
-
-    - yarn workspace @keyrier/ui sonar-scanner
+    - yarn lerna run build
+    - yarn lerna run test -- --coverage --watchAll=false
     - yarn workspace @keyrier/ui pack:dockerelectron
+
+    - yarn lerna run sonar-scanner
 
 after_success:
     - yarn lh https://deploy-preview-`echo $TRAVIS_PULL_REQUEST`--keyrier.netlify.com/
