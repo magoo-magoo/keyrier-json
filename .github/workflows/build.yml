@@ -13,8 +13,6 @@ jobs:
                 os: [ubuntu-latest, macOS-latest]
 
         steps:
-            env:
-                NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
             - uses: actions/checkout@v1
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
@@ -27,6 +25,7 @@ jobs:
                   yarn workspace @keyrier/core build
               env:
                   CI: true
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     build-ui:
         name: ui build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
@@ -38,8 +37,6 @@ jobs:
                 os: [ubuntu-latest, macOS-latest]
 
         steps:
-            env:
-                NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
             - uses: actions/checkout@v1
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
@@ -52,6 +49,7 @@ jobs:
                   yarn workspace @keyrier/ui build
               env:
                   CI: true
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     build-cli:
         name: cli build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
@@ -63,8 +61,6 @@ jobs:
                 os: [ubuntu-latest, macOS-latest]
 
         steps:
-            env:
-                NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
             - uses: actions/checkout@v1
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
@@ -77,3 +73,4 @@ jobs:
                   yarn workspace @keyrier/cli build
               env:
                   CI: true
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
