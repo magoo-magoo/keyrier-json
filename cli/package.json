@@ -4,7 +4,6 @@
   "license": "MIT",
   "source": "src/cli.ts",
   "author": "magoo <magoo@magoo.dev>",
-  "private": false,
   "readme": "./README.md",
   "bin": {
     "keyrier": "dist/cli.js"
