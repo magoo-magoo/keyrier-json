@@ -24,6 +24,7 @@
     "@types/yargs": "^15.0.4",
     "@zeit/ncc": "^0.22.1",
     "faker": "^4.1.0",
+    "jest": "^26.0.1",
     "microbundle": "next",
     "ts-jest": "^25.5.1",
     "typescript": "3.9.2",
