@@ -29,11 +29,8 @@ jobs:
             - name: lerna info
               run: yarn lerna info
 
-            - name: lerna bootstrap
-              run: yarn lerna bootstrap
-
             - name: build
               run: yarn lerna run build
 
             - name: test
-              run: yarn lerna run test -- -- --coverage --watchAll=false
+              run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
