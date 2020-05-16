@@ -12,6 +12,9 @@ jobs:
                 node-version: [12.x, 13.x, 14.x]
                 os: [ubuntu-latest, macOS-latest, windows-latest]
 
+        env:
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
         steps:
             - uses: actions/checkout@v2
 
@@ -22,16 +25,12 @@ jobs:
 
             - name: yarn install
               run: yarn --frozen-lockfile
-              env:
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: lerna info
               run: yarn lerna info
 
             - name: lerna bootstrap
               run: yarn lerna bootstrap
-              env:
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: build
               run: yarn lerna run build
