@@ -1,6 +1,13 @@
 name: Node CI
 
-on: [push]
+on:
+    push:
+        branches:
+            - master
+            - beta
+    pull_request:
+        branches:
+            - master
 
 jobs:
     build:
@@ -36,10 +43,7 @@ jobs:
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
             - name: deploy on gh-pages
-              on:
-                  push:
-                      branches:
-                          - master
+              if: github.ref == 'master'
               uses: peaceiris/actions-gh-pages@v3
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
