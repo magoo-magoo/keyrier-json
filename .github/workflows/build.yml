@@ -10,7 +10,7 @@ jobs:
         strategy:
             matrix:
                 node-version: [12.x, 13.x, 14.x]
-                os: [ubuntu-latest, macOS-latest, windows-latest]
+                os: [ubuntu-latest, macOS-latest]
 
         env:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
