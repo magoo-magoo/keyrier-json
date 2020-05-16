@@ -10,21 +10,31 @@ jobs:
         strategy:
             matrix:
                 node-version: [12.x, 13.x, 14.x]
-                os: [ubuntu-latest, macOS-latest]
+                os: [ubuntu-latest, macOS-latest, windows-latest]
 
         steps:
             - uses: actions/checkout@v2
+            
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node-version }}
-            - name: yarn install, build, and test
-              run: |
-                  yarn --frozen-lockfile
-                  yarn lerna info
-                  yarn lerna bootstrap
-                  yarn lerna run build
-                  yarn lerna run test -- -- --coverage --watchAll=false
-              env:
+
+            - name: yarn install
+                run: yarn --frozen-lockfile
+ 
+            - name: lerna info
+                run: yarn lerna info
+ 
+            - name: lerna bootstrap
+                run: yarn lerna bootstrap
+ 
+            - name: build
+                run: yarn lerna run build
+ 
+            - name: test
+                run: yarn lerna run test -- -- --coverage --watchAll=false
+ 
+            env:
                   CI: true
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

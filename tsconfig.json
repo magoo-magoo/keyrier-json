@@ -51,16 +51,8 @@
         "ui/setupTests.ts"
     ],
     "include": [
-        "src",
-        "core/code.test.ts",
-        "core/sql.ts",
-        "core/code.ts",
-        "core/sql.test.ts",
-        "ui/config.ts",
-        "ui/index.tsx",
-        "ui/react-app-env.d.ts",
-        "ui/registerServiceWorker.ts",
-        "ui/setupTests.ts",
-        "ui/typings.d.ts"
+        "core/src",
+        "cli/src",
+        "ui/src"
     ]
 }

@@ -5,6 +5,7 @@
     "ui",
     "cli"
   ],
+  "useWorkspaces": true,
   "version": "1.0.5",
   "command": {
     "version": {
