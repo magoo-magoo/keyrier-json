@@ -35,14 +35,12 @@ jobs:
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
-    deploy:
-        on:
-            push:
-                branches:
-                    - master
-        needs: build
-        name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./ui/build
+            - name: deploy on gh-pages
+              on:
+                  push:
+                      branches:
+                          - master
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./ui/build
