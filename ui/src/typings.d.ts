@@ -23,4 +23,3 @@ declare module 'brace/ext/language_tools'
 declare module 'brace/ext/searchbox'
 declare module 'brace/snippets/javascript'
 declare module 'brace/snippets/json'
-
