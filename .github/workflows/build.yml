@@ -16,8 +16,8 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [12.x, 13.x, 14.x]
-                os: [ubuntu-latest, macOS-latest]
+                node-version: [14.x]
+                os: [ubuntu-latest]
 
         env:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -32,6 +32,9 @@ jobs:
 
             - name: yarn install
               run: yarn --frozen-lockfile
+
+            - name: install electron build deps
+              run: sudo apt-get install -y libgconf-2-4
 
             - name: lerna info
               run: yarn lerna info
