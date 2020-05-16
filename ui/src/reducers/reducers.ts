@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import undoable from 'redux-undo'
-import { Action } from '../actions/actions'
+import { Action, resetEditor } from '../actions/actions'
 import { configuration } from '../config'
 import { codeEvaluation } from '../core/code'
 import { jsonBeautify } from '../core/converters/json'
@@ -13,7 +13,6 @@ import {
     emptyState,
     getDefaultAppState,
     getDefaultUserSettingsState,
-    itemType,
     OupoutState,
     OupoutTableState,
     QueryMode,
@@ -23,7 +22,7 @@ import {
     UserSettingsState,
 } from '../state/State'
 
-export const rootReducer = (rootState = getDefaultAppState(), action: Action) => {
+export const appReducer = (rootState = getDefaultAppState(), action: Action) => {
     if (action.type === 'CLEAR_EDITOR') {
         return emptyState
     }
@@ -68,6 +67,8 @@ export const source = (state: SourceState, action: Action) => {
 
 export const userSettings = (state: UserSettingsState | undefined = getDefaultUserSettingsState(), action: Action) => {
     switch (action.type) {
+        case 'RESET_EDITOR':
+            return getDefaultUserSettingsState()
         case 'SWITCH_GLOBAL_THEME':
             return { ...state, globalTheme: action.theme }
         case 'SWITCH_EDITOR_THEME':
@@ -129,10 +130,9 @@ export const computeOutput = (
 
     const { text, obj } = evaluation ?? { text: null, obj: null }
     let displayedColumns = new Array<string>()
-    const outputObject: itemType[] | object = obj as any
-    if (Array.isArray(outputObject)) {
+    if (Array.isArray(obj)) {
         const keyMap: { [key: string]: string } = {}
-        outputObject.forEach(d => {
+        obj.forEach(d => {
             if (d !== null && d !== undefined && !Object.is(d, {}) && !Array.isArray(d)) {
                 const keysToAdd = d ? (typeof d === 'object' ? Object.keys(d) : [arrayElementName]) : []
                 keysToAdd.forEach(key => (keyMap[key] = key))
@@ -149,19 +149,19 @@ export const computeOutput = (
             ? previousState.table.isModalOpen
             : false
 
-    let selectedTab: tabType = Array.isArray(outputObject) ? 'Table' : 'RawJson'
+    let selectedTab: tabType = Array.isArray(obj) ? 'Table' : 'RawJson'
 
     if (action.type === 'UPDATE_OUTPUT_TAB_SELECTION') {
         selectedTab = action.tab
     }
     return {
         selectedTab,
-        obj: outputObject,
+        obj: obj,
         objSize: text ? text.length : 0,
         searchTerm: '',
         match: false,
         table: {
-            isArray: Array.isArray(outputObject),
+            isArray: Array.isArray(obj),
             isModalOpen,
             displayedColumns,
             columns: displayedColumns,
@@ -322,20 +322,30 @@ const table = (state: OupoutTableState | undefined, action: Action) => {
 
 export const resetApp = (state = getDefaultAppState(), action: Action) => {
     if (action.type === 'RESET_EDITOR') {
-        return rootReducer({ ...getDefaultAppState() }, action)
+        return appReducer({ ...getDefaultAppState() }, action)
     }
-    return rootReducer(state, action)
+    return appReducer(state, action)
 }
 
 const perf = (state = getDefaultAppState(), action: Action) => {
     perfStart(`reduce - action: ${action.type}`)
-    const newState = resetApp(state, action)
+    let newState
+    if (action.type === 'RESET_EDITOR') {
+        newState = appReducer({ ...getDefaultAppState() }, action)
+    } else {
+        newState = appReducer(state, action)
+    }
     perfEnd(`reduce - action: ${action.type}`)
     return newState
 }
 
 const rootReducers = combineReducers({
-    app: undoable(perf, { undoType: 'APP_UNDO', redoType: 'APP_REDO', limit: configuration.limitUndo }),
+    app: undoable(perf, {
+        undoType: 'APP_UNDO',
+        redoType: 'APP_REDO',
+        limit: configuration.limitUndo,
+        initTypes: [resetEditor().type],
+    }),
     userSettings,
 })
 export default rootReducers

@@ -1,7 +1,6 @@
 export const customToString = (obj: any | null | undefined): string => {
     if (Array.isArray(obj)) {
-        const array: any[] = obj
-        return array.map(e => customToString(e)).join(',')
+        return obj.map(e => customToString(e)).join(',')
     }
     if (typeof obj === 'object') {
         return JSON.stringify(obj)
