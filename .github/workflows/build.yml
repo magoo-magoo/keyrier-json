@@ -14,27 +14,27 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-            
+
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node-version }}
 
             - name: yarn install
-                run: yarn --frozen-lockfile
- 
+              run: yarn --frozen-lockfile
+
             - name: lerna info
-                run: yarn lerna info
- 
+              run: yarn lerna info
+
             - name: lerna bootstrap
-                run: yarn lerna bootstrap
- 
+              run: yarn lerna bootstrap
+
             - name: build
-                run: yarn lerna run build
- 
+              run: yarn lerna run build
+
             - name: test
-                run: yarn lerna run test -- -- --coverage --watchAll=false
- 
-            env:
+              run: yarn lerna run test -- -- --coverage --watchAll=false
+
+              env:
                   CI: true
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
