@@ -11,7 +11,7 @@
   publish = "ui/build"
 
   # Default build command.
-  command = "yarn lerna run build --scope @keyrier/ui"
+  command = "yarn lerna run build"
 
 
 # Production context: all deploys from the Production branch set in your site's 
