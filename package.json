@@ -1,10 +1,44 @@
 {
-  "name": "keyrier-json",
-  "version": "1.0.0",
-  "repository": "git@github.com:magoo-magoo/keyrier-json.git",
-  "author": "magoo <contact@magoo.dev>",
-  "license": "MIT",
-  "devDependencies": {
-    "lerna": "3.21.0"
-  }
+    "name": "keyrier-json",
+    "version": "1.0.0",
+    "repository": "git@github.com:magoo-magoo/keyrier-json.git",
+    "author": "magoo <contact@magoo.dev>",
+    "private": true,
+    "license": "MIT",
+    "devDependencies": {
+        "prettier": "2.0.4",
+        "eslint-config-prettier": "6.10.1",
+        "concurrently": "5.1.0",
+        "source-map-explorer": "2.4.2",
+        "pretty-quick": "2.0.1",
+        "@types/node": "12.12.38",
+        "@types/jest": "25.2.1",
+        "@stryker-mutator/core": "^3.1.0",
+        "@stryker-mutator/jest-runner": "3.1.0",
+        "@stryker-mutator/typescript": "3.1.0",
+        "jest": "^24.9.0",
+        "husky": "4.2.5",
+        "@now/node": "1.5.1",
+        "@typescript-eslint/eslint-plugin": "2.28.0",
+        "typescript": "3.9.2",
+        "wait-on": "4.0.2",
+        "ts-jest": "^24.1.0",
+        "lerna": "3.21.0"
+    },
+    "workspaces": [
+        "cli",
+        "core",
+        "ui"
+    ],
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,css,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    }
 }

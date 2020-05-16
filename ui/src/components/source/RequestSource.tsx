@@ -7,6 +7,7 @@ import { withErrorBoundary } from '../../components/common/ErrorBoundary'
 import { logError } from '../../core/logging/logger'
 import { useChangeEventState, useToggleState } from '../../hooks/hooks'
 import { RenderHeaderInput } from './RequestHeader'
+import { customToString } from '../../core/converters/string'
 
 interface Props {
     onFinish: () => void

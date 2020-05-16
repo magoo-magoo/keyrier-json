@@ -1,38 +1,33 @@
 {
-  "name": "@keyrier/cli",
-  "version": "0.0.1",
-  "license": "MIT",
-  "source": "src/cli.ts",
-  "author": "magoo <magoo@magoo.dev>",
-  "readme": "./README.md",
-  "bin": {
-    "keyrier": "dist/cli.js"
-  },
-  "scripts": {
-    "test": "jest",
-    "build": "microbundle --target=node",
-    "dev": "microbundle --target=node watch",
-    "make-big-file": "ncc run src/bigfile.ts",
-    "ncc-run-cli": "ncc run src/cli.ts",
-    "build-release": "yarn build && npm version patch && npm publish --access=public"
-  },
-  "devDependencies": {
-    "@types/faker": "^4.1.11",
-    "@types/jest": "^25.2.1",
-    "@types/node": "12.12.38",
-    "@types/update-notifier": "^4.1.0",
-    "@types/yargs": "^15.0.4",
-    "@zeit/ncc": "^0.22.1",
-    "faker": "^4.1.0",
-    "jest": "^26.0.1",
-    "microbundle": "next",
-    "ts-jest": "^25.5.1",
-    "typescript": "3.9.2",
-    "update-notifier": "^4.1.0"
-  },
-  "dependencies": {
-    "@keyrier/core": "1.0.5",
-    "meow": "7.0.0",
-    "update-notifier": "4.1.0"
-  }
+    "name": "@keyrier/cli",
+    "version": "0.0.1",
+    "license": "MIT",
+    "source": "src/cli.ts",
+    "author": "magoo <magoo@magoo.dev>",
+    "readme": "./README.md",
+    "bin": {
+        "keyrier": "dist/cli.js"
+    },
+    "scripts": {
+        "test": "jest",
+        "build": "microbundle --target=node",
+        "dev": "microbundle --target=node watch",
+        "make-big-file": "ncc run src/bigfile.ts",
+        "ncc-run-cli": "ncc run src/cli.ts",
+        "build-release": "yarn build && npm version patch && npm publish --access=public"
+    },
+    "devDependencies": {
+        "@types/faker": "^4.1.11",
+        "@types/update-notifier": "^4.1.0",
+        "@types/yargs": "^15.0.4",
+        "@zeit/ncc": "^0.22.1",
+        "faker": "^4.1.0",
+        "microbundle": "next",
+        "update-notifier": "^4.1.0"
+    },
+    "dependencies": {
+        "@keyrier/core": "1.0.5",
+        "meow": "7.0.0",
+        "update-notifier": "4.1.0"
+    }
 }
