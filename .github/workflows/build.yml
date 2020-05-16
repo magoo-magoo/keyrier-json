@@ -22,19 +22,19 @@ jobs:
 
             - name: yarn install
               run: yarn --frozen-lockfile
+              env:
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: lerna info
               run: yarn lerna info
 
             - name: lerna bootstrap
               run: yarn lerna bootstrap
+              env:
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: build
               run: yarn lerna run build
 
             - name: test
               run: yarn lerna run test -- -- --coverage --watchAll=false
-
-              env:
-                  CI: true
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
