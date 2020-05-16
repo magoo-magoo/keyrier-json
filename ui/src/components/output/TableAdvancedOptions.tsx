@@ -7,10 +7,10 @@ import _ from 'lodash'
 import * as React from 'react'
 import { ChangeEvent, FC, lazy, memo, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
+import { ValueType } from 'react-select'
 import { Button, Collapse } from 'reactstrap'
 import { itemType, RootState } from 'state/State'
 import { getColumns, getdisplayedColumns, getGroupBy, getOutputarray } from 'store/selectors'
-import { ValueType } from 'react-select'
 
 export const ReactSelect = lazy(() => import(/* webpackChunkName: "react-select" */ 'react-select'))
 
@@ -62,14 +62,14 @@ const TableAdvancedOptions: FC<Props> = ({
     ])
 
     if (columns.length <= 0) {
-        return <></>
+        return null
     }
 
     const columnOptions = columns.map(k => ({ value: k, label: k }))
 
     return (
-        <div className="row py-1">
-            <div className="col-2">
+        <div className="row py-1 justify-content-center">
+            <div className={`${optionsCollapsed ? 'col-5' : 'col-3'}`}>
                 <Button className={'float-left col my-1'} color="primary" block={true} onClick={switchOptionsCollapsed}>
                     {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
                 </Button>

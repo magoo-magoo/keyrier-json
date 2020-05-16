@@ -18,7 +18,7 @@ type Props = {
     theme: EditorTheme
     name: string
     value: string
-    onChange: (v: string, e: any) => void
+    onChange: (v: string, e: React.ChangeEvent) => void
 }
 const AceEditor: FC<Props> = ({ mode, theme, name, value, onChange }) => {
     return (

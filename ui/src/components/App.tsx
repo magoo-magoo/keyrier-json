@@ -26,13 +26,13 @@ type Props = {
     updateGridLayouts: typeof updateLayouts
 }
 const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
-    const onLayoutChange = (_: ReactGridLayout.Layout[], newLayouts: ReactGridLayout.Layouts) => {
+    const onLayoutChange = (_: ReactGridLayout.Layout[], newLayouts: ReactGridLayout.Layouts) =>
         updateGridLayouts(newLayouts)
-    }
+
     return (
         <>
             <Header />
-            <div className="container-fluid">
+            <div className="container-fluid mb-5">
                 <h1 className="my-5">Paste your JSON and Query it.</h1>
                 <ResponsiveGridLayout
                     autoSize={true}
@@ -42,12 +42,13 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
                     draggableHandle={`.${grabbleStyles.grabber}`}
                     breakpoints={{ lg: 0 }}
                     cols={{ lg: 24 }}
-                    margin={[1, 1]}
-                    containerPadding={[10, 10]}
+                    margin={[5, 5]}
+                    containerPadding={[5, 5]}
                     rowHeight={25}
                     onLayoutChange={onLayoutChange}
-                    verticalCompact={true}
+                    verticalCompact={false}
                     compactType="vertical"
+                    maxRows={75}
                 >
                     <div key={configuration.layout.keys.lateralMenuKey} className={`rounded ${appStyles.gridborder}`}>
                         <GrabbleHeader title="Options">

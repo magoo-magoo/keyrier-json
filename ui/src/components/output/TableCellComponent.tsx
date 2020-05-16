@@ -11,7 +11,7 @@ type CellProps = {
 
 export const TableCellComponent: FC<CellProps> = ({ cell, onClick }) => {
     if (!cell) {
-        return <></>
+        return null
     }
     const stringValue = customToString(cell.value)
     const isTooLong = stringValue.length > 50
