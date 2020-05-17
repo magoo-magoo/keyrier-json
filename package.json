@@ -5,6 +5,26 @@
     "author": "magoo <contact@magoo.dev>",
     "private": true,
     "license": "MIT",
+    "workspaces": [
+        "cli",
+        "core",
+        "ui"
+    ],
+    "scripts": {
+        "preversion": "lerna run build",
+        "publish": "lerna publish"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,css,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
     "devDependencies": {
         "prettier": "2.0.4",
         "eslint-config-prettier": "6.10.1",
@@ -24,21 +44,5 @@
         "wait-on": "4.0.2",
         "ts-jest": "^24.1.0",
         "lerna": "3.21.0"
-    },
-    "workspaces": [
-        "cli",
-        "core",
-        "ui"
-    ],
-    "husky": {
-        "hooks": {
-            "pre-commit": "pretty-quick --staged"
-        }
-    },
-    "lint-staged": {
-        "*.{ts,tsx,js,css,md}": [
-            "prettier --write",
-            "git add"
-        ]
     }
 }
