@@ -10,6 +10,8 @@ npm i @keyrier/core
 yarn add @keyrier/core
 ```
 
+## Usage
+
 ```javascript
 import { sqlQuery } from '../../core/dist/index.module'
 

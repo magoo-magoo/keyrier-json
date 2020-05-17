@@ -16,15 +16,15 @@ export const computePath = (path: string[] | undefined) => {
     return path
 }
 
-export const sqlQuery = (sourceString: string, queryString: string) => {
+export const sqlQuery = (json: string, query: string) => {
     try {
-        const sqlTree = toAst(queryString)
+        const sqlTree = toAst(query)
 
         if (!allowedSourceNames.some(x => x === String(sqlTree.source.name.values[0]).toLowerCase())) {
             return new SyntaxError(String(sqlTree.source.name.values[0]))
         }
 
-        const sourceDataObject = jsonParseSafe(sourceString)
+        const sourceDataObject = jsonParseSafe(json)
 
         return executeQuery(sqlTree, sourceDataObject)
     } catch (e) {
