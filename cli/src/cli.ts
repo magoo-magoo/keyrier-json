@@ -4,10 +4,10 @@ import { sqlQuery } from '@keyrier/core'
 import fs from 'fs'
 import meow from 'meow'
 import updateNotifier from 'update-notifier'
-import pkg from '../package.json'
+import { name, version } from '../package.json'
 
 // check for update
-updateNotifier({ pkg, distTag: 'latest' }).notify({ isGlobal: true })
+updateNotifier({ pkg: { name, version }, distTag: 'latest' }).notify({ isGlobal: true })
 
 const logDebug = (message: string | object) => {
     if (cli.flags.verbose) {
@@ -133,5 +133,5 @@ const exec = async (query: string, filepath: string, outputFile: string) => {
     logDebug('execution finished')
 }
 exec(queryArg, filePathArg ?? 'stdin', output)
-.then(() => logDebug('exiting with no issue'))
-.catch(() => logDebug('crashed!'))
+    .then(() => logDebug('exiting with no issue'))
+    .catch(() => logDebug('crashed!'))
