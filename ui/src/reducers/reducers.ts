@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux'
 import undoable from 'redux-undo'
-import { Action, resetEditor } from '../actions/actions'
+import { Action } from '../actions/actions'
 import { configuration } from '../config'
 import { codeEvaluation } from '../core/code'
 import { jsonBeautify } from '../core/converters/json'
 import { containsIgnoreCase } from '../core/converters/string'
-import { perfEnd, perfStart } from '../core/logging/performance'
 import { arrayElementName } from '../models/array'
 import initialStateJson from '../state/default-state.json'
 import {
@@ -322,29 +321,16 @@ const table = (state: OupoutTableState | undefined, action: Action) => {
 
 export const resetApp = (state = getDefaultAppState(), action: Action) => {
     if (action.type === 'RESET_EDITOR') {
-        return appReducer({ ...getDefaultAppState() }, action)
+        return appReducer(getDefaultAppState(), action)
     }
     return appReducer(state, action)
 }
 
-const perf = (state = getDefaultAppState(), action: Action) => {
-    perfStart(`reduce - action: ${action.type}`)
-    let newState
-    if (action.type === 'RESET_EDITOR') {
-        newState = appReducer({ ...getDefaultAppState() }, action)
-    } else {
-        newState = appReducer(state, action)
-    }
-    perfEnd(`reduce - action: ${action.type}`)
-    return newState
-}
-
 const rootReducers = combineReducers({
-    app: undoable(perf, {
+    app: undoable(resetApp, {
         undoType: 'APP_UNDO',
         redoType: 'APP_REDO',
         limit: configuration.limitUndo,
-        initTypes: [resetEditor().type],
     }),
     userSettings,
 })

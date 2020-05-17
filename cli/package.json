@@ -5,6 +5,10 @@
     "source": "src/cli.ts",
     "author": "magoo <magoo@magoo.dev>",
     "readme": "./README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/magoo-magoo/keyrier-json"
+    },
     "bin": {
         "keyrier": "dist/cli.js"
     },

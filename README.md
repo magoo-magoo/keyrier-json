@@ -1,6 +1,11 @@
-![logo](./public/logo_192.png)
+![logo](ui/public/logo_192.png)
 
 # Keyrier JSON
+
+## A CLI, a library and a web application to perfom query on JSON objects.
+
+SQL like syntax or javascript.
+![](demo.gif)
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 ![GitHub release](https://img.shields.io/github/release/magoo-magoo/keyrier-json.svg)
@@ -10,23 +15,16 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5aa1568f-9fcc-4964-803b-6a3b76e6f0cf/deploy-status)](https://app.netlify.com/sites/keyrier/deploys)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmagoo-magoo%2Fkeyrier-json%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/magoo-magoo/keyrier-json/master)
 
-## [Live here](https://keyrier.magoo.dev) and [here](https://magoo-magoo.github.io/keyrier-json)
+## Web version is available [here](https://keyrier.magoo.dev) or [here](https://magoo-magoo.github.io/keyrier-json)
 
-A web application to perfom query on JSON object.
-SQL like syntax or javascript.
-![](demo.gif)
+## CLI
+
+Go to [documentation](cli/README.md)
+
+## Library
+
+Go to [documentation](core/README.md)
 
 ## Desktop
 
 A desktop version is available. Last version [here](https://github.com/magoo-magoo/keyrier-json/releases/latest).
-
-## Development
-
--   Run locally:
-    ```bash
-    yarn start
-    ```
--   Build:
-    ```bash
-    yarn build
-    ```
