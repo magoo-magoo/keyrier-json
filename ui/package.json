@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "homepage": "./",
     "readme": "./README.md",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/magoo-magoo/keyrier-json"

@@ -1,6 +1,10 @@
 {
     "name": "@keyrier/core",
     "version": "1.0.5",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/magoo-magoo/keyrier-json"
+    },
     "license": "MIT",
     "readme": "./README.md",
     "source": "src/index.ts",

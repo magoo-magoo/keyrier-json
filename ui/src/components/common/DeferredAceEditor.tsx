@@ -1,17 +1,24 @@
-import 'ace-builds'
-import 'ace-builds/src-noconflict/mode-javascript'
-import 'ace-builds/src-noconflict/mode-json'
-import 'ace-builds/src-noconflict/mode-mysql'
-import 'ace-builds/src-noconflict/theme-github'
-import 'ace-builds/src-noconflict/theme-monokai'
-import 'ace-builds/src-noconflict/theme-solarized_dark'
-import 'ace-builds/src-noconflict/theme-terminal'
-import 'ace-builds/src-noconflict/theme-tomorrow'
-import 'ace-builds/webpack-resolver'
+// import 'ace-builds'
+import * as ace from 'ace-builds/src-min-noconflict/ace' // Load Ace Editor
 import * as React from 'react'
 import { FC } from 'react'
+// import 'ace-builds/src-min/mode-javascript'
+// import 'ace-builds/src-min/mode-json'
+// import 'ace-builds/src-min/mode-mysql'
+// import 'ace-builds/src-min/theme-github'
+// import 'ace-builds/src-min/theme-monokai'
+// import 'ace-builds/src-min/theme-solarized_dark'
+// import 'ace-builds/src-min/theme-terminal'
+// import 'ace-builds/src-min/theme-tomorrow'
+// import 'ace-builds/webpack-resolver'
 import Ace from 'react-ace'
 import { EditorTheme } from 'themes/themes'
+
+const CDN = 'https://cdn.jsdelivr.net/npm/ace-builds@1.3.3/src-min-noconflict'
+ace.config.set('basePath', CDN)
+ace.config.set('modePath', CDN)
+ace.config.set('themePath', CDN)
+ace.config.set('workerPath', CDN)
 
 type Props = {
     mode: 'javascript' | 'mysql' | 'json'

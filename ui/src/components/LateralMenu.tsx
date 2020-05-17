@@ -1,35 +1,36 @@
+import {
+    clearEditor,
+    redo,
+    resetEditor,
+    undo,
+    updateAutoFormatSource,
+    updateQueryMode,
+    updateSource,
+} from 'actions/actions'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
+import { logDebug } from 'core/logging/logger'
+import { withPerformance } from 'core/logging/performance'
+import { useToggleState } from 'hooks/hooks'
 import * as React from 'react'
+import { ChangeEvent, FC, memo, useCallback } from 'react'
 import { connect } from 'react-redux'
 import {
-    updateSource,
-    resetEditor,
-    clearEditor,
-    updateAutoFormatSource,
-    undo,
-    redo,
-    updateQueryMode,
-} from 'actions/actions'
-import HttpRequestSource from './source/RequestSource'
-import { logDebug } from 'core/logging/logger'
-import { useToggleState } from 'hooks/hooks'
-import {
+    Button,
     ButtonDropdown,
-    DropdownToggle,
-    DropdownMenu,
+    ButtonGroup,
     DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Label,
     Modal,
-    ModalHeader,
     ModalBody,
     ModalFooter,
-    Button,
-    ButtonGroup,
-    Label,
+    ModalHeader,
 } from 'reactstrap'
-import { memo, useCallback, FC, ChangeEvent } from 'react'
-import { withErrorBoundary } from 'components/common/ErrorBoundary'
-import { getSourceAutoFormat, getCanUndo, getCanRedo, getQueryMode } from 'store/selectors'
-import { RootState, QueryMode } from 'state/State'
-import { withPerformance } from 'core/logging/performance'
+import { ActionCreators } from 'redux-undo'
+import { QueryMode, RootState } from 'state/State'
+import { getCanRedo, getCanUndo, getQueryMode, getSourceAutoFormat } from 'store/selectors'
+import HttpRequestSource from './source/RequestSource'
 
 interface Props {
     onFileContentReady: typeof updateSource
@@ -43,6 +44,7 @@ interface Props {
     canRedo: boolean
     canUndo: boolean
     autoFormat: boolean
+    resetHistory: typeof ActionCreators.clearHistory
 }
 
 const LateralMenu: FC<Props> = ({
@@ -57,6 +59,7 @@ const LateralMenu: FC<Props> = ({
     canUndo,
     setQueryMode,
     mode,
+    resetHistory,
 }) => {
     const [dropdownIsOpen, toggleDropdown] = useToggleState()
     const [modalIsOpen, toggleModal] = useToggleState()
@@ -150,7 +153,10 @@ const LateralMenu: FC<Props> = ({
                     className="d-flex justify-content-center align-content-between"
                     color="secondary"
                     size={'lg'}
-                    onClick={onReset}
+                    onClick={() => {
+                        onReset()
+                        resetHistory()
+                    }}
                 >
                     <div>
                         <i className="material-icons md-18 mr-1">autorenew</i>
@@ -226,6 +232,7 @@ export default connect(mapStateToProps, {
     onClear: clearEditor,
     onUndo: undo,
     onRedo: redo,
+    resetHistory: ActionCreators.clearHistory,
     changeAutoFormat: updateAutoFormatSource,
     setQueryMode: updateQueryMode,
 })(memo(withErrorBoundary(withPerformance(LateralMenu, 'LateralMenu'))))

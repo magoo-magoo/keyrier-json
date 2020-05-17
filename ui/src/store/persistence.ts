@@ -37,7 +37,7 @@ const getDefault = (key: string) => {
 }
 
 const loadAppState = async (key: string) => {
-    let present = getDefault(key)
+    let present = lodash.merge({}, getDefault(key))
     try {
         const savedState = await localForage.getItem<StateWithHistory<AppState>>(key)
         return lodash.merge({ present }, savedState ?? {})

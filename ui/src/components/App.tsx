@@ -46,8 +46,7 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
                     containerPadding={[5, 5]}
                     rowHeight={25}
                     onLayoutChange={onLayoutChange}
-                    verticalCompact={false}
-                    compactType="vertical"
+                    compactType={null}
                     maxRows={75}
                 >
                     <div key={configuration.layout.keys.lateralMenuKey} className={`rounded ${appStyles.gridborder}`}>
