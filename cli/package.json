@@ -33,5 +33,6 @@
         "@keyrier/core": "^1.0.7",
         "meow": "7.0.0",
         "update-notifier": "4.1.0"
-    }
+    },
+    "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4"
 }

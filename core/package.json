@@ -25,5 +25,6 @@
     "dependencies": {
         "chevrotain": "7.0.1",
         "lodash": "4.17.15"
-    }
+    },
+    "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4"
 }
