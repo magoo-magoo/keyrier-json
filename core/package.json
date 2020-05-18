@@ -1,6 +1,6 @@
 {
     "name": "@keyrier/core",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "Query JSON objects with SQL syntax",
     "repository": {
         "type": "git",
@@ -35,6 +35,5 @@
     "engines": {
         "node": ">=10"
     },
-    "peerDependencies": {},
     "module": "dist/mylib.esm.js"
 }
