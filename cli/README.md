@@ -1,6 +1,6 @@
 # Keyrier JSON CLI
 
-A tool to perform SQL-like query on JSON object.
+A tool to perform SQL-like query on JSON objects.
 
 ## Install
 

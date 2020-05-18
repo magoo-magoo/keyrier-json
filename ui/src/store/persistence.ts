@@ -1,7 +1,7 @@
 import { configuration } from 'config'
 import { logError } from 'core/logging/logger'
 import localForage from 'localforage'
-import lodash from 'lodash'
+import { merge } from 'lodash-es'
 import { toast } from 'react-toastify'
 import { StateWithHistory } from 'redux-undo'
 import { AppState, getDefaultAppState, getDefaultUserSettingsState, UserSettingsState } from 'state/State'
@@ -37,10 +37,10 @@ const getDefault = (key: string) => {
 }
 
 const loadAppState = async (key: string) => {
-    let present = lodash.merge({}, getDefault(key))
+    let present = merge({}, getDefault(key))
     try {
         const savedState = await localForage.getItem<StateWithHistory<AppState>>(key)
-        return lodash.merge({ present }, savedState ?? {})
+        return merge({ present }, savedState ?? {})
     } catch (error) {
         logError(error)
     }
@@ -51,7 +51,7 @@ const loadUserSettings = async (key: string) => {
     let state = getDefault(key)
     try {
         const savedState = await localForage.getItem<UserSettingsState>(key)
-        return lodash.merge(state, savedState ?? {})
+        return merge(state, savedState ?? {})
     } catch (error) {
         logError(error)
     }

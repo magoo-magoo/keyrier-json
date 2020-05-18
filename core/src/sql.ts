@@ -1,4 +1,4 @@
-import { filter, flow, get, map, orderBy, take } from 'lodash'
+import { orderBy } from 'lodash'
 import { jsonParseSafe } from './converters/json'
 import { toAst } from './sql/actions-visitor'
 import { Field, From, Operand, SQLTree } from './sql/SqlTree'
@@ -39,6 +39,48 @@ const mapper = (v: object, fields: Field[], source: From) => {
 
     return mapObject(fields, v, source)
 }
+const get = (obj: any, path: (string | number)[], defaultValue: any = undefined) => {
+    const travel = (regexp: any) =>
+        String.prototype.split
+            .call(path, regexp)
+            .filter(Boolean)
+            .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj)
+    const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/)
+    return result === undefined || result === obj ? defaultValue : result
+}
+
+const slice = (array: any[], start: number, end: number) => {
+    let length = array == null ? 0 : array.length
+    if (!length) {
+        return []
+    }
+    start = start == null ? 0 : start
+    end = end === undefined ? length : end
+
+    if (start < 0) {
+        start = -start > length ? 0 : length + start
+    }
+    end = end > length ? length : end
+    if (end < 0) {
+        end += length
+    }
+    length = start > end ? 0 : (end - start) >>> 0
+    start >>>= 0
+
+    let index = -1
+    const result = new Array(length)
+    while (++index < length) {
+        result[index] = array[index + start]
+    }
+    return result
+}
+const take = (array: any[], n = 1) => {
+    if (!(array != null && array.length)) {
+        return []
+    }
+
+    return slice(array, 0, n < 0 ? 0 : n)
+}
 
 const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
     const fromPath = [...sqlTree.source.name.values]
@@ -54,33 +96,29 @@ const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
         return mapper(data, sqlTree.fields, sqlTree.source)
     }
 
-    const lodashFlow = flow(
-        items =>
-            filter(items, v => {
-                if (!sqlTree.where || !sqlTree.where.conditions) {
-                    return true
-                }
-                const leftValue = sqlTree.where.conditions.left
-                const rightValue = sqlTree.where.conditions.right
-                const operation = sqlTree.where.conditions.operation
+    const filtered = data.filter(v => {
+        if (!sqlTree.where || !sqlTree.where.conditions) {
+            return true
+        }
+        const leftValue = sqlTree.where.conditions.left
+        const rightValue = sqlTree.where.conditions.right
+        const operation = sqlTree.where.conditions.operation
 
-                return compareOperands(operation, leftValue, rightValue, v)
-            }),
-        filtered =>
-            orderBy(
-                filtered,
-                sqlTree.order ? sqlTree.order.orderings.map(x => x.value.value) : [],
-                sqlTree.order ? sqlTree.order.orderings.map(x => x.direction) : []
-            ),
-        ordered =>
-            take(
-                ordered,
-                sqlTree.limit?.value?.value ? parseInt(sqlTree.limit.value.value.toString()) : 999999999999999
-            ),
-        limited => map(limited, v => mapper(v, sqlTree.fields, sqlTree.source))
+        return compareOperands(operation, leftValue, rightValue, v)
+    })
+
+    const ordered = orderBy(
+        filtered,
+        sqlTree.order ? sqlTree.order.orderings.map(x => x.value.value) : [],
+        sqlTree.order ? sqlTree.order.orderings.map(x => x.direction) : []
     )
+    const limited = take(
+        ordered,
+        sqlTree.limit?.value?.value ? parseInt(sqlTree.limit.value.value.toString()) : 999999999999999
+    )
+    const mapped = limited.map(v => mapper(v, sqlTree.fields, sqlTree.source))
 
-    return lodashFlow(data)
+    return mapped
 }
 
 const operators = {

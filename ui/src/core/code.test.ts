@@ -33,19 +33,4 @@ describe('javascript interpreter helpers', () => {
         const result = codeEvaluation('{"a": 1}', 'data.', 'Javascript')
         expect(result).toBeInstanceOf(Error)
     })
-
-    it('should eval code with lodash', () => {
-        const result = codeEvaluation(
-            '{"results": [{"val": 42, "notMapped": "toto"}]}',
-            `
-    _.chain(data)
-    .get('results')
-    .map(d => _.pick(d, ['val' ])).value()
-    
-    `,
-            'Javascript'
-        )
-        expect(result.text).toEqual('[{"val":42}]')
-        expect(result.obj).toEqual([{ val: 42 }])
-    })
 })

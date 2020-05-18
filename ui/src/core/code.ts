@@ -1,5 +1,4 @@
 import { sqlQuery as sqlEvaluation } from '@keyrier/core'
-import lodash from 'lodash'
 import { QueryMode } from '../state/State'
 
 export const codeEvaluation = (sourceString: string, queryString: string, mode: QueryMode) => {
@@ -33,18 +32,13 @@ const evaluate = (sourceString: string, queryString: string, mode: QueryMode) =>
 
 const jsEvaluation = (sourceString: string, queryString: string): null | undefined | object | Error => {
     try {
-        window._ = lodash
         const code = `
       
         const data = eval(${sourceString})
         ${queryString}
       `
         // eslint-disable-next-line
-        const evaluation =  eval(code) // DANGEROUS
-        // if (evaluation instanceof LodashWrapper){
-
-        // }
-        return evaluation
+        return eval(code) // DANGEROUS
     } catch (error) {
         return error
     }

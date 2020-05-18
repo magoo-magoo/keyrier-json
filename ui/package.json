@@ -40,7 +40,7 @@
         "electron-updater": "4.2.5",
         "fast-deep-equal": "3.1.1",
         "localforage": "^1.7.3",
-        "lodash": "4.17.15",
+        "lodash-es": "^4.17.15",
         "match-sorter": "4.1.0",
         "perfume.js": "4.8.1",
         "react": "16.13.1",
@@ -63,7 +63,7 @@
     "devDependencies": {
         "@testing-library/react": "^10.0.4",
         "@types/classnames": "2.2.10",
-        "@types/lodash": "4.14.150",
+        "@types/lodash-es": "^4.17.3",
         "@types/match-sorter": "4.0.0",
         "@types/react": "16.9.34",
         "@types/react-dom": "16.9.7",
@@ -82,7 +82,6 @@
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
         "node-sass": "4.13.1",
         "react-scripts": "3.4.1",
-        "react-testing-library": "8.0.1",
         "redux-devtools": "3.5.0",
         "unfetch": "4.1.0"
     },
@@ -97,6 +96,9 @@
         "moduleNameMapper": {
             "ace-builds": "<rootDir>/../node_modules/ace-builds"
         },
+        "transformIgnorePatterns": [
+            "/!node_modules\\/lodash-es/"
+        ],
         "coverageThreshold": {
             "global": {
                 "branches": 40,
