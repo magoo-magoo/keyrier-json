@@ -5,6 +5,15 @@
     "source": "src/cli.ts",
     "author": "magoo <magoo@magoo.dev>",
     "readme": "./README.md",
+    "description": "Query JSON objects with SQL syntax",
+    "keywords": [
+        "json",
+        "sql",
+        "query",
+        "node",
+        "typescript",
+        "cli"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/magoo-magoo/keyrier-json"

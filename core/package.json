@@ -1,6 +1,7 @@
 {
     "name": "@keyrier/core",
     "version": "1.0.9",
+    "description": "Query JSON objects with SQL syntax",
     "repository": {
         "type": "git",
         "url": "https://github.com/magoo-magoo/keyrier-json"
@@ -9,22 +10,31 @@
     "readme": "./README.md",
     "source": "src/index.ts",
     "main": "dist/index.js",
-    "module": "dist/index.module.js",
     "types": "dist/index.d.ts",
-    "unpkg": "dist/index.umd.js",
     "scripts": {
-        "test": "jest",
-        "build-release": "yarn build && npm version patch",
-        "build": "microbundle",
-        "dev": "microbundle watch"
+        "start": "tsdx watch",
+        "build": "tsdx build",
+        "test": "tsdx test",
+        "lint": "tsdx lint",
+        "prepare": "tsdx build"
     },
     "devDependencies": {
-        "@types/lodash": "4.14.150",
-        "microbundle": "next"
+        "@types/lodash": "^4.14.151"
     },
     "dependencies": {
         "chevrotain": "7.0.1",
-        "lodash": "4.17.15"
+        "lodash": "4.17.15",
+        "lodash-es": "4.17.15"
     },
-    "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4"
+    "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",
+    "typings": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "engines": {
+        "node": ">=10"
+    },
+    "peerDependencies": {},
+    "module": "dist/mylib.esm.js"
 }

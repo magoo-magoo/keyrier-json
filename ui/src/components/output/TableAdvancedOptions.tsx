@@ -3,7 +3,7 @@ import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import Loading from 'components/common/Loading'
 import { withPerformance } from 'core/logging/performance'
 import { useToggleState } from 'hooks/hooks'
-import _ from 'lodash'
+import { pick } from 'lodash-es'
 import * as React from 'react'
 import { ChangeEvent, FC, lazy, memo, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
@@ -48,7 +48,7 @@ const TableAdvancedOptions: FC<Props> = ({
         const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx')
         const workBook = xlsx.utils.book_new()
         const workSheet = xlsx.utils.json_to_sheet(
-            data.map(x => _.pick(x, displayedColumns)),
+            data.map(x => pick(x, displayedColumns)),
             {
                 header: displayedColumns,
             }

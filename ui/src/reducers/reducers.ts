@@ -93,7 +93,7 @@ export const query = (state: QueryState, action: Action) => {
                 text:
                     action.mode === 'SQL'
                         ? initialStateJson.query.text
-                        : "// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// you can use lodash helper functions. see https://lodash.com/docs/\n// ex: _.chain(data).orderBy('age', 'desc')\n\n      data\n    ",
+                        : '// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// \n\n      data\n    ',
             } as const
         default:
             return state
