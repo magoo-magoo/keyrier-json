@@ -1,6 +1,6 @@
 {
     "name": "@keyrier/cli",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "license": "MIT",
     "source": "src/cli.ts",
     "author": "magoo <magoo@magoo.dev>",
@@ -39,7 +39,7 @@
         "update-notifier": "^4.1.0"
     },
     "dependencies": {
-        "@keyrier/core": "^1.0.9",
+        "@keyrier/core": "^1.0.10",
         "meow": "7.0.0",
         "update-notifier": "4.1.0"
     },
