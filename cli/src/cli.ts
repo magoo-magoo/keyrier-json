@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-import { sqlQuery } from '@keyrier/core'
-import fs from 'fs'
+import { query } from '@keyrier/core'
 import meow from 'meow'
 import updateNotifier from 'update-notifier'
 import { name, version } from '../package.json'
@@ -9,54 +8,23 @@ import { name, version } from '../package.json'
 // check for update
 updateNotifier({ pkg: { name, version }, distTag: 'latest' }).notify({ isGlobal: true })
 
-const logDebug = (message: string | object) => {
-    if (cli.flags.verbose) {
-        console.log(message)
-    }
-}
-
-const readStdin = () => {
-    const { stdin } = process
-    let result = ''
-
-    return new Promise<string>(resolve => {
-        if (stdin.isTTY) {
-            resolve(result)
-            return
-        }
-
-        stdin.setEncoding('utf8')
-
-        stdin.on('readable', () => {
-            let chunk: string
-
-            while ((chunk = stdin.read())) {
-                result += chunk
-            }
-        })
-
-        stdin.on('end', () => {
-            resolve(result)
-        })
-    })
-}
-
 const cli = meow(
     `
 Usage
-  $ keyrier <query> <file>
+  $ keyrier <query>
 
 Options
     --help              display help
-    --output, o         output file path (default: stdout)
+    --output, -o        output file path (default: stdout)
+    --output-type, -t   output content type: json or csv (default: json) 
     --verbose, -v       verbose
     --version           print version
 
 Examples
-  $ keyrier "select * from json" users.json
-  $ keyrier "select firstname, lastname, phoneNumber as phone from json" users.json
-  $ keyrier "select name from json where age < 30" users.json --output youngins.json
-  $ wget -qO- https://jsonplaceholder.typicode.com/users | keyrier "select name as Nom, address.city as Ville from json" 
+  $ keyrier "select * from users.json"
+  $ keyrier "select firstname, lastname, phoneNumber as phone from users.csv"
+  $ keyrier "select name from users.json where age < 30" --output youngins.json
+  $ wget -qO- https://jsonplaceholder.typicode.com/users | keyrier "select name as Nom, address.city as Ville from stdin" 
 `,
     {
         flags: {
@@ -70,68 +38,55 @@ Examples
                 alias: 'o',
                 default: 'stdout',
             },
-            input: {
+            outputType: {
                 type: 'string',
-                alias: 'f',
-                default: '',
+                alias: 't',
+                default: 'json',
             },
         },
     }
 )
 
-if (cli.input.length <= 0 || cli.input.length > 2) {
-    cli.showHelp(1)
+const logDebug = (message: string | object) => {
+    if (cli.flags.verbose) {
+        console.log(message)
+    }
 }
 
-const [queryArg, filePathArg] = cli.input
-const { output } = cli.flags
+const outputTypeIsValid = (type: string): type is 'json' | 'csv' => {
+    if (type === 'json') {
+        return true
+    }
+    if (type === 'csv') {
+        return true
+    }
+    return false
+}
+;(async function run() {
+    if (cli.input.length !== 1) {
+        cli.showHelp(1)
+    }
 
-const exec = async (query: string, filepath: string, outputFile: string) => {
-    logDebug({ query })
-    logDebug({ filepath })
-    logDebug('starts execution')
+    const [queryArg] = cli.input
+    const { output, outputType } = cli.flags
 
-    let fileContent = ''
-    if (filepath === 'stdin') {
-        fileContent = await readStdin()
-        if (fileContent === '') {
-            console.log(`
-            provide a file or use stdin
-            keyrier --help
-            `)
-            process.exit(3)
+    if (!queryArg || !outputTypeIsValid(outputType)) {
+        process.exit(2)
+    }
+
+    try {
+        logDebug('starts execution')
+        const { error } = await query(queryArg, {
+            outputFile: output,
+            outputType: outputType,
+        })
+        if (error) {
+            console.error(error)
+            process.exit(5)
         }
-    } else {
-        // assert file exists
-        fs.accessSync(filepath, fs.constants.F_OK)
-
-        // get file content
-        fileContent = fs.readFileSync(filepath, 'utf-8')
+        logDebug('execution finished')
+    } catch (e) {
+        console.error(e)
+        process.exit(6)
     }
-    logDebug({ fileContent })
-
-    // perfoms SQL query
-    const result = sqlQuery(fileContent, query)
-
-    if (result instanceof Error) {
-        console.error(result)
-        process.exit(5)
-    }
-    if (typeof result !== 'object') {
-        console.log(`
-        provide a valid JSON input
-        keyrier --help
-        `)
-        process.exit(4)
-    }
-    if (outputFile === 'stdout') {
-        console.table(result)
-    } else {
-        fs.writeFileSync(outputFile, JSON.stringify(result), { encoding: 'utf-8' })
-    }
-
-    logDebug('execution finished')
-}
-exec(queryArg, filePathArg ?? 'stdin', output)
-    .then(() => logDebug('exiting with no issue'))
-    .catch(() => logDebug('crashed!'))
+})()

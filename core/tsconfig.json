@@ -1,13 +1,9 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "lib": [
-            "ES2017",
-            "DOM",
-            "ESNext"
-        ]
+        "lib": ["ES2017", "DOM", "ESNext"],
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
     },
-    "include": [
-        "./**/*.ts"
-    ]
+    "include": ["./**/*.ts"]
 }

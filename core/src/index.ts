@@ -1,1 +1,3 @@
-export { sqlQuery } from './sql'
+import { sqlQuery } from './sql/sql'
+import query from './query'
+export { sqlQuery, query }

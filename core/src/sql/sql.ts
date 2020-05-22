@@ -1,9 +1,9 @@
 import { orderBy } from 'lodash'
-import { jsonParseSafe } from './converters/json'
-import { toAst } from './sql/actions-visitor'
-import { Field, From, Operand, SQLTree } from './sql/SqlTree'
+import { jsonParseSafe } from '../converters/json'
+import { toAst } from './actions-visitor'
+import { Field, From, Operand, SQLTree } from './SqlTree'
 
-const allowedSourceNames = ['data', 'json'] as const
+const allowedSourceNames = ['data', 'json', 'csv', 'stdin'] as const
 
 export const computePath = (path: string[] | undefined) => {
     if (!path) {
@@ -39,6 +39,7 @@ const mapper = (v: object, fields: Field[], source: From) => {
 
     return mapObject(fields, v, source)
 }
+
 const get = (obj: any, path: (string | number)[], defaultValue: any = undefined) => {
     const travel = (regexp: any) =>
         String.prototype.split
@@ -82,7 +83,7 @@ const take = (array: any[], n = 1) => {
     return slice(array, 0, n < 0 ? 0 : n)
 }
 
-const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
+export const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
     const fromPath = [...sqlTree.source.name.values]
     fromPath.shift()
 

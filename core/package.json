@@ -1,39 +1,45 @@
 {
     "name": "@keyrier/core",
     "version": "1.0.10",
-    "description": "Query JSON objects with SQL syntax",
+    "description": "Query JSON & CSV objects with SQL",
     "repository": {
         "type": "git",
         "url": "https://github.com/magoo-magoo/keyrier-json"
     },
     "license": "MIT",
-    "readme": "./README.md",
-    "source": "src/index.ts",
     "main": "dist/index.js",
+    "module": "dist/mylib.esm.js",
+    "source": "src/index.ts",
     "types": "dist/index.d.ts",
-    "scripts": {
-        "start": "tsdx watch",
-        "build": "tsdx build",
-        "test": "tsdx test",
-        "lint": "tsdx lint",
-        "prepare": "tsdx build"
-    },
-    "devDependencies": {
-        "@types/lodash": "^4.14.151"
-    },
-    "dependencies": {
-        "chevrotain": "7.0.1",
-        "lodash": "4.17.15",
-        "lodash-es": "4.17.15"
-    },
-    "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",
     "typings": "dist/index.d.ts",
     "files": [
         "dist",
         "src"
     ],
+    "scripts": {
+        "build": "tsdx build",
+        "lint": "tsdx lint",
+        "prepare": "tsdx build",
+        "start": "tsdx watch",
+        "test": "tsdx test"
+    },
+    "dependencies": {
+        "chevrotain": "7.0.1",
+        "csv-parse": "^4.9.1",
+        "json2csv": "^5.0.1",
+        "lodash": "4.17.15",
+        "lodash-es": "4.17.15"
+    },
+    "devDependencies": {
+        "@types/json2csv": "^5.0.1",
+        "@types/lodash": "^4.14.151",
+        "@types/mock-fs": "^4.10.0",
+        "mock-fs": "^4.12.0",
+        "mock-stdin": "^1.0.0"
+    },
     "engines": {
         "node": ">=10"
     },
-    "module": "dist/mylib.esm.js"
+    "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",
+    "readme": "./README.md"
 }

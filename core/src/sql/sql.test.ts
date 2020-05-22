@@ -142,8 +142,8 @@ describe('sql interpreter', () => {
         it('should return an error with bad SQL query - bad table', () => {
             const result = sqlQuery('{"a": 1}', 'select * from ddata')
             expect(result).toBeInstanceOf(Error)
-        })  
-        
+        })
+
         it('should accept json as a source name', () => {
             const result = sqlQuery('{"a": 1}', 'select * from json')
             expect(result).not.toBeInstanceOf(Error)
