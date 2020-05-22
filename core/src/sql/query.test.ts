@@ -94,7 +94,7 @@ describe('query', () => {
         const output = fs.readFileSync('fake/dir/output.csv', 'utf-8')
 
         // assert
-        expect(output).toEqual('email\nmael.magoo@test.com')
+        expect(output).toEqual('e"mail"\n"mael.magoo@test.com"')
     })
 
     it('should read stdin', async () => {

@@ -81,12 +81,12 @@ const outputTypeIsValid = (type: string): type is 'json' | 'csv' => {
             outputType: outputType,
         })
         if (error) {
-            console.error(error)
+            console.error(error.message)
             process.exit(5)
         }
         logDebug('execution finished')
     } catch (e) {
-        console.error(e)
+        console.error(e.message)
         process.exit(6)
     }
 })()
