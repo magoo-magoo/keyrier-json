@@ -1,6 +1,6 @@
 # Keyrier JSON CLI
 
-A tool to perform SQL-like query on JSON objects.
+A tool to execute SQL queries on JSON or CSV.
 
 ## Install
 
@@ -11,30 +11,35 @@ npm i -g @keyrier/cli
 ## Run
 
 ```sh
-keyrier <SQL-like query> <json file>
+keyrier <SQL-like query>
 ```
 
 ## Examples
 
 ```sh
-keyrier "select email from json" users.json
+# basic query
+keyrier "select * from users.json"
 ```
 
 ```sh
-keyrier "select firstname, lastname, phoneNumber as phone from json" users.json
+# For a CSV file
+keyrier "select firstname, lastname, phoneNumber as phone from users.csv"
 ```
 
 ```sh
-keyrier "select name from json where age < 30" users.json --output youngins.json
+# input is JSON output CSV
+keyrier "select name from users.json where age < 30"  --output youngins.csv -t csv
 ```
 
 ```sh
-wget -qO- https://jsonplaceholder.typicode.com/users | keyrier "select name as Nom, address.city as Ville from json"
+# read from STDIN
+wget -qO- https://jsonplaceholder.typicode.com/users | keyrier "select name as Nom, address.city as Ville from stdin"
 ```
 
 ## Options
 
     --help              display help
-    --output, o         output file path (default: stdout)
+    --output, -o        output file path (default: stdout)
+    --output-type, -t   output content type: json or csv (default: json)
     --verbose, -v       verbose
     --version           print version

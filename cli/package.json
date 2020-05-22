@@ -5,7 +5,7 @@
     "source": "src/cli.ts",
     "author": "magoo <magoo@magoo.dev>",
     "readme": "./README.md",
-    "description": "Query JSON objects with SQL syntax",
+    "description": "Query JSON & CSV with SQL",
     "keywords": [
         "json",
         "sql",
@@ -35,8 +35,7 @@
         "@types/yargs": "^15.0.4",
         "@zeit/ncc": "^0.22.1",
         "faker": "^4.1.0",
-        "microbundle": "next",
-        "update-notifier": "^4.1.0"
+        "microbundle": "next"
     },
     "dependencies": {
         "@keyrier/core": "^1.0.10",

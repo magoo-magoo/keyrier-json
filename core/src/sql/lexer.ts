@@ -5,7 +5,7 @@ const stringTokenRegex = new RegExp(
     `("[${stringTokenCharacterRegexString}']*")|('[${stringTokenCharacterRegexString}"]*')`
 )
 
-export const Identifier = createToken({ name: 'Identifier', pattern: /[a-zA-Z_]+[\w.]*/ })
+export const Identifier = createToken({ name: 'Identifier', pattern: /[a-zA-Z_]+[\w./]*/ })
 export const WhiteSpace = createToken({ name: 'WhiteSpace', pattern: /\s+/, group: Lexer.SKIPPED })
 export const Comment = createToken({ name: 'Comment', pattern: /--.*/, group: Lexer.SKIPPED })
 export const Select = createToken({ name: 'Select', pattern: /SELECT/i, longer_alt: Identifier })
