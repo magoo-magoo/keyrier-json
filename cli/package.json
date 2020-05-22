@@ -1,6 +1,6 @@
 {
     "name": "@keyrier/cli",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "description": "Query JSON & CSV with SQL",
     "keywords": [
         "json",
@@ -29,7 +29,7 @@
         "test": "jest"
     },
     "dependencies": {
-        "@keyrier/core": "^1.1.2",
+        "@keyrier/core": "^1.1.3",
         "meow": "7.0.0",
         "update-notifier": "4.1.0"
     },
