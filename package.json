@@ -29,7 +29,7 @@
     },
     "devDependencies": {
         "@now/node": "1.5.1",
-        "@stryker-mutator/core": "^3.1.0",
+        "@stryker-mutator/core": "3.2.4",
         "@stryker-mutator/jest-runner": "3.1.0",
         "@stryker-mutator/typescript": "3.1.0",
         "@types/jest": "25.2.1",
@@ -38,14 +38,14 @@
         "concurrently": "5.1.0",
         "eslint-config-prettier": "6.10.1",
         "husky": "4.2.5",
-        "jest": "^24.9.0",
+        "jest": "24.9.0",
         "lerna": "3.21.0",
         "prettier": "2.0.4",
-        "pretty-quick": "^2.0.1",
+        "pretty-quick": "2.0.1",
         "source-map-explorer": "2.4.2",
-        "ts-jest": "^24.1.0",
-        "tsdx": "^0.13.2",
-        "tslib": "^2.0.0",
+        "ts-jest": "24.3.0",
+        "tsdx": "0.13.2",
+        "tslib": "2.0.0",
         "typescript": "3.9.2",
         "wait-on": "4.0.2"
     }
