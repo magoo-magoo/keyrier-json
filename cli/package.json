@@ -37,7 +37,7 @@
         "@types/faker": "4.1.12",
         "@types/update-notifier": "4.1.0",
         "@types/yargs": "15.0.5",
-        "@zeit/ncc": "0.22.2",
+        "@zeit/ncc": "0.22.3",
         "faker": "4.1.0",
         "microbundle": "next"
     },
