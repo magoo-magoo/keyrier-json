@@ -1,19 +1,19 @@
 {
     "name": "keyrier-json",
     "version": "1.0.0",
-    "repository": "git@github.com:magoo-magoo/keyrier-json.git",
-    "author": "magoo <contact@magoo.dev>",
     "private": true,
-    "license": "MIT",
     "description": "Query JSON objects with SQL syntax",
+    "repository": "git@github.com:magoo-magoo/keyrier-json.git",
+    "license": "MIT",
+    "author": "magoo <contact@magoo.dev>",
     "workspaces": [
         "cli",
         "core",
         "ui"
     ],
     "scripts": {
-        "publish": "lerna publish",
         "build": "lerna run build",
+        "publish": "lerna publish",
         "test": "lerna run test -- --watchAll=false"
     },
     "husky": {
