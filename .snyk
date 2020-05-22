@@ -1,0 +1,21 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - react-ace > ace-builds > ace > debug:
+        patched: '2020-05-22T22:28:00.422Z'
+  SNYK-JS-LODASH-567746:
+    - lodash:
+        patched: '2020-05-22T22:28:00.422Z'
+    - react-select > @emotion/css > babel-plugin-emotion > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2020-05-22T22:28:00.422Z'
+    - react-select > @emotion/core > @emotion/css > babel-plugin-emotion > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2020-05-22T22:28:00.422Z'
+  'npm:ms:20170412':
+    - react-ace > ace-builds > ace > debug > ms:
+        patched: '2020-05-22T22:28:00.422Z'
+  'npm:node-uuid:20160328':
+    - react-ace > ace-builds > ace > node-uuid:
+        patched: '2020-05-22T22:28:00.422Z'
