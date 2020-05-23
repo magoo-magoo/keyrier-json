@@ -86,7 +86,7 @@
         "react-redux": "7.2.0",
         "react-select": "3.1.0",
         "react-table": "7.0.4",
-        "react-toastify": "5.5.0",
+        "react-toastify": "6.0.5",
         "react-use": "14.1.1",
         "reactstrap": "8.4.1",
         "redux": "4.0.5",
