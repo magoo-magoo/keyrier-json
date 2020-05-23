@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@keyrier/core": "^1.1.3",
-        "meow": "7.0.0",
+        "meow": "7.0.1",
         "update-notifier": "4.1.0"
     },
     "devDependencies": {
