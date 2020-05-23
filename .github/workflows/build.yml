@@ -46,6 +46,9 @@ jobs:
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
+            - name: ls cov
+              run: ls -l **/coverage/lcov.info
+
             - name: SonarCloud Scan
               uses: sonarsource/sonarcloud-github-action@master
               with:
@@ -53,7 +56,6 @@ jobs:
                   fetch-depth: 0
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-              run: ls ui/coverage core/coverage cli/coverage
 
             - name: deploy on gh-pages
               if: github.ref == 'refs/heads/master'
