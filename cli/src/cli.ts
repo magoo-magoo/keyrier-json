@@ -6,7 +6,9 @@ import updateNotifier from 'update-notifier'
 import { name, version } from '../package.json'
 
 // check for update
-updateNotifier({ pkg: { name, version }, distTag: 'latest' }).notify({ isGlobal: true })
+updateNotifier({ pkg: { name, version }, distTag: 'latest', updateCheckInterval: 1000 * 60 * 60 }).notify({
+    isGlobal: true,
+})
 
 const cli = meow(
     `
