@@ -66,12 +66,7 @@
         ],
         "coverageReporters": [
             "json",
-            [
-                "lcov",
-                {
-                    "projectRoot": "../"
-                }
-            ]
+            "lcov"
         ]
     },
     "dependencies": {
