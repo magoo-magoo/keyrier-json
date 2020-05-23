@@ -47,7 +47,7 @@ jobs:
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
             - name: ls cov
-              run: ls -l **/coverage/lcov.info
+              run: ls -l ui/coverage/lcov.info core/coverage/lcov.info cli/coverage/lcov.info
 
             - name: SonarCloud Scan
               uses: sonarsource/sonarcloud-github-action@master
