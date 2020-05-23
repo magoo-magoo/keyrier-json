@@ -53,6 +53,7 @@ jobs:
                   fetch-depth: 0
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              run: ls ui/coverage core/coverage cli/coverage
 
             - name: deploy on gh-pages
               if: github.ref == 'refs/heads/master'
