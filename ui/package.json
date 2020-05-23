@@ -76,7 +76,7 @@
         "localforage": "1.7.3",
         "lodash-es": "4.17.15",
         "match-sorter": "4.1.0",
-        "perfume.js": "4.8.1",
+        "perfume.js": "5.0.2",
         "react": "16.13.1",
         "react-ace": "8.1.0",
         "react-debounce-input": "3.2.2",
