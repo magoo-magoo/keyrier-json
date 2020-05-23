@@ -78,7 +78,7 @@
         "match-sorter": "4.1.0",
         "perfume.js": "4.8.1",
         "react": "16.13.1",
-        "react-ace": "8.1.0",
+        "react-ace": "9.0.0",
         "react-debounce-input": "3.2.2",
         "react-dom": "16.13.1",
         "react-grid-layout": "0.18.3",
