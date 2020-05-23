@@ -12,6 +12,7 @@ updateNotifier({ pkg: { name, version }, distTag: 'latest', updateCheckInterval:
 
 const cli = meow(
     `
+    
 Usage
   $ keyrier <query>
 
