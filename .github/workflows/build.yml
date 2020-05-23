@@ -46,7 +46,7 @@ jobs:
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
             - name: deploy on gh-pages
-              if: github.ref == ref/head/master'
+              if: github.ref == 'ref/head/master'
               uses: peaceiris/actions-gh-pages@v3
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
