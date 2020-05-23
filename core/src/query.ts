@@ -50,15 +50,15 @@ const isCSVfile = (name: string | number) => {
 type QueryResult = {
     error?: Error
 }
-const query = async (query: string, opts: QueryOptions = {}): Promise<QueryResult> => {
-    if (!query) {
+const query = async (q: string, opts: QueryOptions = {}): Promise<QueryResult> => {
+    if (!q) {
         return { error: new Error() }
     }
 
     const options = Object.assign<QueryOptions, QueryOptions>({ outputType: 'json', outputFile: 'stdout' }, opts)
 
     try {
-        const ast = toAst(query)
+        const ast = toAst(q)
 
         const fileType = getType(ast.source.name.value)
 

@@ -137,13 +137,12 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         i: number = 0
     ) {
         if (ctx.subExpression?.length - i === 1) {
-            const left = this.visit(ctx.subExpression[i])
-            return left
+            return this.visit(ctx.subExpression[i])
         }
         const left = this.visit(ctx.subExpression[i])
 
         const operation = ctx.OrAnd[i].image
-        const right: Operand = this.expression(ctx, ++i)
+        const right: Operand = this.expression(ctx, i + 1)
 
         return {
             left,
@@ -179,7 +178,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
                         }
                         return convertStringTokenToJsString(x.image)
                     })
-                    .map(value => ({ value }))
+                    .map(v => ({ value: v }))
             }
             if (key === 'Integer') {
                 return parseInt(value[0].image)
