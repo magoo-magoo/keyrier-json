@@ -43,8 +43,6 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-const ConnectedSourceEditor = connect(mapStateToProps, { onChange: updateSource })(
+export default connect(mapStateToProps, { onChange: updateSource })(
     withErrorBoundary(memo(withPerformance(SourceEditor, 'SourceEditor')))
 )
-
-export default ConnectedSourceEditor

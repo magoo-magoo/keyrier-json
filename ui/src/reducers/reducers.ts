@@ -273,7 +273,7 @@ export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
     }
     if (!result) {
         if (!Array.isArray(obj)) {
-            ;(keys as string[]).forEach((propertyName: string) => delete obj[propertyName])
+            keys.forEach((propertyName: string | number) => delete obj[propertyName])
         } else {
             obj.length = 0
         }
