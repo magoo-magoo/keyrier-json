@@ -63,10 +63,6 @@
         },
         "transformIgnorePatterns": [
             "/!node_modules\\/lodash-es/"
-        ],
-        "coverageReporters": [
-            "json",
-            "lcov"
         ]
     },
     "dependencies": {
