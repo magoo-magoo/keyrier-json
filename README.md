@@ -2,7 +2,7 @@
 
 # Keyrier JSON
 
-## A CLI, a library and a web application to perfom query on JSON objects.
+## A CLI, a library and a web application to perfom SQL queries on JSON & CSV.
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 ![GitHub release](https://img.shields.io/github/release/magoo-magoo/keyrier-json.svg)
