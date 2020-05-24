@@ -63,7 +63,8 @@
         },
         "transformIgnorePatterns": [
             "/!node_modules\\/lodash-es/"
-        ]
+        ],
+"coverageReporters": [["lcov", { "projectRoot": ".." }]],
     },
     "dependencies": {
         "@keyrier/core": "^1.1.3",
