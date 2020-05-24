@@ -198,7 +198,7 @@ const compareOperands = (operation: string, left: Operand, right: Operand, value
 }
 
 const mapObject = (fields: Field[], mapped: object, source: From) => {
-    const temp: {
+    const mappedObject: {
         [key: string]: any
     } = {}
     fields.forEach(field => {
@@ -206,7 +206,27 @@ const mapObject = (fields: Field[], mapped: object, source: From) => {
             mapped,
             field.field.values.filter(val => val !== source.alias?.value)
         )
-        temp[field.name.value] = value
+        mappedObject[field.name.value] = field.function ? applyFunc(field.function.name, value) : value
     })
-    return temp
+    return mappedObject
+}
+
+const applyFunc = (funcName: string, value: any) => {
+    const func = funcName.toLowerCase()
+    if (func === 'lower') {
+        return String(value).toLowerCase()
+    }
+    if (func === 'upper') {
+        return String(value).toUpperCase()
+    }
+    if (func === 'trim') {
+        return String(value).trim()
+    }
+    if (func === 'reverse') {
+        return String(value).split('').reverse().join('')
+    }
+    if (func === 'length' || func === 'len') {
+        return String(value).length
+    }
+    return value
 }

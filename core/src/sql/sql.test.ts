@@ -331,6 +331,39 @@ describe('sql interpreter', () => {
             expect(result).toEqual([{ age: 21, name: 'Danny de Vito' }])
         })
 
+        it('should apply function lower', () => {
+            const result = sqlQuery('[{"name": "John Doe"}, {"name": "Danny de Vito"}]', 'select lower(name) from json')
+            expect(result).toEqual([{ 'lower(name)': 'john doe' }, { 'lower(name)': 'danny de vito' }])
+        })
+        it('should apply function upper', () => {
+            const result = sqlQuery('[{"name": "John Doe"}]', 'select upper(name) from json')
+            expect(result).toEqual([{ 'upper(name)': 'JOHN DOE' }])
+        })
+        it('should apply function length', () => {
+            const result = sqlQuery('[{"name": "toto"}]', 'select length(name) from json')
+            expect(result).toEqual([{ 'length(name)': 4 }])
+        })
+
+        it('should apply function len', () => {
+            const result = sqlQuery('[{"foo": "Paris"}]', 'select len(foo) from json')
+            expect(result).toEqual([{ 'len(foo)': 5 }])
+        })
+
+        it('should apply function len and display alias', () => {
+            const result = sqlQuery('[{"foo": "Paris"}]', 'select len(foo) as longueur from json')
+            expect(result).toEqual([{ longueur: 5 }])
+        })
+
+        it('should apply function reverse', () => {
+            const result = sqlQuery('[{"foo": "Paris"}]', 'select reverse(foo) from json')
+            expect(result).toEqual([{ 'reverse(foo)': 'siraP' }])
+        })
+
+        it('should apply function trim', () => {
+            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trim(foo) from json')
+            expect(result).toEqual([{ 'trim(foo)': 'Paris' }])
+        })
+
         it('should return result with where clause- not like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',

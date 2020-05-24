@@ -38,7 +38,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return columns
     }
 
-    public cols(ctx: { name: IToken[]; value: IToken[] }) {
+    public cols(ctx: { name: IToken[]; value: IToken[]; function: IToken[] }) {
         let value = ctx.value[0].image
 
         if (ctx.value[0].tokenType === tokenVocabulary.StringToken) {
@@ -47,19 +47,27 @@ class SQLToAstVisitor extends BaseSQLVisitor {
 
         let name = ctx.name && ctx.name[0] ? ctx.name[0].image : value
 
+        const func = ctx.function && ctx.function[0] && ctx.function[0].image
+        if (func) {
+            name = ctx.name && ctx.name[0] ? ctx.name[0].image : `${func}(${value})`
+        }
         if (ctx.name && ctx.name[0].tokenType === tokenVocabulary.StringToken) {
             name = convertStringTokenToJsString(name)
         }
+
         return {
             name,
             value,
+            function: func,
         }
     }
 
     public projection(ctx: { cols: CstNode[] }) {
-        const cols: { value: string; name: string }[] = ctx.cols.map(x => this.visit(x)) as any
+        const cols: { value: string; name: string; function: string | undefined }[] = ctx.cols.map(x =>
+            this.visit(x)
+        ) as any
         const fields: Field[] = []
-        cols.forEach(({ name, value }) => {
+        cols.forEach(({ name, value, function: func }) => {
             const { pathArray: namePathArray, propertyName: namePropertyName } = splitPropertyPath(name)
             const { pathArray: fieldPathArray, propertyName: fieldPropertyName } = splitPropertyPath(value)
             const field: Field = {
@@ -71,6 +79,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
                     value: fieldPropertyName,
                     values: fieldPathArray,
                 },
+                function: func ? { name: func } : undefined,
             }
             fields.push(field)
         })

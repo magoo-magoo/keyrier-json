@@ -33,6 +33,7 @@ import {
 
 export const labels = {
     value: 'value',
+    function: 'function',
     table: 'table',
     name: 'name',
     alias: 'alias',
@@ -60,6 +61,25 @@ class SelectParser extends CstParser {
         this.cols = this.RULE('cols', () => {
             this.OR([
                 { ALT: () => this.CONSUME(Star, { LABEL: labels.value }) },
+                {
+                    ALT: () => {
+                        this.CONSUME2(Identifier, { LABEL: labels.function })
+                        this.CONSUME(OpenParenthesis)
+                        this.CONSUME3(Identifier, { LABEL: labels.value })
+                        this.CONSUME(CloseParenthesis)
+                        this.OPTION1(() => {
+                            this.CONSUME1(As)
+                            this.OR3([
+                                {
+                                    ALT: () => this.CONSUME2(StringToken, { LABEL: labels.name }),
+                                },
+                                {
+                                    ALT: () => this.CONSUME4(Identifier, { LABEL: labels.name }),
+                                },
+                            ])
+                        })
+                    },
+                },
                 {
                     ALT: () => {
                         this.OR1([

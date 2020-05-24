@@ -8,9 +8,14 @@ export interface Value {
     values: (string | number)[]
 }
 
+export interface Func {
+    name: string
+}
+
 export interface Field {
     field: Value
     name: Value
+    function?: Func
 }
 
 export interface Operand {
