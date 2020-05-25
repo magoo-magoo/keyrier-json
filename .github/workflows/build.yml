@@ -11,6 +11,7 @@ on:
 
 jobs:
     build:
+        if: "!contains(github.event.head_commit.message, 'ci skip')"
         name: Build and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
 
@@ -46,8 +47,12 @@ jobs:
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
-            - name: ls cov
-              run: ls -l ui/coverage/lcov.info core/coverage/lcov.info cli/coverage/lcov.info
+            - name: create version and publish
+              if: github.ref == 'refs/heads/master'
+              run: yarn lerna publish patch --yes --create-release github --message "publish %s - ci skip" --registry registry.npmjs.org/:_authToken=$NPM_TOKEN
+              env:
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: SonarCloud Scan
               uses: sonarsource/sonarcloud-github-action@master
