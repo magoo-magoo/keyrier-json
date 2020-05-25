@@ -41,15 +41,16 @@ jobs:
             - name: lerna info
               run: yarn lerna info
 
-            - name: build
-              run: yarn lerna run build
-
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
+            - name: build
+              if: github.ref != 'refs/heads/master'
+              run: yarn lerna run build
+
             - name: create version and publish
               if: github.ref == 'refs/heads/master'
-              run: yarn lerna publish patch --yes --create-release github --message "publish %s - ci skip" --registry registry.npmjs.org/:_authToken=$NPM_TOKEN
+              run: yarn lerna publish patch --yes --message "publish %s - ci skip" --create-release github --conventional-commits --registry registry.npmjs.org/:_authToken=$NPM_TOKEN
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

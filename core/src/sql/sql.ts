@@ -206,13 +206,13 @@ const mapObject = (fields: Field[], mapped: object, source: From) => {
             mapped,
             field.field.values.filter(val => val !== source.alias?.value)
         )
-        mappedObject[field.name.value] = field.function ? applyFunc(field.function.name, value) : value
+        mappedObject[field.name.value] = field.function ? applyFunction(field.function.name, value) : value
     })
     return mappedObject
 }
 
-const applyFunc = (funcName: string, value: any) => {
-    const func = funcName.toLowerCase()
+const applyFunction = (functionName: string, value: any) => {
+    const func = functionName.toLowerCase()
     if (func === 'lower') {
         return String(value).toLowerCase()
     }
