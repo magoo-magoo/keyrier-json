@@ -1,8 +1,9 @@
-import Perfume, { IAnalyticsTrackerOptions } from 'perfume.js'
 import { isDebugMode } from 'core/misc/debug'
+import Perfume from 'perfume.js'
+import { IAnalyticsTrackerOptions } from 'perfume.js/dist/types/types'
 import * as React from 'react'
 import { ProfilerOnRenderCallback } from 'react'
-import { logPerf, logEvents, logError } from './logger'
+import { logError, logEvents, logPerf } from './logger'
 
 const analyticsTracker = (opt: IAnalyticsTrackerOptions) => {
     logPerf(opt.metricName, opt.duration, opt.data)
