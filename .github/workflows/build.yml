@@ -49,7 +49,11 @@ jobs:
 
             - name: create version and publish
               if: github.ref == 'refs/heads/master'
-              run: yarn lerna publish patch --yes --message "publish %s - ci skip" --create-release github --conventional-commits --registry registry.npmjs.org/:_authToken=$NPM_TOKEN
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  yarn lerna publish patch --yes --message "publish %s - ci skip" --create-release github --conventional-commits --registry registry.npmjs.org/:_authToken=$NPM_TOKEN
+
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
