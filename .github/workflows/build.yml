@@ -41,12 +41,11 @@ jobs:
             - name: lerna info
               run: yarn lerna info
 
+            - name: build
+              run: yarn lerna run build
+
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
-
-            - name: build
-              if: github.ref != 'refs/heads/master'
-              run: yarn lerna run build
 
             - name: create version and publish
               if: github.ref == 'refs/heads/master'
