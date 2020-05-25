@@ -222,6 +222,12 @@ const applyFunc = (funcName: string, value: any) => {
     if (func === 'trim') {
         return String(value).trim()
     }
+    if (func === 'trimleft') {
+        return String(value).trimLeft()
+    }
+    if (func === 'trimright') {
+        return String(value).trimRight()
+    }
     if (func === 'reverse') {
         return String(value).split('').reverse().join('')
     }

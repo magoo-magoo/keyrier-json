@@ -364,6 +364,16 @@ describe('sql interpreter', () => {
             expect(result).toEqual([{ 'trim(foo)': 'Paris' }])
         })
 
+        it('should apply function trimleft', () => {
+            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trimlefT(foo) from json')
+            expect(result).toEqual([{ 'trimlefT(foo)': 'Paris   ' }])
+        })
+
+        it('should apply function trimright', () => {
+            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trimRight(foo) from json')
+            expect(result).toEqual([{ 'trimRight(foo)': '   Paris' }])
+        })
+
         it('should return result with where clause- not like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
