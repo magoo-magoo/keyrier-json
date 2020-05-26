@@ -28,4 +28,4 @@ A desktop version is available. Last version [here](https://github.com/magoo-mag
 
 Go to [documentation](ui/README.md)
 
-![](assets/demo.gif)
+![](assets/demo.png)
