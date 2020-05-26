@@ -52,7 +52,8 @@ jobs:
               run: |
                   git config --local user.email "action@github.com"
                   git config --local user.name "GitHub Action"
-                  yarn lerna publish patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits --registry https://registry.npmjs.org/:_authToken=$NPM_TOKEN
+                  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+                  yarn lerna publish patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
