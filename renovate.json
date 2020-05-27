@@ -1,25 +1,25 @@
 {
-  "extends": ["config:base"],
-  "packageRules": [
-    {
-      "packagePatterns": ["^@types/"],
-      "groupName": "typings packages"
-    },
-    {
-      "excludePackagePatterns": ["^@types/"],
-      "depTypeList": ["devDependencies"],
-      "updateTypes": ["patch", "minor"],
-      "groupName": "devDependencies (non-major)"
-    },
-    {
-      "excludePackagePatterns": ["^@types/"],
-      "depTypeList": ["devDependencies"],
-      "updateTypes": ["major"],
-      "groupName": "devDependencies (major)"
-    },
-    {
-      "packagePatterns": ["^electron"],
-      "groupName": "typings packages"
-    }
-  ]
+    "extends": ["config:base"],
+    "packageRules": [
+        {
+            "packagePatterns": ["^electron"],
+            "groupName": "typings packages"
+        },
+        {
+            "packagePatterns": ["^@types/"],
+            "groupName": "typings packages"
+        },
+        {
+            "excludePackagePatterns": ["^@types/"],
+            "depTypeList": ["devDependencies"],
+            "updateTypes": ["patch", "minor"],
+            "groupName": "devDependencies (non-major)"
+        },
+        {
+            "excludePackagePatterns": ["^@types/"],
+            "depTypeList": ["devDependencies"],
+            "updateTypes": ["major"],
+            "groupName": "devDependencies"
+        }
+    ]
 }
