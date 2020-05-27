@@ -36,3 +36,5 @@ source-map-explorer.html
 # stryker
 .stryker-tmp
 reports
+
+.npmrc
