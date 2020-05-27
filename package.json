@@ -1,6 +1,5 @@
 {
     "name": "keyrier-json",
-    "version": "1.0.0",
     "private": true,
     "description": "Query JSON objects with SQL syntax",
     "repository": "git@github.com:magoo-magoo/keyrier-json.git",
