@@ -26,11 +26,13 @@
     "dependencies": {
         "chevrotain": "7.0.1",
         "csv-parse": "^4.9.1",
+        "easy-table": "^1.1.1",
         "json2csv": "^5.0.1",
         "lodash": "4.17.15",
         "lodash-es": "4.17.15"
     },
     "devDependencies": {
+        "@types/easy-table": "^0.0.32",
         "@types/json2csv": "5.0.1",
         "@types/lodash": "4.14.152",
         "@types/mock-fs": "4.10.0",

@@ -2693,6 +2693,11 @@
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
   integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
 
+"@types/easy-table@^0.0.32":
+  version "0.0.32"
+  resolved "https://registry.yarnpkg.com/@types/easy-table/-/easy-table-0.0.32.tgz#961034bf7bba3d5a4344585b960d7a0d11a249b5"
+  integrity sha512-zKh0f/ixYFnr3Ldf5ZJTi1ZpnRqAynTTtVyGvWDf/TT12asE8ac98t3/WGWfFdRPp/qsccxg82C/Kl3NPNhqEw==
+
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
@@ -6397,6 +6402,15 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
+
+easy-table@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/easy-table/-/easy-table-1.1.1.tgz#c1b9b9ad68a017091a1c235e4bcba277540e143f"
+  integrity sha512-C9Lvm0WFcn2RgxbMnTbXZenMIWcBtkzMr+dWqq/JsVoGFSVUVlPqeOa5LP5kM0I3zoOazFpckOEb2/0LDFfToQ==
+  dependencies:
+    ansi-regex "^3.0.0"
+  optionalDependencies:
+    wcwidth ">=1.0.1"
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
@@ -16845,7 +16859,7 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-wcwidth@^1.0.0, wcwidth@^1.0.1:
+wcwidth@>=1.0.1, wcwidth@^1.0.0, wcwidth@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/wcwidth/-/wcwidth-1.0.1.tgz#f0b0dcf915bc5ff1528afadb2c0e17b532da2fe8"
   integrity sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=

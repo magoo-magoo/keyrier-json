@@ -40,8 +40,8 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
                     isResizable={true}
                     layouts={layouts}
                     draggableHandle={`.${grabbleStyles.grabber}`}
-                    breakpoints={{ lg: 0 }}
-                    cols={{ lg: 24 }}
+                    breakpoints={{ xs: 0, lg: 1024 }}
+                    cols={{ lg: 24, xs: 10 }}
                     margin={[5, 5]}
                     containerPadding={[5, 5]}
                     rowHeight={25}

@@ -1,3 +1,4 @@
+import query, { defaultConfig } from './query'
 import { sqlQuery } from './sql/sql'
-import query from './query'
-export { sqlQuery, query }
+
+export { sqlQuery, query, defaultConfig }

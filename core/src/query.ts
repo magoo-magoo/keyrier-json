@@ -1,4 +1,5 @@
 import parse from 'csv-parse/lib/sync'
+import EasyTable from 'easy-table'
 import * as fs from 'fs'
 import { Parser } from 'json2csv'
 import { jsonParseSafe } from './converters/json'
@@ -9,7 +10,7 @@ import { readStdin } from './stdin'
 const InputTypes = ['file/csv', 'file/json', 'stdin/json', 'unknown_file_type'] as const
 type InputType = typeof InputTypes[number]
 type QueryOptions = {
-    outputType?: 'csv' | 'json'
+    outputType?: 'csv' | 'json' | 'table'
     outputFile?: string
 }
 
@@ -50,12 +51,14 @@ const isCSVfile = (name: string | number) => {
 type QueryResult = {
     error?: Error
 }
+export const defaultConfig = { outputType: 'table', outputFile: 'stdout' } as const
+
 const query = async (q: string, opts: QueryOptions = {}): Promise<QueryResult> => {
     if (!q) {
         return { error: new Error() }
     }
 
-    const options = Object.assign<QueryOptions, QueryOptions>({ outputType: 'json', outputFile: 'stdout' }, opts)
+    const options = Object.assign<QueryOptions, QueryOptions>(defaultConfig, opts)
 
     try {
         const ast = toAst(q)
@@ -101,13 +104,24 @@ const query = async (q: string, opts: QueryOptions = {}): Promise<QueryResult> =
             return { error: new Error(`${ast.source.name.value} is not a valid file`) }
         }
 
+        if (options.outputType === 'table') {
+            const tableString = EasyTable.print(executionResult)
+            if (options.outputFile === 'stdout') {
+                console.log(tableString)
+                return {}
+            }
+            fs.writeFileSync(options.outputFile, tableString, 'utf8')
+            return {}
+        }
         if (options.outputType === 'json') {
             if (options.outputFile === 'stdout') {
-                console.table(executionResult)
+                console.log(JSON.stringify(executionResult, null, 2))
+                return {}
             }
             fs.writeFileSync(options.outputFile, JSON.stringify(executionResult), 'utf8')
             return {}
-        } else if (options.outputType === 'csv') {
+        }
+        if (options.outputType === 'csv') {
             const csv = toCsv(executionResult)
             if (options.outputFile === 'stdout') {
                 console.log(csv)

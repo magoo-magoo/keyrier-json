@@ -23,7 +23,7 @@
     "scripts": {
         "build": "microbundle --target=node",
         "build-release": "yarn build && npm version patch && npm publish --access=public",
-        "dev": "microbundle --target=node watch",
+        "start": "microbundle --target=node watch",
         "make-big-file": "ncc run src/bigfile.ts",
         "ncc-run-cli": "ncc run src/cli.ts",
         "test": "jest"

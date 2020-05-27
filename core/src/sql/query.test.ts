@@ -23,13 +23,13 @@ describe('query', () => {
         mockFs({
             'fake/dir/users.json': '[{"email": "mael.magoo@test.com"}]',
         })
-        jest.spyOn(console, 'table')
+        jest.spyOn(console, 'log')
 
         // act
         await query('select * from fake/dir/users.json')
 
         // assert
-        expect(console.table).toBeCalledWith([{ email: 'mael.magoo@test.com' }])
+        expect(console.log).toBeCalledWith(JSON.stringify([{ email: 'mael.magoo@test.com' }], null, 2))
     })
 
     it('should exec query on selected csv file', async () => {
@@ -39,14 +39,14 @@ describe('query', () => {
 "value 1","value 2"`,
         })
         let printed: any
-        jest.spyOn(console, 'table').mockImplementation(v => (printed = v))
+        jest.spyOn(console, 'log').mockImplementation(v => (printed = v))
 
         // act
         const { error } = await query('select * from fake/dir/fake.csv')
 
         // assert
         expect(error).not.toBeDefined()
-        expect(printed).toEqual([{ key_1: 'value 1', key_2: 'value 2' }])
+        expect(JSON.parse(printed)).toEqual([{ key_1: 'value 1', key_2: 'value 2' }])
     })
     it('should return null if json file emty', async () => {
         // arrange

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { query } from '@keyrier/core'
+import { defaultConfig, query } from '@keyrier/core'
 import meow from 'meow'
 import updateNotifier from 'update-notifier'
 import { name, version } from '../package.json'
 
 // check for update
-updateNotifier({ pkg: { name, version }, distTag: 'latest', updateCheckInterval: 1000 * 60 }).notify({
+updateNotifier({ pkg: { name, version }, distTag: 'latest' }).notify({
     isGlobal: true,
 })
 
@@ -18,8 +18,8 @@ Usage
 
 Options
     --help              display help
-    --output, -o        output file path (default: stdout)
-    --output-type, -t   output content type: json or csv (default: json) 
+    --output, -o        output file path (default: ${defaultConfig.outputFile})
+    --output-type, -t   output content type: table, json or csv (default: ${defaultConfig.outputType}) 
     --verbose, -v       verbose
     --version           print version
 
@@ -39,12 +39,12 @@ Examples
             output: {
                 type: 'string',
                 alias: 'o',
-                default: 'stdout',
+                default: defaultConfig.outputFile,
             },
             outputType: {
                 type: 'string',
                 alias: 't',
-                default: 'json',
+                default: defaultConfig.outputType,
             },
         },
     }
@@ -56,11 +56,14 @@ const logDebug = (message: string | object) => {
     }
 }
 
-const outputTypeIsValid = (type: string): type is 'json' | 'csv' => {
+const outputTypeIsValid = (type: string): type is 'table' | 'json' | 'csv' => {
     if (type === 'json') {
         return true
     }
     if (type === 'csv') {
+        return true
+    }
+    if (type === 'table') {
         return true
     }
     return false
