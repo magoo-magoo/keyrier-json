@@ -34,19 +34,19 @@
         "@stryker-mutator/typescript": "3.2.4",
         "@types/jest": "25.2.3",
         "@types/node": "12.12.42",
-        "@typescript-eslint/eslint-plugin": "2.34.0",
+        "@typescript-eslint/eslint-plugin": "3.0.2",
         "concurrently": "5.2.0",
         "eslint-config-prettier": "6.11.0",
         "husky": "4.2.5",
-        "jest": "24.9.0",
+        "jest": "26.0.1",
         "lerna": "3.22.0",
         "prettier": "2.0.5",
         "pretty-quick": "2.0.1",
         "source-map-explorer": "2.4.2",
-        "ts-jest": "24.3.0",
+        "ts-jest": "26.0.0",
         "tsdx": "0.13.2",
         "tslib": "2.0.0",
         "typescript": "3.9.3",
-        "wait-on": "4.0.2"
+        "wait-on": "5.0.0"
     }
 }
