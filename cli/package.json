@@ -31,14 +31,12 @@
     "dependencies": {
         "@keyrier/core": "^1.1.11",
         "meow": "7.0.1",
-        "update-notifier": "4.1.0"
+        "update-notifier": "4.1.0",
+        "xlsx": "^0.16.1"
     },
     "devDependencies": {
-        "@types/faker": "4.1.12",
         "@types/update-notifier": "4.1.0",
-        "@types/yargs": "15.0.5",
-        "@zeit/ncc": "0.22.3",
-        "faker": "4.1.0",
+        "execa": "^4.0.2",
         "microbundle": "next"
     },
     "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",

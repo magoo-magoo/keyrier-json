@@ -41,7 +41,7 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
                     layouts={layouts}
                     draggableHandle={`.${grabbleStyles.grabber}`}
                     breakpoints={{ xs: 0, lg: 1024 }}
-                    cols={{ lg: 24, xs: 10 }}
+                    cols={{ lg: 24, xs: 6 }}
                     margin={[5, 5]}
                     containerPadding={[5, 5]}
                     rowHeight={25}

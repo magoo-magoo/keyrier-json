@@ -60,15 +60,15 @@ export const getDefaultUserSettingsState = () =>
         debugMode: false,
         layouts: {
             xs: [
-                { i: configuration.layout.keys.lateralMenuKey, x: 0, y: 0, w: 5, h: 12, minW: 5, minH: 12 },
-                { i: configuration.layout.keys.sourceEditorKey, x: 0, y: 12, w: 5, h: 6, minW: 5, minH: 6 },
-                { i: configuration.layout.keys.queryEditorKey, x: 0, y: 18, w: 5, h: 6, minW: 5, minH: 6 },
-                { i: configuration.layout.keys.outputKey, x: 0, y: 24, w: 5, h: 12, minW: 5, minH: 12 },
+                { i: configuration.layout.keys.lateralMenuKey, x: 0, y: 0, w: 6, h: 16, minW: 6, minH: 12 },
+                { i: configuration.layout.keys.sourceEditorKey, x: 0, y: 17, w: 6, h: 6, minW: 6, minH: 6 },
+                { i: configuration.layout.keys.queryEditorKey, x: 0, y: 24, w: 6, h: 6, minW: 6, minH: 6 },
+                { i: configuration.layout.keys.outputKey, x: 0, y: 31, w: 6, h: 20, minW: 6, minH: 12 },
             ],
             lg: [
                 { i: configuration.layout.keys.lateralMenuKey, x: 18, y: 0, w: 3, h: 20, minW: 3, minH: 20 },
-                { i: configuration.layout.keys.sourceEditorKey, x: 3, y: 0, w: 7, h: 15, minW: 5, minH: 10 },
-                { i: configuration.layout.keys.queryEditorKey, x: 10, y: 0, w: 7, h: 15, minW: 5, minH: 10 },
+                { i: configuration.layout.keys.sourceEditorKey, x: 3, y: 0, w: 7, h: 15, minW: 6, minH: 10 },
+                { i: configuration.layout.keys.queryEditorKey, x: 10, y: 0, w: 7, h: 15, minW: 6, minH: 10 },
                 { i: configuration.layout.keys.outputKey, x: 3, y: 15, w: 14, h: 30, minW: 12, minH: 15 },
             ],
         },

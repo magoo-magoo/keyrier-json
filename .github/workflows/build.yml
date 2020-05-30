@@ -44,6 +44,9 @@ jobs:
             - name: build
               run: yarn lerna run build
 
+            - name: make CLI script executable
+              run: chmod +x cli/dist/cli.js
+
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
@@ -52,9 +55,9 @@ jobs:
               run: |
                   git config --local user.email "action@github.com"
                   git config --local user.name "GitHub Action"
-                  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+                  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
                   yarn lerna publish patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
-                  yarn run build --scope @keyrier/ui
+                  yarn lerna run build --scope @keyrier/ui
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

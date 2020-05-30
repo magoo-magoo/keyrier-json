@@ -1,4 +1,5 @@
-import query, { defaultConfig } from './query'
-import { sqlQuery } from './sql/sql'
+import { jsonParseSafe } from './converters/json'
+import { toAst } from './sql/actions-visitor'
+import { executeQuery, sqlQuery } from './sql/sql'
 
-export { sqlQuery, query, defaultConfig }
+export { sqlQuery, executeQuery, toAst, jsonParseSafe }

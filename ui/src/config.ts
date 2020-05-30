@@ -2,7 +2,7 @@ export const configuration = {
     limitUndo: 9999,
     storageKey: {
         appState: 'keyrier-json.app.state',
-        userSettings: 'keyrier-json.user.settings',
+        userSettings: 'keyrier-json.user.settings.v1',
     },
     layout: {
         keys: {
