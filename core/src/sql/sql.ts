@@ -17,16 +17,22 @@ export const computePath = (path: string[] | undefined) => {
 }
 
 export const sqlQuery = (json: string, query: string) => {
+    return sqlQueryWithMultipleSources({ data: json, json }, query)
+}
+export const sqlQueryWithMultipleSources = (source: Record<string, string>, query: string) => {
     try {
         const sqlTree = toAst(query)
 
-        if (!allowedSourceNames.some(x => x === String(sqlTree.source.name.values[0]).toLowerCase())) {
+        if (!Object.keys(source).some(x => x === String(sqlTree.source.name.values[0]).toLowerCase())) {
             return new SyntaxError(String(sqlTree.source.name.values[0]))
         }
 
-        const sourceDataObject = jsonParseSafe(json)
+        const sourceDataObjects: Record<string, any> = {}
+        Object.keys(source).forEach(key => {
+            sourceDataObjects[key] = jsonParseSafe(source[key])
+        })
 
-        return executeQuery(sqlTree, sourceDataObject)
+        return executeQuery(sqlTree, sourceDataObjects)
     } catch (e) {
         return e as Error
     }
@@ -83,11 +89,10 @@ const take = (array: any[], n = 1) => {
     return slice(array, 0, n < 0 ? 0 : n)
 }
 
-export const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
+export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) => {
     const fromPath = [...sqlTree.source.name.values]
     fromPath.shift()
-
-    let data = sourceDataObject
+    let data = sourceDataObject[sqlTree.source.name.values[0]]
 
     if (fromPath.length > 0) {
         data = get(data, fromPath.slice(0))
@@ -105,7 +110,7 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
         const rightValue = sqlTree.where.conditions.right
         const operation = sqlTree.where.conditions.operation
 
-        return compareOperands(operation, leftValue, rightValue, v)
+        return compareOperands(operation, leftValue, rightValue, v, sourceDataObject)
     })
 
     const ordered = orderBy(
@@ -125,19 +130,25 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: object) => {
 const operators = {
     modulo: '%',
 } as const
-const compareOperands = (operation: string, left: Operand, right: Operand, value: object): boolean => {
+const compareOperands = (
+    operation: string,
+    left: Operand,
+    right: Operand,
+    value: object,
+    sourceDataObject: Record<string, any>
+): boolean => {
     const leftValue = get(value, computePath(left?.values))
 
     switch (operation.toLowerCase()) {
         case 'or':
             return (
-                compareOperands(left.operation, left.left, left.right, value) ||
-                compareOperands(right.operation, right.left, right.right, value)
+                compareOperands(left.operation, left.left, left.right, value, sourceDataObject) ||
+                compareOperands(right.operation, right.left, right.right, value, sourceDataObject)
             )
         case 'and':
             return (
-                compareOperands(left.operation, left.left, left.right, value) &&
-                compareOperands(right.operation, right.left, right.right, value)
+                compareOperands(left.operation, left.left, left.right, value, sourceDataObject) &&
+                compareOperands(right.operation, right.left, right.right, value, sourceDataObject)
             )
 
         case '=':
@@ -191,8 +202,16 @@ const compareOperands = (operation: string, left: Operand, right: Operand, value
             return !!right.value && leftValue < right.value
         case '<=':
             return !!right.value && leftValue <= right.value
-        case 'in':
-            return Array.isArray(right.value) && right.value.filter(x => x.value === leftValue).length > 0
+        case 'in': {
+            if (Array.isArray(right.value)) {
+                return right.value.filter(x => x.value === leftValue).length > 0
+            }
+            const rightValue = executeQuery(right.value as any, sourceDataObject)
+            if (Array.isArray(rightValue)) {
+                const array = rightValue
+                return array.filter(x => x[(right.value as SQLTree).fields[0].field.value] === leftValue).length > 0
+            }
+        }
     }
     return false
 }

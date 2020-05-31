@@ -1,4 +1,4 @@
-import { computePath, sqlQuery } from './sql'
+import { computePath, sqlQuery, sqlQueryWithMultipleSources } from './sql'
 
 describe('sql interpreter', () => {
     describe('projection', () => {
@@ -65,7 +65,10 @@ describe('sql interpreter', () => {
         })
 
         it('should return sub object for select star from data.child SQL query', () => {
-            const result = sqlQuery('{"a": 1, "b": 42, "child":[{"son":true}]}', 'select * from data.child')
+            const result = sqlQueryWithMultipleSources(
+                { data: '{"a": 1, "b": 42, "child":[{"son":true}]}' },
+                'select * from data.child'
+            )
             expect(result).toEqual([{ son: true }])
         })
 
@@ -145,25 +148,28 @@ describe('sql interpreter', () => {
         })
 
         it('should accept json as a source name', () => {
-            const result = sqlQuery('{"a": 1}', 'select * from json')
+            const result = sqlQueryWithMultipleSources({ json: '{"a": 1}' }, 'select * from json')
             expect(result).not.toBeInstanceOf(Error)
         })
 
         it('should have a named table for plain object', () => {
-            const result = sqlQuery(
-                '{"age": 1, "name": "John Doe", "c": 999}',
+            const result = sqlQueryWithMultipleSources(
+                { data: '{"age": 1, "name": "John Doe", "c": 999}' },
                 'select d.age, d.name as fullName from data d'
             )
             expect(result).toEqual({ age: 1, fullName: 'John Doe' })
         })
 
         it('should return result for table alias and without alias', () => {
-            const result = sqlQuery('{"age": 1, "name": "John Doe", "c": 999}', 'select d.age, name from data d')
+            const result = sqlQueryWithMultipleSources(
+                { data: '{"age": 1, "name": "John Doe", "c": 999}' },
+                'select d.age, name from data d'
+            )
             expect(result).toEqual({ age: 1, name: 'John Doe' })
         })
         it('should have a named table for array', () => {
-            const result = sqlQuery(
-                '[{"age": 1, "name": "John Doe", "c": 999}]',
+            const result = sqlQueryWithMultipleSources(
+                { data: '[{"age": 1, "name": "John Doe", "c": 999}]' },
                 'select d.age, d.name as fullName from data d'
             )
             expect(result).toEqual([{ age: 1, fullName: 'John Doe' }])
@@ -332,45 +338,45 @@ describe('sql interpreter', () => {
         })
 
         it('should apply function lower', () => {
-            const result = sqlQuery('[{"name": "John Doe"}, {"name": "Danny de Vito"}]', 'select lower(name) from json')
+            const result = sqlQuery('[{"name": "John Doe"}, {"name": "Danny de Vito"}]', 'select lower(name) from data')
             expect(result).toEqual([{ 'lower(name)': 'john doe' }, { 'lower(name)': 'danny de vito' }])
         })
         it('should apply function upper', () => {
-            const result = sqlQuery('[{"name": "John Doe"}]', 'select upper(name) from json')
+            const result = sqlQuery('[{"name": "John Doe"}]', 'select upper(name) from data')
             expect(result).toEqual([{ 'upper(name)': 'JOHN DOE' }])
         })
         it('should apply function length', () => {
-            const result = sqlQuery('[{"name": "toto"}]', 'select length(name) from json')
+            const result = sqlQuery('[{"name": "toto"}]', 'select length(name) from data')
             expect(result).toEqual([{ 'length(name)': 4 }])
         })
 
         it('should apply function len', () => {
-            const result = sqlQuery('[{"foo": "Paris"}]', 'select len(foo) from json')
+            const result = sqlQuery('[{"foo": "Paris"}]', 'select len(foo) from data')
             expect(result).toEqual([{ 'len(foo)': 5 }])
         })
 
         it('should apply function len and display alias', () => {
-            const result = sqlQuery('[{"foo": "Paris"}]', 'select len(foo) as longueur from json')
+            const result = sqlQuery('[{"foo": "Paris"}]', 'select len(foo) as longueur from data')
             expect(result).toEqual([{ longueur: 5 }])
         })
 
         it('should apply function reverse', () => {
-            const result = sqlQuery('[{"foo": "Paris"}]', 'select reverse(foo) from json')
+            const result = sqlQuery('[{"foo": "Paris"}]', 'select reverse(foo) from data')
             expect(result).toEqual([{ 'reverse(foo)': 'siraP' }])
         })
 
         it('should apply function trim', () => {
-            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trim(foo) from json')
+            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trim(foo) from data')
             expect(result).toEqual([{ 'trim(foo)': 'Paris' }])
         })
 
         it('should apply function trimleft', () => {
-            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trimlefT(foo) from json')
+            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trimlefT(foo) from data')
             expect(result).toEqual([{ 'trimlefT(foo)': 'Paris   ' }])
         })
 
         it('should apply function trimright', () => {
-            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trimRight(foo) from json')
+            const result = sqlQuery('[{"foo": "   Paris   "}]', 'select trimRight(foo) from data')
             expect(result).toEqual([{ 'trimRight(foo)': '   Paris' }])
         })
 
@@ -506,12 +512,22 @@ describe('sql interpreter', () => {
             expect(result).toEqual([{ fullName: 'Danny de Vito' }, { fullName: 'John Doe' }])
         })
         it('should order by age desc', () => {
-            const result = sqlQuery(
-                '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
+            const result = sqlQueryWithMultipleSources(
+                { data: '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]' },
                 'select name as fullName from data order by age desc'
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'John Doe' }, { fullName: 'Danny de Vito' }])
+        })
+    })
+
+    describe('mutliple sources', () => {
+        it('should query object', () => {
+            const result = sqlQueryWithMultipleSources(
+                { data1: '[{"a": 1, "b": 42}, {"a": "foo", "b": 42}]', data2: '[{"toto": "xxx"}, {"toto": "foo"}]' },
+                'select a from data1 where a in (select toto from data2)'
+            )
+            expect(result).toEqual([{ a: 'foo' }])
         })
     })
 

@@ -1,4 +1,4 @@
-import { CstNode, CstParser } from 'chevrotain'
+import { CstParser } from 'chevrotain'
 import {
     As,
     CloseParenthesis,
@@ -43,7 +43,7 @@ export const labels = {
 } as const
 
 class SelectParser extends CstParser {
-    public selectStatement: (idxInCallingRule?: number | undefined, ...args: any[]) => CstNode | CstNode[]
+    public selectStatement: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public fromClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public selectClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public whereClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
@@ -170,8 +170,23 @@ class SelectParser extends CstParser {
 
         this.subExpression = this.RULE('subExpression', () => {
             this.SUBRULE(this.atomicExpression, { LABEL: labels.left })
-            this.SUBRULE(this.relationalOperator)
-            this.SUBRULE2(this.atomicExpression, { LABEL: labels.right })
+            this.OR([
+                {
+                    ALT: () => {
+                        this.SUBRULE(this.relationalOperator)
+                        // this.CONSUME2(In, { LABEL: 'relationalOperator' })
+                        this.CONSUME2(OpenParenthesis)
+                        this.SUBRULE3(this.selectStatement, { LABEL: labels.right })
+                        this.CONSUME3(CloseParenthesis)
+                    },
+                },
+                {
+                    ALT: () => {
+                        this.SUBRULE1(this.relationalOperator)
+                        this.SUBRULE2(this.atomicExpression, { LABEL: labels.right })
+                    },
+                },
+            ])
         })
 
         this.atomicExpression = this.RULE('atomicExpression', () => {
@@ -234,7 +249,6 @@ class SelectParser extends CstParser {
         this.performSelfAnalysis()
     }
 }
-
 const parserInstance = new SelectParser()
 
 const parse = (inputText: string) => {
@@ -242,11 +256,12 @@ const parse = (inputText: string) => {
 
     parserInstance.input = lexResult.tokens
 
-    parserInstance.selectStatement()
+    const cst = parserInstance.selectStatement()
 
     if (parserInstance.errors.length > 0) {
         throw Error(parserInstance.errors[0].message)
     }
+    return cst
 }
 
-export { parserInstance, SelectParser, parse }
+export { SelectParser, parse }

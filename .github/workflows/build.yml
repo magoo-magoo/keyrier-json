@@ -45,7 +45,7 @@ jobs:
               run: yarn lerna run build
 
             - name: make CLI script executable
-              run: chmod +x cli/dist/cli.js
+              run: chmod +x cli/dist/cli.js # make the script executable for tests
 
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false

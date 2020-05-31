@@ -1,6 +1,6 @@
 import { toAst as toAstVisitor } from './actions-visitor'
 
-describe('Chevrotain Tutorial', () => {
+describe('actions-visitor', () => {
     it('Can convert a simple input to an AST', () => {
         const inputText = 'SELECT column1, column2 FROM table2 WHERE column2 > 3'
         const ast = toAstVisitor(inputText)
@@ -85,5 +85,13 @@ describe('Chevrotain Tutorial', () => {
         ${'select * from table limit "2"'}
     `('should throw an error if input is not invalid', ({ input }) => {
         expect(() => toAstVisitor(input)).toThrow()
+    })
+
+    it('should parse sub query statement', () => {
+        const tree = toAstVisitor('SELECT column1 FROM table1 where column1 in ( select column2 from table2 )')
+        expect(tree).toBeDefined()
+        expect(tree.where!.conditions!.left!.value!).toEqual('column1')
+        expect(tree.where!.conditions!.operation).toEqual('in')
+        expect(tree.where!.conditions.right.value).toBeDefined()
     })
 })

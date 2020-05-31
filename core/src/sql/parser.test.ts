@@ -5,6 +5,11 @@ describe('Chevrotain Tutorial', () => {
         const inputText = 'SELECT column1 FROM table2'
         expect(() => parse(inputText)).not.toThrow()
     })
+    it('Can Parse a subquery input', () => {
+        const inputText = 'SELECT column1 FROM table1 where column1 in (select column2 from table2)'
+        const parser = parse(inputText)
+        expect(parser).toBeDefined()
+    })
 
     it('Will throw an error for an invalid input', () => {
         // missing table name

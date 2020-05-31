@@ -1,6 +1,6 @@
 export interface From {
     name: Value
-    alias?: Value
+    alias: Value
 }
 
 export interface Value {
@@ -19,7 +19,7 @@ export interface Field {
 }
 
 export interface Operand {
-    value: string | number | Value[] | null
+    value: string | number | Value[] | SQLTree | null | undefined
     values?: string[]
     operation: string
     left: Operand
