@@ -18,18 +18,26 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         whereClause: CstNode | CstNode[]
         orderByClause: CstNode | CstNode[]
         limitClause: CstNode | CstNode[]
+        joinClause: CstNode | CstNode[]
     }) {
         const select = this.visit(ctx.selectClause)
         const from = this.visit(ctx.fromClause)
         const where = this.visit(ctx.whereClause)
         const order = this.visit(ctx.orderByClause)
         const limit = this.visit(ctx.limitClause)
-        return {
+        const joins = this.visit(ctx.joinClause)
+        const selectStatement = {
             fields: select,
             source: from,
             where,
             order,
             limit,
+            joins,
+        }
+
+        return {
+            type: 'selectStatement',
+            value: selectStatement,
         } as const
     }
 
@@ -86,12 +94,12 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return fields
     }
 
-    public fromClause(ctx: { table: Array<IToken>; alias: Array<IToken> }): From {
-        let tableName: string = ctx.table[0].image
-        if (ctx.table[0].tokenType === tokenVocabulary.StringToken) {
+    public fromClause(ctx: { table: Array<IToken>; alias: Array<IToken> }, index = 0): From {
+        let tableName: string = ctx.table[index].image
+        if (ctx.table[index].tokenType === tokenVocabulary.StringToken) {
             tableName = convertStringTokenToJsString(tableName)
         }
-        const alias = ctx.alias?.length ? ctx.alias[0].image : tableName
+        const alias = ctx.alias?.length >= index + 1 ? ctx.alias[0].image : tableName
         return {
             name: {
                 value: tableName,
@@ -110,6 +118,23 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return {
             conditions,
         } as const
+    }
+
+    public joinClause(ctx: { table: Array<IToken>; alias: Array<IToken>; expression: CstNode[] }) {
+        if (!ctx.table) {
+            return null
+        }
+
+        const joins: any[] = []
+        ctx.table.forEach((_table, index) => {
+            const from = this.fromClause(ctx, index)
+            const conditions = this.visit(ctx.expression[index])
+            joins.push({
+                from,
+                conditions,
+            })
+        })
+        return joins
     }
 
     public limitClause(ctx: { Integer: IToken[] }) {
@@ -144,7 +169,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
             right: Array<CstNode | CstNode[]>
         },
         i: number = 0
-    ) {
+    ): any {
         if (ctx.subExpression?.length - i === 1) {
             return this.visit(ctx.subExpression[i])
         }
@@ -154,6 +179,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const right: Operand = this.expression(ctx, i + 1)
 
         return {
+            type: 'expression',
             left,
             right,
             operation,
@@ -168,11 +194,11 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const left = this.visit(ctx.left[0])
         const operation = this.visit(ctx.relationalOperator)
         const right = this.visit(ctx.right[0])
-
         return {
-            left: { value: left, values: splitPropertyPath(left).pathArray },
+            type: 'expression',
+            left: { type: left.type, value: left.value, values: splitPropertyPath(left.value).pathArray },
             operation,
-            right: { value: right, values: splitPropertyPath(right).pathArray },
+            right: { type: right.type, value: right.value, values: splitPropertyPath(right.value).pathArray },
         }
     }
 
@@ -180,7 +206,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const entries = Object.entries(context) as [keyof typeof context, Array<IToken>][]
         for (let [key, value] of entries) {
             if (key === 'in') {
-                return value
+                const array = value
                     .map(x => {
                         if (x.tokenType === Integer) {
                             return parseInt(x.image)
@@ -188,18 +214,19 @@ class SQLToAstVisitor extends BaseSQLVisitor {
                         return convertStringTokenToJsString(x.image)
                     })
                     .map(v => ({ value: v }))
+                return { type: 'array', value: array }
             }
             if (key === 'Integer') {
-                return parseInt(value[0].image)
+                return { type: 'integer', value: parseInt(value[0].image) }
             }
             if (key === 'Null') {
-                return null
+                return { type: 'null', value: null }
             }
             if (key === 'Identifier') {
-                return value[0].image
+                return { type: 'identifier', value: value[0].image }
             }
             if (key === 'StringToken') {
-                return convertStringTokenToJsString(value[0].image)
+                return { type: 'string', value: convertStringTokenToJsString(value[0].image) }
             }
         }
         return null
@@ -225,7 +252,7 @@ const toAst = (inputText: string) => {
         throw Error(JSON.stringify(parserInstance.errors))
     }
     const ast = toAstVisitorInstance.visit(cst)
-    return (ast as unknown) as SQLTree
+    return (ast.value as unknown) as SQLTree
 }
 
 const splitPropertyPath = (stringPath: string | number) => {

@@ -16,10 +16,12 @@ export const Like = createToken({ name: 'Like', pattern: /like/i, longer_alt: Id
 export const Limit = createToken({ name: 'Limit', pattern: /limit/i, longer_alt: Identifier })
 export const Null = createToken({ name: 'Null', pattern: /NULL/i, longer_alt: Identifier })
 export const In = createToken({ name: 'In', pattern: /in/i, longer_alt: Identifier })
+export const On = createToken({ name: 'On', pattern: /on/i, longer_alt: Identifier })
 export const IsNot = createToken({ name: 'IsNot', pattern: /is\s+not/i, longer_alt: Identifier })
 export const Is = createToken({ name: 'Is', pattern: /is/i, longer_alt: Identifier })
 export const NotLike = createToken({ name: 'NotLike', pattern: /NOT\s+LIKE/i })
 export const OrderBy = createToken({ name: 'OrderBy', pattern: /ORDER\s+BY+/i })
+export const InnerJoin = createToken({ name: 'InnerJoin', pattern: /INNER\s+JOIN/i })
 export const OrderByDirection = createToken({
     name: 'OrderByDirection',
     pattern: /(ASC|DESC)/i,
@@ -49,7 +51,9 @@ export const tokenVocabulary = {
     Like,
     Limit,
     Null,
+    InnerJoin,
     In,
+    On,
     IsNot,
     Is,
     NotLike,

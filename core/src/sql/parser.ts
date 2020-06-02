@@ -1,35 +1,5 @@
 import { CstParser } from 'chevrotain'
-import {
-    As,
-    CloseParenthesis,
-    Comma,
-    Equal,
-    From,
-    GreaterOrEqualThan,
-    GreaterThan,
-    Identifier,
-    In,
-    Integer,
-    Is,
-    IsNot,
-    LessOrEqualThan,
-    LessThan,
-    lex as selectLexer,
-    Like,
-    Limit,
-    NotEqual,
-    NotLike,
-    Null,
-    OpenParenthesis,
-    OrAnd,
-    OrderBy,
-    OrderByDirection,
-    Select,
-    Star,
-    StringToken,
-    tokenVocabulary,
-    Where,
-} from './lexer'
+import * as lexer from './lexer'
 
 export const labels = {
     value: 'value',
@@ -55,26 +25,27 @@ class SelectParser extends CstParser {
     public subExpression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public projection: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     public cols: (idxInCallingRule?: number | undefined, ...args: any[]) => any
+    public joinClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
     constructor(config?: any) {
-        super(tokenVocabulary, config)
+        super(lexer.tokenVocabulary, config)
 
         this.cols = this.RULE('cols', () => {
             this.OR([
-                { ALT: () => this.CONSUME(Star, { LABEL: labels.value }) },
+                { ALT: () => this.CONSUME(lexer.Star, { LABEL: labels.value }) },
                 {
                     ALT: () => {
-                        this.CONSUME2(Identifier, { LABEL: labels.function })
-                        this.CONSUME(OpenParenthesis)
-                        this.CONSUME3(Identifier, { LABEL: labels.value })
-                        this.CONSUME(CloseParenthesis)
+                        this.CONSUME2(lexer.Identifier, { LABEL: labels.function })
+                        this.CONSUME(lexer.OpenParenthesis)
+                        this.CONSUME3(lexer.Identifier, { LABEL: labels.value })
+                        this.CONSUME(lexer.CloseParenthesis)
                         this.OPTION1(() => {
-                            this.CONSUME1(As)
+                            this.CONSUME1(lexer.As)
                             this.OR3([
                                 {
-                                    ALT: () => this.CONSUME2(StringToken, { LABEL: labels.name }),
+                                    ALT: () => this.CONSUME2(lexer.StringToken, { LABEL: labels.name }),
                                 },
                                 {
-                                    ALT: () => this.CONSUME4(Identifier, { LABEL: labels.name }),
+                                    ALT: () => this.CONSUME4(lexer.Identifier, { LABEL: labels.name }),
                                 },
                             ])
                         })
@@ -84,20 +55,20 @@ class SelectParser extends CstParser {
                     ALT: () => {
                         this.OR1([
                             {
-                                ALT: () => this.CONSUME(StringToken, { LABEL: labels.value }),
+                                ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.value }),
                             },
                             {
-                                ALT: () => this.CONSUME(Identifier, { LABEL: labels.value }),
+                                ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.value }),
                             },
                         ])
                         this.OPTION(() => {
-                            this.CONSUME(As)
+                            this.CONSUME(lexer.As)
                             this.OR2([
                                 {
-                                    ALT: () => this.CONSUME1(StringToken, { LABEL: labels.name }),
+                                    ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.name }),
                                 },
                                 {
-                                    ALT: () => this.CONSUME1(Identifier, { LABEL: labels.name }),
+                                    ALT: () => this.CONSUME1(lexer.Identifier, { LABEL: labels.name }),
                                 },
                             ])
                         })
@@ -111,7 +82,7 @@ class SelectParser extends CstParser {
                 {
                     ALT: () =>
                         this.AT_LEAST_ONE_SEP({
-                            SEP: Comma,
+                            SEP: lexer.Comma,
                             DEF: () => {
                                 this.SUBRULE(this.cols)
                             },
@@ -123,47 +94,70 @@ class SelectParser extends CstParser {
         this.selectStatement = this.RULE('selectStatement', () => {
             this.SUBRULE(this.selectClause)
             this.SUBRULE(this.fromClause)
+
             this.OPTION(() => {
+                this.SUBRULE(this.joinClause)
+            })
+
+            this.OPTION2(() => {
                 this.SUBRULE(this.whereClause)
             })
-            this.OPTION2(() => {
+
+            this.OPTION3(() => {
                 this.SUBRULE(this.orderByClause)
             })
-            this.OPTION3(() => {
+            this.OPTION4(() => {
                 this.SUBRULE(this.limitClause)
             })
         })
 
         this.selectClause = this.RULE('selectClause', () => {
-            this.CONSUME(Select)
+            this.CONSUME(lexer.Select)
             this.SUBRULE(this.projection)
         })
 
+        this.joinClause = this.RULE('joinClause', () => {
+            this.MANY(() => {
+                this.CONSUME(lexer.InnerJoin)
+                this.OR([
+                    {
+                        ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.table }),
+                    },
+                    {
+                        ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.table }),
+                    },
+                ])
+                this.OPTION(() => this.CONSUME2(lexer.Identifier, { LABEL: labels.alias }))
+                this.CONSUME(lexer.On)
+                this.SUBRULE(this.expression)
+            })
+        })
+
         this.fromClause = this.RULE('fromClause', () => {
-            this.CONSUME(From)
+            this.CONSUME(lexer.From)
             this.OR([
                 {
-                    ALT: () => this.CONSUME(Identifier, { LABEL: labels.table }),
+                    ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.table }),
                 },
                 {
-                    ALT: () => this.CONSUME(StringToken, { LABEL: labels.table }),
+                    ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.table }),
                 },
             ])
-            this.OPTION(() => this.CONSUME2(Identifier, { LABEL: labels.alias }))
+            this.OPTION(() => this.CONSUME2(lexer.Identifier, { LABEL: labels.alias }))
         })
 
         this.whereClause = this.RULE('whereClause', () => {
-            this.CONSUME(Where)
+            this.CONSUME(lexer.Where)
             this.SUBRULE(this.expression)
         })
 
         this.expression = this.RULE('expression', () => {
             this.MANY_SEP({
-                SEP: OrAnd,
+                SEP: lexer.OrAnd,
                 DEF: () => {
                     this.SUBRULE(this.subExpression)
 
-                    return OrAnd.name
+                    return lexer.OrAnd.name
                 },
             })
         })
@@ -175,9 +169,9 @@ class SelectParser extends CstParser {
                     ALT: () => {
                         this.SUBRULE(this.relationalOperator)
                         // this.CONSUME2(In, { LABEL: 'relationalOperator' })
-                        this.CONSUME2(OpenParenthesis)
+                        this.CONSUME2(lexer.OpenParenthesis)
                         this.SUBRULE3(this.selectStatement, { LABEL: labels.right })
-                        this.CONSUME3(CloseParenthesis)
+                        this.CONSUME3(lexer.CloseParenthesis)
                     },
                 },
                 {
@@ -191,27 +185,27 @@ class SelectParser extends CstParser {
 
         this.atomicExpression = this.RULE('atomicExpression', () => {
             this.OR([
-                { ALT: () => this.CONSUME(Integer) },
-                { ALT: () => this.CONSUME(Null) },
-                { ALT: () => this.CONSUME(Identifier) },
-                { ALT: () => this.CONSUME(StringToken) },
+                { ALT: () => this.CONSUME(lexer.Integer) },
+                { ALT: () => this.CONSUME(lexer.Null) },
+                { ALT: () => this.CONSUME(lexer.Identifier) },
+                { ALT: () => this.CONSUME(lexer.StringToken) },
                 {
                     ALT: () => {
-                        this.CONSUME(OpenParenthesis)
+                        this.CONSUME(lexer.OpenParenthesis)
                         this.MANY_SEP({
-                            SEP: Comma,
+                            SEP: lexer.Comma,
                             DEF: () => {
                                 this.OR1([
                                     {
-                                        ALT: () => this.CONSUME1(Integer, { LABEL: labels.in }),
+                                        ALT: () => this.CONSUME1(lexer.Integer, { LABEL: labels.in }),
                                     },
                                     {
-                                        ALT: () => this.CONSUME1(StringToken, { LABEL: labels.in }),
+                                        ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.in }),
                                     },
                                 ])
                             },
                         })
-                        this.CONSUME(CloseParenthesis)
+                        this.CONSUME(lexer.CloseParenthesis)
                     },
                 },
             ])
@@ -219,31 +213,31 @@ class SelectParser extends CstParser {
 
         this.relationalOperator = this.RULE('relationalOperator', () => {
             this.OR([
-                { ALT: () => this.CONSUME(GreaterOrEqualThan) },
-                { ALT: () => this.CONSUME(GreaterThan) },
-                { ALT: () => this.CONSUME(LessOrEqualThan) },
-                { ALT: () => this.CONSUME(LessThan) },
-                { ALT: () => this.CONSUME(Equal) },
-                { ALT: () => this.CONSUME(NotEqual) },
-                { ALT: () => this.CONSUME(Like) },
-                { ALT: () => this.CONSUME(NotLike) },
-                { ALT: () => this.CONSUME(In) },
-                { ALT: () => this.CONSUME(IsNot) },
-                { ALT: () => this.CONSUME(Is) },
+                { ALT: () => this.CONSUME(lexer.GreaterOrEqualThan) },
+                { ALT: () => this.CONSUME(lexer.GreaterThan) },
+                { ALT: () => this.CONSUME(lexer.LessOrEqualThan) },
+                { ALT: () => this.CONSUME(lexer.LessThan) },
+                { ALT: () => this.CONSUME(lexer.Equal) },
+                { ALT: () => this.CONSUME(lexer.NotEqual) },
+                { ALT: () => this.CONSUME(lexer.Like) },
+                { ALT: () => this.CONSUME(lexer.NotLike) },
+                { ALT: () => this.CONSUME(lexer.In) },
+                { ALT: () => this.CONSUME(lexer.IsNot) },
+                { ALT: () => this.CONSUME(lexer.Is) },
             ])
         })
 
         this.orderByClause = this.RULE('orderByClause', () => {
-            this.CONSUME(OrderBy)
-            this.CONSUME(Identifier)
+            this.CONSUME(lexer.OrderBy)
+            this.CONSUME(lexer.Identifier)
             this.OPTION({
-                DEF: () => this.CONSUME(OrderByDirection),
+                DEF: () => this.CONSUME(lexer.OrderByDirection),
             })
         })
 
         this.limitClause = this.RULE('limitClause', () => {
-            this.CONSUME(Limit)
-            this.CONSUME(Integer)
+            this.CONSUME(lexer.Limit)
+            this.CONSUME(lexer.Integer)
         })
 
         this.performSelfAnalysis()
@@ -252,7 +246,7 @@ class SelectParser extends CstParser {
 const parserInstance = new SelectParser()
 
 const parse = (inputText: string) => {
-    const lexResult = selectLexer(inputText)
+    const lexResult = lexer.lex(inputText)
 
     parserInstance.input = lexResult.tokens
 

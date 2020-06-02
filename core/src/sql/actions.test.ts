@@ -94,4 +94,18 @@ describe('actions-visitor', () => {
         expect(tree.where!.conditions!.operation).toEqual('in')
         expect(tree.where!.conditions.right.value).toBeDefined()
     })
+
+    it('should parse join query statement', () => {
+        const tree = toAstVisitor(
+            `SELECT 
+            table1.addr as col1 
+            FROM table1 
+            inner join table2 on table1.name = table2.column3
+            inner join table3 on table1.email = table2.column4
+            `
+        )
+        expect(tree).toBeDefined()
+        expect(Array.isArray(tree.joins)).toBeTruthy()
+        expect(tree.joins).toHaveLength(2)
+    })
 })

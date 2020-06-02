@@ -3,9 +3,9 @@ import { jsonParseSafe } from '../converters/json'
 import { toAst } from './actions-visitor'
 import { Field, From, Operand, SQLTree } from './SqlTree'
 
-const allowedSourceNames = ['data', 'json', 'csv', 'stdin'] as const
+// const allowedSourceNames = ['data', 'json', 'csv', 'stdin'] as const
 
-export const computePath = (path: string[] | undefined) => {
+export const computePath = (path: string[] | undefined, allowedSourceNames: string[]) => {
     if (!path) {
         return []
     }
@@ -102,15 +102,39 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
         return mapper(data, sqlTree.fields, sqlTree.source)
     }
 
+    let jointures: { souce: any[]; get: (elem: any) => object | null }[] = []
+    if (sqlTree.joins) {
+        sqlTree.joins.forEach(join => {
+            jointures.push({
+                souce: jsonParseSafe(sourceDataObject[join.from.name.value]),
+                get: function (_elem: any) {
+                    return null
+                },
+            })
+        })
+    }
     const filtered = data.filter(v => {
         if (!sqlTree.where || !sqlTree.where.conditions) {
             return true
         }
+        console.log(sqlTree.where.conditions)
         const leftValue = sqlTree.where.conditions.left
         const rightValue = sqlTree.where.conditions.right
         const operation = sqlTree.where.conditions.operation
 
-        return compareOperands(operation, leftValue, rightValue, v, sourceDataObject)
+        const comparison = compareOperands(
+            sqlTree.where.conditions.type,
+            operation,
+            leftValue,
+            rightValue,
+            v,
+            sourceDataObject
+        )
+        if (jointures.length) {
+            // for (const jointure of jointures) {
+            // }
+        }
+        return comparison
     })
 
     const ordered = orderBy(
@@ -131,36 +155,43 @@ const operators = {
     modulo: '%',
 } as const
 const compareOperands = (
+    _type: string,
     operation: string,
     left: Operand,
     right: Operand,
     value: object,
     sourceDataObject: Record<string, any>
 ): boolean => {
-    const leftValue = get(value, computePath(left?.values))
-
+    let leftValue: any
+    leftValue = getValue(left, value, sourceDataObject)
+    let rightValue = getValue(right, value, sourceDataObject)
     switch (operation.toLowerCase()) {
         case 'or':
             return (
-                compareOperands(left.operation, left.left, left.right, value, sourceDataObject) ||
-                compareOperands(right.operation, right.left, right.right, value, sourceDataObject)
+                (left.type === 'expression' &&
+                    compareOperands(left.type, left.operation, left.left, left.right, value, sourceDataObject)) ||
+                (right.type === 'expression' &&
+                    compareOperands(right.type, right.operation, right.left, right.right, value, sourceDataObject))
             )
         case 'and':
             return (
-                compareOperands(left.operation, left.left, left.right, value, sourceDataObject) &&
-                compareOperands(right.operation, right.left, right.right, value, sourceDataObject)
+                left.type === 'expression' &&
+                compareOperands(left.type, left.operation, left.left, left.right, value, sourceDataObject) &&
+                right.type === 'expression' &&
+                compareOperands(right.type, right.operation, right.left, right.right, value, sourceDataObject)
             )
-
+    }
+    switch (operation.toLowerCase()) {
         case '=':
         case 'is':
-            return leftValue === right.value
+            return leftValue === rightValue
         case '!=':
         case 'is not':
         case '<>':
-            return leftValue !== right.value
+            return leftValue !== rightValue
         case 'like': {
             const leftStr = String(leftValue)
-            const rightStr = String(right.value)
+            const rightStr = String(rightValue)
             if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
                 if (leftStr.includes(rightStr.substring(1, rightStr.length - 1))) {
                     return true
@@ -178,7 +209,7 @@ const compareOperands = (
         }
         case 'not like': {
             const leftStr = String(leftValue)
-            const rightStr = String(right.value)
+            const rightStr = String(rightValue)
             if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
                 if (leftStr.includes(rightStr.substring(1, rightStr.length - 1))) {
                     return false
@@ -195,21 +226,26 @@ const compareOperands = (
             return true
         }
         case '>':
-            return !!right.value && leftValue > right.value
+            return !!rightValue && leftValue > rightValue
         case '>=':
-            return !!right.value && leftValue >= right.value
+            return !!rightValue && leftValue >= rightValue
         case '<':
-            return !!right.value && leftValue < right.value
+            return !!rightValue && leftValue < rightValue
         case '<=':
-            return !!right.value && leftValue <= right.value
+            return !!rightValue && leftValue <= rightValue
         case 'in': {
-            if (Array.isArray(right.value)) {
-                return right.value.filter(x => x.value === leftValue).length > 0
+            if (!rightValue) {
+                break
             }
-            const rightValue = executeQuery(right.value as any, sourceDataObject)
             if (Array.isArray(rightValue)) {
-                const array = rightValue
-                return array.filter(x => x[(right.value as SQLTree).fields[0].field.value] === leftValue).length > 0
+                return rightValue.filter(x => x.value === leftValue).length > 0
+            }
+            if (right.type === 'selectStatement') {
+                const rightval = executeQuery(right.value, sourceDataObject)
+                if (Array.isArray(rightval)) {
+                    const array = rightval
+                    return array.filter(x => x[(rightValue as SQLTree).fields[0].field.value] === leftValue).length > 0
+                }
             }
         }
     }
@@ -254,4 +290,11 @@ const applyFunction = (functionName: string, value: any) => {
         return String(value).length
     }
     return value
+}
+function getValue(operand: Operand, value: object, sourceDataObject: Record<string, any>) {
+    let operandValue = operand.value
+    if (operand.type === 'identifier') {
+        operandValue = get(value, computePath(operand?.values, Object.keys(sourceDataObject)))
+    }
+    return operandValue
 }

@@ -413,6 +413,12 @@ describe('sql interpreter', () => {
 
             expect(result).toEqual([{ age: 42 }])
         })
+        it('should return filtered results with where clause and integer on left side - SQL query - =', () => {
+            const result = sqlQuery(JSON.stringify([{ age: 42 }, { age: 21 }]), 'select * from data where 42 = age')
+            expect(result).not.toBeNull()
+
+            expect(result).toEqual([{ age: 42 }])
+        })
         it('should return filtered results with where clause - SQL query - !=', () => {
             const result = sqlQuery(JSON.stringify([{ age: 42 }, { age: 21 }]), 'select * from data where age != 42')
             expect(result).not.toBeNull()
@@ -529,6 +535,45 @@ describe('sql interpreter', () => {
             )
             expect(result).toEqual([{ a: 'foo' }])
         })
+
+        it('should execute with join query', () => {
+            const result = sqlQueryWithMultipleSources(
+                {
+                    table1: `
+                        [
+                            {
+                              "name": "tero",
+                              "addr": "paris"
+                            },
+                            {
+                              "email": "fake@fake.com",
+                              "name": "foo",
+                              "addr": 42
+                            },
+                            {
+                              "name": "valll",
+                              "addr": 264
+                            },
+                            {
+                              "email": "test@test.com",
+                              "name": "foo",
+                              "addr": "localhost"
+                            }
+                          ]
+                        `,
+                    table2: '[{"column3": "xxx"}, {"column3": "foo"}]',
+                    table3: '[{"column4": "fake@fake.com"}, {"column4": "test@test.com"}]',
+                },
+                `
+                SELECT 
+                table1.addr as col1 
+                FROM table1 
+                inner join table2 on table1.name = table2.column3
+                inner join table3 on table1.email = table2.column4
+                `
+            )
+            expect(result).toEqual([{ col1: 'localhost' }])
+        })
     })
 
     describe('path', () => {
@@ -541,7 +586,7 @@ describe('sql interpreter', () => {
             ${['data', 'field']}               | ${['field']}
             ${['child', 'value', 'something']} | ${['child', 'value', 'something']}
         `('returns $expected when given path is $path', ({ path, expected }) => {
-            const result = computePath(path)
+            const result = computePath(path, ['data'])
             expect(result).toEqual(expected)
         })
     })

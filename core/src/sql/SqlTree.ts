@@ -18,20 +18,44 @@ export interface Field {
     function?: Func
 }
 
-export interface Operand {
-    value: string | number | Value[] | SQLTree | null | undefined
-    values?: string[]
-    operation: string
-    left: Operand
-    right: Operand
-}
+export type Operand =
+    | {
+          value: Value[]
+          values?: string[]
+          operation: string
+          type: 'identifier' | 'array'
+      }
+    | {
+          operation: string
+          value: Value[]
+          type: 'expression'
+          left: Operand
+          right: Operand
+      }
+    | {
+          value: number
+          type: 'integer'
+      }
+    | {
+          value: null
+          type: 'null'
+      }
+    | {
+          value: string
+          type: 'string'
+      }
+    | {
+          value: SQLTree
+          type: 'selectStatement'
+      }
+
 export interface Conditions {
     left: Operand
     right: Operand
     operation: string
 }
 export interface Where {
-    conditions: Conditions
+    conditions: any
 }
 
 export interface Limit {
@@ -45,10 +69,16 @@ export interface Order {
     orderings: ordering[]
 }
 
+export interface Join {
+    conditions: Conditions
+    from: From
+}
+
 export interface SQLTree {
     source: From
     where?: Where | null
     fields: Field[]
     limit: Limit | null
     order?: Order
+    joins: Join[]
 }
