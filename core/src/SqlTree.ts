@@ -55,7 +55,7 @@ export interface Conditions {
     operation: string
 }
 export interface Where {
-    conditions: any
+    conditions: Conditions
 }
 
 export interface Limit {
@@ -80,5 +80,5 @@ export interface SQLTree {
     fields: Field[]
     limit: Limit | null
     order?: Order
-    joins: Join[]
+    joins?: Join[]
 }

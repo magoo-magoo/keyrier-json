@@ -542,6 +542,119 @@ describe('sql interpreter', () => {
                     table1: `
                         [
                             {
+                              "email": "test@test.com",
+                              "name": "foo",
+                              "addr": "localhost"
+                            },
+                            {
+                                "name": "valll",
+                                "addr": 264
+                              }
+                          ]
+                        `,
+                    table2: '[{"column3": "foo"}, {"column3": "xxx"}]',
+                },
+                `
+                SELECT 
+                table1.addr as col1 
+                FROM table1 
+                inner join table2 on table1.name = table2.column3
+                `
+            )
+            expect(result).toEqual([{ col1: 'localhost' }])
+        })
+
+        it('should execute with join query with alias', () => {
+            const result = sqlQueryWithMultipleSources(
+                {
+                    table1: `
+                        [
+                            {
+                              "email": "test@test.com",
+                              "name": "foo",
+                              "addr": "localhost"
+                            },
+                            {
+                                "name": "valll",
+                                "addr": 264
+                              }
+                          ]
+                        `,
+                    table2: '[{"column3": "foo"}, {"column3": "xxx"}]',
+                },
+                `
+                SELECT 
+                t1.addr as col1 
+                FROM table1 t1
+                inner join table2 t2 on t1.name = t2.column3
+                `
+            )
+            expect(result).toEqual([{ col1: 'localhost' }])
+        })
+        it('should return an error with ambigous identifier', () => {
+            const result = sqlQueryWithMultipleSources(
+                {
+                    table1: `
+                        [
+                            {
+                              "email": "test@test.com",
+                              "name": "foo",
+                              "addr": "localhost"
+                            },
+                            {
+                                "name": "valll",
+                                "addr": 264
+                              }
+                          ]
+                        `,
+                    table2: '[{"column3": "foo"}, {"column3": "xxx"}]',
+                },
+                `
+                SELECT 
+                t1.addr as col1 
+                FROM table1 t1
+                inner join table2 t2 on name = t2.column3
+                `
+            )
+            expect(result).toEqual(new Error('Ambiguous identifier: name'))
+        })
+
+        it('should execute with join query 2', () => {
+            const result = sqlQueryWithMultipleSources(
+                {
+                    table1: `
+                        [
+
+                            {
+                              "email": "fake@fake.com",
+                              "name": "foo",
+                              "addr": 42
+                            },
+                            {
+                              "email": "test@test.com",
+                              "name": "foo",
+                              "addr": "localhost"
+                            }
+                          ]
+                        `,
+                    table3: '[{"column4": "none@none.com"}, {"column4": "test@test.com"}]',
+                },
+                `
+                SELECT 
+                table1.addr as col1 
+                FROM table1 
+                inner join table3 on table1.email = table3.column4
+                `
+            )
+            expect(result).toEqual([{ col1: 'localhost' }])
+        })
+
+        it('should execute with multiple join query', () => {
+            const result = sqlQueryWithMultipleSources(
+                {
+                    table1: `
+                        [
+                            {
                               "name": "tero",
                               "addr": "paris"
                             },
@@ -562,14 +675,14 @@ describe('sql interpreter', () => {
                           ]
                         `,
                     table2: '[{"column3": "xxx"}, {"column3": "foo"}]',
-                    table3: '[{"column4": "fake@fake.com"}, {"column4": "test@test.com"}]',
+                    table3: '[{"column4": "mock@mock.com"}, {"column4": "test@test.com"}]',
                 },
                 `
                 SELECT 
                 table1.addr as col1 
                 FROM table1 
                 inner join table2 on table1.name = table2.column3
-                inner join table3 on table1.email = table2.column4
+                inner join table3 on table1.email = table3.column4
                 `
             )
             expect(result).toEqual([{ col1: 'localhost' }])
@@ -586,8 +699,8 @@ describe('sql interpreter', () => {
             ${['data', 'field']}               | ${['field']}
             ${['child', 'value', 'something']} | ${['child', 'value', 'something']}
         `('returns $expected when given path is $path', ({ path, expected }) => {
-            const result = computePath(path, ['data'])
-            expect(result).toEqual(expected)
+            const { path: computedPath } = computePath(path, ['data'])
+            expect(computedPath).toEqual(expected)
         })
     })
 })

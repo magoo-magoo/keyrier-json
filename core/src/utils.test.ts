@@ -1,4 +1,4 @@
-import { jsonParseSafe } from './json'
+import { jsonParseSafe } from './utils'
 
 describe('json helpers', () => {
     it('should parse simple object', () => {

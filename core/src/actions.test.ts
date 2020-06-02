@@ -24,7 +24,7 @@ describe('actions-visitor', () => {
 
     it('should parse multiple where expression', () => {
         const inputText = "SELECT foo FROM bar WHERE foo = 'val' and truc < 42 or prop = 99"
-        const ast = toAstVisitor(inputText)
+        const ast = toAstVisitor(inputText) as any
         expect(ast.fields[0]).toEqual({
             name: { value: 'foo', values: ['foo'] },
             field: { value: 'foo', values: ['foo'] },
@@ -35,7 +35,7 @@ describe('actions-visitor', () => {
         expect(ast.where?.conditions?.operation).toEqual('and')
 
         expect(ast.where?.conditions?.left?.left?.value).toEqual('foo')
-        expect(ast.where?.conditions?.left?.operation).toEqual('=')
+        expect(ast.where?.conditions?.left!.operation).toEqual('=')
         expect(ast.where?.conditions?.left?.right?.value).toEqual('val')
 
         expect(ast.where?.conditions?.right?.operation).toEqual('or')
