@@ -13,128 +13,127 @@ export const labels = {
 } as const
 
 class SelectParser extends CstParser {
-    public selectStatement: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public fromClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public selectClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public whereClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public relationalOperator: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public orderByClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public limitClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public atomicExpression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public expression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public subExpression: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public projection: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public cols: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    public joinClause: (idxInCallingRule?: number | undefined, ...args: any[]) => any
-    constructor(config?: any) {
-        super(lexer.tokenVocabulary, config)
+    public readonly selectStatement = this.RULE('selectStatement', () => {
+        this.SUBRULE(this.selectClause)
+        this.SUBRULE(this.fromClause)
 
-        this.cols = this.RULE('cols', () => {
-            this.OR([
-                { ALT: () => this.CONSUME(lexer.Star, { LABEL: labels.value }) },
-                {
-                    ALT: () => {
-                        this.CONSUME2(lexer.Identifier, { LABEL: labels.function })
-                        this.CONSUME(lexer.OpenParenthesis)
-                        this.CONSUME3(lexer.Identifier, { LABEL: labels.value })
-                        this.CONSUME(lexer.CloseParenthesis)
-                        this.OPTION1(() => {
-                            this.CONSUME1(lexer.As)
-                            this.OR3([
-                                {
-                                    ALT: () => this.CONSUME2(lexer.StringToken, { LABEL: labels.name }),
-                                },
-                                {
-                                    ALT: () => this.CONSUME4(lexer.Identifier, { LABEL: labels.name }),
-                                },
-                            ])
-                        })
-                    },
-                },
-                {
-                    ALT: () => {
-                        this.OR1([
+        this.OPTION(() => {
+            this.SUBRULE(this.joinClause)
+        })
+
+        this.OPTION2(() => {
+            this.SUBRULE(this.whereClause)
+        })
+
+        this.OPTION3(() => {
+            this.SUBRULE(this.orderByClause)
+        })
+        this.OPTION4(() => {
+            this.SUBRULE(this.limitClause)
+        })
+    })
+
+    public readonly selectClause = this.RULE('selectClause', () => {
+        this.CONSUME(lexer.Select)
+        this.SUBRULE(this.projection)
+    })
+
+    public readonly projection = this.RULE('projection', () => {
+        this.OR([
+            {
+                ALT: () =>
+                    this.AT_LEAST_ONE_SEP({
+                        SEP: lexer.Comma,
+                        DEF: () => {
+                            this.SUBRULE(this.cols)
+                        },
+                    }),
+            },
+        ])
+    })
+
+    public readonly cols = this.RULE('cols', () => {
+        this.OR([
+            { ALT: () => this.CONSUME(lexer.Star, { LABEL: labels.value }) },
+            {
+                ALT: () => {
+                    this.CONSUME2(lexer.Identifier, { LABEL: labels.function })
+                    this.CONSUME(lexer.OpenParenthesis)
+                    this.CONSUME3(lexer.Identifier, { LABEL: labels.value })
+                    this.CONSUME(lexer.CloseParenthesis)
+                    this.OPTION1(() => {
+                        this.CONSUME1(lexer.As)
+                        this.OR3([
                             {
-                                ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.value }),
+                                ALT: () => this.CONSUME2(lexer.StringToken, { LABEL: labels.name }),
                             },
                             {
-                                ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.value }),
+                                ALT: () => this.CONSUME4(lexer.Identifier, { LABEL: labels.name }),
                             },
                         ])
-                        this.OPTION(() => {
-                            this.CONSUME(lexer.As)
-                            this.OR2([
-                                {
-                                    ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.name }),
-                                },
-                                {
-                                    ALT: () => this.CONSUME1(lexer.Identifier, { LABEL: labels.name }),
-                                },
-                            ])
-                        })
-                    },
+                    })
                 },
-            ])
-        })
-
-        this.projection = this.RULE('projection', () => {
-            this.OR([
-                {
-                    ALT: () =>
-                        this.AT_LEAST_ONE_SEP({
-                            SEP: lexer.Comma,
-                            DEF: () => {
-                                this.SUBRULE(this.cols)
+            },
+            {
+                ALT: () => {
+                    this.OR1([
+                        {
+                            ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.value }),
+                        },
+                        {
+                            ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.value }),
+                        },
+                    ])
+                    this.OPTION(() => {
+                        this.CONSUME(lexer.As)
+                        this.OR2([
+                            {
+                                ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.name }),
                             },
-                        }),
+                            {
+                                ALT: () => this.CONSUME1(lexer.Identifier, { LABEL: labels.name }),
+                            },
+                        ])
+                    })
                 },
-            ])
+            },
+        ])
+    })
+
+    public readonly fromClause = this.RULE('fromClause', () => {
+        this.CONSUME(lexer.From)
+        this.OR([
+            {
+                ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.table }),
+            },
+            {
+                ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.table }),
+            },
+        ])
+        this.OPTION(() => this.CONSUME2(lexer.Identifier, { LABEL: labels.alias }))
+    })
+
+    public readonly whereClause = this.RULE('whereClause', () => {
+        this.CONSUME(lexer.Where)
+        this.SUBRULE(this.expression)
+    })
+
+    public readonly orderByClause = this.RULE('orderByClause', () => {
+        this.CONSUME(lexer.OrderBy)
+        this.CONSUME(lexer.Identifier)
+        this.OPTION({
+            DEF: () => this.CONSUME(lexer.OrderByDirection),
         })
+    })
 
-        this.selectStatement = this.RULE('selectStatement', () => {
-            this.SUBRULE(this.selectClause)
-            this.SUBRULE(this.fromClause)
+    public readonly limitClause = this.RULE('limitClause', () => {
+        this.CONSUME(lexer.Limit)
+        this.CONSUME(lexer.Integer)
+    })
 
-            this.OPTION(() => {
-                this.SUBRULE(this.joinClause)
-            })
-
-            this.OPTION2(() => {
-                this.SUBRULE(this.whereClause)
-            })
-
-            this.OPTION3(() => {
-                this.SUBRULE(this.orderByClause)
-            })
-            this.OPTION4(() => {
-                this.SUBRULE(this.limitClause)
-            })
-        })
-
-        this.selectClause = this.RULE('selectClause', () => {
-            this.CONSUME(lexer.Select)
-            this.SUBRULE(this.projection)
-        })
-
-        this.joinClause = this.RULE('joinClause', () => {
-            this.MANY(() => {
-                this.CONSUME(lexer.InnerJoin)
-                this.OR([
-                    {
-                        ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.table }),
-                    },
-                    {
-                        ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.table }),
-                    },
-                ])
-                this.OPTION(() => this.CONSUME2(lexer.Identifier, { LABEL: labels.alias }))
-                this.CONSUME(lexer.On)
-                this.SUBRULE(this.expression)
-            })
-        })
-
-        this.fromClause = this.RULE('fromClause', () => {
-            this.CONSUME(lexer.From)
+    public readonly joinClause = this.RULE('joinClause', () => {
+        this.MANY(() => {
+            this.CONSUME(lexer.InnerJoin)
             this.OR([
                 {
                     ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.table }),
@@ -144,102 +143,84 @@ class SelectParser extends CstParser {
                 },
             ])
             this.OPTION(() => this.CONSUME2(lexer.Identifier, { LABEL: labels.alias }))
-        })
-
-        this.whereClause = this.RULE('whereClause', () => {
-            this.CONSUME(lexer.Where)
+            this.CONSUME(lexer.On)
             this.SUBRULE(this.expression)
         })
+    })
 
-        this.expression = this.RULE('expression', () => {
-            this.MANY_SEP({
-                SEP: lexer.OrAnd,
-                DEF: () => {
-                    this.SUBRULE(this.subExpression)
+    public readonly expression = this.RULE('expression', () => {
+        this.MANY_SEP({
+            SEP: lexer.OrAnd,
+            DEF: () => this.SUBRULE(this.subExpression),
+        })
+    })
 
-                    return lexer.OrAnd.name
+    public readonly subExpression = this.RULE('subExpression', () => {
+        this.SUBRULE(this.atomicExpression, { LABEL: labels.left })
+        this.OR([
+            {
+                ALT: () => {
+                    this.SUBRULE(this.relationalOperator)
+                    this.CONSUME2(lexer.OpenParenthesis)
+                    this.SUBRULE3(this.selectStatement, { LABEL: labels.right })
+                    this.CONSUME3(lexer.CloseParenthesis)
                 },
-            })
-        })
-
-        this.subExpression = this.RULE('subExpression', () => {
-            this.SUBRULE(this.atomicExpression, { LABEL: labels.left })
-            this.OR([
-                {
-                    ALT: () => {
-                        this.SUBRULE(this.relationalOperator)
-                        // this.CONSUME2(In, { LABEL: 'relationalOperator' })
-                        this.CONSUME2(lexer.OpenParenthesis)
-                        this.SUBRULE3(this.selectStatement, { LABEL: labels.right })
-                        this.CONSUME3(lexer.CloseParenthesis)
-                    },
+            },
+            {
+                ALT: () => {
+                    this.SUBRULE1(this.relationalOperator)
+                    this.SUBRULE2(this.atomicExpression, { LABEL: labels.right })
                 },
-                {
-                    ALT: () => {
-                        this.SUBRULE1(this.relationalOperator)
-                        this.SUBRULE2(this.atomicExpression, { LABEL: labels.right })
-                    },
+            },
+        ])
+    })
+
+    public readonly atomicExpression = this.RULE('atomicExpression', () => {
+        this.OR([
+            { ALT: () => this.CONSUME(lexer.Integer) },
+            { ALT: () => this.CONSUME(lexer.Null) },
+            { ALT: () => this.CONSUME(lexer.Identifier) },
+            { ALT: () => this.CONSUME(lexer.StringToken) },
+            {
+                ALT: () => {
+                    this.CONSUME(lexer.OpenParenthesis)
+                    this.MANY_SEP({
+                        SEP: lexer.Comma,
+                        DEF: () => {
+                            this.OR1([
+                                {
+                                    ALT: () => this.CONSUME1(lexer.Integer, { LABEL: labels.in }),
+                                },
+                                {
+                                    ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.in }),
+                                },
+                            ])
+                        },
+                    })
+                    this.CONSUME(lexer.CloseParenthesis)
                 },
-            ])
-        })
+            },
+        ])
+    })
 
-        this.atomicExpression = this.RULE('atomicExpression', () => {
-            this.OR([
-                { ALT: () => this.CONSUME(lexer.Integer) },
-                { ALT: () => this.CONSUME(lexer.Null) },
-                { ALT: () => this.CONSUME(lexer.Identifier) },
-                { ALT: () => this.CONSUME(lexer.StringToken) },
-                {
-                    ALT: () => {
-                        this.CONSUME(lexer.OpenParenthesis)
-                        this.MANY_SEP({
-                            SEP: lexer.Comma,
-                            DEF: () => {
-                                this.OR1([
-                                    {
-                                        ALT: () => this.CONSUME1(lexer.Integer, { LABEL: labels.in }),
-                                    },
-                                    {
-                                        ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.in }),
-                                    },
-                                ])
-                            },
-                        })
-                        this.CONSUME(lexer.CloseParenthesis)
-                    },
-                },
-            ])
-        })
+    public readonly relationalOperator = this.RULE('relationalOperator', () => {
+        this.OR([
+            { ALT: () => this.CONSUME(lexer.GreaterOrEqualThan) },
+            { ALT: () => this.CONSUME(lexer.GreaterThan) },
+            { ALT: () => this.CONSUME(lexer.LessOrEqualThan) },
+            { ALT: () => this.CONSUME(lexer.LessThan) },
+            { ALT: () => this.CONSUME(lexer.Equal) },
+            { ALT: () => this.CONSUME(lexer.NotEqual) },
+            { ALT: () => this.CONSUME(lexer.Like) },
+            { ALT: () => this.CONSUME(lexer.NotLike) },
+            { ALT: () => this.CONSUME(lexer.In) },
+            { ALT: () => this.CONSUME(lexer.IsNot) },
+            { ALT: () => this.CONSUME(lexer.Is) },
+        ])
+    })
 
-        this.relationalOperator = this.RULE('relationalOperator', () => {
-            this.OR([
-                { ALT: () => this.CONSUME(lexer.GreaterOrEqualThan) },
-                { ALT: () => this.CONSUME(lexer.GreaterThan) },
-                { ALT: () => this.CONSUME(lexer.LessOrEqualThan) },
-                { ALT: () => this.CONSUME(lexer.LessThan) },
-                { ALT: () => this.CONSUME(lexer.Equal) },
-                { ALT: () => this.CONSUME(lexer.NotEqual) },
-                { ALT: () => this.CONSUME(lexer.Like) },
-                { ALT: () => this.CONSUME(lexer.NotLike) },
-                { ALT: () => this.CONSUME(lexer.In) },
-                { ALT: () => this.CONSUME(lexer.IsNot) },
-                { ALT: () => this.CONSUME(lexer.Is) },
-            ])
-        })
-
-        this.orderByClause = this.RULE('orderByClause', () => {
-            this.CONSUME(lexer.OrderBy)
-            this.CONSUME(lexer.Identifier)
-            this.OPTION({
-                DEF: () => this.CONSUME(lexer.OrderByDirection),
-            })
-        })
-
-        this.limitClause = this.RULE('limitClause', () => {
-            this.CONSUME(lexer.Limit)
-            this.CONSUME(lexer.Integer)
-        })
-
+    constructor(config?: any) {
+        super(lexer.tokenVocabulary, config)
         this.performSelfAnalysis()
     }
 }

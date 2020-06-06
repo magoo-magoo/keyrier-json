@@ -1,6 +1,27 @@
+export const operators = {
+    modulo: '%',
+    or: 'or',
+    and: 'and',
+    equal: '=',
+    is: 'is',
+    notEqual: '!=',
+    isNot: 'is not',
+    '<>': '<>',
+    greaterThan: '>',
+    greaterOrEqualThan: '>=',
+    lessThan: '<',
+    lessOrEqualthan: '<=',
+    in: 'in',
+    like: 'like',
+    notLike: 'not like',
+} as const
+
+export type Operation = typeof operators[keyof typeof operators]
+
 export interface From {
     name: Value
     alias: Value
+    type: 'From'
 }
 
 export interface Value {
@@ -26,7 +47,7 @@ export type Operand =
           type: 'identifier' | 'array'
       }
     | {
-          operation: string
+          operation: Operation
           value: Value[]
           type: 'expression'
           left: Operand
@@ -52,7 +73,7 @@ export type Operand =
 export interface Conditions {
     left: Operand
     right: Operand
-    operation: string
+    operation: Operation
 }
 export interface Where {
     conditions: Conditions
@@ -75,6 +96,7 @@ export interface Join {
 }
 
 export interface SQLTree {
+    type: 'selectStatement'
     source: From
     where?: Where | null
     fields: Field[]

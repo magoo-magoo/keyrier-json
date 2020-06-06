@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash'
-import * as utils from './utils'
 import { toAst } from './actions-visitor'
-import { Conditions, Field, From, Operand, SQLTree } from './SqlTree'
+import { Conditions, Field, From, Operand, Operation, operators, SQLTree } from './SqlTree'
+import * as utils from './utils'
 
 export const computePath = (path: string[] | undefined, allowedSourceNames: string[]) => {
     if (!path) {
@@ -22,7 +22,13 @@ export const sqlQueryWithMultipleSources = (source: Record<string, string>, quer
     try {
         const sqlTree = toAst(query)
 
-        if (!Object.keys(source).some(x => x === String(sqlTree.source.name.values[0]).toLowerCase())) {
+        if (
+            !Object.keys(source).some(
+                x =>
+                    x.toLowerCase() === String(sqlTree.source.alias.values[0]).toLowerCase() ||
+                    x.toLowerCase() === String(sqlTree.source.name.value)
+            )
+        ) {
             return new SyntaxError(String(sqlTree.source.name.values[0]))
         }
 
@@ -37,15 +43,11 @@ export const sqlQueryWithMultipleSources = (source: Record<string, string>, quer
     }
 }
 
-const mapper = (v: object, fields: Field[], source: From) => {
-    if (fields.some(x => x.field.value === '*')) {
-        return v
+const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) => {
+    if (sourceDataObject[sqlTree.source.name.value]) {
+        return sourceDataObject[sqlTree.source.name.value]
     }
 
-    return mapObject(fields, v, source)
-}
-
-export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) => {
     const fromPath = [...sqlTree.source.name.values]
     fromPath.shift()
     let data = sourceDataObject[sqlTree.source.name.values[0]]
@@ -53,6 +55,14 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
     if (fromPath.length > 0) {
         data = utils.get(data, fromPath.slice(0))
     }
+
+    return data
+}
+
+export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) => {
+    const fromPath = [...sqlTree.source.name.values]
+    fromPath.shift()
+    const data = getSourceData(sqlTree, sourceDataObject)
 
     if (!Array.isArray(data)) {
         return mapper(data, sqlTree.fields, sqlTree.source)
@@ -130,11 +140,8 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
     return mapped
 }
 
-const operators = {
-    modulo: '%',
-} as const
 const compareOperands = (
-    operation: string,
+    operation: Operation,
     left: Operand,
     right: Operand,
     values: Record<string, any>,
@@ -143,14 +150,14 @@ const compareOperands = (
     const leftValue = getValue(left, values)
     const rightValue = getValue(right, values)
     switch (operation.toLowerCase()) {
-        case 'or':
+        case operators.or:
             return (
                 (left.type === 'expression' &&
                     compareOperands(left.operation, left.left, left.right, values, sourceDataObject)) ||
                 (right.type === 'expression' &&
                     compareOperands(right.operation, right.left, right.right, values, sourceDataObject))
             )
-        case 'and':
+        case operators.and:
             return (
                 left.type === 'expression' &&
                 compareOperands(left.operation, left.left, left.right, values, sourceDataObject) &&
@@ -159,14 +166,13 @@ const compareOperands = (
             )
     }
     switch (operation.toLowerCase()) {
-        case '=':
-        case 'is':
+        case operators.equal:
+        case operators.is:
             return leftValue === rightValue
-        case '!=':
-        case 'is not':
-        case '<>':
+        case operators.notEqual:
+        case operators.isNot:
             return leftValue !== rightValue
-        case 'like': {
+        case operators.like: {
             const leftStr = String(leftValue)
             const rightStr = String(rightValue)
             if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
@@ -184,7 +190,7 @@ const compareOperands = (
             }
             return false
         }
-        case 'not like': {
+        case operators.notLike: {
             const leftStr = String(leftValue)
             const rightStr = String(rightValue)
             if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
@@ -202,15 +208,15 @@ const compareOperands = (
             }
             return true
         }
-        case '>':
+        case operators.greaterThan:
             return !!rightValue && !!leftValue && leftValue > rightValue
-        case '>=':
+        case operators.greaterOrEqualThan:
             return !!rightValue && !!leftValue && leftValue >= rightValue
-        case '<':
+        case operators.lessThan:
             return !!rightValue && !!leftValue && leftValue < rightValue
-        case '<=':
+        case operators.lessOrEqualthan:
             return !!rightValue && !!leftValue && leftValue <= rightValue
-        case 'in': {
+        case operators.in: {
             if (!rightValue) {
                 break
             }
@@ -268,6 +274,7 @@ const applyFunction = (functionName: string, value: any) => {
     }
     return value
 }
+
 const getValue = (operand: Operand, values: Record<string, any>) => {
     let operandValue = operand.value
     if (operand.type === 'identifier') {
@@ -285,4 +292,12 @@ const getValue = (operand: Operand, values: Record<string, any>) => {
         operandValue = utils.get(value, path)
     }
     return operandValue
+}
+
+const mapper = (v: object, fields: Field[], source: From) => {
+    if (fields.some(x => x.field.value === '*')) {
+        return v
+    }
+
+    return mapObject(fields, v, source)
 }

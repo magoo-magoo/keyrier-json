@@ -152,6 +152,12 @@ describe('sql interpreter', () => {
             expect(result).not.toBeInstanceOf(Error)
         })
 
+        it('should accept json filename as a source name', () => {
+            const result = sqlQueryWithMultipleSources({ 'filename.json': '[{"a": 1}]' }, 'select * from filename.json')
+            // expect(result).not.toBeInstanceOf(Error)
+            expect(result).toEqual([{ a: 1 }])
+        })
+
         it('should have a named table for plain object', () => {
             const result = sqlQueryWithMultipleSources(
                 { data: '{"age": 1, "name": "John Doe", "c": 999}' },

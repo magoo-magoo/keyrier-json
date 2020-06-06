@@ -1,4 +1,5 @@
 import { CstNode, ICstVisitor, IToken } from 'chevrotain'
+import { ReadonlyKeys } from 'utility-types'
 import { Integer, lex, Token, tokenVocabulary } from './lexer'
 import { SelectParser } from './parser'
 import { Field, From, Operand, Order, ordering, SQLTree } from './SqlTree'
@@ -6,20 +7,17 @@ import { Field, From, Operand, Order, ordering, SQLTree } from './SqlTree'
 const parserInstance = new SelectParser()
 const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, any> = parserInstance.getBaseCstVisitorConstructor()
 
+type readonlyKeys = ReadonlyKeys<SelectParser>
+type Node = readonlyKeys
+export type Ctx = Record<Node, CstNode | CstNode[]>
+
 class SQLToAstVisitor extends BaseSQLVisitor {
     constructor() {
         super()
         this.validateVisitor()
     }
 
-    public selectStatement(ctx: {
-        selectClause: CstNode | CstNode[]
-        fromClause: CstNode | CstNode[]
-        whereClause: CstNode | CstNode[]
-        orderByClause: CstNode | CstNode[]
-        limitClause: CstNode | CstNode[]
-        joinClause: CstNode | CstNode[]
-    }) {
+    public selectStatement(ctx: Ctx) {
         const select = this.visit(ctx.selectClause)
         const from = this.visit(ctx.fromClause)
         const where = this.visit(ctx.whereClause)
@@ -33,7 +31,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
             order,
             limit,
             joins,
-        }
+        } as SQLTree
 
         return {
             type: 'selectStatement',
@@ -41,7 +39,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         } as const
     }
 
-    public selectClause(ctx: { projection: CstNode | CstNode[] }) {
+    public selectClause(ctx: Ctx) {
         const columns = this.visit(ctx.projection)
         return columns
     }
@@ -101,6 +99,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         }
         const alias = ctx.alias?.length >= index + 1 ? ctx.alias[0].image : tableName
         return {
+            type: 'From',
             name: {
                 value: tableName,
                 values: splitPropertyPath(tableName).pathArray,
@@ -112,7 +111,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         }
     }
 
-    public whereClause(ctx: { expression: CstNode | CstNode[] }) {
+    public whereClause(ctx: Ctx) {
         const conditions = this.visit(ctx.expression)
 
         return {
@@ -233,8 +232,15 @@ class SQLToAstVisitor extends BaseSQLVisitor {
     }
 
     public relationalOperator(ctx: Record<Token, Array<IToken>>) {
-        const values = Object.values(ctx)
-        return values[0][0].image
+        const {
+            image,
+            tokenType: { LABEL },
+        } = Object.values(ctx)[0][0]
+
+        if (LABEL) {
+            return LABEL
+        }
+        return image
     }
 }
 

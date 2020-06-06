@@ -30,7 +30,7 @@ export const get = (obj: any, path: (string | number)[], defaultValue: any = und
     return result === undefined || result === obj ? defaultValue : result
 }
 
-export const slice = (array: any[], start: number, end: number) => {
+const slice = (array: any[], start: number, end: number) => {
     let length = array == null ? 0 : array.length
     if (!length) {
         return []
@@ -61,4 +61,11 @@ export const take = (array: any[], n = 1) => {
     }
 
     return slice(array, 0, n < 0 ? 0 : n)
+}
+
+export const assertIsDefined = <T = {}>(value: T): value is NonNullable<T> => {
+    if (value) {
+        return true
+    }
+    throw new Error()
 }
