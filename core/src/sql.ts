@@ -3,11 +3,11 @@ import { toAst } from './actions-visitor'
 import { Conditions, Field, From, Operand, Operation, operators, SQLTree } from './SqlTree'
 import * as utils from './utils'
 
-export const computePath = (path: string[] | undefined, allowedSourceNames: string[]) => {
+export const computePath = (path: (string | number)[] | undefined, allowedSourceNames: string[]) => {
     if (!path) {
         return { path: [] }
     }
-    if (allowedSourceNames.some(x => x === path[0]?.toLowerCase())) {
+    if (allowedSourceNames.some(x => x === String(path[0])?.toLowerCase())) {
         return { tableName: path[0], path: [...path].slice(1) }
     }
 
@@ -32,7 +32,7 @@ export const sqlQueryWithMultipleSources = (source: Record<string, string>, quer
             return new SyntaxError(String(sqlTree.source.name.values[0]))
         }
 
-        const sourceDataObjects: Record<string, any> = {}
+        const sourceDataObjects: Record<string, object> = {}
         Object.keys(source).forEach(key => {
             sourceDataObjects[key] = utils.jsonParseSafe(source[key])
         })
@@ -43,7 +43,7 @@ export const sqlQueryWithMultipleSources = (source: Record<string, string>, quer
     }
 }
 
-const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) => {
+const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, object>) => {
     if (sourceDataObject[sqlTree.source.name.value]) {
         return sourceDataObject[sqlTree.source.name.value]
     }
@@ -59,13 +59,20 @@ const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) 
     return data
 }
 
+export type Row = {
+    projected: object
+    real: object
+    dataContext: Record<string, object>
+    includeInResult: boolean
+}
+
 export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) => {
     const fromPath = [...sqlTree.source.name.values]
     fromPath.shift()
     const data = getSourceData(sqlTree, sourceDataObject)
 
     if (!Array.isArray(data)) {
-        return mapper(data, sqlTree.fields, sqlTree.source)
+        return mapper(data, sqlTree.fields, { [sqlTree.source.alias.value]: data })
     }
 
     let jointures: { source: any[]; conditions: Conditions; from: From }[] = []
@@ -78,74 +85,90 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
             })
         })
     }
-    const filtered = data.filter(v => {
-        if (jointures.length) {
-            for (const { source, conditions, from } of jointures) {
-                let match = false
-                for (const joinRow of source) {
-                    const comparison = compareOperands(
-                        conditions.operation,
-                        conditions.left,
-                        conditions.right,
-                        {
+    const rows: Row[] = data.map(x => ({
+        real: x,
+        projected: x,
+        includeInResult: true,
+        dataContext: {
+            [sqlTree.source.name.value]: x,
+            [sqlTree.source.alias.value]: x,
+        },
+    }))
+
+    const ordered = sqlTree.order
+        ? orderBy(
+              rows,
+              sqlTree.order.orderings.map(x => 'real.' + x.value.value),
+              sqlTree.order.orderings.map(x => x.direction)
+          )
+        : rows
+
+    const results: object[] = []
+    ordered.forEach(row => {
+        if (sqlTree.limit && sqlTree.limit.value.value <= results.length) {
+            return
+        }
+        const shouldBeIncludeInResults = () => {
+            if (jointures.length) {
+                for (const { source, conditions, from } of jointures) {
+                    let match = false
+                    for (const joinRow of source) {
+                        const joinRowData = {
                             [from.name.value]: joinRow,
                             [from.alias.value]: joinRow,
-                            [sqlTree.source.name.value]: v,
-                            [sqlTree.source.alias.value]: v,
-                        },
-                        sourceDataObject
-                    )
-                    if (comparison) {
-                        match = true
+                        }
+                        row.dataContext = { ...row.dataContext, ...joinRowData }
+                        const comparison = compareOperands(
+                            conditions.operation,
+                            conditions.left,
+                            conditions.right,
+                            {
+                                ...joinRowData,
+                                ...row.dataContext,
+                            },
+                            sourceDataObject
+                        )
+                        if (comparison) {
+                            match = true
+                        }
+                    }
+                    if (!match) {
+                        row.includeInResult = false
                     }
                 }
-                if (!match) {
-                    return false
-                }
             }
+
+            if (!sqlTree.where || !sqlTree.where.conditions) {
+                row.includeInResult = row.includeInResult && true
+                return
+            }
+            const leftValue = sqlTree.where.conditions.left
+            const rightValue = sqlTree.where.conditions.right
+            const operation = sqlTree.where.conditions.operation
+
+            const comparison = compareOperands(operation, leftValue, rightValue, row.dataContext, sourceDataObject)
+
+            row.includeInResult = row.includeInResult && comparison
         }
 
-        if (!sqlTree.where || !sqlTree.where.conditions) {
-            return true
+        shouldBeIncludeInResults()
+
+        if (row.includeInResult) {
+            const mapped = mapper(row.real, sqlTree.fields, row.dataContext)
+            row.projected = mapped
+            results.push(mapped)
         }
-        const leftValue = sqlTree.where.conditions.left
-        const rightValue = sqlTree.where.conditions.right
-        const operation = sqlTree.where.conditions.operation
-
-        const comparison = compareOperands(
-            operation,
-            leftValue,
-            rightValue,
-            {
-                [sqlTree.source.alias.value]: v,
-                [sqlTree.source.name.value]: v,
-            },
-            sourceDataObject
-        )
-
-        return comparison
     })
 
-    const ordered = orderBy(
-        filtered,
-        sqlTree.order ? sqlTree.order.orderings.map(x => x.value.value) : [],
-        sqlTree.order ? sqlTree.order.orderings.map(x => x.direction) : []
-    )
-    const limited = utils.take(
-        ordered,
-        sqlTree.limit?.value?.value ? parseInt(sqlTree.limit.value.value.toString()) : 999999999999999
-    )
-    const mapped = limited.map(v => mapper(v, sqlTree.fields, sqlTree.source))
-
-    return mapped
+    return results
 }
 
 const compareOperands = (
     operation: Operation,
     left: Operand,
     right: Operand,
-    values: Record<string, any>,
-    sourceDataObject: Record<string, any>
+    values: Record<string, object>,
+    sourceDataObject: Record<string, object>
 ): boolean => {
     const leftValue = getValue(left, values)
     const rightValue = getValue(right, values)
@@ -235,21 +258,16 @@ const compareOperands = (
     return false
 }
 
-const mapObject = (fields: Field[], mapped: object, source: From) => {
-    const mappedObject: {
-        [key: string]: any
-    } = {}
+const mapObject = (fields: Field[], sources: Record<string, object>) => {
+    const mappedObject: Record<string, object> = {}
     fields.forEach(field => {
-        const value = utils.get(
-            mapped,
-            field.field.values.filter(val => val !== source.alias?.value)
-        )
+        const value = getValue(field, sources)
         mappedObject[field.name.value] = field.function ? applyFunction(field.function.name, value) : value
     })
     return mappedObject
 }
 
-const applyFunction = (functionName: string, value: any) => {
+const applyFunction = (functionName: string, value: object) => {
     const func = functionName.toLowerCase()
     if (func === 'lower') {
         return String(value).toLowerCase()
@@ -275,29 +293,43 @@ const applyFunction = (functionName: string, value: any) => {
     return value
 }
 
-const getValue = (operand: Operand, values: Record<string, any>) => {
-    let operandValue = operand.value
-    if (operand.type === 'identifier') {
-        const availableTables = Object.keys(values)
-        const { path, tableName } = computePath(operand?.values, availableTables)
-
-        if (tableName && !availableTables.some(x => x === tableName)) {
-            throw Error(`Unknown identifier: ${tableName}`)
-        }
-        if (!tableName && availableTables.length > 1) {
-            throw Error(`Ambiguous identifier: ${operandValue}`)
-        }
-
-        const value = tableName ? values[tableName] : Object.values(values)[0]
-        operandValue = utils.get(value, path)
+const getValue = (operand: Operand | Field, values: Record<string, object>) => {
+    if (
+        operand.type === 'integer' ||
+        operand.type === 'string' ||
+        operand.type === 'array' ||
+        operand.type === 'selectStatement' ||
+        operand.type === 'null' ||
+        operand.type === 'expression'
+    ) {
+        return operand.value
     }
-    return operandValue
+    if (operand.type === 'opIdentifier') {
+        const { field } = operand
+        return getIdentifierValue(values, field)
+    }
+    return getIdentifierValue(values, operand)
 }
 
-const mapper = (v: object, fields: Field[], source: From) => {
+const mapper = (v: object, fields: Field[], sources: Record<string, object>) => {
     if (fields.some(x => x.field.value === '*')) {
         return v
     }
 
-    return mapObject(fields, v, source)
+    return mapObject(fields, sources)
+}
+
+function getIdentifierValue(values: Record<string, object>, field: Field) {
+    const availableTables = Object.keys(values)
+    const { path, tableName } = computePath(field?.field.values, availableTables)
+
+    if (tableName && !availableTables.some(x => x === tableName)) {
+        throw Error(`Unknown identifier: ${tableName}`)
+    }
+    if (!tableName && availableTables.length > 1) {
+        throw Error(`Ambiguous identifier: ${field.field.value}`)
+    }
+
+    const value = tableName ? values[tableName] : Object.values(values)[0]
+    return utils.get(value, path)
 }

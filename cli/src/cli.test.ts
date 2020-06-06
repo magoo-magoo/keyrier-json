@@ -7,7 +7,7 @@ const keyrier = async (...args: string[]) => {
     return await execa(fixturePath, args)
 }
 
-const fixturePath = path.join(__dirname, '../dist', 'cli.js')
+const fixturePath = path.join(__dirname, '../dist', 'index.js')
 
 describe('Keyrier CLI', () => {
     beforeAll(() => {})
@@ -50,7 +50,7 @@ describe('Keyrier CLI', () => {
         expect(stdout).toContain('value 1')
         expect(stdout).toContain('value 2')
     })
-    it('should return null if json file emty', async () => {
+    it('should return null if json file empty', async () => {
         // arrange
         fs.writeFileSync('tests/fake.json', '', 'utf8')
 
@@ -61,7 +61,7 @@ describe('Keyrier CLI', () => {
         expect(exitCode).toBe(0)
         expect(stdout).toBe('')
     })
-    it('should return null if csv file emty', async () => {
+    it('should return null if csv file empty', async () => {
         // arrange
         fs.writeFileSync('tests/fake.csv', '', 'utf8')
 
@@ -87,7 +87,6 @@ describe('Keyrier CLI', () => {
     })
 
     it('should write result to CSV file', async () => {
-        // arrange
         // arrange
         fs.writeFileSync('tests/users.json', `[{"email": "mael.magoo@test.com"}]`, 'utf8')
 

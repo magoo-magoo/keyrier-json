@@ -3,9 +3,11 @@
     "compilerOptions": {
         "module": "ESNext",
         "target": "ESNext",
+        "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "types": ["node", "jest"]
+        "types": ["node", "jest"],
+        "rootDir": "./"
     },
     "include": ["./**/*.ts", "./src/query.test.ts"]
 }

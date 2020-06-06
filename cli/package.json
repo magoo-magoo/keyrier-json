@@ -21,23 +21,28 @@
         "keyrier": "dist/cli.js"
     },
     "scripts": {
-        "build": "microbundle --target=node",
-        "build-release": "yarn build && npm version patch && npm publish --access=public",
-        "start": "microbundle --target=node watch",
-        "make-big-file": "ncc run src/bigfile.ts",
-        "ncc-run-cli": "ncc run src/cli.ts",
-        "test": "jest"
+        "build": "tsdx build --target node",
+        "lint": "tsdx lint",
+        "insert:shebang": "sed -i.old '1s;^;#!/usr/bin/env node;' dist/index.js && chmod +x dist/index.js && rm dist/index.js.old -f",
+        "postbuild": "yarn insert:shebang",
+        "prepare": "tsdx build --target node",
+        "start": "tsdx watch --onSuccess 'yarn insert:shebang'",
+        "test": "tsdx test"
     },
     "dependencies": {
         "@keyrier/core": "^1.1.12",
+        "@types/easy-table": "^0.0.32",
+        "@types/json2csv": "5.0.1",
+        "csv-parse": "^4.9.1",
+        "json2csv": "^5.0.1",
         "meow": "7.0.1",
+        "easy-table": "^1.1.1",
         "update-notifier": "4.1.0",
         "xlsx": "^0.16.1"
     },
     "devDependencies": {
         "@types/update-notifier": "4.1.0",
-        "execa": "^4.0.2",
-        "microbundle": "next"
+        "execa": "^4.0.2"
     },
     "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",
     "readme": "./README.md"

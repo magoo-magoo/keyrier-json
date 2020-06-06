@@ -1,6 +1,4 @@
-#!/usr/bin/env node
-
-import { executeQuery, jsonParseSafe, toAst } from '@keyrier/core'
+import { executeQuery, jsonParseSafe, SQLTree, toAst } from '@keyrier/core'
 import parse from 'csv-parse/lib/sync'
 import EasyTable from 'easy-table'
 import * as fs from 'fs'
@@ -111,6 +109,24 @@ const isCSVfile = (name: string | number) => {
     return false
 }
 
+const travel = (node: any, consume: (v: any) => void) => {
+    if (!node) {
+        return
+    }
+
+    consume(node)
+
+    if (typeof node !== 'object') {
+        return
+    }
+    Object.keys(node).forEach(key => {
+        const value = node[key]
+        if (typeof value === 'object') {
+            travel(value, consume)
+        }
+    })
+}
+
 export const query = async (q: string, opts: QueryOptions = {}) => {
     if (!q) {
         throw new Error()
@@ -119,46 +135,34 @@ export const query = async (q: string, opts: QueryOptions = {}) => {
     const options = Object.assign<QueryOptions, QueryOptions>(defaultConfig, opts)
     logDebug({ options })
 
-    const ast = toAst(q)
-    logDebug({ ast })
-
-    const fileType = getType(ast.source.name.value)
-    logDebug({ fileType })
-
-    let inputCcontent: string
-
-    if (fileType === 'stdin/json') {
-        inputCcontent = await readStdin()
-    } else {
-        inputCcontent = fs.readFileSync(ast.source.name.value, 'utf8')
-    }
-
-    if (!inputCcontent) {
-        return
-    }
     if (!options.outputFile) {
         return
     }
 
-    let executionResult: object
-    if (fileType === 'file/json' || fileType === 'stdin/json') {
-        const sourceDataObject = jsonParseSafe(inputCcontent)
-        executionResult = executeQuery(
-            { ...ast, source: { name: { value: 'json', values: ['json'] } } },
-            sourceDataObject
-        )
-    } else if (fileType === 'file/csv') {
-        const sourceDataObject = parse(inputCcontent, {
-            columns: true,
-            skip_empty_lines: true,
-        })
-        executionResult = executeQuery(
-            { ...ast, source: { name: { value: 'csv', values: ['csv'] } } },
-            sourceDataObject
-        )
-    } else {
-        throw new Error(`${ast.source.name.value} is not a valid file`)
+    const ast = toAst(q)
+    logDebug({ ast })
+
+    const from: SQLTree.From[] = []
+    travel(ast, node => {
+        if (node?.type === 'From') {
+            from.push(node)
+        }
+    })
+
+    const sources: Record<string, any> = {}
+
+    for (const f of from) {
+        const sourceDataObject = await importFileData(f)
+        if (!sourceDataObject) {
+            return
+        }
+        sources[f.name.value] = sourceDataObject
+        sources[f.alias.value] = sourceDataObject
     }
+
+    const executionResult = executeQuery(ast, sources)
+
+    logDebug({ executionResult })
 
     if (options.outputType === 'table') {
         const tableString = EasyTable.print(executionResult)
@@ -232,6 +236,36 @@ const toCsv = (data: object[] | object) => {
         logDebug('execution finished')
     } catch (e) {
         console.error(e.message)
+        console.error(e)
         process.exit(6)
     }
 })()
+async function importFileData(source: SQLTree.From) {
+    const fileType = getType(source.name.value)
+    logDebug({ fileType })
+
+    let inputCcontent: string
+
+    if (fileType === 'stdin/json') {
+        inputCcontent = await readStdin()
+    } else {
+        inputCcontent = fs.readFileSync(source.name.value, 'utf8')
+    }
+
+    if (!inputCcontent) {
+        return null
+    }
+
+    let sourceDataObject: object
+    if (fileType === 'file/json' || fileType === 'stdin/json') {
+        sourceDataObject = jsonParseSafe(inputCcontent)
+    } else if (fileType === 'file/csv') {
+        sourceDataObject = parse(inputCcontent, {
+            columns: true,
+            skip_empty_lines: true,
+        })
+    } else {
+        throw new Error(`${source.name.value} is not a valid file`)
+    }
+    return sourceDataObject
+}

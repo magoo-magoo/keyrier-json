@@ -154,7 +154,6 @@ describe('sql interpreter', () => {
 
         it('should accept json filename as a source name', () => {
             const result = sqlQueryWithMultipleSources({ 'filename.json': '[{"a": 1}]' }, 'select * from filename.json')
-            // expect(result).not.toBeInstanceOf(Error)
             expect(result).toEqual([{ a: 1 }])
         })
 
@@ -680,18 +679,28 @@ describe('sql interpreter', () => {
                             }
                           ]
                         `,
-                    table2: '[{"column3": "xxx"}, {"column3": "foo"}]',
+                    table2: '[{"column3": "xxx"}, {"column3": "foo", "prop": "Srbja"}]',
                     table3: '[{"column4": "mock@mock.com"}, {"column4": "test@test.com"}]',
                 },
                 `
                 SELECT 
-                table1.addr as col1 
+                table1.addr as col1,
+                table2.column3 as col2,
+                table3.column4 as col3,
+                table2.prop as col4
                 FROM table1 
                 inner join table2 on table1.name = table2.column3
                 inner join table3 on table1.email = table3.column4
                 `
             )
-            expect(result).toEqual([{ col1: 'localhost' }])
+            expect(result).toEqual([
+                {
+                    col1: 'localhost',
+                    col2: 'foo',
+                    col3: 'test@test.com',
+                    col4: 'Srbja',
+                },
+            ])
         })
     })
 

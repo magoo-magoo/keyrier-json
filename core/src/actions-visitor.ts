@@ -2,7 +2,7 @@ import { CstNode, ICstVisitor, IToken } from 'chevrotain'
 import { ReadonlyKeys } from 'utility-types'
 import { Integer, lex, Token, tokenVocabulary } from './lexer'
 import { SelectParser } from './parser'
-import { Field, From, Operand, Order, ordering, SQLTree } from './SqlTree'
+import { Field, FieldType, From, Operand, Order, ordering, SQLTree } from './SqlTree'
 
 const parserInstance = new SelectParser()
 const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, any> = parserInstance.getBaseCstVisitorConstructor()
@@ -68,7 +68,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         }
     }
 
-    public projection(ctx: { cols: CstNode[] }) {
+    public projection(ctx: { cols: CstNode[] }): Field[] {
         const cols: { value: string; name: string; function: string | undefined }[] = ctx.cols.map(x =>
             this.visit(x)
         ) as any
@@ -76,7 +76,13 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         cols.forEach(({ name, value, function: func }) => {
             const { pathArray: namePathArray, propertyName: namePropertyName } = splitPropertyPath(name)
             const { pathArray: fieldPathArray, propertyName: fieldPropertyName } = splitPropertyPath(value)
+            let type: FieldType = 'fieldIdentifier'
+            if (func) {
+                type = 'function'
+            }
+
             const field: Field = {
+                type,
                 name: {
                     value: namePropertyName,
                     values: namePathArray,
@@ -195,13 +201,23 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const right = this.visit(ctx.right[0])
         return {
             type: 'expression',
-            left: { type: left.type, value: left.value, values: splitPropertyPath(left.value).pathArray },
+            left: {
+                type: left.type,
+                value: left.value,
+                values: splitPropertyPath(left.value).pathArray,
+                field: left.field,
+            },
             operation,
-            right: { type: right.type, value: right.value, values: splitPropertyPath(right.value).pathArray },
+            right: {
+                type: right.type,
+                value: right.value,
+                values: splitPropertyPath(right.value).pathArray,
+                field: right.field,
+            },
         }
     }
 
-    public atomicExpression(context: Record<Token | 'in', Array<IToken>>) {
+    public atomicExpression(context: Record<Token | 'in', Array<IToken>>): Operand {
         const entries = Object.entries(context) as [keyof typeof context, Array<IToken>][]
         for (let [key, value] of entries) {
             if (key === 'in') {
@@ -212,7 +228,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
                         }
                         return convertStringTokenToJsString(x.image)
                     })
-                    .map(v => ({ value: v }))
+                    .map(v => ({ value: v, values: [v] }))
                 return { type: 'array', value: array }
             }
             if (key === 'Integer') {
@@ -222,13 +238,25 @@ class SQLToAstVisitor extends BaseSQLVisitor {
                 return { type: 'null', value: null }
             }
             if (key === 'Identifier') {
-                return { type: 'identifier', value: value[0].image }
+                const { pathArray, propertyName } = splitPropertyPath(value[0].image)
+                return {
+                    type: 'opIdentifier',
+                    value: value[0].image,
+                    field: {
+                        type: 'fieldIdentifier',
+                        name: { value: propertyName, values: pathArray },
+                        field: {
+                            value: propertyName,
+                            values: pathArray,
+                        },
+                    },
+                }
             }
             if (key === 'StringToken') {
                 return { type: 'string', value: convertStringTokenToJsString(value[0].image) }
             }
         }
-        return null
+        throw new Error()
     }
 
     public relationalOperator(ctx: Record<Token, Array<IToken>>) {

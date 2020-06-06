@@ -33,7 +33,9 @@ export interface Func {
     name: string
 }
 
+export type FieldType = 'fieldIdentifier' | 'fieldString' | 'fieldFunction'
 export interface Field {
+    type: FieldType
     field: Value
     name: Value
     function?: Func
@@ -43,8 +45,13 @@ export type Operand =
     | {
           value: Value[]
           values?: string[]
-          operation: string
-          type: 'identifier' | 'array'
+          type: 'array'
+      }
+    | {
+          field: Field
+          value: string
+          values?: string[]
+          type: 'opIdentifier'
       }
     | {
           operation: Operation

@@ -7,10 +7,12 @@ describe('actions-visitor', () => {
 
         expect(ast.fields).toHaveLength(2)
         expect(ast.fields[0]).toEqual({
+            type: 'fieldIdentifier',
             name: { value: 'column1', values: ['column1'] },
             field: { value: 'column1', values: ['column1'] },
         })
         expect(ast.fields[1]).toEqual({
+            type: 'fieldIdentifier',
             name: { value: 'column2', values: ['column2'] },
             field: { value: 'column2', values: ['column2'] },
         })
@@ -26,6 +28,7 @@ describe('actions-visitor', () => {
         const inputText = "SELECT foo FROM bar WHERE foo = 'val' and truc < 42 or prop = 99"
         const ast = toAstVisitor(inputText) as any
         expect(ast.fields[0]).toEqual({
+            type: 'fieldIdentifier',
             name: { value: 'foo', values: ['foo'] },
             field: { value: 'foo', values: ['foo'] },
         })
@@ -54,14 +57,17 @@ describe('actions-visitor', () => {
         const ast = toAstVisitor(inputText)
 
         expect(ast.fields[0]).toEqual({
+            type: 'fieldIdentifier',
             name: { value: 'foo', values: ['foo'] },
             field: { value: 'column1', values: ['column1'] },
         })
         expect(ast.fields[1]).toEqual({
+            type: 'fieldIdentifier',
             name: { value: 'column2', values: ['column2'] },
             field: { value: 'column2', values: ['column2'] },
         })
         expect(ast.fields[2]).toEqual({
+            type: 'fieldIdentifier',
             name: { value: 'bar', values: ['bar'] },
             field: { value: 'column3', values: ['column3'] },
         })

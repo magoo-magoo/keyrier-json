@@ -30,7 +30,7 @@ export const get = (obj: any, path: (string | number)[], defaultValue: any = und
     return result === undefined || result === obj ? defaultValue : result
 }
 
-const slice = (array: any[], start: number, end: number) => {
+const slice = <T = any>(array: T[], start: number, end: number) => {
     let length = array == null ? 0 : array.length
     if (!length) {
         return []
@@ -49,13 +49,13 @@ const slice = (array: any[], start: number, end: number) => {
     start >>>= 0
 
     let index = -1
-    const result = new Array(length)
+    const result = new Array<T>(length)
     while (++index < length) {
         result[index] = array[index + start]
     }
     return result
 }
-export const take = (array: any[], n = 1) => {
+export const take = <T = any>(array: T[], n = 1) => {
     if (!(array != null && array.length)) {
         return []
     }
