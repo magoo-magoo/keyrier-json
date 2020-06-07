@@ -15,6 +15,23 @@ describe('sql interpreter', () => {
             expect(result).toEqual([{ field: 'bar' }])
         })
 
+        it('should select string value', () => {
+            const result = sqlQuery('{}', 'select "Hello world" as col1 from data')
+            expect(result).toEqual({ col1: 'Hello world' })
+        })
+        it('should select value with special char', () => {
+            const result = sqlQuery(
+                `
+        [
+            {
+              "col1": "\\\\"
+            }
+          ]
+        `,
+                'select col1 from data'
+            )
+            expect(result).toEqual([{ col1: '\\' }])
+        })
         it('should rename column whith As keyword correct column SQL query', () => {
             const result = sqlQuery(
                 '{"age": 1, "name": "John Doe", "c": 999}',
@@ -35,6 +52,11 @@ describe('sql interpreter', () => {
         it('should return a simple object for select star from data SQL query', () => {
             const result = sqlQuery('{"a": 1, "b": 42}', 'select * from data')
             expect(result).toEqual({ a: 1, b: 42 })
+        })
+
+        it('should project boolean value', () => {
+            const result = sqlQuery('{"col1": true}', 'select col1 from data')
+            expect(result).toEqual({ col1: true })
         })
 
         it('should return a simple object for select with underscore from data SQL query', () => {
@@ -143,8 +165,9 @@ describe('sql interpreter', () => {
             expect(result).toBeInstanceOf(Error)
         })
         it('should return an error with bad SQL query - bad table', () => {
-            const result = sqlQuery('{"a": 1}', 'select * from ddata')
+            const result = sqlQuery('{"a": 1}', 'select * from nonexsiting')
             expect(result).toBeInstanceOf(Error)
+            expect((result as any).message).toContain('nonexsiting')
         })
 
         it('should accept json as a source name', () => {
@@ -329,7 +352,7 @@ describe('sql interpreter', () => {
         it('should return result with where clause- not like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select * from data where name not like "Joh%"'
+                'select * from data where name not    like "Joh%"'
             )
             expect(result).toEqual([{ age: 21, name: 'Danny de Vito' }])
         })
@@ -563,7 +586,7 @@ describe('sql interpreter', () => {
                 SELECT 
                 table1.addr as col1 
                 FROM table1 
-                inner join table2 on table1.name = table2.column3
+                inner   join table2 on table1.name = table2.column3
                 `
             )
             expect(result).toEqual([{ col1: 'localhost' }])

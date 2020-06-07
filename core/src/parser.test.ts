@@ -10,6 +10,11 @@ describe('Chevrotain Tutorial', () => {
         const parser = parse(inputText)
         expect(parser).toBeDefined()
     })
+    it('Can Parse new line', () => {
+        const inputText = `SELECT "\n" FROM table`
+        const parser = parse(inputText)
+        expect(parser).toBeDefined()
+    })
 
     it('Will throw an error for an invalid input', () => {
         // missing table name

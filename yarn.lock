@@ -2417,7 +2417,7 @@
     surrial "~2.0.2"
     tslib "~2.0.0"
 
-"@stryker-mutator/core@3.2.4":
+"@stryker-mutator/core@^3.2.4":
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/core/-/core-3.2.4.tgz#859b98bd1aa92021b5a73b7b70d26feb80cb984f"
   integrity sha512-bTPFctIx1iH0YPx0dJxfMfJKyxv9+NIONjEPfrZsJjaUoQFv787s9+bnzD/JUYCYoG6Hj7XjMFsFs97xI318yA==
@@ -2448,7 +2448,7 @@
     typed-inject "~2.2.1"
     typed-rest-client "~1.7.1"
 
-"@stryker-mutator/jest-runner@3.2.4":
+"@stryker-mutator/jest-runner@3.2.4", "@stryker-mutator/jest-runner@^3.2.4":
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/jest-runner/-/jest-runner-3.2.4.tgz#a7c94204eec9bbe8a243dbaf5a2f74e9531acbc9"
   integrity sha512-MooAGDubqw/cbLnrQ1K27AI9vgeQlr/GqALW0x/lp7YXsSutf9UPk+efjo18g4wHO9+gBM7EdjkRydf6QHuynQ==
@@ -2456,7 +2456,7 @@
     "@stryker-mutator/api" "^3.2.4"
     semver "~6.3.0"
 
-"@stryker-mutator/typescript@3.2.4":
+"@stryker-mutator/typescript@3.2.4", "@stryker-mutator/typescript@^3.2.4":
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/typescript/-/typescript-3.2.4.tgz#de40376a7672eebd95fa88bb66e8ef72700ad03c"
   integrity sha512-ZVYVMeTFSiy0Nfj+y7AxvtL+GH/gHbBf1D/vgRwpUn15G3AZ7j6ip7KVvahTSTwzeKlXwSU2sYu1/vCf3i+92Q==

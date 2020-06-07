@@ -1,9 +1,9 @@
-import { toAst as toAstVisitor } from './actions-visitor'
+import { toAst } from './actions-visitor'
 
 describe('actions-visitor', () => {
     it('Can convert a simple input to an AST', () => {
         const inputText = 'SELECT column1, column2 FROM table2 WHERE column2 > 3'
-        const ast = toAstVisitor(inputText)
+        const ast = toAst(inputText)
 
         expect(ast.fields).toHaveLength(2)
         expect(ast.fields[0]).toEqual({
@@ -23,10 +23,23 @@ describe('actions-visitor', () => {
         expect(ast.where?.conditions?.operation).toEqual('>')
         expect(ast.where?.conditions?.right?.value).toEqual(3)
     })
+    it('Can convert with special chars to an AST', () => {
+        const inputText = `SELECT "\n" FROM table`
+        const ast = toAst(inputText)
+
+        expect(ast.fields).toHaveLength(1)
+        expect(ast.fields[0]).toEqual({
+            type: 'fieldString',
+            name: { value: '\n', values: ['\n'] },
+            field: { value: '\n', values: ['\n'] },
+        })
+
+        expect(ast.source.name.value).toEqual('table')
+    })
 
     it('should parse multiple where expression', () => {
         const inputText = "SELECT foo FROM bar WHERE foo = 'val' and truc < 42 or prop = 99"
-        const ast = toAstVisitor(inputText) as any
+        const ast = toAst(inputText) as any
         expect(ast.fields[0]).toEqual({
             type: 'fieldIdentifier',
             name: { value: 'foo', values: ['foo'] },
@@ -54,7 +67,7 @@ describe('actions-visitor', () => {
 
     it('should convert "as" expression', () => {
         const inputText = 'SELECT column1 as foo, column2, column3 as bar FROM table'
-        const ast = toAstVisitor(inputText)
+        const ast = toAst(inputText)
 
         expect(ast.fields[0]).toEqual({
             type: 'fieldIdentifier',
@@ -90,11 +103,11 @@ describe('actions-visitor', () => {
         ${'select * from table order by limit'}
         ${'select * from table limit "2"'}
     `('should throw an error if input is not invalid', ({ input }) => {
-        expect(() => toAstVisitor(input)).toThrow()
+        expect(() => toAst(input)).toThrow()
     })
 
     it('should parse sub query statement', () => {
-        const tree = toAstVisitor('SELECT column1 FROM table1 where column1 in ( select column2 from table2 )')
+        const tree = toAst('SELECT column1 FROM table1 where column1 in ( select column2 from table2 )')
         expect(tree).toBeDefined()
         expect(tree.where!.conditions!.left!.value!).toEqual('column1')
         expect(tree.where!.conditions!.operation).toEqual('in')
@@ -102,7 +115,7 @@ describe('actions-visitor', () => {
     })
 
     it('should parse join query statement', () => {
-        const tree = toAstVisitor(
+        const tree = toAst(
             `SELECT 
             table1.addr as col1 
             FROM table1 

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { toAst } from './actions-visitor'
 import { executeQuery, sqlQuery, sqlQueryWithMultipleSources } from './sql'
 import * as SQLTree from './SqlTree'

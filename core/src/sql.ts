@@ -1,6 +1,7 @@
 import { orderBy } from 'lodash'
 import { toAst } from './actions-visitor'
-import { Conditions, Field, From, Operand, Operation, operators, SQLTree } from './SqlTree'
+import { operators } from './operators'
+import { Conditions, Field, From, Operand, Operation, SQLTree } from './SqlTree'
 import * as utils from './utils'
 
 export const computePath = (path: (string | number)[] | undefined, allowedSourceNames: string[]) => {
@@ -50,29 +51,21 @@ const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, object
 
     const fromPath = [...sqlTree.source.name.values]
     fromPath.shift()
-    let data = sourceDataObject[sqlTree.source.name.values[0]]
 
-    if (fromPath.length > 0) {
-        data = utils.get(data, fromPath.slice(0))
-    }
-
-    return data
+    return utils.get(sourceDataObject[sqlTree.source.name.values[0]], fromPath)
 }
 
 export type Row = {
     projected: object
     real: object
     dataContext: Record<string, object>
-    includeInResult: boolean
 }
 
-export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, any>) => {
-    const fromPath = [...sqlTree.source.name.values]
-    fromPath.shift()
+export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, any>): any => {
     const data = getSourceData(sqlTree, sourceDataObject)
 
     if (!Array.isArray(data)) {
-        return mapper(data, sqlTree.fields, { [sqlTree.source.alias.value]: data })
+        return mapper(data, sqlTree.fields, { [sqlTree.source.alias.value]: data }, sourceDataObject)
     }
 
     let jointures: { source: any[]; conditions: Conditions; from: From }[] = []
@@ -88,7 +81,6 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
     const rows: Row[] = data.map(x => ({
         real: x,
         projected: x,
-        includeInResult: true,
         dataContext: {
             [sqlTree.source.name.value]: x,
             [sqlTree.source.alias.value]: x,
@@ -122,10 +114,7 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
                             conditions.operation,
                             conditions.left,
                             conditions.right,
-                            {
-                                ...joinRowData,
-                                ...row.dataContext,
-                            },
+                            row.dataContext,
                             sourceDataObject
                         )
                         if (comparison) {
@@ -133,14 +122,13 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
                         }
                     }
                     if (!match) {
-                        row.includeInResult = false
+                        return false
                     }
                 }
             }
 
             if (!sqlTree.where || !sqlTree.where.conditions) {
-                row.includeInResult = row.includeInResult && true
-                return
+                return true
             }
             const leftValue = sqlTree.where.conditions.left
             const rightValue = sqlTree.where.conditions.right
@@ -148,13 +136,11 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
 
             const comparison = compareOperands(operation, leftValue, rightValue, row.dataContext, sourceDataObject)
 
-            row.includeInResult = row.includeInResult && comparison
+            return comparison
         }
 
-        shouldBeIncludeInResults()
-
-        if (row.includeInResult) {
-            const mapped = mapper(row.real, sqlTree.fields, row.dataContext)
+        if (shouldBeIncludeInResults()) {
+            const mapped = mapper(row.real, sqlTree.fields, row.dataContext, sourceDataObject)
             row.projected = mapped
             results.push(mapped)
         }
@@ -170,9 +156,9 @@ const compareOperands = (
     values: Record<string, object>,
     sourceDataObject: Record<string, object>
 ): boolean => {
-    const leftValue = getValue(left, values)
-    const rightValue = getValue(right, values)
-    switch (operation.toLowerCase()) {
+    const leftValue = getValue(left, values, sourceDataObject)
+    const rightValue = getValue(right, values, sourceDataObject)
+    switch (operation) {
         case operators.or:
             return (
                 (left.type === 'expression' &&
@@ -188,7 +174,7 @@ const compareOperands = (
                 compareOperands(right.operation, right.left, right.right, values, sourceDataObject)
             )
     }
-    switch (operation.toLowerCase()) {
+    switch (operation) {
         case operators.equal:
         case operators.is:
             return leftValue === rightValue
@@ -239,30 +225,18 @@ const compareOperands = (
             return !!rightValue && !!leftValue && leftValue < rightValue
         case operators.lessOrEqualthan:
             return !!rightValue && !!leftValue && leftValue <= rightValue
-        case operators.in: {
-            if (!rightValue) {
-                break
-            }
-            if (Array.isArray(rightValue)) {
-                return rightValue.filter(x => x.value === leftValue).length > 0
-            }
-            if (right.type === 'selectStatement') {
-                const rightval = executeQuery(right.value, sourceDataObject)
-                if (Array.isArray(rightval)) {
-                    const array = rightval
-                    return array.filter(x => x[right.value.fields[0].field.value] === leftValue).length > 0
-                }
-            }
-        }
+        case operators.in:
+            return rightValue.filter((x: any) => x.value === leftValue).length > 0
     }
-    return false
+    throw new Error()
 }
 
-const mapObject = (fields: Field[], sources: Record<string, object>) => {
+const mapObject = (fields: Field[], sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
     const mappedObject: Record<string, object> = {}
     fields.forEach(field => {
-        const value = getValue(field, sources)
-        mappedObject[field.name.value] = field.function ? applyFunction(field.function.name, value) : value
+        const value = getValue(field, sources, sourceDataObject)
+        mappedObject[field.name.value] =
+            field.type === 'fieldFunction' ? applyFunction(field.function.name, value) : value
     })
     return mappedObject
 }
@@ -290,15 +264,25 @@ const applyFunction = (functionName: string, value: object) => {
     if (func === 'length' || func === 'len') {
         return String(value).length
     }
-    return value
+    throw new Error()
 }
 
-const getValue = (operand: Operand | Field, values: Record<string, object>) => {
+const getValue = (
+    operand: Operand | Field,
+    values: Record<string, object>,
+    sourceDataObject: Record<string, object>
+) => {
+    if (operand.type === 'fieldString') {
+        const value = getIdentifierValue(values, operand)
+        if (value !== undefined) {
+            return value
+        }
+        return operand.field.value
+    }
     if (
         operand.type === 'integer' ||
         operand.type === 'string' ||
         operand.type === 'array' ||
-        operand.type === 'selectStatement' ||
         operand.type === 'null' ||
         operand.type === 'expression'
     ) {
@@ -306,17 +290,35 @@ const getValue = (operand: Operand | Field, values: Record<string, object>) => {
     }
     if (operand.type === 'opIdentifier') {
         const { field } = operand
-        return getIdentifierValue(values, field)
+        const value = getIdentifierValue(values, field)
+        if (value !== undefined) {
+            return value
+        }
     }
-    return getIdentifierValue(values, operand)
+    if (operand.type === 'selectStatement') {
+        const array = executeQuery(operand.value, sourceDataObject)
+        return array.map((x: any) => ({ value: x[operand.value.fields[0].field.value] }))
+    }
+
+    const value = getIdentifierValue(values, operand as any)
+
+    if (value !== undefined) {
+        return value
+    }
+    return undefined
 }
 
-const mapper = (v: object, fields: Field[], sources: Record<string, object>) => {
+const mapper = (
+    v: object,
+    fields: Field[],
+    sources: Record<string, object>,
+    sourceDataObject: Record<string, object>
+) => {
     if (fields.some(x => x.field.value === '*')) {
         return v
     }
 
-    return mapObject(fields, sources)
+    return mapObject(fields, sources, sourceDataObject)
 }
 
 function getIdentifierValue(values: Record<string, object>, field: Field) {

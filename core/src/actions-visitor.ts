@@ -47,8 +47,10 @@ class SQLToAstVisitor extends BaseSQLVisitor {
     public cols(ctx: { name: IToken[]; value: IToken[]; function: IToken[] }) {
         let value = ctx.value[0].image
 
+        let type = 'fieldIdentifier'
         if (ctx.value[0].tokenType === tokenVocabulary.StringToken) {
             value = convertStringTokenToJsString(value)
+            type = 'fieldString'
         }
 
         let name = ctx.name && ctx.name[0] ? ctx.name[0].image : value
@@ -56,6 +58,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         const func = ctx.function && ctx.function[0] && ctx.function[0].image
         if (func) {
             name = ctx.name && ctx.name[0] ? ctx.name[0].image : `${func}(${value})`
+            type = 'fieldFunction'
         }
         if (ctx.name && ctx.name[0].tokenType === tokenVocabulary.StringToken) {
             name = convertStringTokenToJsString(name)
@@ -65,23 +68,20 @@ class SQLToAstVisitor extends BaseSQLVisitor {
             name,
             value,
             function: func,
+            type,
         }
     }
 
     public projection(ctx: { cols: CstNode[] }): Field[] {
-        const cols: { value: string; name: string; function: string | undefined }[] = ctx.cols.map(x =>
+        const cols: { value: string; name: string; function: string | undefined; type: FieldType }[] = ctx.cols.map(x =>
             this.visit(x)
         ) as any
         const fields: Field[] = []
-        cols.forEach(({ name, value, function: func }) => {
+        cols.forEach(({ name, value, function: func, type }) => {
             const { pathArray: namePathArray, propertyName: namePropertyName } = splitPropertyPath(name)
             const { pathArray: fieldPathArray, propertyName: fieldPropertyName } = splitPropertyPath(value)
-            let type: FieldType = 'fieldIdentifier'
-            if (func) {
-                type = 'function'
-            }
 
-            const field: Field = {
+            const field = {
                 type,
                 name: {
                     value: namePropertyName,
@@ -103,7 +103,7 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         if (ctx.table[index].tokenType === tokenVocabulary.StringToken) {
             tableName = convertStringTokenToJsString(tableName)
         }
-        const alias = ctx.alias?.length >= index + 1 ? ctx.alias[0].image : tableName
+        const alias = (ctx.alias && ctx.alias[index].image) ?? tableName
         return {
             type: 'From',
             name: {
@@ -261,14 +261,10 @@ class SQLToAstVisitor extends BaseSQLVisitor {
 
     public relationalOperator(ctx: Record<Token, Array<IToken>>) {
         const {
-            image,
             tokenType: { LABEL },
         } = Object.values(ctx)[0][0]
 
-        if (LABEL) {
-            return LABEL
-        }
-        return image
+        return LABEL
     }
 }
 

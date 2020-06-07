@@ -1,20 +1,4 @@
-export const operators = {
-    modulo: '%',
-    or: 'or',
-    and: 'and',
-    equal: '=',
-    is: 'is',
-    notEqual: '!=',
-    isNot: 'is not',
-    '<>': '<>',
-    greaterThan: '>',
-    greaterOrEqualThan: '>=',
-    lessThan: '<',
-    lessOrEqualthan: '<=',
-    in: 'in',
-    like: 'like',
-    notLike: 'not like',
-} as const
+import { operators } from './operators'
 
 export type Operation = typeof operators[keyof typeof operators]
 
@@ -33,14 +17,19 @@ export interface Func {
     name: string
 }
 
-export type FieldType = 'fieldIdentifier' | 'fieldString' | 'fieldFunction'
-export interface Field {
-    type: FieldType
-    field: Value
-    name: Value
-    function?: Func
-}
-
+export type FieldType = 'fieldIdentifier' | 'fieldString'
+export type Field =
+    | {
+          type: FieldType
+          field: Value
+          name: Value
+      }
+    | {
+          name: Value
+          field: Value
+          type: 'fieldFunction'
+          function: Func
+      }
 export type Operand =
     | {
           value: Value[]

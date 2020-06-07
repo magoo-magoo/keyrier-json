@@ -1,0 +1,16 @@
+export const operators = {
+    modulo: '%',
+    or: 'or',
+    and: 'and',
+    equal: '=',
+    is: 'is',
+    notEqual: '!=',
+    isNot: 'is not',
+    greaterThan: '>',
+    greaterOrEqualThan: '>=',
+    lessThan: '<',
+    lessOrEqualthan: '<=',
+    in: 'in',
+    like: 'like',
+    notLike: 'not like',
+} as const

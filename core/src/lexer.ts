@@ -1,5 +1,5 @@
 import { createToken, Lexer } from 'chevrotain'
-import { operators } from './SqlTree'
+import { operators } from './operators'
 
 const stringTokenCharacterRegexString = 'a-zA-Z0-9%\\s-&(){}\\[\\]$\\*!\\\\@/,;:=ë#+-<>?^_'
 const stringTokenRegex = new RegExp(
@@ -35,11 +35,9 @@ export const OrderByDirection = createToken({
 })
 export const As = createToken({ name: 'As', pattern: /AS/i, longer_alt: Identifier })
 export const OrAnd = createToken({ name: 'OrAnd', pattern: /(AND|OR)/i, longer_alt: Identifier })
-export const Or = createToken({ name: 'Or', pattern: /OR/i, longer_alt: Identifier })
-export const And = createToken({ name: 'And', pattern: /AND/i, longer_alt: Identifier })
 export const Star = createToken({ name: 'Star', pattern: /\*/ })
 export const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ })
-export const StringToken = createToken({ name: 'StringToken', pattern: stringTokenRegex, line_breaks: true })
+export const StringToken = createToken({ name: 'StringToken', pattern: stringTokenRegex })
 export const GreaterOrEqualThan = createToken({
     name: 'GreaterOrEqualThan',
     pattern: />=/,
