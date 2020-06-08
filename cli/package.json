@@ -31,18 +31,18 @@
     },
     "dependencies": {
         "@keyrier/core": "^1.1.13",
-        "@types/easy-table": "^0.0.32",
+        "@types/easy-table": "0.0.32",
         "@types/json2csv": "5.0.1",
-        "csv-parse": "^4.9.1",
-        "easy-table": "^1.1.1",
-        "json2csv": "^5.0.1",
+        "csv-parse": "4.9.1",
+        "easy-table": "1.1.1",
+        "json2csv": "5.0.1",
         "meow": "7.0.1",
         "update-notifier": "4.1.0",
         "xlsx": "0.16.2"
     },
     "devDependencies": {
         "@types/update-notifier": "4.1.0",
-        "execa": "^4.0.2"
+        "execa": "4.0.2"
     },
     "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",
     "readme": "./README.md"

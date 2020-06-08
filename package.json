@@ -28,7 +28,7 @@
     },
     "devDependencies": {
         "@now/node": "1.6.1",
-        "@stryker-mutator/core": "^3.2.4",
+        "@stryker-mutator/core": "3.2.4",
         "@stryker-mutator/jest-runner": "3.2.4",
         "@stryker-mutator/typescript": "3.2.4",
         "@types/jest": "25.2.3",
