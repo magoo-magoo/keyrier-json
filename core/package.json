@@ -21,7 +21,8 @@
         "lint": "tsdx lint",
         "prepare": "tsdx build",
         "start": "tsdx watch",
-        "test": "tsdx test"
+        "test": "tsdx test",
+        "stryker:run": "stryker run"
     },
     "dependencies": {
         "chevrotain": "7.0.1",
