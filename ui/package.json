@@ -101,7 +101,7 @@
         "xlsx": "0.16.2"
     },
     "devDependencies": {
-        "@testing-library/react": "10.0.4",
+        "@testing-library/react": "10.2.1",
         "@types/classnames": "2.2.10",
         "@types/lodash-es": "4.17.3",
         "@types/match-sorter": "4.0.0",
@@ -114,9 +114,9 @@
         "@types/react-table": "7.0.18",
         "@types/reactstrap": "8.4.2",
         "@types/scheduler": "0.16.1",
-        "cypress": "4.6.0",
-        "electron": "8.3.0",
-        "electron-builder": "22.6.1",
+        "cypress": "4.8.0",
+        "electron": "8.3.1",
+        "electron-builder": "22.7.0",
         "gh-pages": "2.2.0",
         "jest-environment-jsdom-sixteen": "1.0.3",
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",

@@ -43,7 +43,7 @@
         "source-map-explorer": "2.4.2",
         "ts-jest": "24.3.0",
         "tsdx": "0.13.2",
-        "typescript": "3.9.3",
+        "typescript": "3.9.5",
         "wait-on": "4.0.2"
     }
 }
