@@ -1,4 +1,4 @@
-name: Main workflow
+name: Test and build
 
 on:
     push:
@@ -28,22 +28,24 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node-version }}
-
-            - name: yarn install
+            - name: Install dependencies
               run: yarn --frozen-lockfile
-
-            - name: install electron build deps
-              run: sudo apt-get install -y libgconf-2-4
 
             - name: lerna info
               run: yarn lerna info
 
             - name: build
-              run: yarn lerna run build
+              run: |
+                  yarn lerna run build
+
+            - name: Build/release Electron app
+              uses: samuelmeuli/action-electron-builder@v1
+              with:
+                  github_token: ${{ secrets.github_token }}
+                  release: false
+                  package_root: ui
+                  skip_build: true
+                  args: --linux AppImage --publish never
 
             - name: make CLI script executable
               run: chmod +x cli/dist/index.js # make the script executable for tests
@@ -54,24 +56,6 @@ jobs:
             - name: Stryker mutation testing
               run: yarn lerna run stryker:run
 
-            - name: create version and publish
-              if: github.ref == 'refs/heads/master'
-              run: |
-                  git config --local user.email "action@github.com"
-                  git config --local user.name "GitHub Action"
-                  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-                  yarn lerna publish patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
-                  yarn lerna run build --scope @keyrier/ui
-              env:
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Push new version changes
-              if: github.ref == 'refs/heads/master'
-              uses: ad-m/github-push-action@master
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-
             - name: SonarCloud Scan
               uses: sonarsource/sonarcloud-github-action@master
               with:
@@ -80,9 +64,19 @@ jobs:
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-            - name: deploy on gh-pages
+            - name: create version
+
               if: github.ref == 'refs/heads/master'
-              uses: peaceiris/actions-gh-pages@v3
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+                  yarn lerna version patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Push new version changes
+              if: github.ref == 'refs/heads/master'
+              uses: ad-m/github-push-action@master
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: ./ui/build

@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash'
 import { toAst } from './actions-visitor'
 import { operators } from './operators'
-import { Conditions, Field, From, Operand, Operation, SQLTree } from './SqlTree'
+import { Conditions, Field, From, Operand, Operation, SQLTree, Where } from './SqlTree'
 import * as utils from './utils'
 
 export const computePath = (path: (string | number)[] | undefined, allowedSourceNames: string[]) => {
@@ -100,46 +100,9 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
         if (sqlTree.limit && sqlTree.limit.value.value <= results.length) {
             return
         }
-        const shouldBeIncludeInResults = () => {
-            if (jointures.length) {
-                for (const { source, conditions, from } of jointures) {
-                    let match = false
-                    for (const joinRow of source) {
-                        const joinRowData = {
-                            [from.name.value]: joinRow,
-                            [from.alias.value]: joinRow,
-                        }
-                        row.dataContext = { ...row.dataContext, ...joinRowData }
-                        const comparison = compareOperands(
-                            conditions.operation,
-                            conditions.left,
-                            conditions.right,
-                            row.dataContext,
-                            sourceDataObject
-                        )
-                        if (comparison) {
-                            match = true
-                        }
-                    }
-                    if (!match) {
-                        return false
-                    }
-                }
-            }
+        const shouldBeIncludeInResults = rowShouldBeincludedInResult(jointures, row, sourceDataObject, sqlTree.where)
 
-            if (!sqlTree.where || !sqlTree.where.conditions) {
-                return true
-            }
-            const leftValue = sqlTree.where.conditions.left
-            const rightValue = sqlTree.where.conditions.right
-            const operation = sqlTree.where.conditions.operation
-
-            const comparison = compareOperands(operation, leftValue, rightValue, row.dataContext, sourceDataObject)
-
-            return comparison
-        }
-
-        if (shouldBeIncludeInResults()) {
+        if (shouldBeIncludeInResults) {
             const mapped = mapper(row.real, sqlTree.fields, row.dataContext, sourceDataObject)
             row.projected = mapped
             results.push(mapped)
@@ -155,18 +118,18 @@ const compareOperands = (
     right: Operand,
     values: Record<string, object>,
     sourceDataObject: Record<string, object>
-): boolean => {
+): any => {
     const leftValue = getValue(left, values, sourceDataObject)
     const rightValue = getValue(right, values, sourceDataObject)
     switch (operation) {
-        case operators.or:
+        case 'or':
             return (
                 (left.type === 'expression' &&
                     compareOperands(left.operation, left.left, left.right, values, sourceDataObject)) ||
                 (right.type === 'expression' &&
                     compareOperands(right.operation, right.left, right.right, values, sourceDataObject))
             )
-        case operators.and:
+        case 'and':
             return (
                 left.type === 'expression' &&
                 compareOperands(left.operation, left.left, left.right, values, sourceDataObject) &&
@@ -175,13 +138,13 @@ const compareOperands = (
             )
     }
     switch (operation) {
-        case operators.equal:
-        case operators.is:
+        case '=':
+        case 'is':
             return leftValue === rightValue
-        case operators.notEqual:
-        case operators.isNot:
+        case '!=':
+        case 'is not':
             return leftValue !== rightValue
-        case operators.like: {
+        case 'like': {
             const leftStr = String(leftValue)
             const rightStr = String(rightValue)
             if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
@@ -199,7 +162,7 @@ const compareOperands = (
             }
             return false
         }
-        case operators.notLike: {
+        case 'not like': {
             const leftStr = String(leftValue)
             const rightStr = String(rightValue)
             if (rightStr.startsWith(operators.modulo) && rightStr.endsWith(operators.modulo)) {
@@ -217,18 +180,17 @@ const compareOperands = (
             }
             return true
         }
-        case operators.greaterThan:
+        case '>':
             return !!rightValue && !!leftValue && leftValue > rightValue
-        case operators.greaterOrEqualThan:
+        case '>=':
             return !!rightValue && !!leftValue && leftValue >= rightValue
-        case operators.lessThan:
+        case '<':
             return !!rightValue && !!leftValue && leftValue < rightValue
-        case operators.lessOrEqualthan:
+        case '<=':
             return !!rightValue && !!leftValue && leftValue <= rightValue
-        case operators.in:
+        case 'in':
             return rightValue.filter((x: any) => x.value === leftValue).length > 0
     }
-    throw new Error()
 }
 
 const mapObject = (fields: Field[], sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
@@ -290,22 +252,14 @@ const getValue = (
     }
     if (operand.type === 'opIdentifier') {
         const { field } = operand
-        const value = getIdentifierValue(values, field)
-        if (value !== undefined) {
-            return value
-        }
+        return getIdentifierValue(values, field)
     }
     if (operand.type === 'selectStatement') {
         const array = executeQuery(operand.value, sourceDataObject)
         return array.map((x: any) => ({ value: x[operand.value.fields[0].field.value] }))
     }
 
-    const value = getIdentifierValue(values, operand as any)
-
-    if (value !== undefined) {
-        return value
-    }
-    return undefined
+    return getIdentifierValue(values, operand as any)
 }
 
 const mapper = (
@@ -319,6 +273,48 @@ const mapper = (
     }
 
     return mapObject(fields, sources, sourceDataObject)
+}
+
+function rowShouldBeincludedInResult(
+    jointures: { source: any[]; conditions: Conditions; from: From }[],
+    row: Row,
+    sourceDataObject: Record<string, any>,
+    where: Where | undefined | null
+) {
+    for (const { source, conditions, from } of jointures) {
+        let match = false
+        for (const joinRow of source) {
+            const joinRowData = {
+                [from.name.value]: joinRow,
+                [from.alias.value]: joinRow,
+            }
+            row.dataContext = { ...row.dataContext, ...joinRowData }
+            const comparison = compareOperands(
+                conditions.operation,
+                conditions.left,
+                conditions.right,
+                row.dataContext,
+                sourceDataObject
+            )
+            if (comparison) {
+                match = true
+            }
+        }
+        if (!match) {
+            return false
+        }
+    }
+
+    if (!where || !where.conditions) {
+        return true
+    }
+    const leftValue = where.conditions.left
+    const rightValue = where.conditions.right
+    const operation = where.conditions.operation
+
+    const comparison = compareOperands(operation, leftValue, rightValue, row.dataContext, sourceDataObject)
+
+    return comparison
 }
 
 function getIdentifierValue(values: Record<string, object>, field: Field) {

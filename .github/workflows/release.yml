@@ -1,0 +1,61 @@
+name: Release
+
+on:
+    push:
+        tags:
+            - '*'
+
+jobs:
+    release:
+        name: Release
+        runs-on: ubuntu-latest
+        env:
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Use Node.js 14
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+
+            - name: Install dependencies
+              run: yarn --frozen-lockfile
+
+            - name: lerna info
+              run: yarn lerna info
+
+            - name: Build
+              run: yarn lerna run build
+
+            - name: Build Electron app
+              uses: samuelmeuli/action-electron-builder@v1
+              with:
+                  github_token: ${{ secrets.github_token }}
+                  release: false
+                  package_root: ui
+                  skip_build: true
+                  args: --linux AppImage --publish never
+
+            - name: Publish NPM package
+              run: |
+                  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+                  yarn lerna publish from-git --yes
+
+            - name: Upload binaries to release
+              uses: svenstaro/upload-release-action@v1-release
+              with:
+                  repo_token: ${{ secrets.GITHUB_TOKEN }}
+                  tag: ${{ github.ref }}
+                  overwrite: true
+                  file: ui/dist/*
+                  file_glob: true
+
+            - name: Deploy on gh-pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./ui/build

@@ -18,7 +18,7 @@
     "author": "magoo <magoo@magoo.dev>",
     "source": "src/cli.ts",
     "bin": {
-        "keyrier": "dist/cli.js"
+        "keyrier": "dist/index.js"
     },
     "scripts": {
         "build": "tsdx build --target node",

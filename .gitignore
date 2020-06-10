@@ -38,3 +38,4 @@ source-map-explorer.html
 reports
 
 .npmrc
+ui/dist
