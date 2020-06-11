@@ -19,6 +19,10 @@ export const sqlQuery = (json: string, query: string) => {
     return sqlQueryWithMultipleSources({ data: json, json }, query)
 }
 
+/**
+ * Function
+ * @return {object | object[]}
+ */
 export const sqlQueryWithMultipleSources = (source: Record<string, string>, query: string) => {
     try {
         const sqlTree = toAst(query)
