@@ -15,6 +15,11 @@ export const computePath = (path: (string | number)[] | undefined, allowedSource
     return { path }
 }
 
+/**
+ *
+ * @param json JSON source.
+ * @param query SQL query
+ */
 export const sqlQuery = (json: string, query: string) => {
     return sqlQueryWithMultipleSources({ data: json, json }, query)
 }

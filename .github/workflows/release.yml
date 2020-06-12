@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
             STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
         steps:
@@ -34,7 +34,7 @@ jobs:
             - name: Build Electron app
               uses: samuelmeuli/action-electron-builder@v1
               with:
-                  github_token: ${{ secrets.github_token }}
+                  github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                   release: false
                   package_root: ui
                   skip_build: true
@@ -45,10 +45,21 @@ jobs:
                   echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
                   yarn lerna publish from-git --yes
 
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+              with:
+                  tag_name: ${{ github.ref }}
+                  release_name: Release ${{ github.ref }}
+                  draft: false
+                  prerelease: false
+
             - name: Upload binaries to release
               uses: svenstaro/upload-release-action@v1-release
               with:
-                  repo_token: ${{ secrets.GITHUB_TOKEN }}
+                  repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                   tag: ${{ github.ref }}
                   overwrite: true
                   file: ui/dist/*
@@ -57,5 +68,5 @@ jobs:
             - name: Deploy on gh-pages
               uses: peaceiris/actions-gh-pages@v3
               with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                   publish_dir: ./ui/build
