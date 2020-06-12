@@ -22,7 +22,7 @@ jobs:
 
         env:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
             STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
         steps:
@@ -58,9 +58,6 @@ jobs:
 
             - name: SonarCloud Scan
               uses: sonarsource/sonarcloud-github-action@master
-              with:
-                  # Disabling shallow clone is recommended for improving relevancy of reporting
-                  fetch-depth: 0
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -73,10 +70,10 @@ jobs:
                   echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
                   yarn lerna version patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
             - name: Push new version changes
               if: github.ref == 'refs/heads/master'
               uses: ad-m/github-push-action@master
               with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
