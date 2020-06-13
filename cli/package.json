@@ -25,6 +25,7 @@
         "lint": "tsdx lint",
         "insert:shebang": "sed -i.old '1s;^;#!/usr/bin/env node;' dist/index.js && chmod +x dist/index.js && rm dist/index.js.old -f",
         "postbuild": "yarn insert:shebang",
+        "postprepare": "yarn insert:shebang",
         "prepare": "tsdx build --target node",
         "start": "tsdx watch --onSuccess 'yarn insert:shebang'",
         "test": "tsdx test"
