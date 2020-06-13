@@ -1,6 +1,6 @@
 {
     "name": "@keyrier/core",
-    "version": "1.1.19",
+    "version": "1.1.20",
     "description": "Query JSON & CSV objects with SQL",
     "repository": {
         "type": "git",
