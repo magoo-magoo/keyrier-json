@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.21 (2020-06-13)
+
+**Note:** Version bump only for package keyrier-json
+
+
+
+
+
 ## 1.1.20 (2020-06-13)
 
 **Note:** Version bump only for package keyrier-json
