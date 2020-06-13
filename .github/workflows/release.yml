@@ -46,6 +46,8 @@ jobs:
                   args: --linux AppImage --publish never
 
             - name: Publish NPM package
+              env:
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
               run: |
                   echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
                   yarn lerna publish from-git --yes
