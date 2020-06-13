@@ -65,7 +65,7 @@ jobs:
 
               if: github.ref == 'refs/heads/master'
               run: |
-                  git config --local user.email magoo@magoo.dev"
+                  git config --local user.email "magoo@magoo.dev"
                   git config --local user.name "Maël GOUACIDE"
                   echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
                   yarn lerna version patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
