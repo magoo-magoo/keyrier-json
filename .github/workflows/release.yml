@@ -3,7 +3,7 @@ name: Release
 on:
     push:
         tags:
-            - 'v*'
+            - '*'
 
 jobs:
     release:
@@ -30,7 +30,8 @@ jobs:
             - name: Checkout master
               run: |
                   git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/magoo-magoo/keyrier-json
-                  git checkout "${GITHUB_REF:11}" && git pull
+                  git fetch --all --tags --prune
+                  git checkout tags/${GITHUB_REF} -b master
 
             - name: Install dependencies
               run: yarn --frozen-lockfile
