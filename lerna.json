@@ -6,7 +6,7 @@
         "cli"
     ],
     "useWorkspaces": true,
-    "version": "1.1.29",
+    "version": "1.1.30",
     "command": {
         "version": {
             "message": "chore(release): publish %s"
