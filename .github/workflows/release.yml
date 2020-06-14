@@ -29,7 +29,7 @@ jobs:
 
             - name: Checkout master
               run: |
-                  git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/magoo-magoo/keyrier-json
+                  git remote set-url origin https://github.com/magoo-magoo/keyrier-json
                   git fetch --all --tags --prune
                   git checkout origin/master
 
