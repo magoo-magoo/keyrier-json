@@ -30,7 +30,7 @@ jobs:
             - name: Checkout master
               run: |
                   git remote set-url origin https://github.com/magoo-magoo/keyrier-json
-                  git fetch --all --tags --prune
+                  git fetch --all --tags --force
                   git checkout origin/master
 
             - name: Install dependencies
