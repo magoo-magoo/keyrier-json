@@ -31,7 +31,7 @@ jobs:
               run: |
                   git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/magoo-magoo/keyrier-json
                   git fetch --all --tags --prune
-                  git checkout tags/${GITHUB_REF} -b master
+                  git checkout origin/master
 
             - name: Install dependencies
               run: yarn --frozen-lockfile
