@@ -27,8 +27,8 @@ jobs:
               with:
                   node-version: 14
 
-            - name: Checkout master
-              run: git checkout master
+            # - name: Checkout master
+            #   run: git checkout master
 
             - name: Install dependencies
               run: yarn --frozen-lockfile
