@@ -1,6 +1,6 @@
 {
     "name": "@keyrier/cli",
-    "version": "1.1.27",
+    "version": "1.1.28",
     "description": "Query JSON & CSV with SQL",
     "keywords": [
         "json",
@@ -30,7 +30,7 @@
         "test": "tsdx test"
     },
     "dependencies": {
-        "@keyrier/core": "^1.1.27",
+        "@keyrier/core": "^1.1.28",
         "@types/easy-table": "0.0.32",
         "@types/json2csv": "5.0.1",
         "csv-parse": "4.10.1",
