@@ -27,8 +27,10 @@ jobs:
               with:
                   node-version: 14
 
-            # - name: Checkout master
-            #   run: git checkout master
+            - name: Checkout master
+              run: |
+                  git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/magoo-magoo/keyrier-json
+                  git checkout "${GITHUB_REF:11}" && git pull
 
             - name: Install dependencies
               run: yarn --frozen-lockfile
