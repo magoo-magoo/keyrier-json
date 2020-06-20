@@ -3,43 +3,53 @@ import { operators } from './operators'
 export type Operation = typeof operators[keyof typeof operators]
 
 export interface From {
-    name: Value
-    alias: Value
+    name: PathValue
+    alias: PathValue
     type: 'From'
 }
 
-export interface Value {
-    value: string | number
-    values: (string | number)[]
+export type Value = StringValue | NumberValue | PathValue
+
+export interface NumberValue {
+    value: number
+    type: 'NumberValue'
+}
+export interface StringValue {
+    value: string
+    type: 'StringValue'
+}
+export interface PathValue {
+    value: string
+    values: string[]
+    type: 'PathValue'
 }
 
 export interface Func {
     name: string
+    parameters: Field[]
 }
 
 export type FieldType = 'fieldIdentifier' | 'fieldString'
 export type Field =
     | {
           type: FieldType
-          field: Value
+          field: PathValue
           name: Value
       }
     | {
           name: Value
-          field: Value
+          field: PathValue
           type: 'fieldFunction'
           function: Func
       }
 export type Operand =
     | {
           value: Value[]
-          values?: string[]
           type: 'array'
       }
     | {
           field: Field
           value: string
-          values?: string[]
           type: 'opIdentifier'
       }
     | {

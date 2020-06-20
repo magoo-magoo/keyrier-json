@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash'
 import { toAst } from './actions-visitor'
 import { operators } from './operators'
-import { Conditions, Field, From, Operand, Operation, SQLTree, Where } from './SqlTree'
+import { Conditions, Field, From, Func, Operand, Operation, SQLTree, Where } from './SqlTree'
 import * as utils from './utils'
 
 export const computePath = (path: (string | number)[] | undefined, allowedSourceNames: string[]) => {
@@ -69,6 +69,11 @@ export type Row = {
     real: object
     dataContext: Record<string, object>
 }
+type Jointure = {
+    source: any[]
+    conditions: Conditions
+    from: From
+}
 
 export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, any>): any => {
     const data = getSourceData(sqlTree, sourceDataObject)
@@ -77,7 +82,7 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
         return mapper(data, sqlTree.fields, { [sqlTree.source.alias.value]: data }, sourceDataObject)
     }
 
-    let jointures: { source: any[]; conditions: Conditions; from: From }[] = []
+    let jointures: Jointure[] = []
     if (sqlTree.joins) {
         sqlTree.joins.forEach(join => {
             jointures.push({
@@ -203,39 +208,37 @@ const compareOperands = (
 }
 
 const mapObject = (fields: Field[], sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
-    const mappedObject: Record<string, object> = {}
+    const mappedObject: Record<string | number, any> = {}
     fields.forEach(field => {
         const value = getValue(field, sources, sourceDataObject)
-        mappedObject[field.name.value] =
-            field.type === 'fieldFunction' ? applyFunction(field.function.name, value) : value
+        if (field.type === 'fieldFunction') {
+            mappedObject[field.name.value] = applyFunction(field.function, sources, sourceDataObject)
+        } else {
+            mappedObject[field.name.value] = value
+        }
     })
     return mappedObject
 }
 
-const applyFunction = (functionName: string, value: object) => {
-    const func = functionName.toLowerCase()
-    if (func === 'lower') {
-        return String(value).toLowerCase()
+const functions: Record<string, ((value: any) => string | number) | undefined> = {
+    lower: parameters => String(parameters[0]).toLowerCase(),
+    upper: parameters => String(parameters[0]).toUpperCase(),
+    trim: parameters => String(parameters[0]).trim(),
+    trimleft: parameters => String(parameters[0]).trimLeft(),
+    trimright: parameters => String(parameters[0]).trimRight(),
+    reverse: parameters => String(parameters[0]).split('').reverse().join(''),
+    length: parameters => String(parameters[0]).length,
+    len: parameters => String(parameters[0]).length,
+    concat: parameters => parameters.join(''),
+}
+const applyFunction = (funcVal: Func, sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
+    const parameters = funcVal.parameters.map(x => getValue(x, sources, sourceDataObject))
+    const func = funcVal.name.toLowerCase()
+    const toApply = functions[func]
+    if (toApply) {
+        return toApply(parameters)
     }
-    if (func === 'upper') {
-        return String(value).toUpperCase()
-    }
-    if (func === 'trim') {
-        return String(value).trim()
-    }
-    if (func === 'trimleft') {
-        return String(value).trimLeft()
-    }
-    if (func === 'trimright') {
-        return String(value).trimRight()
-    }
-    if (func === 'reverse') {
-        return String(value).split('').reverse().join('')
-    }
-    if (func === 'length' || func === 'len') {
-        return String(value).length
-    }
-    throw new Error()
+    throw new Error(`Unsupported function. Supported built-in functions are: ${Object.keys(functions).join(', ')}`)
 }
 
 const getValue = (
@@ -268,7 +271,7 @@ const getValue = (
         return array.map((x: any) => ({ value: x[operand.value.fields[0].field.value] }))
     }
 
-    return getIdentifierValue(values, operand as any)
+    return getIdentifierValue(values, operand)
 }
 
 const mapper = (
@@ -285,7 +288,7 @@ const mapper = (
 }
 
 function rowShouldBeincludedInResult(
-    jointures: { source: any[]; conditions: Conditions; from: From }[],
+    jointures: Jointure[],
     row: Row,
     sourceDataObject: Record<string, any>,
     where: Where | undefined | null

@@ -365,6 +365,14 @@ describe('sql interpreter', () => {
             expect(result).toEqual([{ age: 21, name: 'Danny de Vito' }])
         })
 
+        it('should apply function concat', () => {
+            const result = sqlQuery(
+                '[{"name": "John Doe", "city": "PARIS"}]',
+                'select concat("foo bar", name, city, "some content") from data'
+            )
+            expect(result).toEqual([{ 'concat(foo bar,name,city,some content)': 'foo barJohn DoePARISsome content' }])
+        })
+
         it('should apply function lower', () => {
             const result = sqlQuery('[{"name": "John Doe"}, {"name": "Danny de Vito"}]', 'select lower(name) from data')
             expect(result).toEqual([{ 'lower(name)': 'john doe' }, { 'lower(name)': 'danny de vito' }])

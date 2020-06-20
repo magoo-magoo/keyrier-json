@@ -10,6 +10,7 @@ export const labels = {
     left: 'left',
     right: 'right',
     in: 'in',
+    functionParameter: 'functionParameter',
 } as const
 
 class SelectParser extends CstParser {
@@ -52,14 +53,41 @@ class SelectParser extends CstParser {
         ])
     })
 
+    public readonly value = this.RULE('value', () => {
+        this.OR1([
+            { ALT: () => this.CONSUME(lexer.Star, { LABEL: labels.value }) },
+            {
+                ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.value }),
+            },
+            {
+                ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.value }),
+            },
+        ])
+        this.OPTION(() => {
+            this.CONSUME(lexer.As)
+            this.OR2([
+                {
+                    ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.name }),
+                },
+                {
+                    ALT: () => this.CONSUME1(lexer.Identifier, { LABEL: labels.name }),
+                },
+            ])
+        })
+    })
+
     public readonly cols = this.RULE('cols', () => {
         this.OR([
-            { ALT: () => this.CONSUME(lexer.Star, { LABEL: labels.value }) },
             {
                 ALT: () => {
                     this.CONSUME2(lexer.Identifier, { LABEL: labels.function })
                     this.CONSUME(lexer.OpenParenthesis)
-                    this.CONSUME3(lexer.Identifier, { LABEL: labels.value })
+                    this.MANY_SEP({
+                        SEP: lexer.Comma,
+                        DEF: () => {
+                            this.SUBRULE2(this.value)
+                        },
+                    })
                     this.CONSUME(lexer.CloseParenthesis)
                     this.OPTION1(() => {
                         this.CONSUME1(lexer.As)
@@ -76,25 +104,7 @@ class SelectParser extends CstParser {
             },
             {
                 ALT: () => {
-                    this.OR1([
-                        {
-                            ALT: () => this.CONSUME(lexer.StringToken, { LABEL: labels.value }),
-                        },
-                        {
-                            ALT: () => this.CONSUME(lexer.Identifier, { LABEL: labels.value }),
-                        },
-                    ])
-                    this.OPTION(() => {
-                        this.CONSUME(lexer.As)
-                        this.OR2([
-                            {
-                                ALT: () => this.CONSUME1(lexer.StringToken, { LABEL: labels.name }),
-                            },
-                            {
-                                ALT: () => this.CONSUME1(lexer.Identifier, { LABEL: labels.name }),
-                            },
-                        ])
-                    })
+                    this.SUBRULE(this.value)
                 },
             },
         ])

@@ -8,13 +8,27 @@ describe('actions-visitor', () => {
         expect(ast.fields).toHaveLength(2)
         expect(ast.fields[0]).toEqual({
             type: 'fieldIdentifier',
-            name: { value: 'column1', values: ['column1'] },
-            field: { value: 'column1', values: ['column1'] },
+            name: {
+                type: 'StringValue',
+                value: 'column1',
+            },
+            field: {
+                type: 'PathValue',
+                value: 'column1',
+                values: ['column1'],
+            },
         })
         expect(ast.fields[1]).toEqual({
             type: 'fieldIdentifier',
-            name: { value: 'column2', values: ['column2'] },
-            field: { value: 'column2', values: ['column2'] },
+            name: {
+                type: 'StringValue',
+                value: 'column2',
+            },
+            field: {
+                type: 'PathValue',
+                value: 'column2',
+                values: ['column2'],
+            },
         })
 
         expect(ast.source.name.value).toEqual('table2')
@@ -30,8 +44,15 @@ describe('actions-visitor', () => {
         expect(ast.fields).toHaveLength(1)
         expect(ast.fields[0]).toEqual({
             type: 'fieldString',
-            name: { value: '\n', values: ['\n'] },
-            field: { value: '\n', values: ['\n'] },
+            name: {
+                type: 'StringValue',
+                value: '\n',
+            },
+            field: {
+                type: 'PathValue',
+                value: '\n',
+                values: ['\n'],
+            },
         })
 
         expect(ast.source.name.value).toEqual('table')
@@ -42,8 +63,15 @@ describe('actions-visitor', () => {
         const ast = toAst(inputText) as any
         expect(ast.fields[0]).toEqual({
             type: 'fieldIdentifier',
-            name: { value: 'foo', values: ['foo'] },
-            field: { value: 'foo', values: ['foo'] },
+            name: {
+                type: 'StringValue',
+                value: 'foo',
+            },
+            field: {
+                type: 'PathValue',
+                value: 'foo',
+                values: ['foo'],
+            },
         })
 
         expect(ast.source.name.value).toEqual('bar')
@@ -71,18 +99,39 @@ describe('actions-visitor', () => {
 
         expect(ast.fields[0]).toEqual({
             type: 'fieldIdentifier',
-            name: { value: 'foo', values: ['foo'] },
-            field: { value: 'column1', values: ['column1'] },
+            name: {
+                type: 'StringValue',
+                value: 'foo',
+            },
+            field: {
+                type: 'PathValue',
+                value: 'column1',
+                values: ['column1'],
+            },
         })
         expect(ast.fields[1]).toEqual({
             type: 'fieldIdentifier',
-            name: { value: 'column2', values: ['column2'] },
-            field: { value: 'column2', values: ['column2'] },
+            name: {
+                type: 'StringValue',
+                value: 'column2',
+            },
+            field: {
+                type: 'PathValue',
+                value: 'column2',
+                values: ['column2'],
+            },
         })
         expect(ast.fields[2]).toEqual({
             type: 'fieldIdentifier',
-            name: { value: 'bar', values: ['bar'] },
-            field: { value: 'column3', values: ['column3'] },
+            name: {
+                type: 'StringValue',
+                value: 'bar',
+            },
+            field: {
+                type: 'PathValue',
+                value: 'column3',
+                values: ['column3'],
+            },
         })
 
         expect(ast.source.name.value).toEqual('table')

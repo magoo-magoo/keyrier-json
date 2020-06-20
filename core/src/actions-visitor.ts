@@ -2,7 +2,7 @@ import { CstNode, ICstVisitor, IToken } from 'chevrotain'
 import { ReadonlyKeys } from 'utility-types'
 import { Integer, lex, Token, tokenVocabulary } from './lexer'
 import { SelectParser } from './parser'
-import { Field, FieldType, From, Operand, Order, ordering, SQLTree } from './SqlTree'
+import { Field, FieldType, From, Operand, Order, ordering, SQLTree, Value } from './SqlTree'
 
 const parserInstance = new SelectParser()
 const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, any> = parserInstance.getBaseCstVisitorConstructor()
@@ -44,10 +44,12 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return columns
     }
 
-    public cols(ctx: { name: IToken[]; value: IToken[]; function: IToken[] }) {
-        let value = ctx.value[0].image
-
-        let type = 'fieldIdentifier'
+    public value(ctx: { name: IToken[]; value: IToken[] }): { name: string; value: string; type: FieldType } {
+        let value = ''
+        if (ctx.value?.length) {
+            value = ctx.value[0].image
+        }
+        let type: FieldType = 'fieldIdentifier'
         if (ctx.value[0].tokenType === tokenVocabulary.StringToken) {
             value = convertStringTokenToJsString(value)
             type = 'fieldString'
@@ -55,11 +57,6 @@ class SQLToAstVisitor extends BaseSQLVisitor {
 
         let name = ctx.name && ctx.name[0] ? ctx.name[0].image : value
 
-        const func = ctx.function && ctx.function[0] && ctx.function[0].image
-        if (func) {
-            name = ctx.name && ctx.name[0] ? ctx.name[0].image : `${func}(${value})`
-            type = 'fieldFunction'
-        }
         if (ctx.name && ctx.name[0].tokenType === tokenVocabulary.StringToken) {
             name = convertStringTokenToJsString(name)
         }
@@ -67,33 +64,58 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return {
             name,
             value,
-            function: func,
+            type,
+        }
+    }
+    public cols(ctx: { name: IToken[]; value: CstNode[]; function: IToken[] }) {
+        if (ctx.function) {
+            const func = ctx.function[0].image
+            let name = ''
+            let value = ''
+            let type = 'fieldFunction'
+            const parameters = ctx.value.map(x => this.visit(x))
+            name = ctx.name && ctx.name[0] ? ctx.name[0].image : `${func}(${parameters.map(x => x.name).join(',')})`
+            return {
+                name,
+                value,
+                function: func,
+                type,
+                parameters,
+            }
+        }
+        let { name, value, type } = this.visit(ctx.value)
+        return {
+            name,
+            value,
             type,
         }
     }
 
     public projection(ctx: { cols: CstNode[] }): Field[] {
-        const cols: { value: string; name: string; function: string | undefined; type: FieldType }[] = ctx.cols.map(x =>
-            this.visit(x)
-        ) as any
+        const cols: {
+            value: string
+            name: string
+            function: string | undefined
+            type: FieldType
+            parameters: { name: string; value: string; type: FieldType }[]
+        }[] = ctx.cols.map(x => this.visit(x)) as any
         const fields: Field[] = []
-        cols.forEach(({ name, value, function: func, type }) => {
-            const { pathArray: namePathArray, propertyName: namePropertyName } = splitPropertyPath(name)
-            const { pathArray: fieldPathArray, propertyName: fieldPropertyName } = splitPropertyPath(value)
 
-            const field = {
-                type,
-                name: {
-                    value: namePropertyName,
-                    values: namePathArray,
-                },
-                field: {
-                    value: fieldPropertyName,
-                    values: fieldPathArray,
-                },
-                function: func ? { name: func } : undefined,
+        cols.forEach(({ name, value, function: func, type, parameters }) => {
+            const fieldValue = mapField(name, value, type)
+
+            if (func) {
+                const field = {
+                    ...fieldValue,
+                    function: {
+                        name: func,
+                        parameters: parameters.map(x => mapField(x.name, x.value, x.type)),
+                    },
+                }
+                fields.push(field)
+            } else {
+                fields.push(fieldValue)
             }
-            fields.push(field)
         })
         return fields
     }
@@ -107,10 +129,12 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         return {
             type: 'From',
             name: {
+                type: 'PathValue',
                 value: tableName,
                 values: splitPropertyPath(tableName).pathArray,
             },
             alias: {
+                type: 'PathValue',
                 value: alias,
                 values: splitPropertyPath(alias).pathArray,
             },
@@ -151,13 +175,14 @@ class SQLToAstVisitor extends BaseSQLVisitor {
         }
     }
     public orderByClause(ctx: { OrderBy: IToken[]; Identifier: IToken[]; OrderByDirection: IToken[] }): Order {
-        const { pathArray, propertyName } = splitPropertyPath(ctx.Identifier[0].image)
+        const { propertyName } = splitPropertyPath(ctx.Identifier[0].image)
         const direction = ctx.OrderByDirection && (ctx.OrderByDirection[0].image as 'asc' | 'desc')
 
         const order: ordering = {
             value: {
+                type: 'StringValue',
                 value: propertyName,
-                values: pathArray,
+                // values: pathArray,
             },
             direction,
         }
@@ -219,41 +244,36 @@ class SQLToAstVisitor extends BaseSQLVisitor {
 
     public atomicExpression(context: Record<Token | 'in', Array<IToken>>): Operand {
         const entries = Object.entries(context) as [keyof typeof context, Array<IToken>][]
-        for (let [key, value] of entries) {
+        for (let [key, entryValue] of entries) {
             if (key === 'in') {
-                const array = value
-                    .map(x => {
-                        if (x.tokenType === Integer) {
-                            return parseInt(x.image)
-                        }
-                        return convertStringTokenToJsString(x.image)
-                    })
-                    .map(v => ({ value: v, values: [v] }))
+                const array: Value[] = entryValue.map(value => {
+                    if (value.tokenType === Integer) {
+                        const type = 'NumberValue'
+                        const intValue = parseInt(value.image)
+                        return { type, value: intValue, values: [intValue] }
+                    }
+                    const type = 'StringValue'
+                    const stringValue = convertStringTokenToJsString(value.image)
+                    return { type, value: stringValue, values: [stringValue] }
+                })
                 return { type: 'array', value: array }
             }
             if (key === 'Integer') {
-                return { type: 'integer', value: parseInt(value[0].image) }
+                return { type: 'integer', value: parseInt(entryValue[0].image) }
             }
             if (key === 'Null') {
                 return { type: 'null', value: null }
             }
             if (key === 'Identifier') {
-                const { pathArray, propertyName } = splitPropertyPath(value[0].image)
+                const field = mapField(entryValue[0].image, entryValue[0].image, 'fieldIdentifier')
                 return {
                     type: 'opIdentifier',
-                    value: value[0].image,
-                    field: {
-                        type: 'fieldIdentifier',
-                        name: { value: propertyName, values: pathArray },
-                        field: {
-                            value: propertyName,
-                            values: pathArray,
-                        },
-                    },
+                    value: entryValue[0].image,
+                    field,
                 }
             }
             if (key === 'StringToken') {
-                return { type: 'string', value: convertStringTokenToJsString(value[0].image) }
+                return { type: 'string', value: convertStringTokenToJsString(entryValue[0].image) }
             }
         }
         throw new Error()
@@ -292,5 +312,23 @@ const splitPropertyPath = (stringPath: string | number) => {
 }
 
 const convertStringTokenToJsString = (str: string) => str.substring(1, str.length - 1)
+
+const mapField = (name: string, value: string, type: FieldType): Field => {
+    const { propertyName: namePropertyName } = splitPropertyPath(name)
+    const { pathArray: fieldPathArray, propertyName: fieldPropertyName } = splitPropertyPath(value)
+
+    return {
+        type,
+        name: {
+            type: 'StringValue',
+            value: namePropertyName,
+        },
+        field: {
+            type: 'PathValue',
+            value: fieldPropertyName,
+            values: fieldPathArray,
+        },
+    }
+}
 
 export { toAst }
