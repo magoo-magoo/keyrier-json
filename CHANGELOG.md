@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.32 (2020-06-20)
+
+
+### Features
+
+* add multi parameters functions ([45196ba](https://github.com/magoo-magoo/keyrier-json/commit/45196bad642851f3f94cbec822b99d4b6a334c3d))
+
+
+
+
+
 ## 1.1.31 (2020-06-14)
 
 **Note:** Version bump only for package keyrier-json
