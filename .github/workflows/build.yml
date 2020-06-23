@@ -65,7 +65,7 @@ jobs:
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-            - name: create version
+            - name: NPM publish packages
               if: github.ref == 'refs/heads/master'
               run: |
                   git config --local user.email "magoo@magoo.dev"
@@ -74,6 +74,13 @@ jobs:
                   yarn lerna publish patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
               env:
                   GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+            - name: 'Get Previous tag'
+              if: github.ref == 'refs/heads/master'
+              id: previoustag
+              uses: 'WyriHaximus/github-action-get-previous-tag@master'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
             - name: Push new version changes
               if: github.ref == 'refs/heads/master'
@@ -90,8 +97,8 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # This token is provided by Actions, you do not need to create your own token
               with:
-                  tag_name: ${{ github.ref }}
-                  release_name: Release ${{ github.ref }}
+                  tag_name: ${{ steps.previoustag.outputs.tag }}
+                  release_name: Release ${{ steps.previoustag.outputs.tag }}
                   draft: false
                   prerelease: false
 
@@ -100,7 +107,7 @@ jobs:
               uses: svenstaro/upload-release-action@v1-release
               with:
                   repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-                  tag: ${{ github.ref }}
+                  tag: ${{ steps.previoustag.outputs.tag }}
                   overwrite: true
                   file: ui/dist/*
                   file_glob: true
