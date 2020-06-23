@@ -66,12 +66,12 @@ jobs:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
             - name: create version
-
               if: github.ref == 'refs/heads/master'
               run: |
                   git config --local user.email "magoo@magoo.dev"
                   git config --local user.name "Maël GOUACIDE"
-                  yarn lerna version patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
+                  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+                  yarn lerna publish patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
               env:
                   GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
@@ -82,3 +82,32 @@ jobs:
                   tags: true
                   force: true
                   github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+            - name: Create Release
+              if: github.ref == 'refs/heads/master'
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+              with:
+                  tag_name: ${{ github.ref }}
+                  release_name: Release ${{ github.ref }}
+                  draft: false
+                  prerelease: false
+
+            - name: Upload binaries to release
+              if: github.ref == 'refs/heads/master'
+              uses: svenstaro/upload-release-action@v1-release
+              with:
+                  repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+                  tag: ${{ github.ref }}
+                  overwrite: true
+                  file: ui/dist/*
+                  file_glob: true
+
+            - name: Deploy on gh-pages
+              if: github.ref == 'refs/heads/master'
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+                  publish_dir: ./ui/build
