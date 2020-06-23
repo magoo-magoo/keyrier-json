@@ -46,7 +46,7 @@ class SelectParser extends CstParser {
                     this.AT_LEAST_ONE_SEP({
                         SEP: lexer.Comma,
                         DEF: () => {
-                            this.SUBRULE(this.cols)
+                            this.SUBRULE(this.columnClause)
                         },
                     }),
             },
@@ -76,7 +76,7 @@ class SelectParser extends CstParser {
         })
     })
 
-    public readonly cols = this.RULE('cols', () => {
+    public readonly columnClause = this.RULE('columnClause', () => {
         this.OR([
             {
                 ALT: () => {
@@ -125,7 +125,7 @@ class SelectParser extends CstParser {
 
     public readonly whereClause = this.RULE('whereClause', () => {
         this.CONSUME(lexer.Where)
-        this.SUBRULE(this.expression)
+        this.SUBRULE(this.expressionClause)
     })
 
     public readonly orderByClause = this.RULE('orderByClause', () => {
@@ -154,11 +154,11 @@ class SelectParser extends CstParser {
             ])
             this.OPTION(() => this.CONSUME2(lexer.Identifier, { LABEL: labels.alias }))
             this.CONSUME(lexer.On)
-            this.SUBRULE(this.expression)
+            this.SUBRULE(this.expressionClause)
         })
     })
 
-    public readonly expression = this.RULE('expression', () => {
+    public readonly expressionClause = this.RULE('expressionClause', () => {
         this.MANY_SEP({
             SEP: lexer.OrAnd,
             DEF: () => this.SUBRULE(this.subExpression),

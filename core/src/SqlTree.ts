@@ -29,19 +29,28 @@ export interface Func {
     parameters: Field[]
 }
 
-export type FieldType = 'fieldIdentifier' | 'fieldString'
-export type Field =
-    | {
-          type: FieldType
-          field: PathValue
-          name: Value
-      }
-    | {
-          name: Value
-          field: PathValue
-          type: 'fieldFunction'
-          function: Func
-      }
+type FieldFunction = {
+    name: Value
+    field: PathValue
+    type: 'fieldFunction'
+    function: Func
+}
+
+type FieldString = {
+    type: 'fieldString'
+    field: PathValue
+    name: StringValue
+}
+type FieldIdentifier = {
+    type: 'fieldIdentifier'
+    field: PathValue
+    name: Value
+}
+
+export type Field = FieldString | FieldIdentifier | FieldFunction
+
+export type FieldType = Field['type']
+
 export type Operand =
     | {
           value: Value[]

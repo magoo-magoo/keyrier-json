@@ -373,6 +373,11 @@ describe('sql interpreter', () => {
             expect(result).toEqual([{ 'concat(foo bar,name,city,some content)': 'foo barJohn DoePARISsome content' }])
         })
 
+        it('should return an error for an invalid function', () => {
+            const result = sqlQuery('[{"name": "John Doe"}]', 'select nonexistentfunction(name) from data')
+            expect(result).toBeInstanceOf(Error)
+            expect(result.message).toContain('Unsupported function: nonexistentfunction')
+        })
         it('should apply function lower', () => {
             const result = sqlQuery('[{"name": "John Doe"}, {"name": "Danny de Vito"}]', 'select lower(name) from data')
             expect(result).toEqual([{ 'lower(name)': 'john doe' }, { 'lower(name)': 'danny de vito' }])

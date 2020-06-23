@@ -82,16 +82,14 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
         return mapper(data, sqlTree.fields, { [sqlTree.source.alias.value]: data }, sourceDataObject)
     }
 
-    let jointures: Jointure[] = []
-    if (sqlTree.joins) {
-        sqlTree.joins.forEach(join => {
-            jointures.push({
-                from: join.from,
-                conditions: join.conditions,
-                source: sourceDataObject[join.from.name.value],
-            })
+    let jointures = new Array<Jointure>()
+    sqlTree.joins?.forEach(join => {
+        jointures.push({
+            from: join.from,
+            conditions: join.conditions,
+            source: sourceDataObject[join.from.name.value],
         })
-    }
+    })
     const rows: Row[] = data.map(x => ({
         real: x,
         projected: x,
@@ -101,15 +99,13 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
         },
     }))
 
-    const ordered = sqlTree.order
-        ? orderBy(
-              rows,
-              sqlTree.order.orderings.map(x => 'real.' + x.value.value),
-              sqlTree.order.orderings.map(x => x.direction)
-          )
-        : rows
+    const ordered = orderBy(
+        rows,
+        sqlTree.order?.orderings.map(x => 'real.' + x.value.value),
+        sqlTree.order?.orderings.map(x => x.direction)
+    )
 
-    const results: object[] = []
+    const results = new Array<object>()
     ordered.forEach(row => {
         if (sqlTree.limit && sqlTree.limit.value.value <= results.length) {
             return
@@ -238,7 +234,9 @@ const applyFunction = (funcVal: Func, sources: Record<string, object>, sourceDat
     if (toApply) {
         return toApply(parameters)
     }
-    throw new Error(`Unsupported function. Supported built-in functions are: ${Object.keys(functions).join(', ')}`)
+    throw new Error(
+        `Unsupported function: ${func}. Supported built-in functions are: ${Object.keys(functions).join(', ')}`
+    )
 }
 
 const getValue = (
