@@ -93,7 +93,7 @@
         "react-table": "7.5.0",
         "react-toastify": "6.0.6",
         "react-use": "15.2.2",
-        "reactstrap": "8.5.0",
+        "reactstrap": "8.5.1",
         "redux": "4.0.5",
         "redux-logger": "3.0.6",
         "redux-undo": "1.0.1",
