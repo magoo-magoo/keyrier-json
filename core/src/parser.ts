@@ -1,4 +1,5 @@
-import { CstParser } from 'chevrotain'
+import { CstNode, CstParser, IRuleConfig } from 'chevrotain'
+import { SQLToAstVisitor } from './actions-visitor'
 import * as lexer from './lexer'
 
 export const labels = {
@@ -13,7 +14,25 @@ export const labels = {
     functionParameter: 'functionParameter',
 } as const
 
-class SelectParser extends CstParser {
+export class CustomCstParser<T = SQLToAstVisitor> extends CstParser {
+    protected rule(
+        name: Exclude<keyof T, number | symbol>,
+        implementation: (...implArgs: any[]) => any,
+        config?: IRuleConfig<CstNode>
+    ) {
+        return super.RULE(name, implementation, config)
+    }
+
+    RULE(
+        name: Exclude<keyof T, number | symbol>,
+        implementation: (...implArgs: any[]) => any,
+        config?: IRuleConfig<CstNode>
+    ) {
+        return super.RULE(name, implementation, config)
+    }
+}
+
+class SelectParser extends CustomCstParser {
     public readonly selectStatement = this.RULE('selectStatement', () => {
         this.SUBRULE(this.selectClause)
         this.SUBRULE(this.fromClause)
@@ -34,12 +53,12 @@ class SelectParser extends CstParser {
         })
     })
 
-    public readonly selectClause = this.RULE('selectClause', () => {
+    public readonly selectClause = this.rule('selectClause', () => {
         this.CONSUME(lexer.Select)
         this.SUBRULE(this.projection)
     })
 
-    public readonly projection = this.RULE('projection', () => {
+    public readonly projection = this.rule('projection', () => {
         this.OR([
             {
                 ALT: () =>
@@ -53,7 +72,7 @@ class SelectParser extends CstParser {
         ])
     })
 
-    public readonly value = this.RULE('value', () => {
+    public readonly value = this.rule('value', () => {
         this.OR1([
             { ALT: () => this.CONSUME(lexer.Star, { LABEL: labels.value }) },
             {
@@ -76,7 +95,7 @@ class SelectParser extends CstParser {
         })
     })
 
-    public readonly columnClause = this.RULE('columnClause', () => {
+    public readonly columnClause = this.rule('columnClause', () => {
         this.OR([
             {
                 ALT: () => {
@@ -110,7 +129,7 @@ class SelectParser extends CstParser {
         ])
     })
 
-    public readonly fromClause = this.RULE('fromClause', () => {
+    public readonly fromClause = this.rule('fromClause', () => {
         this.CONSUME(lexer.From)
         this.OR([
             {
@@ -123,12 +142,12 @@ class SelectParser extends CstParser {
         this.OPTION(() => this.CONSUME2(lexer.Identifier, { LABEL: labels.alias }))
     })
 
-    public readonly whereClause = this.RULE('whereClause', () => {
+    public readonly whereClause = this.rule('whereClause', () => {
         this.CONSUME(lexer.Where)
         this.SUBRULE(this.expressionClause)
     })
 
-    public readonly orderByClause = this.RULE('orderByClause', () => {
+    public readonly orderByClause = this.rule('orderByClause', () => {
         this.CONSUME(lexer.OrderBy)
         this.CONSUME(lexer.Identifier)
         this.OPTION({
@@ -136,12 +155,12 @@ class SelectParser extends CstParser {
         })
     })
 
-    public readonly limitClause = this.RULE('limitClause', () => {
+    public readonly limitClause = this.rule('limitClause', () => {
         this.CONSUME(lexer.Limit)
         this.CONSUME(lexer.Integer)
     })
 
-    public readonly joinClause = this.RULE('joinClause', () => {
+    public readonly joinClause = this.rule('joinClause', () => {
         this.MANY(() => {
             this.CONSUME(lexer.InnerJoin)
             this.OR([
@@ -158,14 +177,14 @@ class SelectParser extends CstParser {
         })
     })
 
-    public readonly expressionClause = this.RULE('expressionClause', () => {
+    public readonly expressionClause = this.rule('expressionClause', () => {
         this.MANY_SEP({
             SEP: lexer.OrAnd,
             DEF: () => this.SUBRULE(this.subExpression),
         })
     })
 
-    public readonly subExpression = this.RULE('subExpression', () => {
+    public readonly subExpression = this.rule('subExpression', () => {
         this.SUBRULE(this.atomicExpression, { LABEL: labels.left })
         this.OR([
             {
@@ -185,7 +204,7 @@ class SelectParser extends CstParser {
         ])
     })
 
-    public readonly atomicExpression = this.RULE('atomicExpression', () => {
+    public readonly atomicExpression = this.rule('atomicExpression', () => {
         this.OR([
             { ALT: () => this.CONSUME(lexer.Integer) },
             { ALT: () => this.CONSUME(lexer.Null) },
@@ -213,7 +232,7 @@ class SelectParser extends CstParser {
         ])
     })
 
-    public readonly relationalOperator = this.RULE('relationalOperator', () => {
+    public readonly relationalOperator = this.rule('relationalOperator', () => {
         this.OR([
             { ALT: () => this.CONSUME(lexer.GreaterOrEqualThan) },
             { ALT: () => this.CONSUME(lexer.GreaterThan) },

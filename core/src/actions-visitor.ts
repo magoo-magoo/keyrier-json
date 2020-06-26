@@ -1,19 +1,19 @@
-import { CstNode, ICstVisitor, IToken } from 'chevrotain'
-import { ReadonlyKeys, ValuesType } from 'utility-types'
+import { CstNode, CstParser, ICstVisitor, IToken } from 'chevrotain'
+import { ValuesType } from 'utility-types'
 import { Integer, lex, Token, tokenVocabulary } from './lexer'
 import { labels, SelectParser } from './parser'
 import { Field, FieldType, From, Operand, Order, ordering, SQLTree, Value } from './SqlTree'
 
 const parserInstance = new SelectParser()
 const BaseSQLVisitor: new (arg?: any) => ICstVisitor<number, any> = parserInstance.getBaseCstVisitorConstructor()
+type NodeKeys = Exclude<keyof SelectParser, keyof CstParser> | ValuesType<typeof labels>
 
-type NodeKeys = ReadonlyKeys<SelectParser> | ValuesType<typeof labels>
 type TokenKeys = Token | ValuesType<typeof labels>
 type NodeCtx = Record<NodeKeys, CstNode[]>
 type TokenCtx = Record<TokenKeys, IToken[]>
 type Ctx = NodeCtx & TokenCtx
 
-class SQLToAstVisitor extends BaseSQLVisitor {
+export class SQLToAstVisitor extends BaseSQLVisitor {
     constructor() {
         super()
         this.validateVisitor()
