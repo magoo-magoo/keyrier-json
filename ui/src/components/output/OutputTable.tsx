@@ -1,4 +1,4 @@
-import { toggleOutputTableModal } from 'actions/actions'
+import Actions from 'actions/actions'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { withPerformance } from 'core/logging/performance'
 import * as React from 'react'
@@ -11,7 +11,7 @@ import './OutputTable.scss'
 import OutputTableView from './OutputTableView'
 
 interface Props {
-    toggleModal: typeof toggleOutputTableModal
+    toggleModal: typeof Actions.toggleOutputTableModal
     isModalOpen: boolean
 }
 
@@ -45,5 +45,5 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default connect(mapStateToProps, {
-    toggleModal: toggleOutputTableModal,
+    toggleModal: Actions.toggleOutputTableModal,
 })(withErrorBoundary(memo(withPerformance(OutputTable, 'OutputTable'))))

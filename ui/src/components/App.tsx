@@ -1,4 +1,4 @@
-import { updateLayouts } from 'actions/actions'
+import Actions from 'actions/actions'
 import { configuration } from 'config'
 import { withPerformance } from 'core/logging/performance'
 import * as React from 'react'
@@ -23,7 +23,7 @@ const QueryEditor = lazy(() => import(/* webpackChunkName: "QueryEditor" */ 'com
 type Props = {
     mode: QueryMode
     layouts: ReactGridLayout.Layouts
-    updateGridLayouts: typeof updateLayouts
+    updateGridLayouts: typeof Actions.updateLayouts
 }
 const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
     const onLayoutChange = (_: ReactGridLayout.Layout[], newLayouts: ReactGridLayout.Layouts) =>
@@ -83,5 +83,5 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
 }
 
 export default connect(state => ({ mode: getQueryMode(state), layouts: getLayouts(state) }), {
-    updateGridLayouts: updateLayouts,
+    updateGridLayouts: Actions.updateLayouts,
 })(withPerformance(App, 'App'))

@@ -41,8 +41,14 @@
         "xlsx": "0.16.2"
     },
     "devDependencies": {
+        "@types/jest": "^26.0.3",
+        "@types/node": "^14.0.14",
         "@types/update-notifier": "4.1.0",
-        "execa": "4.0.2"
+        "eslint-config-prettier": "^6.11.0",
+        "execa": "4.0.2",
+        "prettier": "^2.0.5",
+        "tsdx": "^0.13.2",
+        "typescript": "^3.9.5"
     },
     "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",
     "readme": "./README.md"

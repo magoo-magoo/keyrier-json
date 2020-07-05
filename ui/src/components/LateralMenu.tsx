@@ -1,12 +1,4 @@
-import {
-    clearEditor,
-    redo,
-    resetEditor,
-    undo,
-    updateAutoFormatSource,
-    updateQueryMode,
-    updateSource,
-} from 'actions/actions'
+import Actions from 'actions/actions'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { logDebug } from 'core/logging/logger'
 import { withPerformance } from 'core/logging/performance'
@@ -33,14 +25,14 @@ import { getCanRedo, getCanUndo, getQueryMode, getSourceAutoFormat } from 'store
 import HttpRequestSource from './source/RequestSource'
 
 interface Props {
-    onFileContentReady: typeof updateSource
-    changeAutoFormat: typeof updateAutoFormatSource
-    onReset: typeof resetEditor
-    onClear: typeof clearEditor
-    setQueryMode: typeof updateQueryMode
+    onFileContentReady: typeof Actions.updateSource
+    changeAutoFormat: typeof Actions.updateAutoFormatSource
+    onReset: typeof Actions.resetEditor
+    onClear: typeof Actions.clearEditor
+    setQueryMode: typeof Actions.updateQueryMode
     mode: QueryMode
-    onUndo: typeof undo
-    onRedo: typeof redo
+    onUndo: typeof Actions.undo
+    onRedo: typeof Actions.redo
     canRedo: boolean
     canUndo: boolean
     autoFormat: boolean
@@ -227,12 +219,12 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default connect(mapStateToProps, {
-    onFileContentReady: updateSource,
-    onReset: resetEditor,
-    onClear: clearEditor,
-    onUndo: undo,
-    onRedo: redo,
+    onFileContentReady: Actions.updateSource,
+    onReset: Actions.resetEditor,
+    onClear: Actions.clearEditor,
+    onUndo: Actions.undo,
+    onRedo: Actions.redo,
     resetHistory: ActionCreators.clearHistory,
-    changeAutoFormat: updateAutoFormatSource,
-    setQueryMode: updateQueryMode,
+    changeAutoFormat: Actions.updateAutoFormatSource,
+    setQueryMode: Actions.updateQueryMode,
 })(memo(withErrorBoundary(withPerformance(LateralMenu, 'LateralMenu'))))

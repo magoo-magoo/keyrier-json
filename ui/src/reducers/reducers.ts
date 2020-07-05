@@ -1,117 +1,121 @@
+import { createReducer } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import undoable from 'redux-undo'
-import { Action } from '../actions/actions'
+import actions, { Action } from '../actions/actions'
 import { configuration } from '../config'
 import { codeEvaluation } from '../core/code'
 import { jsonBeautify } from '../core/converters/json'
 import { containsIgnoreCase } from '../core/converters/string'
 import { arrayElementName } from '../models/array'
 import initialStateJson from '../state/default-state.json'
-import {
-    AppState,
-    emptyState,
-    getDefaultAppState,
-    getDefaultUserSettingsState,
-    OupoutState,
-    OupoutTableState,
-    QueryMode,
-    QueryState,
-    SourceState,
-    tabType,
-    UserSettingsState,
-} from '../state/State'
+import * as State from '../state/State'
 
-export const appReducer = (rootState = getDefaultAppState(), action: Action) => {
-    if (action.type === 'CLEAR_EDITOR') {
-        return emptyState
-    }
-    const newState =
-        rootState?.query && rootState?.source
-            ? ({
-                  ...rootState,
-                  query: query(rootState.query, action),
-                  source: source(rootState.source, action),
-              } as const)
-            : {}
+export const appReducer = createReducer<State.AppState>(State.getDefaultAppState(), builder =>
+    builder
+        .addCase(actions.clearEditor, () => State.emptyState)
+        .addMatcher<Action>(
+            (action): action is Exclude<Action, ReturnType<typeof actions.clearEditor>> =>
+                action.type !== 'CLEAR_EDITOR',
+            (draft, action) => {
+                if (draft.query) {
+                    draft.query = query(draft.query, action)
+                }
+                if (draft.source) {
+                    draft.source = source(draft.source, action)
+                }
 
-    const newOutputState = output(rootState, newState, action)
-    const ret = {
-        ...newState,
-        output: {
-            ...newOutputState,
-            table: table(newOutputState?.table ?? {}, action),
-        },
-    }
+                switch (action.type) {
+                    case 'UPDATE_QUERY':
+                    case 'UPDATE_SOURCE_TEXT':
+                        draft.output = computeOutput(
+                            draft.output,
+                            draft.source?.text ? draft.source.text : '',
+                            draft.query?.text ? draft.query.text : '',
+                            action,
+                            draft.query?.mode ? draft.query.mode : 'SQL'
+                        )
+                        return
+                    case 'TOGGLE_OUTPUT_TABLE_MODAL':
+                        if (draft.output?.table) {
+                            draft.output.table.isModalOpen = !draft.output.table?.isModalOpen
+                        }
+                        return
 
-    return ret
-}
-
-export const source = (state: SourceState, action: Action) => {
-    switch (action.type) {
-        case 'UPDATE_SOURCE_TEXT':
-            return {
-                ...state,
-                text: state?.autoFormat ? jsonBeautify(action.source.trim()) : action.source,
+                    case 'UPDATE_OUTPUT_TAB_SELECTION':
+                        if (draft.output) {
+                            draft.output.selectedTab = action.payload
+                        }
+                        return
+                    case 'UPDATE_OUTPUT_SEARCH_TERM':
+                        if (draft.output) {
+                            draft.output = filter(draft.output, action.payload)
+                            draft.output.searchTerm = action.payload
+                            draft.output.selectedTab = 'RawJson'
+                        }
+                        return
+                }
             }
-        case 'UPDATE_AUTOFORMAT_SOURCE':
-            return {
-                ...state,
-                text: action.active ? jsonBeautify(state?.text?.trim()) : state?.text ?? '',
-                autoFormat: action.active,
+        )
+        .addMatcher(
+            (_action): _action is Action => true,
+            (draft, action) => {
+                if (draft.output) {
+                    draft.output.table = table(draft.output?.table, action)
+                }
             }
-        default:
-            return state
-    }
-}
+        )
+)
 
-export const userSettings = (state: UserSettingsState | undefined = getDefaultUserSettingsState(), action: Action) => {
-    switch (action.type) {
-        case 'RESET_EDITOR':
-            return getDefaultUserSettingsState()
-        case 'SWITCH_GLOBAL_THEME':
-            return { ...state, globalTheme: action.theme }
-        case 'SWITCH_EDITOR_THEME':
-            return { ...state, editorTheme: action.theme }
-        case 'UPDATE_LAYOUTS':
-            return { ...state, layouts: action.layouts }
-        default:
-            return state
-    }
-}
+export const source = createReducer<State.SourceState>({}, builder =>
+    builder
+        .addCase(actions.updateSource, (state, action) => {
+            state.text = state?.autoFormat ? jsonBeautify(action.payload.trim()) : action.payload
+        })
+        .addCase(actions.updateAutoFormatSource, (state, action) => {
+            state.text = action.payload ? jsonBeautify(state?.text?.trim()) : state?.text ?? ''
+            state.autoFormat = action.payload
+        })
+)
 
-export const query = (state: QueryState, action: Action) => {
-    switch (action.type) {
-        case 'UPDATE_QUERY':
-            return {
-                ...state,
-                text: action.query,
-            }
-        case 'UPDATE_QUERY_MODE':
-            return {
-                ...state,
-                mode: action.mode,
-                text:
-                    action.mode === 'SQL'
-                        ? initialStateJson.query.text
-                        : '// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// \n\n      data\n    ',
-            } as const
-        default:
-            return state
-    }
-}
+export const userSettings = createReducer<State.UserSettingsState>(State.getDefaultUserSettingsState(), builder =>
+    builder
+        .addCase(actions.resetEditor, () => State.getDefaultUserSettingsState())
+        .addCase(actions.switchTheme, (state, action) => {
+            state.globalTheme = action.payload
+        })
+        .addCase(actions.switchEditorTheme, (state, action) => {
+            state.editorTheme = action.payload
+        })
+        .addCase(actions.updateLayouts, (state, action) => {
+            state.layouts = action.payload
+        })
+)
+export const query = createReducer<State.QueryState>({}, builder =>
+    builder
+        .addCase(actions.updateQuery, (state, action) => {
+            state.text = action.payload
+        })
+        .addCase(actions.updateQueryMode, (state, action) => {
+            state.mode = action.payload
+            state.text =
+                action.payload === 'SQL'
+                    ? initialStateJson.query.text
+                    : '// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// \n\n      data\n    '
+        })
+)
 
 export const computeOutput = (
-    previousState: OupoutState,
+    previousState: State.OupoutState | undefined,
     sourceString: string,
     queryString: string,
     action: Action,
-    mode: QueryMode
+    mode: State.QueryMode
 ) => {
     const evaluation = codeEvaluation(sourceString, queryString, mode)
 
     if (evaluation instanceof Error) {
         return {
-            selectedTab: 'RawJson',
+            selectedTab: 'RawJson' as const,
             obj: null,
             objSize: 0,
             searchTerm: '',
@@ -124,7 +128,7 @@ export const computeOutput = (
                 columns: [],
                 groupBy: [],
             },
-        } as const
+        }
     }
 
     const { text, obj } = evaluation ?? { text: null, obj: null }
@@ -148,10 +152,10 @@ export const computeOutput = (
             ? previousState.table.isModalOpen
             : false
 
-    let selectedTab: tabType = Array.isArray(obj) ? 'Table' : 'RawJson'
+    let selectedTab: State.tabType = Array.isArray(obj) ? 'Table' : 'RawJson'
 
     if (action.type === 'UPDATE_OUTPUT_TAB_SELECTION') {
-        selectedTab = action.tab
+        selectedTab = action.payload
     }
     return {
         selectedTab,
@@ -164,74 +168,34 @@ export const computeOutput = (
             isModalOpen,
             displayedColumns,
             columns: displayedColumns,
-            groupBy: [],
+            groupBy: previousState?.table?.groupBy ?? [],
         },
-    } as const
+    }
 }
 
-export const output = (previousState: AppState, newState: AppState | null, action: Action) => {
-    switch (action.type) {
-        case 'UPDATE_QUERY':
-        case 'UPDATE_SOURCE_TEXT':
-        case 'UPDATE_TABLE_COLUMNS':
-        case 'UPDATE_TABLE_GROUP_BY':
-            if (
-                previousState?.source?.text === newState?.source?.text &&
-                previousState?.query?.text === newState?.query?.text
-            ) {
-                return previousState.output
-            }
-            if (newState) {
-                return computeOutput(
-                    newState.output ?? {},
-                    newState.source?.text ? newState.source.text : '',
-                    newState.query?.text ? newState.query.text : '',
-                    action,
-                    newState.query?.mode ? newState.query.mode : 'SQL'
-                )
-            }
-            break
-        case 'TOGGLE_OUTPUT_TABLE_MODAL':
-            return newState
-                ? {
-                      ...newState.output,
-                      table: {
-                          ...(newState.output ? newState.output.table : {}),
-                          isModalOpen: newState.output?.table ? !newState.output.table.isModalOpen : false,
-                      },
-                  }
-                : {}
-        case 'UPDATE_OUTPUT_TAB_SELECTION':
-            if (newState) {
-                return {
-                    ...newState.output,
-                    selectedTab: action.tab,
+const table = createReducer<State.OupoutTableState>(
+    State.getDefaultAppState().output!.table as State.OupoutTableState,
+    builder =>
+        builder
+            .addCase(actions.updateTableColumns, (state, action) => {
+                state.displayedColumns = action.payload
+
+                if (!state.groupBy) {
+                    return
                 }
-            }
-            break
-        case 'UPDATE_OUTPUT_SEARCH_TERM':
-            if (newState && newState.output) {
-                return {
-                    ...filter(newState.output, action.searchTerm),
-                    searchTerm: action.searchTerm,
-                    selectedTab: 'RawJson',
-                } as const
-            }
-            break
-        default:
-            if (newState?.output) {
-                return computeOutput(
-                    newState.output,
-                    newState.source?.text ? newState.source.text : '',
-                    newState.query?.text ? newState.query.text : '',
-                    action,
-                    newState.query?.mode ? newState.query.mode : 'SQL'
-                )
-            }
-            break
-    }
-    return {}
-}
+                for (let i = 0; i < state.groupBy.length; i++) {
+                    const element = state.groupBy[i]
+                    if (!action.payload.includes(element)) {
+                        state.groupBy.splice(i, 1)
+                    }
+                }
+            })
+            .addCase(actions.updateTableGroupBy, (state, action) => {
+                state.groupBy = action.payload
+                    .filter(gb => state && state.displayedColumns && state.displayedColumns.indexOf(gb) !== -1)
+                    .filter(gb => gb !== 'Group by...')
+            })
+)
 
 export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
     if (typeof src !== 'string' && typeof src !== 'object') {
@@ -281,7 +245,7 @@ export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
     return { match: result, filteredObj: obj }
 }
 
-const filter = (state: OupoutState, searchTerm: string) => {
+const filter = (state: State.OupoutState, searchTerm: string) => {
     if (!searchTerm || searchTerm.trim() === '' || !state) {
         return { ...state, match: false }
     }
@@ -293,35 +257,9 @@ const filter = (state: OupoutState, searchTerm: string) => {
     return state
 }
 
-const table = (state: OupoutTableState | undefined, action: Action) => {
-    switch (action.type) {
-        case 'UPDATE_TABLE_COLUMNS':
-            let groupByList = state?.groupBy ? state.groupBy : []
-            groupByList.forEach(groupBy => {
-                if (action.columns.indexOf(groupBy) === -1) {
-                    groupByList = groupByList.filter(gb => action.columns.indexOf(gb) !== -1)
-                }
-            })
-            return {
-                ...state,
-                displayedColumns: action.columns,
-                groupBy: groupByList,
-            }
-        case 'UPDATE_TABLE_GROUP_BY':
-            return {
-                ...state,
-                groupBy: action.groupBy
-                    .filter(gb => state && state.displayedColumns && state.displayedColumns.indexOf(gb) !== -1)
-                    .filter(gb => gb !== 'Group by...'),
-            }
-        default:
-            return state
-    }
-}
-
-export const resetApp = (state = getDefaultAppState(), action: Action) => {
+export const resetApp = (state = State.getDefaultAppState(), action: Action) => {
     if (action.type === 'RESET_EDITOR') {
-        return appReducer(getDefaultAppState(), action)
+        return appReducer(State.getDefaultAppState(), action)
     }
     return appReducer(state, action)
 }

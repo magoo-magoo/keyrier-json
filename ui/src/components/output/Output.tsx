@@ -1,9 +1,9 @@
+import Actions from 'actions/actions'
 import classNames from 'classnames'
 import * as React from 'react'
 import { FC, memo, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Alert, Badge, Button, TabContent, TabPane } from 'reactstrap'
-import { updateOutputTabSelection } from '../../actions/actions'
 import { withErrorBoundary } from '../../components/common/ErrorBoundary'
 import { prettyPrintBytes } from '../../core/converters/string'
 import { withPerformance } from '../../core/logging/performance'
@@ -17,7 +17,7 @@ interface Props {
     isArray: boolean
     activeTab: tabType
     objSize: number
-    setActiveTab: typeof updateOutputTabSelection
+    setActiveTab: typeof Actions.updateOutputTabSelection
     errorMessage?: string
 }
 
@@ -100,6 +100,6 @@ const mapStateToProps = (state: RootState) => ({
     objSize: getOutputObjectSize(state),
 })
 
-export default connect(mapStateToProps, { setActiveTab: updateOutputTabSelection })(
+export default connect(mapStateToProps, { setActiveTab: Actions.updateOutputTabSelection })(
     memo(withErrorBoundary(withPerformance(Output, 'Output')))
 )

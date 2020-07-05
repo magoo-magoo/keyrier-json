@@ -1,4 +1,4 @@
-import { updateSource } from 'actions/actions'
+import Actions from 'actions/actions'
 import { AceEditor } from 'components/common/DeferredAceEditor'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { withPerformance } from 'core/logging/performance'
@@ -11,7 +11,7 @@ import { getEditorTheme, getSourceText } from 'store/selectors'
 import { EditorTheme } from 'themes/themes'
 
 interface Props {
-    onChange: typeof updateSource
+    onChange: typeof Actions.updateSource
     sourceText: string
     currentEditorTheme: EditorTheme
 }
@@ -43,6 +43,6 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-export default connect(mapStateToProps, { onChange: updateSource })(
+export default connect(mapStateToProps, { onChange: Actions.updateSource })(
     withErrorBoundary(memo(withPerformance(SourceEditor, 'SourceEditor')))
 )

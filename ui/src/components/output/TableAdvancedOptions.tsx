@@ -1,4 +1,4 @@
-import { toggleOutputTableModal, updateTableColumns, updateTableGroupBy } from 'actions/actions'
+import Actions from 'actions/actions'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import Loading from 'components/common/Loading'
 import { withPerformance } from 'core/logging/performance'
@@ -19,9 +19,9 @@ interface Props {
     displayedColumns: string[]
     groupBy: string[]
     columns: string[]
-    onColumnsChange: typeof updateTableColumns
-    setTableGroupBy: typeof updateTableGroupBy
-    toggleModal: typeof toggleOutputTableModal
+    onColumnsChange: typeof Actions.updateTableColumns
+    setTableGroupBy: typeof Actions.updateTableGroupBy
+    toggleModal: typeof Actions.toggleOutputTableModal
 }
 
 const TableAdvancedOptions: FC<Props> = ({
@@ -118,7 +118,7 @@ const mapStateToProps = (state: RootState) => {
 }
 
 export default connect(mapStateToProps, {
-    onColumnsChange: updateTableColumns,
-    setTableGroupBy: updateTableGroupBy,
-    toggleModal: toggleOutputTableModal,
+    onColumnsChange: Actions.updateTableColumns,
+    setTableGroupBy: Actions.updateTableGroupBy,
+    toggleModal: Actions.toggleOutputTableModal,
 })(memo(withErrorBoundary(withPerformance(TableAdvancedOptions, 'TableAdvancedOptions'))))

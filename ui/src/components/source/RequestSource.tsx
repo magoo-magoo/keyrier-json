@@ -1,17 +1,17 @@
+import Actions from 'actions/actions'
 import * as React from 'react'
 import { FC, memo, useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import { Alert, Button, Form, FormGroup } from 'reactstrap'
-import { updateSource } from '../../actions/actions'
 import { withErrorBoundary } from '../../components/common/ErrorBoundary'
+import { customToString } from '../../core/converters/string'
 import { logError } from '../../core/logging/logger'
 import { useChangeEventState, useToggleState } from '../../hooks/hooks'
 import { RenderHeaderInput } from './RequestHeader'
-import { customToString } from '../../core/converters/string'
 
 interface Props {
     onFinish: () => void
-    setSource: (src: string) => void
+    setSource: typeof Actions.updateSource
 }
 
 const HttpRequestSource: FC<Props> = ({ onFinish, setSource }) => {
@@ -147,4 +147,4 @@ const HeaderList: FC<HeaderListProps> = ({ headers, onChange }) => {
     )
 }
 
-export default connect(null, { setSource: updateSource })(withErrorBoundary(memo(HttpRequestSource)))
+export default connect(null, { setSource: Actions.updateSource })(withErrorBoundary(memo(HttpRequestSource)))

@@ -1,22 +1,6 @@
-import {
-    clearEditor,
-    redo,
-    resetEditor,
-    switchEditorTheme,
-    switchTheme,
-    toggleOutputTableModal,
-    undo,
-    updateAutoFormatSource,
-    updateOutputTabSelection,
-    updateQuery,
-    updateQueryMode,
-    updateSearchTerm,
-    updateSource,
-    updateTableColumns,
-    updateTableGroupBy,
-} from '../actions/actions'
+import Actions from 'actions/actions'
 import { arrayElementName } from '../models/array'
-import { emptyState, getDefaultAppState, QueryState } from '../state/State'
+import { AppState, emptyState, getDefaultAppState, QueryState } from '../state/State'
 import { availableEditorThemes, availableGeneralThemes } from '../themes/themes'
 import rootReducers, { containsTerm, query, resetApp, source } from './reducers'
 
@@ -28,7 +12,7 @@ describe('Reducers', () => {
                 obj: {},
                 searchTerm: '',
                 match: false,
-                selectedTab: 'RawJson',
+                selectedTab: 'RawJson' as const,
                 table: {
                     array: [],
                     isArray: false,
@@ -38,26 +22,25 @@ describe('Reducers', () => {
                     groupBy: [],
                 },
             },
-            query: { text: 'fake q', mode: 'Javascript' },
+            query: { text: 'fake q', mode: 'Javascript' as const },
             source: { text: 'fake s' },
         }
-        const results = resetApp(state as any, {
+        const results = resetApp(state, {
             type: 'RESET_EDITOR',
+            payload: undefined,
         })
 
         expect(results?.query).toEqual(getDefaultAppState().query)
         expect(results?.source).toEqual(getDefaultAppState().source)
     })
     it('clear action', () => {
-        const state = {
+        const state: AppState = {
             output: {
-                text: 'fake o',
                 obj: {},
                 searchTerm: '',
                 match: false,
                 selectedTab: 'RawJson',
                 table: {
-                    array: ['fake'],
                     isArray: false,
                     isModalOpen: true,
                     displayedColumns: [],
@@ -68,8 +51,9 @@ describe('Reducers', () => {
             query: { text: 'fake q', mode: 'Javascript' },
             source: { text: 'fake s' },
         }
-        const results = resetApp(state as any, {
+        const results = resetApp(state, {
             type: 'CLEAR_EDITOR',
+            payload: undefined,
         })
 
         expect(results).toEqual(emptyState)
@@ -78,7 +62,7 @@ describe('Reducers', () => {
     it('update query action should update', () => {
         const state: QueryState = { text: 'initial', mode: 'Javascript' }
 
-        const result = query(state, { query: 'new value', type: 'UPDATE_QUERY' })
+        const result = query(state, { payload: 'new value', type: 'UPDATE_QUERY' })
 
         expect(result).toEqual({ text: 'new value', mode: 'Javascript' })
     })
@@ -87,7 +71,7 @@ describe('Reducers', () => {
         const state = { text: 'initial' }
 
         const result = source(state as any, {
-            source: 'new value',
+            payload: 'new value',
             type: 'UPDATE_SOURCE_TEXT',
         })
 
@@ -125,7 +109,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, switchEditorTheme(theme))
+        const result = rootReducers(previousState, Actions.switchEditorTheme(theme))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -144,7 +128,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, switchTheme(theme))
+        const result = rootReducers(previousState, Actions.switchTheme(theme))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -168,7 +152,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateAutoFormatSource(true))
+        const result = rootReducers(previousState, Actions.updateAutoFormatSource(true))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -193,7 +177,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateAutoFormatSource(false))
+        const result = rootReducers(previousState, Actions.updateAutoFormatSource(false))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -220,7 +204,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateSource('[{"a": 42}]'))
+        const result = rootReducers(previousState, Actions.updateSource('[{"a": 42}]'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -248,7 +232,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateQuery('data.foo'))
+        const result = rootReducers(previousState, Actions.updateQuery('data.foo'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -268,7 +252,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, resetEditor())
+        const result = rootReducers(previousState, Actions.resetEditor())
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -289,7 +273,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, undo())
+        const result = rootReducers(previousState, Actions.undo())
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -308,7 +292,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, redo())
+        const result = rootReducers(previousState, Actions.redo())
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -327,7 +311,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, clearEditor())
+        const result = rootReducers(previousState, Actions.clearEditor())
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -348,7 +332,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateQuery('data'))
+        const result = rootReducers(previousState, Actions.updateQuery('data'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -380,7 +364,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateQuery('data.does.not.exist'))
+        const result = rootReducers(previousState, Actions.updateQuery('data.does.not.exist'))
 
         // assert
         expect(result.app.present.output?.errorMessage).toBeDefined()
@@ -401,7 +385,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, toggleOutputTableModal())
+        const result = rootReducers(previousState, Actions.toggleOutputTableModal())
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -423,7 +407,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, toggleOutputTableModal())
+        const result = rootReducers(previousState, Actions.toggleOutputTableModal())
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -437,7 +421,7 @@ describe('Reducers', () => {
                 past: [],
                 present: {
                     output: { table: {} },
-                    source: { text: '[{}]' },
+                    source: { text: '[{"foo": 1, "bar":2, "some": 3}]' },
                     query: { text: 'data' },
                 },
                 future: [],
@@ -446,7 +430,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateTableColumns(['foo', 'bar']))
+        const result = rootReducers(previousState, Actions.updateTableColumns(['foo', 'bar']))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -469,7 +453,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateTableGroupBy(['foo', 'bar']))
+        const result = rootReducers(previousState, Actions.updateTableGroupBy(['foo', 'bar']))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -492,7 +476,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateTableGroupBy(['foo', 'bar']))
+        const result = rootReducers(previousState, Actions.updateTableGroupBy(['foo', 'bar']))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -504,7 +488,7 @@ describe('Reducers', () => {
             app: {
                 past: [],
                 present: {
-                    output: { table: { groupBy: ['foo', 'bar'] } },
+                    output: { table: { groupBy: ['foo', 'bar'], displayedColumns: ['foo', 'bar'] } },
                     source: { text: '[{"foo": 1, "bar": "value"}]' },
                     query: { text: 'data', mode: 'Javascript' as const },
                 },
@@ -514,7 +498,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateTableColumns(['foo']))
+        const result = rootReducers(previousState, Actions.updateTableColumns(['foo']))
 
         // assert
         expect(result.app.present.output?.errorMessage).toBeUndefined()
@@ -538,7 +522,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateSearchTerm('bar'))
+        const result = rootReducers(previousState, Actions.updateSearchTerm('bar'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -561,7 +545,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateOutputTabSelection('Table'))
+        const result = rootReducers(previousState, Actions.updateOutputTabSelection('Table'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -584,7 +568,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateQuery('select foo, field2 from data'))
+        const result = rootReducers(previousState, Actions.updateQuery('select foo, field2 from data'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -606,7 +590,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateQuery('data.map(x => x.foo)'))
+        const result = rootReducers(previousState, Actions.updateQuery('data.map(x => x.foo)'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -629,7 +613,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateQuery('data'))
+        const result = rootReducers(previousState, Actions.updateQuery('data'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
@@ -652,7 +636,7 @@ describe('Reducers', () => {
         }
 
         // act
-        const result = rootReducers(previousState, updateQueryMode('SQL'))
+        const result = rootReducers(previousState, Actions.updateQueryMode('SQL'))
 
         // assert
         expect(result.app.present.error).toBeUndefined()
