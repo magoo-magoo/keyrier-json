@@ -1,10 +1,10 @@
+import Actions from 'actions/actions'
 import deepEqual from 'fast-deep-equal'
 import * as React from 'react'
 import { FC, lazy, memo, Suspense, useCallback, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { connect } from 'react-redux'
 import { CustomInput, FormGroup, Label } from 'reactstrap'
-import { updateSearchTerm } from '../../actions/actions'
 import { withErrorBoundary } from '../../components/common/ErrorBoundary'
 import { prettyPrintBytes } from '../../core/converters/string'
 import { withPerformance } from '../../core/logging/performance'
@@ -22,7 +22,7 @@ interface Props {
     src: object | null
     searchTerm: string | undefined
     match: boolean
-    onSearchChange: typeof updateSearchTerm
+    onSearchChange: typeof Actions.updateSearchTerm
     size: number
     debugMode: boolean
 }
@@ -92,6 +92,6 @@ const mapStateToProps = (state: RootState) => {
     }
 }
 
-export default connect(mapStateToProps, { onSearchChange: updateSearchTerm })(
+export default connect(mapStateToProps, { onSearchChange: Actions.updateSearchTerm })(
     withErrorBoundary(memo(withPerformance(JsonView, 'JsonView'), (prev, next) => deepEqual(prev, next)))
 )

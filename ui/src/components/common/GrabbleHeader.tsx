@@ -13,7 +13,7 @@ export const GrabbleHeader: FC<Props> = ({ title, children }) => {
     const [parentref, { height: parentHeight }] = useMeasure<HTMLDivElement>()
     const [headerRef, { height: headerHeight }] = useMeasure<HTMLDivElement>()
     const height = parentHeight - headerHeight * 2 - 2
-    console.log({ title, parentHeight })
+
     return (
         <div ref={parentref} className={`${styles.draggable} h-100 `}>
             <div className="px-2">

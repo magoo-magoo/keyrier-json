@@ -6,21 +6,21 @@ import initialStateJson from './default-state.json'
 
 export type itemType = any
 
-export type AppState = DeepReadonly<{
+export type AppState = {
     source?: SourceState
     query?: QueryState
     output?: OupoutState
     error?: Error
-}>
-export type QueryState = DeepReadonly<{
+}
+export type QueryState = {
     text?: string
     mode?: QueryMode
-}>
-export type SourceState = DeepReadonly<{
+}
+export type SourceState = {
     text?: string
     autoFormat?: boolean
-}>
-export type OupoutState = DeepReadonly<{
+}
+export type OupoutState = {
     searchTerm?: string
     match?: boolean
     selectedTab?: tabType
@@ -28,14 +28,14 @@ export type OupoutState = DeepReadonly<{
     objSize?: number
     errorMessage?: string
     table?: OupoutTableState
-}>
-export type OupoutTableState = DeepReadonly<{
+}
+export type OupoutTableState = {
     isArray?: boolean
     isModalOpen?: boolean
-    displayedColumns?: readonly string[]
-    columns?: readonly string[]
-    groupBy?: readonly string[]
-}>
+    displayedColumns?: string[]
+    columns?: string[]
+    groupBy?: string[]
+}
 export type UserSettingsState = DeepReadonly<{
     globalTheme?: GeneralTheme
     editorTheme?: EditorTheme
@@ -76,13 +76,13 @@ export const getDefaultUserSettingsState = () =>
 
 export const emptyState = {
     source: { text: '', autoFormat: true },
-    query: { text: '', mode: 'SQL' },
+    query: { text: '', mode: 'SQL' as const },
     output: {
         match: false,
         obj: {},
         objSize: 2,
         searchTerm: '',
-        selectedTab: 'RawJson',
+        selectedTab: 'RawJson' as const,
         table: {
             isArray: false,
             columns: [],
@@ -91,4 +91,4 @@ export const emptyState = {
             groupBy: [],
         },
     },
-} as const
+}

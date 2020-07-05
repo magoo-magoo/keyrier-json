@@ -1,4 +1,4 @@
-import { updateQuery } from 'actions/actions'
+import Actions from 'actions/actions'
 import { AceEditor } from 'components/common/DeferredAceEditor'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { withPerformance } from 'core/logging/performance'
@@ -11,7 +11,7 @@ import { getEditorTheme, getQueryMode, getQueryText } from 'store/selectors'
 import { EditorTheme } from 'themes/themes'
 
 interface Props {
-    setQuery: typeof updateQuery
+    setQuery: typeof Actions.updateQuery
     queryText: string
     currentEditorTheme: EditorTheme
     mode: QueryMode
@@ -45,6 +45,6 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-export default connect(mapStateToProps, { setQuery: updateQuery })(
+export default connect(mapStateToProps, { setQuery: Actions.updateQuery })(
     withErrorBoundary(memo(withPerformance(QueryEditor, 'QueryEditor')))
 )

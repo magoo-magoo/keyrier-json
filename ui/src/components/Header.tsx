@@ -1,31 +1,31 @@
-import * as React from 'react'
-import { version } from '../../package.json'
-import { GeneralTheme, availableGeneralThemes, availableEditorThemes, EditorTheme } from 'themes/themes'
-import { switchTheme, switchEditorTheme } from 'actions/actions'
-import { connect } from 'react-redux'
-import { getTheme, getEditorTheme } from 'store/selectors'
-import { RootState } from 'state/State'
+import Actions from 'actions/actions'
+import { withPerformance } from 'core/logging/performance'
 import { useToggleState } from 'hooks/hooks'
+import * as React from 'react'
+import { FC, memo, useCallback } from 'react'
+import { connect } from 'react-redux'
 import {
+    Collapse,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Nav,
     Navbar,
     NavbarBrand,
     NavbarToggler,
-    Collapse,
-    Nav,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
     NavItem,
     NavLink,
-    Dropdown,
 } from 'reactstrap'
+import { RootState } from 'state/State'
+import { getEditorTheme, getTheme } from 'store/selectors'
+import { availableEditorThemes, availableGeneralThemes, EditorTheme, GeneralTheme } from 'themes/themes'
+import { version } from '../../package.json'
 import { withErrorBoundary } from './common/ErrorBoundary'
-import { memo, useCallback, FC } from 'react'
-import { withPerformance } from 'core/logging/performance'
 
 interface Props {
-    setGeneralTheme: typeof switchTheme
-    setEditorTheme: typeof switchEditorTheme
+    setGeneralTheme: typeof Actions.switchTheme
+    setEditorTheme: typeof Actions.switchEditorTheme
     currentTheme: GeneralTheme | null
     currentEditorTheme: EditorTheme
 }
@@ -113,6 +113,7 @@ const mapStateToProps = (state: RootState) => ({
     currentEditorTheme: getEditorTheme(state),
 })
 
-export default connect(mapStateToProps, { setGeneralTheme: switchTheme, setEditorTheme: switchEditorTheme })(
-    memo(withErrorBoundary(withPerformance(Header, 'Header')))
-)
+export default connect(mapStateToProps, {
+    setGeneralTheme: Actions.switchTheme,
+    setEditorTheme: Actions.switchEditorTheme,
+})(memo(withErrorBoundary(withPerformance(Header, 'Header'))))
