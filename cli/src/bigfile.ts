@@ -5,7 +5,7 @@ import fs from 'fs'
 
 faker.locale = 'fr'
 
-const users = [...new Array(1000000).keys()].map(i => {
+const users = [...new Array(1000000).keys()].map((i) => {
     return {
         id: i + 1,
         uuid: faker.random.uuid(),

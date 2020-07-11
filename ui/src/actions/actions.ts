@@ -17,12 +17,8 @@ const Actions = {
     undo: createAction('APP_UNDO'),
     redo: createAction('APP_REDO'),
     switchTheme: createAction<GeneralTheme, '@USER_SETTINGS/SWITCH_GLOBAL_THEME'>('@USER_SETTINGS/SWITCH_GLOBAL_THEME'),
-    switchEditorTheme: createAction<EditorTheme, '@USER_SETTINGS/SWITCH_EDITOR_THEME'>(
-        '@USER_SETTINGS/SWITCH_EDITOR_THEME'
-    ),
-    updateLayouts: createAction<ReactGridLayout.Layouts, '@USER_SETTINGS/UPDATE_LAYOUTS'>(
-        '@USER_SETTINGS/UPDATE_LAYOUTS'
-    ),
+    switchEditorTheme: createAction<EditorTheme, '@USER_SETTINGS/SWITCH_EDITOR_THEME'>('@USER_SETTINGS/SWITCH_EDITOR_THEME'),
+    updateLayouts: createAction<ReactGridLayout.Layouts, '@USER_SETTINGS/UPDATE_LAYOUTS'>('@USER_SETTINGS/UPDATE_LAYOUTS'),
 }
 
 export type Action = ReturnType<typeof Actions[keyof typeof Actions]>

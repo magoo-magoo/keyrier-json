@@ -7,9 +7,7 @@ export const useToggleState = (initial: boolean = false): readonly [boolean, () 
 
 type HtmlElementHookable = HTMLSelectElement | HTMLInputElement
 
-export const useChangeEventState = (
-    initialValue: string
-): readonly [string, (e: ChangeEvent<HtmlElementHookable>) => void] => {
+export const useChangeEventState = (initialValue: string): readonly [string, (e: ChangeEvent<HtmlElementHookable>) => void] => {
     const [value, setValue] = useState(initialValue)
 
     const eventHandler = useCallback(
@@ -18,7 +16,7 @@ export const useChangeEventState = (
                 setValue(event.target.value)
             }
         },
-        [setValue]
+        [setValue],
     )
 
     return [value, eventHandler]

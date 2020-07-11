@@ -71,14 +71,13 @@ export class SQLToAstVisitor extends BaseSQLVisitor {
     public columnClause(ctx: Ctx) {
         if (ctx.function && Array.isArray(ctx.function) && Array.isArray(ctx.value)) {
             const func = ctx.function[0].image
-            const parameters = ctx.value.map(x => this.visit(x))
-            const name =
-                ctx.name && ctx.name[0] ? ctx.name[0].image : `${func}(${parameters.map(x => x.name).join(',')})`
+            const parameters = ctx.value.map((x) => this.visit(x))
+            const name = ctx.name && ctx.name[0] ? ctx.name[0].image : `${func}(${parameters.map((x) => x.name).join(',')})`
             return buildField(
                 name,
                 func,
                 'fieldFunction',
-                parameters.map(x => buildField(x.name, x.value, x.type))
+                parameters.map((x) => buildField(x.name, x.value, x.type)),
             )
         } else {
             let { name, value, type } = this.visit(ctx.value)
@@ -87,7 +86,7 @@ export class SQLToAstVisitor extends BaseSQLVisitor {
     }
 
     public projection(ctx: Ctx): Field[] {
-        return ctx.columnClause.map(x => this.visit(x))
+        return ctx.columnClause.map((x) => this.visit(x))
     }
 
     public fromClause(ctx: Ctx, index = 0): From {
@@ -205,7 +204,7 @@ export class SQLToAstVisitor extends BaseSQLVisitor {
         const entries = Object.entries(context)
         for (let [key, entryValue] of entries) {
             if (key === 'in') {
-                const array: Value[] = entryValue.map(value => {
+                const array: Value[] = entryValue.map((value) => {
                     if (value.tokenType === Integer) {
                         const type = 'NumberValue'
                         const intValue = parseInt(value.image)

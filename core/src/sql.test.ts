@@ -9,7 +9,7 @@ describe('sql interpreter', () => {
                       }
             }
           ]`,
-                'select child.foo.field from data'
+                'select child.foo.field from data',
             )
 
             expect(result).toEqual([{ field: 'bar' }])
@@ -28,23 +28,17 @@ describe('sql interpreter', () => {
             }
           ]
         `,
-                'select col1 from data'
+                'select col1 from data',
             )
             expect(result).toEqual([{ col1: '\\' }])
         })
         it('should rename column whith As keyword correct column SQL query', () => {
-            const result = sqlQuery(
-                '{"age": 1, "name": "John Doe", "c": 999}',
-                'select age, name as fullName from data'
-            )
+            const result = sqlQuery('{"age": 1, "name": "John Doe", "c": 999}', 'select age, name as fullName from data')
             expect(result).toEqual({ age: 1, fullName: 'John Doe' })
         })
 
         it('should rename column whith As keyword correct column when source is an array SQL query', () => {
-            const result = sqlQuery(
-                '[{"age": 1, "name": "John Doe", "c": 999}]',
-                'select age, name as fullName from data'
-            )
+            const result = sqlQuery('[{"age": 1, "name": "John Doe", "c": 999}]', 'select age, name as fullName from data')
 
             expect(result).toEqual([{ age: 1, fullName: 'John Doe' }])
         })
@@ -70,10 +64,7 @@ describe('sql interpreter', () => {
         })
 
         it('should return a simple object for select string from data SQL query', () => {
-            const result = sqlQuery(
-                '{"a": 1, "b": 42, "c": 5}',
-                'select "b", \'a\' , "b" as col, \'a\' as "col2" from data'
-            )
+            const result = sqlQuery('{"a": 1, "b": 42, "c": 5}', 'select "b", \'a\' , "b" as col, \'a\' as "col2" from data')
             expect(result).toEqual({ a: 1, b: 42, col2: 1, col: 42 })
         })
         it('should return a simple object for select star and column name from data SQL query', () => {
@@ -87,10 +78,7 @@ describe('sql interpreter', () => {
         })
 
         it('should return sub object for select star from data.child SQL query', () => {
-            const result = sqlQueryWithMultipleSources(
-                { data: '{"a": 1, "b": 42, "child":[{"son":true}]}' },
-                'select * from data.child'
-            )
+            const result = sqlQueryWithMultipleSources({ data: '{"a": 1, "b": 42, "child":[{"son":true}]}' }, 'select * from data.child')
             expect(result).toEqual([{ son: true }])
         })
 
@@ -122,7 +110,7 @@ describe('sql interpreter', () => {
             ]
           }
           `,
-                `select field1, field2 from data.arrayField`
+                `select field1, field2 from data.arrayField`,
             )
 
             expect(result).toEqual([
@@ -155,7 +143,7 @@ describe('sql interpreter', () => {
             ]
           }
           `,
-                `select field1, field2 from data.arrayField where field1 = 42`
+                `select field1, field2 from data.arrayField where field1 = 42`,
             )
 
             expect(result).toEqual([{ field1: 42, field2: 'foo' }])
@@ -183,7 +171,7 @@ describe('sql interpreter', () => {
         it('should have a named table for plain object', () => {
             const result = sqlQueryWithMultipleSources(
                 { data: '{"age": 1, "name": "John Doe", "c": 999}' },
-                'select d.age, d.name as fullName from data d'
+                'select d.age, d.name as fullName from data d',
             )
             expect(result).toEqual({ age: 1, fullName: 'John Doe' })
         })
@@ -191,14 +179,14 @@ describe('sql interpreter', () => {
         it('should return result for table alias and without alias', () => {
             const result = sqlQueryWithMultipleSources(
                 { data: '{"age": 1, "name": "John Doe", "c": 999}' },
-                'select d.age, name from data d'
+                'select d.age, name from data d',
             )
             expect(result).toEqual({ age: 1, name: 'John Doe' })
         })
         it('should have a named table for array', () => {
             const result = sqlQueryWithMultipleSources(
                 { data: '[{"age": 1, "name": "John Doe", "c": 999}]' },
-                'select d.age, d.name as fullName from data d'
+                'select d.age, d.name as fullName from data d',
             )
             expect(result).toEqual([{ age: 1, fullName: 'John Doe' }])
         })
@@ -208,7 +196,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with deep where clause - SQL query', () => {
             const result = sqlQuery(
                 '[{"id": 42, "child": {"foo": "bar"}},{"id": 666, "child": {"foo": "devil"}}]',
-                "select id from data where child.foo = 'bar'"
+                "select id from data where child.foo = 'bar'",
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ id: 42 }])
@@ -217,7 +205,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause -handle OR - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 84, "name": "Macron Manu"}]',
-                'select name as fullName from data where age = 42 or age = 21'
+                'select name as fullName from data where age = 42 or age = 21',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'John Doe' }, { fullName: 'Danny de Vito' }])
@@ -226,7 +214,7 @@ describe('sql interpreter', () => {
         it('should return all results with where clause -handle OR - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 10, "name": "MacronManu"}]',
-                "select name as fullName from data where age >= 21 or name = 'MacronManu'"
+                "select name as fullName from data where age >= 21 or name = 'MacronManu'",
             )
             expect(result).toBeDefined()
             expect(result).toHaveLength(3)
@@ -234,7 +222,7 @@ describe('sql interpreter', () => {
         it('should return all results with where clause -handle AND - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 10, "name": "MacronManu"}]',
-                'select name as fullName from data where age >= 10 and name is not null'
+                'select name as fullName from data where age >= 10 and name is not null',
             )
             expect(result).toBeDefined()
             expect(result).toHaveLength(3)
@@ -243,7 +231,7 @@ describe('sql interpreter', () => {
         it('should return no result with where clause -handle AND - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 10, "name": "MacronManu"}]',
-                'select name as fullName from data where age >= 10 and name is null'
+                'select name as fullName from data where age >= 10 and name is null',
             )
             expect(result).toBeDefined()
             expect(result).toHaveLength(0)
@@ -252,7 +240,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause and string value with spaces -handle OR - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"},  {"age": 10, "name": "Macron Manu"}]',
-                "select name as fullName from data where  name = 'Macron Manu'"
+                "select name as fullName from data where  name = 'Macron Manu'",
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'Macron Manu' }])
@@ -261,7 +249,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause - in - SQL query', () => {
             const result = sqlQuery(
                 '[{"id": 1, "field": 42}, {"id": 2, "foo": "bar"},  {"id": 3, "field": "value"}]',
-                'select id from data where id in (1, 3)'
+                'select id from data where id in (1, 3)',
             )
             expect(result).toEqual([{ id: 1 }, { id: 3 }])
         })
@@ -269,16 +257,13 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause - in - SQL query', () => {
             const result = sqlQuery(
                 '[{"id": 1, "field": 42}, {"id": 2, "foo": "bar"},  {"id": 3, "field": "value"}, {"id": "string-id"}]',
-                'select id from data where id in (1, 3, "string-id")'
+                'select id from data where id in (1, 3, "string-id")',
             )
             expect(result).toEqual([{ id: 1 }, { id: 3 }, { id: 'string-id' }])
         })
 
         it('should return filtered results with where clause - SQL query - is', () => {
-            const result = sqlQuery(
-                JSON.stringify([{ age: 42 }, { age: 21, v: null }]),
-                'select * from data where v is null'
-            )
+            const result = sqlQuery(JSON.stringify([{ age: 42 }, { age: 21, v: null }]), 'select * from data where v is null')
             expect(result).not.toBeNull()
 
             expect(result).toEqual([{ age: 21, v: null }])
@@ -287,7 +272,7 @@ describe('sql interpreter', () => {
         it('should return no result with where clause - SQL query - is', () => {
             const result = sqlQuery(
                 JSON.stringify([{ age: 42 }, { age: 21, foo: 'bonjour lol' }]),
-                'select * from data where foo is "%lol%"'
+                'select * from data where foo is "%lol%"',
             )
             expect(result).not.toBeNull()
 
@@ -300,7 +285,7 @@ describe('sql interpreter', () => {
                     { age: 42, v: {} },
                     { age: 21, v: null },
                 ]),
-                'select age from data where v is not null'
+                'select age from data where v is not null',
             )
             expect(result).not.toBeNull()
 
@@ -310,7 +295,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause- like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select name as fullName from data where name like "Joh%"'
+                'select name as fullName from data where name like "Joh%"',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'John Doe' }])
@@ -319,7 +304,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause- like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select name as fullName from data where name like "%y%"'
+                'select name as fullName from data where name like "%y%"',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'Danny de Vito' }])
@@ -327,7 +312,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause- like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select name as fullName from data where name like "%ohn%"'
+                'select name as fullName from data where name like "%ohn%"',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'John Doe' }])
@@ -336,7 +321,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause- like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select name as fullName from data where name like "%oe"'
+                'select name as fullName from data where name like "%oe"',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'John Doe' }])
@@ -345,14 +330,14 @@ describe('sql interpreter', () => {
         it('should return no result with where clause- like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select name as fullName from data where name like 42'
+                'select name as fullName from data where name like 42',
             )
             expect(result).toEqual([])
         })
         it('should return result with where clause- not like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select * from data where name not    like "Joh%"'
+                'select * from data where name not    like "Joh%"',
             )
             expect(result).toEqual([{ age: 21, name: 'Danny de Vito' }])
         })
@@ -360,7 +345,7 @@ describe('sql interpreter', () => {
         it('should return result with where clause- not like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select * from data where name not like "%Doe"'
+                'select * from data where name not like "%Doe"',
             )
             expect(result).toEqual([{ age: 21, name: 'Danny de Vito' }])
         })
@@ -368,7 +353,7 @@ describe('sql interpreter', () => {
         it('should apply function concat', () => {
             const result = sqlQuery(
                 '[{"name": "John Doe", "city": "PARIS"}]',
-                'select concat("foo bar", name, city, "some content") from data'
+                'select concat("foo bar", name, city, "some content") from data',
             )
             expect(result).toEqual([{ 'concat(foo bar,name,city,some content)': 'foo barJohn DoePARISsome content' }])
         })
@@ -424,14 +409,14 @@ describe('sql interpreter', () => {
         it('should return result with where clause- not like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select * from data where name not like "% Do%"'
+                'select * from data where name not like "% Do%"',
             )
             expect(result).toEqual([{ age: 21, name: 'Danny de Vito' }])
         })
         it('should return no result with where clause- not like operator - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select * from data where name not like "D"'
+                'select * from data where name not like "D"',
             )
             expect(result).toEqual([
                 { age: 42, name: 'John Doe' },
@@ -442,7 +427,7 @@ describe('sql interpreter', () => {
         it('should return filtered results with where clause - SQL query', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select name as fullName from data where age = 42'
+                'select name as fullName from data where age = 42',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'John Doe' }])
@@ -526,7 +511,7 @@ describe('sql interpreter', () => {
         it('should return 2 items array when limit is 2', () => {
             const result = sqlQuery(
                 '[{"id": 1, "field": 42}, {"id": 2, "foo": "bar"},  {"id": 3, "field": "value"}]',
-                'select id from data limit 2'
+                'select id from data limit 2',
             )
             expect(result).toEqual([{ id: 1 }, { id: 2 }])
         })
@@ -544,7 +529,7 @@ describe('sql interpreter', () => {
         select * from data
         --IGNORE ME
         
-        --IGNORE ME`
+        --IGNORE ME`,
             )
             expect(result).toEqual({ a: 1, b: 42 })
         })
@@ -553,7 +538,7 @@ describe('sql interpreter', () => {
         it('should order by age', () => {
             const result = sqlQuery(
                 '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]',
-                'select name as fullName from data order by age'
+                'select name as fullName from data order by age',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'Danny de Vito' }, { fullName: 'John Doe' }])
@@ -561,7 +546,7 @@ describe('sql interpreter', () => {
         it('should order by age desc', () => {
             const result = sqlQueryWithMultipleSources(
                 { data: '[{"age": 42, "name": "John Doe"}, {"age": 21, "name": "Danny de Vito"}]' },
-                'select name as fullName from data order by age desc'
+                'select name as fullName from data order by age desc',
             )
             expect(result).toBeDefined()
             expect(result).toEqual([{ fullName: 'John Doe' }, { fullName: 'Danny de Vito' }])
@@ -572,7 +557,7 @@ describe('sql interpreter', () => {
         it('should query object', () => {
             const result = sqlQueryWithMultipleSources(
                 { data1: '[{"a": 1, "b": 42}, {"a": "foo", "b": 42}]', data2: '[{"toto": "xxx"}, {"toto": "foo"}]' },
-                'select a from data1 where a in (select toto from data2)'
+                'select a from data1 where a in (select toto from data2)',
             )
             expect(result).toEqual([{ a: 'foo' }])
         })
@@ -600,7 +585,7 @@ describe('sql interpreter', () => {
                 table1.addr as col1 
                 FROM table1 
                 inner   join table2 on table1.name = table2.column3
-                `
+                `,
             )
             expect(result).toEqual([{ col1: 'localhost' }])
         })
@@ -628,7 +613,7 @@ describe('sql interpreter', () => {
                 t1.addr as col1 
                 FROM table1 t1
                 inner join table2 t2 on t1.name = t2.column3
-                `
+                `,
             )
             expect(result).toEqual([{ col1: 'localhost' }])
         })
@@ -655,7 +640,7 @@ describe('sql interpreter', () => {
                 t1.addr as col1 
                 FROM table1 t1
                 inner join table2 t2 on name = t2.column3
-                `
+                `,
             )
             expect(result).toEqual(new Error('Ambiguous identifier: name'))
         })
@@ -685,7 +670,7 @@ describe('sql interpreter', () => {
                 table1.addr as col1 
                 FROM table1 
                 inner join table3 on table1.email = table3.column4
-                `
+                `,
             )
             expect(result).toEqual([{ col1: 'localhost' }])
         })
@@ -727,7 +712,7 @@ describe('sql interpreter', () => {
                 FROM table1 
                 inner join table2 on table1.name = table2.column3
                 inner join table3 on table1.email = table3.column4
-                `
+                `,
             )
             expect(result).toEqual([
                 {

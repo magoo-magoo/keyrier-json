@@ -1,0 +1,14 @@
+{
+    "$schema": "../node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+    "mutate": ["src/**/*.ts?(x)", "!src/**/*@(.test|.spec|Spec).ts?(x)"],
+    "mutator": "typescript",
+    "testRunner": "jest",
+    "reporters": ["progress", "clear-text", "html", "dashboard"],
+    "dashboard": {
+        "module": "core"
+    },
+    "coverageAnalysis": "off",
+    "jest": {
+        "projectType": "create-react-app"
+    }
+}

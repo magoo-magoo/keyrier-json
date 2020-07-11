@@ -26,8 +26,7 @@ type Props = {
     updateGridLayouts: typeof Actions.updateLayouts
 }
 const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
-    const onLayoutChange = (_: ReactGridLayout.Layout[], newLayouts: ReactGridLayout.Layouts) =>
-        updateGridLayouts(newLayouts)
+    const onLayoutChange = (_: ReactGridLayout.Layout[], newLayouts: ReactGridLayout.Layouts) => updateGridLayouts(newLayouts)
 
     return (
         <>
@@ -82,6 +81,6 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
     )
 }
 
-export default connect(state => ({ mode: getQueryMode(state), layouts: getLayouts(state) }), {
+export default connect((state) => ({ mode: getQueryMode(state), layouts: getLayouts(state) }), {
     updateGridLayouts: Actions.updateLayouts,
 })(withPerformance(App, 'App'))

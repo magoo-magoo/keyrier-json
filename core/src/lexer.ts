@@ -2,9 +2,7 @@ import { createToken, Lexer } from 'chevrotain'
 import { operators } from './operators'
 
 const stringTokenCharacterRegexString = 'a-zA-Z0-9%\\s-&(){}\\[\\]$\\*!\\\\@/,;:=ë#+-<>?^_'
-const stringTokenRegex = new RegExp(
-    `("[${stringTokenCharacterRegexString}']*")|('[${stringTokenCharacterRegexString}"]*')`
-)
+const stringTokenRegex = new RegExp(`("[${stringTokenCharacterRegexString}']*")|('[${stringTokenCharacterRegexString}"]*')`)
 
 export const Identifier = createToken({ name: 'Identifier', pattern: /[a-zA-Z_]+[\w./]*/ })
 export const WhiteSpace = createToken({ name: 'WhiteSpace', pattern: /\s+/, group: Lexer.SKIPPED })

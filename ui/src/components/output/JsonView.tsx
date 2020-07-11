@@ -9,13 +9,7 @@ import { withErrorBoundary } from '../../components/common/ErrorBoundary'
 import { prettyPrintBytes } from '../../core/converters/string'
 import { withPerformance } from '../../core/logging/performance'
 import { RootState } from '../../state/State'
-import {
-    getDebugMode,
-    getOutputObject,
-    getOutputObjectSize,
-    getOutputSearchMatch,
-    getOutputSearchTerm,
-} from '../../store/selectors'
+import { getDebugMode, getOutputObject, getOutputObjectSize, getOutputSearchMatch, getOutputSearchTerm } from '../../store/selectors'
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {
@@ -34,7 +28,7 @@ const noop = () => null
 const JsonView: FC<Props> = ({ src, searchTerm, onSearchChange, match, size, debugMode }) => {
     const [bigSize, setBigSize] = useState(4683932)
     const isTooBig = size > bigSize
-    const handlechange = useCallback(e => onSearchChange(e.target.value), [onSearchChange])
+    const handlechange = useCallback((e) => onSearchChange(e.target.value), [onSearchChange])
     return (
         <div id="jsonView">
             <DebounceInput
@@ -57,7 +51,7 @@ const JsonView: FC<Props> = ({ src, searchTerm, onSearchChange, match, size, deb
                             steps={1024 * 100}
                             min={1024 * 100}
                             max={1024 * 1024}
-                            onChange={e => setBigSize(parseInt(e.currentTarget.value, 10))}
+                            onChange={(e) => setBigSize(parseInt(e.currentTarget.value, 10))}
                         />
                     </FormGroup>
                 ) : (
@@ -93,5 +87,5 @@ const mapStateToProps = (state: RootState) => {
 }
 
 export default connect(mapStateToProps, { onSearchChange: Actions.updateSearchTerm })(
-    withErrorBoundary(memo(withPerformance(JsonView, 'JsonView'), (prev, next) => deepEqual(prev, next)))
+    withErrorBoundary(memo(withPerformance(JsonView, 'JsonView'), (prev, next) => deepEqual(prev, next))),
 )

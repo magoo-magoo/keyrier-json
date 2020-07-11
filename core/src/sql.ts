@@ -8,7 +8,7 @@ export const computePath = (path: (string | number)[] | undefined, allowedSource
     if (!path) {
         return { path: [] }
     }
-    if (allowedSourceNames.some(x => x === String(path[0])?.toLowerCase())) {
+    if (allowedSourceNames.some((x) => x === String(path[0])?.toLowerCase())) {
         return { tableName: path[0], path: [...path].slice(1) }
     }
 
@@ -34,16 +34,16 @@ export const sqlQueryWithMultipleSources = (source: Record<string, string>, quer
 
         if (
             !Object.keys(source).some(
-                x =>
+                (x) =>
                     x.toLowerCase() === String(sqlTree.source.alias.values[0]).toLowerCase() ||
-                    x.toLowerCase() === String(sqlTree.source.name.value)
+                    x.toLowerCase() === String(sqlTree.source.name.value),
             )
         ) {
             return new SyntaxError(String(sqlTree.source.name.values[0]))
         }
 
         const sourceDataObjects: Record<string, object> = {}
-        Object.keys(source).forEach(key => {
+        Object.keys(source).forEach((key) => {
             sourceDataObjects[key] = utils.jsonParseSafe(source[key])
         })
 
@@ -83,14 +83,14 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
     }
 
     let jointures = new Array<Jointure>()
-    sqlTree.joins?.forEach(join => {
+    sqlTree.joins?.forEach((join) => {
         jointures.push({
             from: join.from,
             conditions: join.conditions,
             source: sourceDataObject[join.from.name.value],
         })
     })
-    const rows: Row[] = data.map(x => ({
+    const rows: Row[] = data.map((x) => ({
         real: x,
         projected: x,
         dataContext: {
@@ -101,12 +101,12 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
 
     const ordered = orderBy(
         rows,
-        sqlTree.order?.orderings.map(x => 'real.' + x.value.value),
-        sqlTree.order?.orderings.map(x => x.direction)
+        sqlTree.order?.orderings.map((x) => 'real.' + x.value.value),
+        sqlTree.order?.orderings.map((x) => x.direction),
     )
 
     const results = new Array<object>()
-    ordered.forEach(row => {
+    ordered.forEach((row) => {
         if (sqlTree.limit && sqlTree.limit.value.value <= results.length) {
             return
         }
@@ -127,17 +127,15 @@ const compareOperands = (
     left: Operand,
     right: Operand,
     values: Record<string, object>,
-    sourceDataObject: Record<string, object>
+    sourceDataObject: Record<string, object>,
 ): any => {
     const leftValue = getValue(left, values, sourceDataObject)
     const rightValue = getValue(right, values, sourceDataObject)
     switch (operation) {
         case 'or':
             return (
-                (left.type === 'expression' &&
-                    compareOperands(left.operation, left.left, left.right, values, sourceDataObject)) ||
-                (right.type === 'expression' &&
-                    compareOperands(right.operation, right.left, right.right, values, sourceDataObject))
+                (left.type === 'expression' && compareOperands(left.operation, left.left, left.right, values, sourceDataObject)) ||
+                (right.type === 'expression' && compareOperands(right.operation, right.left, right.right, values, sourceDataObject))
             )
         case 'and':
             return (
@@ -205,7 +203,7 @@ const compareOperands = (
 
 const mapObject = (fields: Field[], sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
     const mappedObject: Record<string | number, any> = {}
-    fields.forEach(field => {
+    fields.forEach((field) => {
         const value = getValue(field, sources, sourceDataObject)
         if (field.type === 'fieldFunction') {
             mappedObject[field.name.value] = applyFunction(field.function, sources, sourceDataObject)
@@ -217,33 +215,27 @@ const mapObject = (fields: Field[], sources: Record<string, object>, sourceDataO
 }
 
 const functions: Record<string, ((value: any) => string | number) | undefined> = {
-    lower: parameters => String(parameters[0]).toLowerCase(),
-    upper: parameters => String(parameters[0]).toUpperCase(),
-    trim: parameters => String(parameters[0]).trim(),
-    trimleft: parameters => String(parameters[0]).trimLeft(),
-    trimright: parameters => String(parameters[0]).trimRight(),
-    reverse: parameters => String(parameters[0]).split('').reverse().join(''),
-    length: parameters => String(parameters[0]).length,
-    len: parameters => String(parameters[0]).length,
-    concat: parameters => parameters.join(''),
+    lower: (parameters) => String(parameters[0]).toLowerCase(),
+    upper: (parameters) => String(parameters[0]).toUpperCase(),
+    trim: (parameters) => String(parameters[0]).trim(),
+    trimleft: (parameters) => String(parameters[0]).trimLeft(),
+    trimright: (parameters) => String(parameters[0]).trimRight(),
+    reverse: (parameters) => String(parameters[0]).split('').reverse().join(''),
+    length: (parameters) => String(parameters[0]).length,
+    len: (parameters) => String(parameters[0]).length,
+    concat: (parameters) => parameters.join(''),
 }
 const applyFunction = (funcVal: Func, sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
-    const parameters = funcVal.parameters.map(x => getValue(x, sources, sourceDataObject))
+    const parameters = funcVal.parameters.map((x) => getValue(x, sources, sourceDataObject))
     const func = funcVal.name.toLowerCase()
     const toApply = functions[func]
     if (toApply) {
         return toApply(parameters)
     }
-    throw new Error(
-        `Unsupported function: ${func}. Supported built-in functions are: ${Object.keys(functions).join(', ')}`
-    )
+    throw new Error(`Unsupported function: ${func}. Supported built-in functions are: ${Object.keys(functions).join(', ')}`)
 }
 
-const getValue = (
-    operand: Operand | Field,
-    values: Record<string, object>,
-    sourceDataObject: Record<string, object>
-) => {
+const getValue = (operand: Operand | Field, values: Record<string, object>, sourceDataObject: Record<string, object>) => {
     if (operand.type === 'fieldString') {
         const value = getIdentifierValue(values, operand)
         if (value !== undefined) {
@@ -272,13 +264,8 @@ const getValue = (
     return getIdentifierValue(values, operand)
 }
 
-const mapper = (
-    v: object,
-    fields: Field[],
-    sources: Record<string, object>,
-    sourceDataObject: Record<string, object>
-) => {
-    if (fields.some(x => x.field.value === '*')) {
+const mapper = (v: object, fields: Field[], sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
+    if (fields.some((x) => x.field.value === '*')) {
         return v
     }
 
@@ -289,7 +276,7 @@ function rowShouldBeincludedInResult(
     jointures: Jointure[],
     row: Row,
     sourceDataObject: Record<string, any>,
-    where: Where | undefined | null
+    where: Where | undefined | null,
 ) {
     for (const { source, conditions, from } of jointures) {
         let match = false
@@ -299,13 +286,7 @@ function rowShouldBeincludedInResult(
                 [from.alias.value]: joinRow,
             }
             row.dataContext = { ...row.dataContext, ...joinRowData }
-            const comparison = compareOperands(
-                conditions.operation,
-                conditions.left,
-                conditions.right,
-                row.dataContext,
-                sourceDataObject
-            )
+            const comparison = compareOperands(conditions.operation, conditions.left, conditions.right, row.dataContext, sourceDataObject)
             if (comparison) {
                 match = true
             }
@@ -331,7 +312,7 @@ function getIdentifierValue(values: Record<string, object>, field: Field) {
     const availableTables = Object.keys(values)
     const { path, tableName } = computePath(field?.field.values, availableTables)
 
-    if (tableName && !availableTables.some(x => x === tableName)) {
+    if (tableName && !availableTables.some((x) => x === tableName)) {
         throw Error(`Unknown identifier: ${tableName}`)
     }
     if (!tableName && availableTables.length > 1) {

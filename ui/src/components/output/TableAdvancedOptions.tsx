@@ -24,14 +24,7 @@ interface Props {
     toggleModal: typeof Actions.toggleOutputTableModal
 }
 
-const TableAdvancedOptions: FC<Props> = ({
-    onColumnsChange,
-    columns,
-    setTableGroupBy,
-    data,
-    displayedColumns,
-    toggleModal,
-}) => {
+const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGroupBy, data, displayedColumns, toggleModal }) => {
     const [optionsCollapsed, switchOptionsCollapsed] = useToggleState()
 
     const handleColumnChange = useCallback(
@@ -41,31 +34,29 @@ const TableAdvancedOptions: FC<Props> = ({
                 onColumnsChange(mapped)
             }
         },
-        [onColumnsChange]
+        [onColumnsChange],
     )
 
     const handleExport = useCallback(async () => {
         const xlsx = await import(/* webpackChunkName: "xlsx.js" */ 'xlsx')
         const workBook = xlsx.utils.book_new()
         const workSheet = xlsx.utils.json_to_sheet(
-            data.map(x => pick(x, displayedColumns)),
+            data.map((x) => pick(x, displayedColumns)),
             {
                 header: displayedColumns,
-            }
+            },
         )
         xlsx.utils.book_append_sheet(workBook, workSheet, 'keyrier-json')
         xlsx.writeFile(workBook, `export-${new Date().toISOString()}.xlsx`)
     }, [displayedColumns, data])
 
-    const handleGroupChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => setTableGroupBy([e.target.value]), [
-        setTableGroupBy,
-    ])
+    const handleGroupChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => setTableGroupBy([e.target.value]), [setTableGroupBy])
 
     if (columns.length <= 0) {
         return null
     }
 
-    const columnOptions = columns.map(k => ({ value: k, label: k }))
+    const columnOptions = columns.map((k) => ({ value: k, label: k }))
 
     return (
         <div className="row py-1 justify-content-center">
@@ -74,14 +65,9 @@ const TableAdvancedOptions: FC<Props> = ({
                     {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
                 </Button>
                 <Collapse isOpen={optionsCollapsed}>
-                    <select
-                        className="form-control-lg form-control"
-                        name="select"
-                        id="groupingSelect"
-                        onChange={handleGroupChange}
-                    >
+                    <select className="form-control-lg form-control" name="select" id="groupingSelect" onChange={handleGroupChange}>
                         <option key={'Group by...'}>Group by...</option>
-                        {displayedColumns.map(key => (
+                        {displayedColumns.map((key) => (
                             <option key={key}>{key}</option>
                         ))}
                     </select>
@@ -94,7 +80,7 @@ const TableAdvancedOptions: FC<Props> = ({
                     <Suspense fallback={<Loading componentName="ReactSelect" />}>
                         <ReactSelect
                             options={columnOptions}
-                            value={displayedColumns.map(k => ({
+                            value={displayedColumns.map((k) => ({
                                 value: k,
                                 label: k,
                             }))}

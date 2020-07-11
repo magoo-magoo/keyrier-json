@@ -2,7 +2,7 @@ const readStdin = () => {
     const { stdin } = process
     let result = ''
 
-    return new Promise<string>(resolve => {
+    return new Promise<string>((resolve) => {
         if (stdin.isTTY) {
             resolve(result)
             return

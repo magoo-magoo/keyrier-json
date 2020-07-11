@@ -53,7 +53,7 @@ Examples
                 default: defaultConfig.outputType,
             },
         },
-    }
+    },
 )
 
 const logDebug = (message: string | object) => {
@@ -73,7 +73,7 @@ type QueryOptions = {
     outputFile?: string
 }
 
-const outputTypeIsValid = (type: string): type is OutputType => outputTypes.filter(x => x === type).length > 0
+const outputTypeIsValid = (type: string): type is OutputType => outputTypes.filter((x) => x === type).length > 0
 
 const getType = (name: string | number): InputType => {
     if (isCSVfile(name)) {
@@ -119,7 +119,7 @@ const travel = (node: any, consume: (v: any) => void) => {
     if (typeof node !== 'object') {
         return
     }
-    Object.keys(node).forEach(key => {
+    Object.keys(node).forEach((key) => {
         const value = node[key]
         if (typeof value === 'object') {
             travel(value, consume)
@@ -143,7 +143,7 @@ export const query = async (q: string, opts: QueryOptions = {}) => {
     logDebug({ ast })
 
     const from: SQLTree.From[] = []
-    travel(ast, node => {
+    travel(ast, (node) => {
         if (node?.type === 'From') {
             from.push(node)
         }

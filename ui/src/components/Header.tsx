@@ -72,9 +72,7 @@ const Header: FC<Props> = ({ setGeneralTheme, currentTheme, setEditorTheme, curr
                             </Dropdown>
                         </NavItem>
                         <NavItem>
-                            <NavLink href="https://github.com/magoo-magoo/keyrier-json/releases/latest">
-                                v{version}
-                            </NavLink>
+                            <NavLink href="https://github.com/magoo-magoo/keyrier-json/releases/latest">v{version}</NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink href="https://github.com/magoo-magoo/keyrier-json">GitHub</NavLink>
