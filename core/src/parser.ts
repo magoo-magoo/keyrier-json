@@ -15,19 +15,11 @@ export const labels = {
 } as const
 
 export class CustomCstParser<T = SQLToAstVisitor> extends CstParser {
-    protected rule(
-        name: Exclude<keyof T, number | symbol>,
-        implementation: (...implArgs: any[]) => any,
-        config?: IRuleConfig<CstNode>
-    ) {
+    protected rule(name: Exclude<keyof T, number | symbol>, implementation: (...implArgs: any[]) => any, config?: IRuleConfig<CstNode>) {
         return super.RULE(name, implementation, config)
     }
 
-    RULE(
-        name: Exclude<keyof T, number | symbol>,
-        implementation: (...implArgs: any[]) => any,
-        config?: IRuleConfig<CstNode>
-    ) {
+    RULE(name: Exclude<keyof T, number | symbol>, implementation: (...implArgs: any[]) => any, config?: IRuleConfig<CstNode>) {
         return super.RULE(name, implementation, config)
     }
 }

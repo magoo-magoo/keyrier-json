@@ -20,20 +20,17 @@ type Props = {
 }
 export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
     const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | null)
-    const tableData = useMemo(
-        () => data.map(e => (!!e ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {})),
-        [data]
-    )
+    const tableData = useMemo(() => data.map((e) => (!!e ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {})), [data])
     const columns = React.useMemo(
         () =>
-            displayedColumns.map(name => {
+            displayedColumns.map((name) => {
                 return {
                     header: name,
                     accessor: name,
                     Filter: DefaultColumnFilter,
                 }
             }),
-        [displayedColumns]
+        [displayedColumns],
     )
 
     const onCloseDetailModal = () => setDetailsCellValue(null)
@@ -43,13 +40,13 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
             data: tableData,
         },
         useFilters,
-        useSortBy
+        useSortBy,
     )
     if (
         !tableData ||
         !Array.isArray(tableData) ||
         tableData.length === 0 ||
-        tableData.every(e => e === null || e === undefined || (typeof e === 'object' && Object.keys(e).length === 0))
+        tableData.every((e) => e === null || e === undefined || (typeof e === 'object' && Object.keys(e).length === 0))
     ) {
         return <div />
     }
@@ -68,10 +65,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
                             <thead>
                                 {headerGroups.map((headerGroup, hi) => (
                                     <tr key={hi}>
-                                        <th
-                                            scope="col"
-                                            className="shadow-sm text-capitalize text-center data-test-id-column-name"
-                                        ></th>
+                                        <th scope="col" className="shadow-sm text-capitalize text-center data-test-id-column-name"></th>
                                         {headerGroup.headers.map((column, ci) => (
                                             <th
                                                 key={ci}
@@ -82,11 +76,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
                                                 <div {...column.getHeaderProps((column as any).getSortByToggleProps())}>
                                                     {column.render('header')}
                                                     <span>
-                                                        {(column as any).isSorted
-                                                            ? (column as any).isSortedDesc
-                                                                ? ' 🔽'
-                                                                : ' 🔼'
-                                                            : ''}
+                                                        {(column as any).isSorted ? ((column as any).isSortedDesc ? ' 🔽' : ' 🔼') : ''}
                                                     </span>
                                                 </div>
 
@@ -102,19 +92,12 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
                                     return (
                                         <tr key={i}>
                                             <th scope="row">
-                                                <button
-                                                    onClick={() => setDetailsCellValue(row.original)}
-                                                    className="btn btn-link"
-                                                >
+                                                <button onClick={() => setDetailsCellValue(row.original)} className="btn btn-link">
                                                     <i className="material-icons">open_in_browser</i>
                                                 </button>
                                             </th>
-                                            {row.cells.map(cell => (
-                                                <TableCellComponent
-                                                    key={cell.column.id}
-                                                    cell={cell}
-                                                    onClick={setDetailsCellValue}
-                                                />
+                                            {row.cells.map((cell) => (
+                                                <TableCellComponent key={cell.column.id} cell={cell} onClick={setDetailsCellValue} />
                                             ))}
                                         </tr>
                                     )
@@ -142,5 +125,5 @@ const mapStateToProps = (state: RootState) => {
 }
 
 export default connect(mapStateToProps)(
-    withErrorBoundary(memo(withPerformance(OutputTableView, 'OutputTableView'), (prev, next) => deepEqual(prev, next)))
+    withErrorBoundary(memo(withPerformance(OutputTableView, 'OutputTableView'), (prev, next) => deepEqual(prev, next))),
 )

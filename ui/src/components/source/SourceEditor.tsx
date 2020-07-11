@@ -23,17 +23,11 @@ const SourceEditor: FC<Props> = ({ onChange, sourceText, currentEditorTheme }) =
                 unstable_runWithPriority(unstable_IdlePriority, () => onChange(s))
             }
         },
-        [onChange, sourceText]
+        [onChange, sourceText],
     )
     return (
         <>
-            <AceEditor
-                mode="json"
-                theme={currentEditorTheme}
-                name="sourceAceEditor"
-                onChange={onChangeCallback}
-                value={sourceText}
-            />
+            <AceEditor mode="json" theme={currentEditorTheme} name="sourceAceEditor" onChange={onChangeCallback} value={sourceText} />
         </>
     )
 }
@@ -44,5 +38,5 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default connect(mapStateToProps, { onChange: Actions.updateSource })(
-    withErrorBoundary(memo(withPerformance(SourceEditor, 'SourceEditor')))
+    withErrorBoundary(memo(withPerformance(SourceEditor, 'SourceEditor'))),
 )

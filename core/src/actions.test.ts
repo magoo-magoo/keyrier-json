@@ -170,7 +170,7 @@ describe('actions-visitor', () => {
             FROM table1 
             inner join table2 on table1.name = table2.column3
             inner join table3 on table1.email = table2.column4
-            `
+            `,
         )
         expect(tree).toBeDefined()
         expect(Array.isArray(tree.joins)).toBeTruthy()

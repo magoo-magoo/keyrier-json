@@ -81,20 +81,11 @@ const HttpRequestSource: FC<Props> = ({ onFinish, setSource }) => {
             <Form inline={true} hidden={!hasBody}>
                 <FormGroup>
                     <label>Body</label>
-                    <input
-                        className="form-control-lg form-control"
-                        type="textarea"
-                        value={body}
-                        onChange={setBody}
-                    />{' '}
+                    <input className="form-control-lg form-control" type="textarea" value={body} onChange={setBody} />{' '}
                 </FormGroup>
             </Form>
             <label htmlFor="headers">Request headers</label>{' '}
-            <Button
-                outline={true}
-                color="primary"
-                onClick={() => setHeaders([...headers, [`name-${headers.length + 1}`, 'value']])}
-            >
+            <Button outline={true} color="primary" onClick={() => setHeaders([...headers, [`name-${headers.length + 1}`, 'value']])}>
                 Add header
             </Button>
             <br />
@@ -120,28 +111,19 @@ type HeaderListProps = {
 }
 
 const HeaderList: FC<HeaderListProps> = ({ headers, onChange }) => {
-    const onRemove = useCallback((header: [string, string]) => onChange(headers.filter(h => h !== header)), [
-        headers,
-        onChange,
-    ])
+    const onRemove = useCallback((header: [string, string]) => onChange(headers.filter((h) => h !== header)), [headers, onChange])
     const onChangeCallback = useCallback(
         (header: [string, string]) => {
             const index = headers.indexOf(header)
             headers[index] = { ...header }
             onChange([...headers])
         },
-        [headers, onChange]
+        [headers, onChange],
     )
     return (
         <>
             {headers.map((header, index) => (
-                <RenderHeaderInput
-                    header={header}
-                    key={index}
-                    id={index}
-                    onChange={onChangeCallback}
-                    onRemove={onRemove}
-                />
+                <RenderHeaderInput header={header} key={index} id={index} onChange={onChangeCallback} onRemove={onRemove} />
             ))}
         </>
     )

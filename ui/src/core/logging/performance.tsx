@@ -74,18 +74,8 @@ export const logPerfPeriodically = async () => {
     }
 }
 
-export const withPerformance = <P extends object>(Component: React.ComponentType<P>, name: string): React.FC<P> => ({
-    ...props
-}) => {
-    const onRender: ProfilerOnRenderCallback = (
-        id,
-        phase,
-        actualDuration,
-        baseDuration,
-        startTime,
-        commitTime,
-        interactions
-    ) => {
+export const withPerformance = <P extends object>(Component: React.ComponentType<P>, name: string): React.FC<P> => ({ ...props }) => {
+    const onRender: ProfilerOnRenderCallback = (id, phase, actualDuration, baseDuration, startTime, commitTime, interactions) => {
         logPerf(name, actualDuration, {
             type: 'component-render',
             id,

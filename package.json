@@ -11,9 +11,7 @@
         "ui"
     ],
     "scripts": {
-        "build": "lerna run build",
-        "publish": "lerna publish",
-        "test": "lerna run test -- --watchAll=false"
+        "format": "prettier --config .prettierrc '{cli,core,ui}/**/*.{js,jsx,ts,tsx}' --write"
     },
     "husky": {
         "hooks": {
@@ -28,9 +26,6 @@
     },
     "devDependencies": {
         "@now/node": "1.6.1",
-        "@stryker-mutator/core": "3.2.4",
-        "@stryker-mutator/jest-runner": "3.2.4",
-        "@stryker-mutator/typescript": "3.2.4",
         "concurrently": "5.2.0",
         "husky": "4.2.5",
         "jest": "24.9.0",

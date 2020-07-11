@@ -17,15 +17,12 @@ export const getOutputSearchTerm = (state: RootState) => state?.app?.present?.ou
 export const getOutputSearchMatch = (state: RootState) => !!state?.app?.present?.output?.match
 export const getisOutputTableModalOpen = (state: RootState) => !!state?.app?.present?.output?.table?.isModalOpen
 
-export const getTheme = (state: RootState) =>
-    state?.userSettings?.globalTheme ?? getDefaultUserSettingsState().globalTheme
-export const getEditorTheme = (state: RootState) =>
-    state?.userSettings?.editorTheme ?? getDefaultUserSettingsState().editorTheme
+export const getTheme = (state: RootState) => state?.userSettings?.globalTheme ?? getDefaultUserSettingsState().globalTheme
+export const getEditorTheme = (state: RootState) => state?.userSettings?.editorTheme ?? getDefaultUserSettingsState().editorTheme
 export const getLayouts = (state: RootState) =>
     (state?.userSettings?.layouts ?? getDefaultUserSettingsState().layouts) as ReactGridLayout.Layouts
 
-export const getdisplayedColumns = (state: RootState) =>
-    copyArrayOrEmpty(state?.app?.present?.output?.table?.displayedColumns)
+export const getdisplayedColumns = (state: RootState) => copyArrayOrEmpty(state?.app?.present?.output?.table?.displayedColumns)
 export const getOutputarray = (state: RootState) =>
     Array.isArray(state?.app?.present?.output?.obj) ? copyArrayOrEmpty(state?.app?.present?.output?.obj) : []
 export const getColumns = (state: RootState) => copyArrayOrEmpty(state?.app?.present?.output?.table?.columns)

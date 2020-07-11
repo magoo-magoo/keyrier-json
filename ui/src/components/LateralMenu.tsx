@@ -70,7 +70,7 @@ const LateralMenu: FC<Props> = ({
                 fileReader.readAsText(e.target.files[0])
             }
         },
-        [toggleDropdown, onFileContentReady]
+        [toggleDropdown, onFileContentReady],
     )
 
     const handleAutoFormatChange = useCallback(() => changeAutoFormat(!autoFormat), [changeAutoFormat, autoFormat])
@@ -102,11 +102,7 @@ const LateralMenu: FC<Props> = ({
                 </ButtonGroup>
                 <br />
                 <br />
-                <Label
-                    className="d-flex justify-content-center align-content-between"
-                    check={true}
-                    onClick={handleAutoFormatChange}
-                >
+                <Label className="d-flex justify-content-center align-content-between" check={true} onClick={handleAutoFormatChange}>
                     <i className="material-icons mr-1">{autoFormat ? 'check_box' : 'check_box_outline_blank'}</i>
                     Auto format
                 </Label>
@@ -125,13 +121,7 @@ const LateralMenu: FC<Props> = ({
                         <DropdownItem toggle={false}>
                             <label id="import-file">
                                 Browse JSON file...
-                                <input
-                                    type="file"
-                                    name="file"
-                                    id="sourceFile"
-                                    style={{ display: 'none' }}
-                                    onChange={handleFileChange}
-                                />
+                                <input type="file" name="file" id="sourceFile" style={{ display: 'none' }} onChange={handleFileChange} />
                             </label>
                         </DropdownItem>
                         <DropdownItem id="http-request" onClick={toggleModal}>
@@ -184,12 +174,7 @@ const LateralMenu: FC<Props> = ({
                 )}
 
                 <br />
-                <Button
-                    className="d-flex justify-content-center align-content-between"
-                    color="danger"
-                    size={'lg'}
-                    onClick={onClear}
-                >
+                <Button className="d-flex justify-content-center align-content-between" color="danger" size={'lg'} onClick={onClear}>
                     <div>
                         <i className="material-icons md-18  mr-1">clear</i>
                     </div>

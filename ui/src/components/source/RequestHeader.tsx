@@ -13,14 +13,8 @@ export const RenderHeaderInput: FC<Props> = memo(
     withErrorBoundary(({ header, onRemove, onChange, id }) => {
         const [key, value] = header
 
-        const onKeyChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([e.target.value, value]), [
-            onChange,
-            value,
-        ])
-        const onValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([key, e.target.value]), [
-            onChange,
-            key,
-        ])
+        const onKeyChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([e.target.value, value]), [onChange, value])
+        const onValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([key, e.target.value]), [onChange, key])
         const onRemoveCallback = useCallback(() => onRemove(header), [onRemove, header])
 
         return (
@@ -54,5 +48,5 @@ export const RenderHeaderInput: FC<Props> = memo(
                 </div>
             </div>
         )
-    })
+    }),
 )

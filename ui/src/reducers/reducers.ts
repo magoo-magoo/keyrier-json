@@ -10,12 +10,11 @@ import { arrayElementName } from '../models/array'
 import initialStateJson from '../state/default-state.json'
 import * as State from '../state/State'
 
-export const appReducer = createReducer<State.AppState>(State.getDefaultAppState(), builder =>
+export const appReducer = createReducer<State.AppState>(State.getDefaultAppState(), (builder) =>
     builder
         .addCase(actions.clearEditor, () => State.emptyState)
         .addMatcher<Action>(
-            (action): action is Exclude<Action, ReturnType<typeof actions.clearEditor>> =>
-                action.type !== 'CLEAR_EDITOR',
+            (action): action is Exclude<Action, ReturnType<typeof actions.clearEditor>> => action.type !== 'CLEAR_EDITOR',
             (draft, action) => {
                 if (draft.query) {
                     draft.query = query(draft.query, action)
@@ -32,7 +31,7 @@ export const appReducer = createReducer<State.AppState>(State.getDefaultAppState
                             draft.source?.text ? draft.source.text : '',
                             draft.query?.text ? draft.query.text : '',
                             action,
-                            draft.query?.mode ? draft.query.mode : 'SQL'
+                            draft.query?.mode ? draft.query.mode : 'SQL',
                         )
                         return
                     case 'TOGGLE_OUTPUT_TABLE_MODAL':
@@ -54,7 +53,7 @@ export const appReducer = createReducer<State.AppState>(State.getDefaultAppState
                         }
                         return
                 }
-            }
+            },
         )
         .addMatcher(
             (_action): _action is Action => true,
@@ -62,11 +61,11 @@ export const appReducer = createReducer<State.AppState>(State.getDefaultAppState
                 if (draft.output) {
                     draft.output.table = table(draft.output?.table, action)
                 }
-            }
-        )
+            },
+        ),
 )
 
-export const source = createReducer<State.SourceState>({}, builder =>
+export const source = createReducer<State.SourceState>({}, (builder) =>
     builder
         .addCase(actions.updateSource, (state, action) => {
             state.text = state?.autoFormat ? jsonBeautify(action.payload.trim()) : action.payload
@@ -74,10 +73,10 @@ export const source = createReducer<State.SourceState>({}, builder =>
         .addCase(actions.updateAutoFormatSource, (state, action) => {
             state.text = action.payload ? jsonBeautify(state?.text?.trim()) : state?.text ?? ''
             state.autoFormat = action.payload
-        })
+        }),
 )
 
-export const userSettings = createReducer<State.UserSettingsState>(State.getDefaultUserSettingsState(), builder =>
+export const userSettings = createReducer<State.UserSettingsState>(State.getDefaultUserSettingsState(), (builder) =>
     builder
         .addCase(actions.resetEditor, () => State.getDefaultUserSettingsState())
         .addCase(actions.switchTheme, (state, action) => {
@@ -88,9 +87,9 @@ export const userSettings = createReducer<State.UserSettingsState>(State.getDefa
         })
         .addCase(actions.updateLayouts, (state, action) => {
             state.layouts = action.payload
-        })
+        }),
 )
-export const query = createReducer<State.QueryState>({}, builder =>
+export const query = createReducer<State.QueryState>({}, (builder) =>
     builder
         .addCase(actions.updateQuery, (state, action) => {
             state.text = action.payload
@@ -101,7 +100,7 @@ export const query = createReducer<State.QueryState>({}, builder =>
                 action.payload === 'SQL'
                     ? initialStateJson.query.text
                     : '// data is your JSON object\n// you can use any correct javascript code to query it\n// in addition of that,\n// \n\n      data\n    '
-        })
+        }),
 )
 
 export const computeOutput = (
@@ -109,7 +108,7 @@ export const computeOutput = (
     sourceString: string,
     queryString: string,
     action: Action,
-    mode: State.QueryMode
+    mode: State.QueryMode,
 ) => {
     const evaluation = codeEvaluation(sourceString, queryString, mode)
 
@@ -135,14 +134,14 @@ export const computeOutput = (
     let displayedColumns = new Array<string>()
     if (Array.isArray(obj)) {
         const keyMap: { [key: string]: string } = {}
-        obj.forEach(d => {
+        obj.forEach((d) => {
             if (d !== null && d !== undefined && !Object.is(d, {}) && !Array.isArray(d)) {
                 const keysToAdd = d ? (typeof d === 'object' ? Object.keys(d) : [arrayElementName]) : []
-                keysToAdd.forEach(key => (keyMap[key] = key))
+                keysToAdd.forEach((key) => (keyMap[key] = key))
             }
         })
         displayedColumns = Object.keys(keyMap)
-            .filter(key => key && typeof key === 'string' && key.trim() !== '')
+            .filter((key) => key && typeof key === 'string' && key.trim() !== '')
             .sort((ax, b) => ax.toLowerCase().localeCompare(b.toLowerCase()))
     }
     const isModalOpen =
@@ -173,28 +172,26 @@ export const computeOutput = (
     }
 }
 
-const table = createReducer<State.OupoutTableState>(
-    State.getDefaultAppState().output!.table as State.OupoutTableState,
-    builder =>
-        builder
-            .addCase(actions.updateTableColumns, (state, action) => {
-                state.displayedColumns = action.payload
+const table = createReducer<State.OupoutTableState>(State.getDefaultAppState().output!.table as State.OupoutTableState, (builder) =>
+    builder
+        .addCase(actions.updateTableColumns, (state, action) => {
+            state.displayedColumns = action.payload
 
-                if (!state.groupBy) {
-                    return
+            if (!state.groupBy) {
+                return
+            }
+            for (let i = 0; i < state.groupBy.length; i++) {
+                const element = state.groupBy[i]
+                if (!action.payload.includes(element)) {
+                    state.groupBy.splice(i, 1)
                 }
-                for (let i = 0; i < state.groupBy.length; i++) {
-                    const element = state.groupBy[i]
-                    if (!action.payload.includes(element)) {
-                        state.groupBy.splice(i, 1)
-                    }
-                }
-            })
-            .addCase(actions.updateTableGroupBy, (state, action) => {
-                state.groupBy = action.payload
-                    .filter(gb => state && state.displayedColumns && state.displayedColumns.indexOf(gb) !== -1)
-                    .filter(gb => gb !== 'Group by...')
-            })
+            }
+        })
+        .addCase(actions.updateTableGroupBy, (state, action) => {
+            state.groupBy = action.payload
+                .filter((gb) => state && state.displayedColumns && state.displayedColumns.indexOf(gb) !== -1)
+                .filter((gb) => gb !== 'Group by...')
+        }),
 )
 
 export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
@@ -212,7 +209,7 @@ export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
 
     const keys = Array.isArray(obj)
         ? Array.from({ length: obj.length }, (_, k) => k)
-        : Object.getOwnPropertyNames(obj).filter(propertyName => propertyName)
+        : Object.getOwnPropertyNames(obj).filter((propertyName) => propertyName)
 
     let result = false
 

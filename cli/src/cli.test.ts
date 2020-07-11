@@ -102,11 +102,9 @@ describe('Keyrier CLI', () => {
         // arrange
 
         // act
-        const { exitCode } = await execa(
-            fixturePath,
-            ['select foo from stdin', '-t', 'json', '-o', 'tests/output/output.csv'],
-            { input: '[{"foo": "bar", "notSelected": "value"}]' }
-        )
+        const { exitCode } = await execa(fixturePath, ['select foo from stdin', '-t', 'json', '-o', 'tests/output/output.csv'], {
+            input: '[{"foo": "bar", "notSelected": "value"}]',
+        })
         const output = fs.readFileSync('tests/output/output.csv', 'utf-8')
 
         // assert
