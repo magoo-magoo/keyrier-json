@@ -59,9 +59,11 @@ const loadUserSettings = async (key: string) => {
     return {}
 }
 
-export default {
+const persistence = {
     getAppState,
     getUserSettings,
     persistAppState,
     persistUserSettings,
 }
+
+export default persistence

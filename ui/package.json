@@ -26,7 +26,7 @@
         "pack:dockerelectron": "bash -c \"docker run --rm --env GH_TOKEN=$GITHUB_TOKEN --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') -v ${PWD}:/project -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine /bin/bash -c \\\"npm run pack:electron\\\"\"",
         "pack:electron": "electron-builder --linux AppImage --windows nsis --publish never",
         "start": "react-scripts start",
-        "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+        "test": "react-scripts test",
         "stryker:run": "stryker run"
     },
     "browserslist": {
@@ -123,13 +123,17 @@
         "cypress": "4.8.0",
         "electron": "8.3.1",
         "electron-builder": "22.7.0",
+        "eslint": "^7.5.0",
         "eslint-config-prettier": "^6.11.0",
         "gh-pages": "2.2.0",
+        "jest": "26.1.0",
         "jest-environment-jsdom-sixteen": "1.0.3",
         "lighthousebot": "https://github.com/GoogleChromeLabs/lighthousebot",
         "node-sass": "4.14.1",
         "prettier": "^2.0.5",
-        "react-scripts": "3.4.1",
+        "react": "^17.0.0-rc.0",
+        "react-dom": "^17.0.0-rc.0",
+        "react-scripts": "next",
         "redux-devtools": "3.5.0",
         "typescript": "^3.9.5",
         "unfetch": "4.1.0"
