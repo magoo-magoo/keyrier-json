@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { Button } from 'reactstrap'
-import { memo, useCallback, ChangeEvent, FC } from 'react'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
+import * as React from 'react'
+import { ChangeEvent, FC, memo } from 'react'
+import { Button } from 'reactstrap'
 interface Props {
     header: [string, string]
     id: number
@@ -13,9 +13,9 @@ export const RenderHeaderInput: FC<Props> = memo(
     withErrorBoundary(({ header, onRemove, onChange, id }) => {
         const [key, value] = header
 
-        const onKeyChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([e.target.value, value]), [onChange, value])
-        const onValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange([key, e.target.value]), [onChange, key])
-        const onRemoveCallback = useCallback(() => onRemove(header), [onRemove, header])
+        const onKeyChange = (e: ChangeEvent<HTMLInputElement>) => onChange([e.target.value, value])
+        const onValueChange = (e: ChangeEvent<HTMLInputElement>) => onChange([key, e.target.value])
+        const onRemoveCallback = () => onRemove(header)
 
         return (
             <div className="row align-items-center">
