@@ -11,7 +11,7 @@ describe('JsonView', () => {
         const result = render(
             <Provider store={store}>
                 <JsonView />
-            </Provider>
+            </Provider>,
         )
 
         expect(result.baseElement).toBeDefined()

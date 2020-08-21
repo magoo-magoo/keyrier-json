@@ -24,7 +24,7 @@ const QueryEditor: FC<Props> = ({ setQuery, queryText, mode, currentEditorTheme 
                 unstable_runWithPriority(unstable_IdlePriority, () => setQuery(a))
             }
         },
-        [setQuery, queryText]
+        [setQuery, queryText],
     )
     return (
         <>
@@ -46,5 +46,5 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default connect(mapStateToProps, { setQuery: Actions.updateQuery })(
-    withErrorBoundary(memo(withPerformance(QueryEditor, 'QueryEditor')))
+    withErrorBoundary(memo(withPerformance(QueryEditor, 'QueryEditor'))),
 )

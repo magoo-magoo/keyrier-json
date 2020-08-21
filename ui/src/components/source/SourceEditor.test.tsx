@@ -11,7 +11,7 @@ describe('SourceEditor', () => {
         const { baseElement } = render(
             <Provider store={store}>
                 <SourceEditor />
-            </Provider>
+            </Provider>,
         )
 
         expect(baseElement).toBeDefined()

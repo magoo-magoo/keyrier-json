@@ -1,12 +1,12 @@
-export const customToString = (obj: any | null | undefined): string => {
+export const customToString = (obj: unknown): string => {
     if (Array.isArray(obj)) {
-        return obj.map(e => customToString(e)).join(',')
+        return obj.map((e) => customToString(e)).join(',')
     }
     if (typeof obj === 'object') {
         return JSON.stringify(obj)
     }
     if (obj !== null && obj !== undefined) {
-        return obj.toString()
+        return (obj as any).toString()
     }
 
     return ''

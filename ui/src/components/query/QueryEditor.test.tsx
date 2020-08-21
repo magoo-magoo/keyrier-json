@@ -11,7 +11,7 @@ describe('QueryEditor', () => {
         const result = render(
             <Provider store={store}>
                 <QueryEditor />
-            </Provider>
+            </Provider>,
         )
 
         expect(result.baseElement).toBeDefined()

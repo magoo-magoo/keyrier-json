@@ -30,7 +30,7 @@ const evaluate = (sourceString: string, queryString: string, mode: QueryMode) =>
     return new Error('unsupported mode')
 }
 
-const jsEvaluation = (sourceString: string, queryString: string): null | undefined | object | Error => {
+const jsEvaluation = (sourceString: string, queryString: string): null | undefined | unknown | Error => {
     try {
         const code = `
       

@@ -53,7 +53,7 @@ const HttpRequestSource: FC<Props> = ({ onFinish, setSource }) => {
                     defaultValue={method}
                     name="requestMethod"
                     id="requestMethod"
-                    onChange={setMethod}
+                    onBlur={setMethod}
                 >
                     <option>GET</option>
                     <option>POST</option>
@@ -80,8 +80,8 @@ const HttpRequestSource: FC<Props> = ({ onFinish, setSource }) => {
             </div>
             <Form inline={true} hidden={!hasBody}>
                 <FormGroup>
-                    <label>Body</label>
-                    <input className="form-control-lg form-control" type="textarea" value={body} onChange={setBody} />{' '}
+                    <label htmlFor="body">Body</label>
+                    <input id="body" className="form-control-lg form-control" type="textarea" value={body} onChange={setBody} />{' '}
                 </FormGroup>
             </Form>
             <label htmlFor="headers">Request headers</label>{' '}

@@ -10,18 +10,22 @@ describe('string helpers', () => {
         const result = customToString('toto')
         expect(result).toBe('toto')
     })
+
     it('should convert falsy boolean', () => {
         const result = customToString(false)
         expect(result).toBe('false')
     })
+
     it('should convert undefined', () => {
         const result = customToString(undefined)
         expect(result).toBe('')
     })
+
     it('should convert null', () => {
         const result = customToString(null)
         expect(result).toBe('null')
     })
+
     it('should convert thruthy boolean', () => {
         const result = customToString(true)
         expect(result).toBe('true')
@@ -31,14 +35,17 @@ describe('string helpers', () => {
         const result = customToString([])
         expect(result).toBe('')
     })
+
     it('should convert populated array', () => {
         const result = customToString(['Hello', 'World'])
         expect(result).toBe('Hello,World')
     })
+
     it('should convert object', () => {
         const result = customToString({ property: 42 })
         expect(result).toBe('{"property":42}')
     })
+
     it('should return true when contains part', () => {
         const result = containsIgnoreCase('une longue phrase', 'PhrasE')
         expect(result).toBeTruthy()
@@ -88,6 +95,7 @@ describe('string helpers', () => {
 
         expect(result).toEqual(expected)
     })
+
     it.each`
         input
         ${undefined}

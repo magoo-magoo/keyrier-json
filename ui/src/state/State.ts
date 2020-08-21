@@ -1,7 +1,7 @@
 import { configuration } from 'config'
 import { StateWithHistory } from 'redux-undo'
 import { EditorTheme, GeneralTheme } from 'themes/themes'
-import { DeepReadonly } from 'utility-types'
+import { DeepReadonly, DeepRequired } from 'utility-types'
 import initialStateJson from './default-state.json'
 
 export type itemType = any
@@ -24,7 +24,7 @@ export type OupoutState = {
     searchTerm?: string
     match?: boolean
     selectedTab?: tabType
-    obj?: object | null
+    obj?: unknown | null
     objSize?: number
     errorMessage?: string
     table?: OupoutTableState
@@ -51,7 +51,7 @@ export type RootState = DeepReadonly<{
     userSettings?: UserSettingsState
 }>
 
-export const getDefaultAppState = () => initialStateJson as AppState
+export const getDefaultAppState = () => (initialStateJson as unknown) as DeepRequired<AppState>
 export const defaultAppState = initialStateJson as AppState
 export const getDefaultUserSettingsState = () =>
     ({

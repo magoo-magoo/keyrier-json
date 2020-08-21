@@ -4,10 +4,12 @@ describe('logger', () => {
     beforeEach(() => {
         ;(window as any).__DEBUG__ = true
     })
+
     afterEach(() => {
         ;(window as any).__DEBUG__ = false
         jest.restoreAllMocks()
     })
+
     it('should not log performance event', () => {
         ;(window as any).__DEBUG__ = false
 
@@ -15,6 +17,7 @@ describe('logger', () => {
 
         expect(logEvents.isEmpty()).toBeTruthy()
     })
+
     it('should log performance event', () => {
         expect(logEvents.dequeue()).toBeUndefined()
 
@@ -52,13 +55,13 @@ describe('logger', () => {
 
     it('should log error', () => {
         // arrange
-        const errorFunction = jest.spyOn(console, 'error').mockImplementation(() => {})
+        const errorFunction = jest.spyOn(console, 'error').mockReturnValue()
 
         // act
         logError('error msg')
 
         // assert
-        expect(errorFunction).toBeCalledWith('Keyrier', 'error msg')
+        expect(errorFunction).toHaveBeenCalledWith('Keyrier', 'error msg')
     })
 
     it('should log error object', () => {
@@ -69,9 +72,10 @@ describe('logger', () => {
         logError('error msg', { prop: 'value' })
 
         // assert
-        expect(errorFunction).toBeCalledWith('Keyrier', 'error msg')
-        expect(errorFunction).toBeCalledWith({ prop: 'value' })
+        expect(errorFunction).toHaveBeenCalledWith('Keyrier', 'error msg')
+        expect(errorFunction).toHaveBeenCalledWith({ prop: 'value' })
     })
+
     it('should log warning object', () => {
         // arrange
         const warnFunction = jest.spyOn(console, 'warn').mockImplementation()
@@ -80,8 +84,9 @@ describe('logger', () => {
         logWarning('warn msg', { prop: 'value' })
 
         // assert
-        expect(warnFunction).toBeCalledWith('Keyrier', 'warn msg', { prop: 'value' })
+        expect(warnFunction).toHaveBeenCalledWith('Keyrier', 'warn msg', { prop: 'value' })
     })
+
     it('should log warning', () => {
         // arrange
         const warnFunction = jest.spyOn(console, 'warn').mockImplementation()
@@ -90,7 +95,7 @@ describe('logger', () => {
         logWarning('warn msg')
 
         // assert
-        expect(warnFunction).toBeCalledWith('Keyrier', 'warn msg')
+        expect(warnFunction).toHaveBeenCalledWith('Keyrier', 'warn msg')
     })
 
     it('should log debug object', () => {
@@ -101,8 +106,9 @@ describe('logger', () => {
         logDebug('debug msg', { prop: 'value' })
 
         // assert
-        expect(debugFunction).toBeCalledWith('Keyrier', 'debug msg', { prop: 'value' })
+        expect(debugFunction).toHaveBeenCalledWith('Keyrier', 'debug msg', { prop: 'value' })
     })
+
     it('should debug warning', () => {
         // arrange
         const debugFunction = jest.spyOn(console, 'debug').mockImplementation()
@@ -111,6 +117,6 @@ describe('logger', () => {
         logDebug('warn msg')
 
         // assert
-        expect(debugFunction).toBeCalledWith('Keyrier', 'warn msg')
+        expect(debugFunction).toHaveBeenCalledWith('Keyrier', 'warn msg')
     })
 })

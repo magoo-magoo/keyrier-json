@@ -172,7 +172,7 @@ export const computeOutput = (
     }
 }
 
-const table = createReducer<State.OupoutTableState>(State.getDefaultAppState().output!.table as State.OupoutTableState, (builder) =>
+const table = createReducer<State.OupoutTableState>(State.getDefaultAppState().output.table as State.OupoutTableState, (builder) =>
     builder
         .addCase(actions.updateTableColumns, (state, action) => {
             state.displayedColumns = action.payload
@@ -194,7 +194,7 @@ const table = createReducer<State.OupoutTableState>(State.getDefaultAppState().o
         }),
 )
 
-export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
+export const containsTerm = (src: any, searchTerm: string) => {
     if (typeof src !== 'string' && typeof src !== 'object') {
         return { match: false, filteredObj: src }
     }
@@ -205,7 +205,7 @@ export const containsTerm = (src: any | any[] | null, searchTerm: string) => {
         }
         return { match: false, filteredObj: src }
     }
-    const obj: { [key: string]: any } = Array.isArray(src) ? [...src] : { ...src }
+    const obj: { [key: string]: unknown } = Array.isArray(src) ? [...src] : { ...src }
 
     const keys = Array.isArray(obj)
         ? Array.from({ length: obj.length }, (_, k) => k)
@@ -254,7 +254,7 @@ const filter = (state: State.OupoutState, searchTerm: string) => {
     return state
 }
 
-export const resetApp = (state = State.getDefaultAppState(), action: Action) => {
+export const resetApp = (state: State.AppState = State.getDefaultAppState(), action: Action) => {
     if (action.type === 'RESET_EDITOR') {
         return appReducer(State.getDefaultAppState(), action)
     }

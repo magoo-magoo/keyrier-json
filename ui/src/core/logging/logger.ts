@@ -1,8 +1,6 @@
 import { isDebugMode } from 'core/misc/debug'
 import { getAppVersion } from 'core/misc/utils'
 
-// tslint:disable:no-console
-
 export const logError = (error: string | Error, payload?: any) => {
     console.error('Keyrier', error)
     if (typeof payload !== 'undefined') {

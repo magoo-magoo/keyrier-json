@@ -6,18 +6,18 @@ import { toast } from 'react-toastify'
 import { StateWithHistory } from 'redux-undo'
 import { AppState, getDefaultAppState, getDefaultUserSettingsState, UserSettingsState } from 'state/State'
 
-const persistAppState = (appstate: StateWithHistory<AppState>) => {
+const persistAppState = (appstate: StateWithHistory<AppState>): void => {
     persist(configuration.storageKey.appState, appstate)
 }
 
-const persistUserSettings = (userSettings: UserSettingsState) => {
+const persistUserSettings = (userSettings: UserSettingsState): void => {
     persist(configuration.storageKey.userSettings, userSettings)
 }
 
-const getUserSettings = () => loadUserSettings(configuration.storageKey.userSettings) as Promise<UserSettingsState>
-const getAppState = () => loadAppState(configuration.storageKey.appState) as Promise<StateWithHistory<AppState>>
+const getUserSettings = (): Promise<UserSettingsState> => loadUserSettings(configuration.storageKey.userSettings)
+const getAppState = (): Promise<StateWithHistory<AppState>> => loadAppState(configuration.storageKey.appState)
 
-const persist = async (key: string, value: object | undefined) => {
+const persist = async (key: string, value: StateWithHistory<AppState> | UserSettingsState | undefined) => {
     try {
         await localForage.setItem(key, value)
     } catch (error) {
@@ -36,8 +36,8 @@ const getDefault = (key: string) => {
     }
 }
 
-const loadAppState = async (key: string) => {
-    let present = merge({}, getDefault(key))
+const loadAppState = async (key: string): Promise<StateWithHistory<AppState>> => {
+    const present = merge({}, getDefault(key))
     try {
         const savedState = await localForage.getItem<StateWithHistory<AppState>>(key)
         return merge({ present }, savedState ?? {})
@@ -45,10 +45,10 @@ const loadAppState = async (key: string) => {
         logError(error)
     }
 
-    return {}
+    return { future: [], past: [], present: {} }
 }
 const loadUserSettings = async (key: string) => {
-    let state = getDefault(key)
+    const state = getDefault(key)
     try {
         const savedState = await localForage.getItem<UserSettingsState>(key)
         return merge(state, savedState ?? {})

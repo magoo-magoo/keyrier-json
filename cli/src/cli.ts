@@ -56,7 +56,7 @@ Examples
     },
 )
 
-const logDebug = (message: string | object) => {
+const logDebug = (message: any) => {
     if (cli.flags.verbose) {
         console.error(typeof message === 'object' ? JSON.stringify(message, null, 2) : message)
     }
@@ -207,7 +207,7 @@ export const query = async (q: string, opts: QueryOptions = {}) => {
     throw new Error()
 }
 
-const toCsv = (data: object[] | object) => {
+const toCsv = (data: any) => {
     const json2csvParser = new Parser({ quote: '"' })
     return json2csvParser.parse(data)
 }
@@ -256,7 +256,7 @@ async function importFileData(source: SQLTree.From) {
         return null
     }
 
-    let sourceDataObject: object
+    let sourceDataObject: unknown
     if (fileType === 'file/json' || fileType === 'stdin/json') {
         sourceDataObject = jsonParseSafe(inputCcontent)
     } else if (fileType === 'file/csv') {

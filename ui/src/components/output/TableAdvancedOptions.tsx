@@ -7,7 +7,7 @@ import { pick } from 'lodash-es'
 import * as React from 'react'
 import { ChangeEvent, FC, lazy, memo, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { ValueType } from 'react-select'
+import { OptionTypeBase, ValueType } from 'react-select'
 import { Button, Collapse } from 'reactstrap'
 import { itemType, RootState } from 'state/State'
 import { getColumns, getdisplayedColumns, getGroupBy, getOutputarray } from 'store/selectors'
@@ -28,7 +28,7 @@ const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGro
     const [optionsCollapsed, switchOptionsCollapsed] = useToggleState()
 
     const handleColumnChange = useCallback(
-        (cols: ValueType<{}> | undefined | null) => {
+        (cols: ValueType<OptionTypeBase> | undefined | null) => {
             if (cols instanceof Array) {
                 const mapped = cols.map((c: { value?: string }) => (c.value ? c.value : ''))
                 onColumnsChange(mapped)
@@ -65,7 +65,7 @@ const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGro
                     {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
                 </Button>
                 <Collapse isOpen={optionsCollapsed}>
-                    <select className="form-control-lg form-control" name="select" id="groupingSelect" onChange={handleGroupChange}>
+                    <select className="form-control-lg form-control" name="select" id="groupingSelect" onBlur={handleGroupChange}>
                         <option key={'Group by...'}>Group by...</option>
                         {displayedColumns.map((key) => (
                             <option key={key}>{key}</option>

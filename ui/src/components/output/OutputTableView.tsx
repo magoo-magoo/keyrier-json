@@ -9,16 +9,16 @@ import { connect } from 'react-redux'
 import { useFilters, useSortBy, useTable } from 'react-table'
 import { itemType, RootState } from 'state/State'
 import { getColumns, getdisplayedColumns, getGroupBy, getOutputarray } from 'store/selectors'
+import { DefaultColumnFilter } from './DefaultColumnFilter'
 import TableAdvancedOptions from './TableAdvancedOptions'
 import { TableCellComponent } from './TableCellComponent'
 import { TableDetailModal } from './TableDetailModal'
-import { DefaultColumnFilter } from './DefaultColumnFilter'
 
 type Props = {
     data: itemType[]
     displayedColumns: string[]
 }
-export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
+const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
     const [detailsCellValue, setDetailsCellValue] = useState(null as itemType | null)
     const tableData = useMemo(() => data.map((e) => (!!e ? (typeof e === 'object' ? e : { [arrayElementName]: e }) : {})), [data])
     const columns = React.useMemo(
@@ -61,7 +61,7 @@ export const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
             <div className="row">
                 <div className="col">
                     <Suspense fallback={<Loading componentName="ReactTable" />}>
-                        <table className="table table-bordered table-hover table-responsive data-test-id-output-table">
+                        <table role="grid" className="table table-bordered table-hover table-responsive data-test-id-output-table">
                             <thead>
                                 {headerGroups.map((headerGroup, hi) => (
                                     <tr key={hi}>

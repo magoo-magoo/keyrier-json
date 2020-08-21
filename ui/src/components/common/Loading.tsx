@@ -12,4 +12,4 @@ const Loading: FC<Props> = ({ componentName, debugMode }) => (
     <div className={Styles.loader}>{process.env.NODE_ENV === 'production' && !debugMode ? '' : componentName}</div>
 )
 
-export default connect(state => ({ debugMode: getDebugMode(state) }))(Loading)
+export default connect((state) => ({ debugMode: getDebugMode(state) }))(Loading)
