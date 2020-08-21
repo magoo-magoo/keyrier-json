@@ -5,11 +5,13 @@ import { FC, lazy, memo, Suspense, useCallback, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { connect } from 'react-redux'
 import { CustomInput, FormGroup, Label } from 'reactstrap'
+
 import { withErrorBoundary } from '../../components/common/ErrorBoundary'
 import { prettyPrintBytes } from '../../core/converters/string'
 import { withPerformance } from '../../core/logging/performance'
 import { RootState } from '../../state/State'
 import { getDebugMode, getOutputObject, getOutputObjectSize, getOutputSearchMatch, getOutputSearchTerm } from '../../store/selectors'
+
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {

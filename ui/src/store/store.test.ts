@@ -1,4 +1,5 @@
 import { AppState, UserSettingsState } from 'state/State'
+
 import { configureStore } from './store'
 
 let mockPersistUserSettings = (_state: UserSettingsState) => {
@@ -23,18 +24,22 @@ jest.mock('./persistence', () => {
 
 describe('store', () => {
     it('should configure store without crashing', () =>
-        new Promise((done) => {
-            expect(() => configureStore().then(() => done())).not.toThrow()
+        new Promise((resolve) => {
+            expect(() => configureStore().then(() => resolve())).not.toThrow()
         }))
 
     it('should persist state on change', () =>
-        new Promise((done) => {
+        new Promise((resolve) => {
             mockPersistUserSettings = (state) => {
                 expect(state).toBeDefined()
-                done()
+                resolve()
             }
-            configureStore().then((store) => {
-                store.dispatch({ type: 'TEST' })
-            })
+            configureStore()
+                .then((store) => {
+                    return store.dispatch({ type: 'TEST' })
+                })
+                .catch(() => {
+                    expect(true).toBeFalsy()
+                })
         }))
 })

@@ -1,6 +1,7 @@
 import execa from 'execa'
 import fs from 'fs'
 import path from 'path'
+
 import { version } from '../package.json'
 
 const keyrier = async (...args: string[]) => {

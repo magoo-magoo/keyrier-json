@@ -1,4 +1,5 @@
 import Actions from 'actions/actions'
+
 import { arrayElementName } from '../models/array'
 import { AppState, emptyState, getDefaultAppState, QueryState } from '../state/State'
 import { availableEditorThemes, availableGeneralThemes } from '../themes/themes'

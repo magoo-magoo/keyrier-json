@@ -1,8 +1,9 @@
 import * as React from 'react'
-import Styles from './Loading.module.scss'
+import { FC } from 'react'
 import { connect } from 'react-redux'
 import { getDebugMode } from 'store/selectors'
-import { FC } from 'react'
+
+import Styles from './Loading.module.scss'
 
 type Props = {
     componentName: string

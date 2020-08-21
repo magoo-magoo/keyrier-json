@@ -1,4 +1,5 @@
 import { CstNode, CstParser, IRuleConfig } from 'chevrotain'
+
 import { SQLToAstVisitor } from './actions-visitor'
 import * as lexer from './lexer'
 

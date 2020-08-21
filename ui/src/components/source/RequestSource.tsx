@@ -1,9 +1,10 @@
 import Actions from 'actions/actions'
+import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import * as React from 'react'
 import { FC, memo, useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import { Alert, Button, Form, FormGroup } from 'reactstrap'
-import { withErrorBoundary } from '../../components/common/ErrorBoundary'
+
 import { customToString } from '../../core/converters/string'
 import { logError } from '../../core/logging/logger'
 import { useChangeEventState, useToggleState } from '../../hooks/hooks'

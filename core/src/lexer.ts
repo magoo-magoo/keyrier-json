@@ -1,4 +1,5 @@
 import { createToken, Lexer } from 'chevrotain'
+
 import { operators } from './operators'
 
 const stringTokenCharacterRegexString = 'a-zA-Z0-9%\\s-&(){}\\[\\]$\\*!\\\\@/,;:=ë#+-<>?^_'

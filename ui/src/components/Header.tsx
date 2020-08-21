@@ -20,6 +20,7 @@ import {
 import { RootState } from 'state/State'
 import { getEditorTheme, getTheme } from 'store/selectors'
 import { availableEditorThemes, availableGeneralThemes, EditorTheme, GeneralTheme } from 'themes/themes'
+
 import { version } from '../../package.json'
 import { withErrorBoundary } from './common/ErrorBoundary'
 

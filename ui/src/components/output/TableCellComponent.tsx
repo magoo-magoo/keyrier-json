@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
 import { Cell } from 'react-table'
+
 import { customToString } from '../../core/converters/string'
 import { itemType } from '../../state/State'
 

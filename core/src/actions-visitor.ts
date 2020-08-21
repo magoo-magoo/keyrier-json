@@ -1,5 +1,6 @@
 import { CstNode, CstParser, ICstVisitor, IToken } from 'chevrotain'
 import { ValuesType } from 'utility-types'
+
 import { Integer, lex, Token, tokenVocabulary } from './lexer'
 import { labels, SelectParser } from './parser'
 import { Field, FieldType, From, Operand, Order, ordering, SQLTree, Value } from './SqlTree'

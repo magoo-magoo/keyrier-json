@@ -6,6 +6,7 @@ import { Parser } from 'json2csv'
 import meow from 'meow'
 import updateNotifier from 'update-notifier'
 import xlsx from 'xlsx'
+
 import { name, version } from '../package.json'
 import { readStdin } from './stdin'
 

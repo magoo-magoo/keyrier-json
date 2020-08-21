@@ -1,4 +1,4 @@
-import { useState, useCallback, ChangeEvent } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 
 export const useToggleState = (initial = false): readonly [boolean, () => void] => {
     const [value, setValue] = useState(initial)

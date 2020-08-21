@@ -2,6 +2,7 @@ import { configuration } from 'config'
 import { StateWithHistory } from 'redux-undo'
 import { EditorTheme, GeneralTheme } from 'themes/themes'
 import { DeepReadonly, DeepRequired } from 'utility-types'
+
 import initialStateJson from './default-state.json'
 
 export type itemType = any

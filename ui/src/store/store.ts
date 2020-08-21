@@ -1,5 +1,6 @@
 import { configureStore as conf, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { createLogger } from 'redux-logger'
+
 import rootReducers from '../reducers/reducers'
 import persistence from './persistence'
 

@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import undoable from 'redux-undo'
+
 import actions, { Action } from '../actions/actions'
 import { configuration } from '../config'
 import { codeEvaluation } from '../core/code'

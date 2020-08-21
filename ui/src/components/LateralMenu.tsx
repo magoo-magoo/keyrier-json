@@ -22,6 +22,7 @@ import {
 import { ActionCreators } from 'redux-undo'
 import { QueryMode, RootState } from 'state/State'
 import { getCanRedo, getCanUndo, getQueryMode, getSourceAutoFormat } from 'store/selectors'
+
 import HttpRequestSource from './source/RequestSource'
 
 interface Props {
