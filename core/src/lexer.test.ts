@@ -6,7 +6,7 @@ describe('Lexer', () => {
         const inputText = 'SELECT column1 FROM table2 where column1 = 42'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(8)
@@ -33,7 +33,7 @@ describe('Lexer', () => {
         const inputText = "SELECT column1 FROM table2 where column1 like 'foo42'"
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(8)
@@ -56,11 +56,12 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[6], tokenVocabulary.Like)).toBeTruthy()
         expect(tokenMatcher(tokens[7], tokenVocabulary.StringToken)).toBeTruthy()
     })
+
     it('lex not like operator', () => {
         const inputText = "SELECT column1 FROM table2 where column1 not like 'foo42'"
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(8)
@@ -88,7 +89,7 @@ describe('Lexer', () => {
         const inputText = 'SELECT column1 as foo FROM table2'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(6)
@@ -107,11 +108,12 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[4], tokenVocabulary.From)).toBeTruthy()
         expect(tokenMatcher(tokens[5], tokenVocabulary.Identifier)).toBeTruthy()
     })
+
     it('lex star token', () => {
         const inputText = 'SELECT column1, * FROM table2'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(6)
@@ -135,7 +137,7 @@ describe('Lexer', () => {
         const inputText = 'SELECT foo.bar FROM table2'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(4)
@@ -155,7 +157,7 @@ describe('Lexer', () => {
         const inputText = 'SELECT * from table order by foo'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(6)
@@ -174,11 +176,12 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[4], tokenVocabulary.OrderBy)).toBeTruthy()
         expect(tokenMatcher(tokens[5], tokenVocabulary.Identifier)).toBeTruthy()
     })
+
     it('should lex order by asc', () => {
         const inputText = 'SELECT * from table order by foo asc'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(7)
@@ -199,11 +202,12 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[5], tokenVocabulary.Identifier)).toBeTruthy()
         expect(tokenMatcher(tokens[6], tokenVocabulary.OrderByDirection)).toBeTruthy()
     })
+
     it('should lex order by desc', () => {
         const inputText = 'SELECT * from table order by foo desc'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(7)
@@ -229,7 +233,7 @@ describe('Lexer', () => {
         const inputText = 'SELECT foo, bar from table'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(6)
@@ -248,11 +252,12 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[4], tokenVocabulary.From)).toBeTruthy()
         expect(tokenMatcher(tokens[5], tokenVocabulary.Identifier)).toBeTruthy()
     })
+
     it('should lex or expression', () => {
         const inputText = 'select name from data where age = 42 or age = 21'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(12)
@@ -283,11 +288,12 @@ describe('Lexer', () => {
         expect(tokenMatcher(tokens[10], tokenVocabulary.Equal)).toBeTruthy()
         expect(tokenMatcher(tokens[11], tokenVocabulary.Integer)).toBeTruthy()
     })
+
     it('should lex and expression', () => {
         const inputText = 'select name from data where age = 42 and age = 21'
         const lexingResult = lex(inputText)
 
-        expect(lexingResult.errors.length).toBe(0)
+        expect(lexingResult.errors).toHaveLength(0)
 
         const tokens = lexingResult.tokens
         expect(tokens).toHaveLength(12)

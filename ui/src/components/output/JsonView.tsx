@@ -13,7 +13,7 @@ import { getDebugMode, getOutputObject, getOutputObjectSize, getOutputSearchMatc
 const ReactJson = lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
 
 interface Props {
-    src: object | null
+    src: unknown | null
     searchTerm: string | undefined
     match: boolean
     onSearchChange: typeof Actions.updateSearchTerm
@@ -61,7 +61,8 @@ const JsonView: FC<Props> = ({ src, searchTerm, onSearchChange, match, size, deb
                     <></>
                 ) : (
                     <ReactJson
-                        src={src ? src : {}}
+                        // eslint-disable-next-line @typescript-eslint/ban-types
+                        src={src ? (src as object) : {}}
                         name="data"
                         iconStyle="triangle"
                         indentWidth={8}

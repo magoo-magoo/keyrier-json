@@ -42,7 +42,7 @@ export const sqlQueryWithMultipleSources = (source: Record<string, string>, quer
             return new SyntaxError(String(sqlTree.source.name.values[0]))
         }
 
-        const sourceDataObjects: Record<string, object> = {}
+        const sourceDataObjects: Record<string, unknown> = {}
         Object.keys(source).forEach((key) => {
             sourceDataObjects[key] = utils.jsonParseSafe(source[key])
         })
@@ -53,7 +53,7 @@ export const sqlQueryWithMultipleSources = (source: Record<string, string>, quer
     }
 }
 
-const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, object>) => {
+const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, unknown>) => {
     if (sourceDataObject[sqlTree.source.name.value]) {
         return sourceDataObject[sqlTree.source.name.value]
     }
@@ -65,9 +65,9 @@ const getSourceData = (sqlTree: SQLTree, sourceDataObject: Record<string, object
 }
 
 export type Row = {
-    projected: object
-    real: object
-    dataContext: Record<string, object>
+    projected: unknown
+    real: unknown
+    dataContext: Record<string, unknown>
 }
 type Jointure = {
     source: any[]
@@ -82,7 +82,7 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
         return mapper(data, sqlTree.fields, { [sqlTree.source.alias.value]: data }, sourceDataObject)
     }
 
-    let jointures = new Array<Jointure>()
+    const jointures = new Array<Jointure>()
     sqlTree.joins?.forEach((join) => {
         jointures.push({
             from: join.from,
@@ -105,7 +105,7 @@ export const executeQuery = (sqlTree: SQLTree, sourceDataObject: Record<string, 
         sqlTree.order?.orderings.map((x) => x.direction),
     )
 
-    const results = new Array<object>()
+    const results = new Array<unknown>()
     ordered.forEach((row) => {
         if (sqlTree.limit && sqlTree.limit.value.value <= results.length) {
             return
@@ -126,8 +126,8 @@ const compareOperands = (
     operation: Operation,
     left: Operand,
     right: Operand,
-    values: Record<string, object>,
-    sourceDataObject: Record<string, object>,
+    values: Record<string, unknown>,
+    sourceDataObject: Record<string, unknown>,
 ): any => {
     const leftValue = getValue(left, values, sourceDataObject)
     const rightValue = getValue(right, values, sourceDataObject)
@@ -201,7 +201,7 @@ const compareOperands = (
     }
 }
 
-const mapObject = (fields: Field[], sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
+const mapObject = (fields: Field[], sources: Record<string, unknown>, sourceDataObject: Record<string, unknown>) => {
     const mappedObject: Record<string | number, any> = {}
     fields.forEach((field) => {
         const value = getValue(field, sources, sourceDataObject)
@@ -225,7 +225,7 @@ const functions: Record<string, ((value: any) => string | number) | undefined> =
     len: (parameters) => String(parameters[0]).length,
     concat: (parameters) => parameters.join(''),
 }
-const applyFunction = (funcVal: Func, sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
+const applyFunction = (funcVal: Func, sources: Record<string, unknown>, sourceDataObject: Record<string, unknown>) => {
     const parameters = funcVal.parameters.map((x) => getValue(x, sources, sourceDataObject))
     const func = funcVal.name.toLowerCase()
     const toApply = functions[func]
@@ -235,7 +235,7 @@ const applyFunction = (funcVal: Func, sources: Record<string, object>, sourceDat
     throw new Error(`Unsupported function: ${func}. Supported built-in functions are: ${Object.keys(functions).join(', ')}`)
 }
 
-const getValue = (operand: Operand | Field, values: Record<string, object>, sourceDataObject: Record<string, object>) => {
+const getValue = (operand: Operand | Field, values: Record<string, unknown>, sourceDataObject: Record<string, unknown>) => {
     if (operand.type === 'fieldString') {
         const value = getIdentifierValue(values, operand)
         if (value !== undefined) {
@@ -264,7 +264,7 @@ const getValue = (operand: Operand | Field, values: Record<string, object>, sour
     return getIdentifierValue(values, operand)
 }
 
-const mapper = (v: object, fields: Field[], sources: Record<string, object>, sourceDataObject: Record<string, object>) => {
+const mapper = (v: unknown, fields: Field[], sources: Record<string, unknown>, sourceDataObject: Record<string, unknown>) => {
     if (fields.some((x) => x.field.value === '*')) {
         return v
     }
@@ -308,7 +308,7 @@ function rowShouldBeincludedInResult(
     return comparison
 }
 
-function getIdentifierValue(values: Record<string, object>, field: Field) {
+function getIdentifierValue(values: Record<string, unknown>, field: Field) {
     const availableTables = Object.keys(values)
     const { path, tableName } = computePath(field?.field.values, availableTables)
 

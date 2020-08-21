@@ -11,7 +11,7 @@ describe('App', () => {
         const { baseElement } = render(
             <Provider store={store}>
                 <App />
-            </Provider>
+            </Provider>,
         )
 
         expect(baseElement).toBeDefined()

@@ -80,7 +80,7 @@ export class SQLToAstVisitor extends BaseSQLVisitor {
                 parameters.map((x) => buildField(x.name, x.value, x.type)),
             )
         } else {
-            let { name, value, type } = this.visit(ctx.value)
+            const { name, value, type } = this.visit(ctx.value)
             return buildField(name, value, type)
         }
     }
@@ -161,7 +161,7 @@ export class SQLToAstVisitor extends BaseSQLVisitor {
         }
     }
 
-    public expressionClause(ctx: Ctx, i: number = 0): any {
+    public expressionClause(ctx: Ctx, i = 0): any {
         if (ctx.subExpression?.length - i === 1) {
             return this.visit(ctx.subExpression[i])
         }
@@ -202,7 +202,7 @@ export class SQLToAstVisitor extends BaseSQLVisitor {
 
     public atomicExpression(context: TokenCtx): Operand {
         const entries = Object.entries(context)
-        for (let [key, entryValue] of entries) {
+        for (const [key, entryValue] of entries) {
             if (key === 'in') {
                 const array: Value[] = entryValue.map((value) => {
                     if (value.tokenType === Integer) {
@@ -256,9 +256,7 @@ const toAst = (inputText: string) => {
     const lexResult = lex(inputText)
 
     parserInstance.input = lexResult.tokens
-    let cst: CstNode[] | CstNode
-
-    cst = parserInstance.selectStatement()
+    const cst: CstNode[] | CstNode = parserInstance.selectStatement()
 
     if (parserInstance.errors.length > 0) {
         throw Error(JSON.stringify(parserInstance.errors))

@@ -5,6 +5,7 @@ describe('json helpers', () => {
         const result = jsonParseSafe('{"a": 1}')
         expect(result).toEqual({ a: 1 })
     })
+
     it('should parse empty object', () => {
         const result = jsonParseSafe('{}')
         expect(result).toEqual({})
@@ -14,24 +15,23 @@ describe('json helpers', () => {
         const result = jsonParseSafe('{wrong JSON}')
         expect(result).toEqual('{wrong JSON}')
     })
+
     it('should parse empty', () => {
         const result = jsonParseSafe('')
         expect(result).toBeNull()
     })
+
     it('should parse null', () => {
         const result = jsonParseSafe(null as any)
         expect(result).toBeNull()
     })
-    it('should parse undefined', () => {
-        const result = jsonParseSafe(undefined as any)
-        expect(result).toBeNull()
-    })
+
     it('should parse undefined', () => {
         const result = jsonParseSafe(undefined as any)
         expect(result).toBeNull()
     })
 
-    it('should parse undefined', () => {
+    it('should parse multiple backslash', () => {
         const result = jsonParseSafe(`
         [
             {
@@ -50,6 +50,7 @@ describe('json helpers', () => {
         const result = jsonParseSafe(' [\r\n  {"foo": "s\'t\\"r\'\\t             \\n &\\b"   }   ]  \t  ')
         expect(result).toEqual([{ foo: "s't\"r'\t             \n &\b" }])
     })
+
     it('should parse json string with special character', () => {
         const result = jsonParseSafe(`
     {
@@ -84,16 +85,16 @@ describe('json helpers', () => {
 
     it('should return not found when prop does not exist', () => {
         const result = get({ foofoo: 'value' }, ['foo'])
-        expect(result).toEqual(undefined)
+        expect(result).toBeUndefined()
     })
 
-    it('should return not found when prop does not exist', () => {
+    it('should return not found when path is empty', () => {
         const result = get({ foofoo: 'value' }, [])
-        expect(result).toEqual(undefined)
+        expect(result).toBeUndefined()
     })
 
-    it('should return not found when prop does not exist', () => {
+    it('should return not found when path contains an undefined value', () => {
         const result = get({ foofoo: 'value' }, [(undefined as unknown) as string])
-        expect(result).toEqual(undefined)
+        expect(result).toBeUndefined()
     })
 })

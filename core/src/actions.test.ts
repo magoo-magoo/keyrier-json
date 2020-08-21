@@ -37,6 +37,7 @@ describe('actions-visitor', () => {
         expect(ast.where?.conditions?.operation).toEqual('>')
         expect(ast.where?.conditions?.right?.value).toEqual(3)
     })
+
     it('Can convert with special chars to an AST', () => {
         const inputText = `SELECT "\n" FROM table`
         const ast = toAst(inputText)

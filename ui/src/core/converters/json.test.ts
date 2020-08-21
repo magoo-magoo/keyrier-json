@@ -15,6 +15,7 @@ describe('json helpers', () => {
 
         expect(result).toEqual(expected)
     })
+
     it('jsonBeautify should not change semantic', () => {
         const result = jsonBeautify(`{   "field1":   "Value1",
     "field2": "Value2",
@@ -27,6 +28,7 @@ describe('json helpers', () => {
             field3: 3,
         })
     })
+
     it('jsonBeautify should return string', () => {
         const result = jsonBeautify(`toto`)
 

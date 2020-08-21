@@ -119,13 +119,13 @@ const LateralMenu: FC<Props> = ({
                     </DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem toggle={false}>
-                            <label id="import-file">
+                            <span id="import-file">
                                 Browse JSON file...
                                 <input type="file" name="file" id="sourceFile" style={{ display: 'none' }} onChange={handleFileChange} />
-                            </label>
+                            </span>
                         </DropdownItem>
                         <DropdownItem id="http-request" onClick={toggleModal}>
-                            <label>HTTP request</label>
+                            <span>HTTP request</span>
                         </DropdownItem>
                     </DropdownMenu>
                 </ButtonDropdown>

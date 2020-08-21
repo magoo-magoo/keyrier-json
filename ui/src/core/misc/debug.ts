@@ -1,1 +1,7 @@
-export const isDebugMode = () => (window as any).__DEBUG__
+export const isDebugMode = () => window.__DEBUG__
+
+declare global {
+    interface Window {
+        __DEBUG__: boolean
+    }
+}

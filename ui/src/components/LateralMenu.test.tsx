@@ -11,7 +11,7 @@ describe('LateralMenu', () => {
         const result = render(
             <Provider store={store}>
                 <LateralMenu />
-            </Provider>
+            </Provider>,
         )
 
         const main = await result.findByText(/undo/)

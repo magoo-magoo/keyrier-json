@@ -8,7 +8,7 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 import { RootState } from 'state/State'
 import { getisOutputTableModalOpen, getOutputObject } from 'store/selectors'
 import './OutputTable.scss'
-import OutputTableView from './OutputTableView'
+import View from './OutputTableView'
 
 interface Props {
     toggleModal: typeof Actions.toggleOutputTableModal
@@ -21,7 +21,7 @@ const OutputTable: FC<Props> = ({ toggleModal, isModalOpen }) => {
             <Modal isOpen={isModalOpen} toggle={toggleModal} className="mw-100">
                 <ModalHeader toggle={toggleModal}>Table view</ModalHeader>
                 <ModalBody>
-                    <OutputTableView />
+                    <View />
                 </ModalBody>
                 <ModalFooter>
                     <Button color="secondary" onClick={toggleModal}>
@@ -32,7 +32,7 @@ const OutputTable: FC<Props> = ({ toggleModal, isModalOpen }) => {
 
             <div className="row">
                 <div className="col">
-                    <OutputTableView />
+                    <View />
                 </div>
             </div>
         </div>

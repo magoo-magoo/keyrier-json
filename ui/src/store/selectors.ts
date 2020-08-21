@@ -1,6 +1,6 @@
 import { getDefaultUserSettingsState, RootState } from 'state/State'
 
-const copyArrayOrEmpty = <T = {}>(array: readonly T[] | null | undefined) => {
+const copyArrayOrEmpty = <T = unknown>(array: readonly T[] | null | undefined) => {
     if (!array) {
         return [] as T[]
     }

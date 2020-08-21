@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
 import { Cell } from 'react-table'
-import { customToString, takeFirst } from '../../core/converters/string'
+import { customToString } from '../../core/converters/string'
 import { itemType } from '../../state/State'
 
 type CellProps = {
@@ -14,16 +14,12 @@ export const TableCellComponent: FC<CellProps> = ({ cell, onClick }) => {
         return null
     }
     const stringValue = customToString(cell.value)
-    const isTooLong = stringValue.length > 50
-    const displayValue = isTooLong ? takeFirst(stringValue, 50) : stringValue
-    const onCellClick = isTooLong
-        ? () => {
-              onClick(cell.value)
-          }
-        : undefined
+    const onCellClick = () => {
+        onClick(cell.value)
+    }
     return (
-        <td onClick={onCellClick} className={`text-center text-nowrap data-test-id-cell-data`}>
-            {isTooLong ? <button className="btn">{displayValue}</button> : displayValue}
+        <td onClick={onCellClick} role="gridcell" className={`text-center text-nowrap data-test-id-cell-data`}>
+            <button className="btn">{stringValue}</button>
         </td>
     )
 }

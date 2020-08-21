@@ -101,5 +101,5 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default connect(mapStateToProps, { setActiveTab: Actions.updateOutputTabSelection })(
-    memo(withErrorBoundary(withPerformance(Output, 'Output')))
+    memo(withErrorBoundary(withPerformance(Output, 'Output'))),
 )

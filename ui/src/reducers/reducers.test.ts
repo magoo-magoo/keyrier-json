@@ -33,6 +33,7 @@ describe('Reducers', () => {
         expect(results?.query).toEqual(getDefaultAppState().query)
         expect(results?.source).toEqual(getDefaultAppState().source)
     })
+
     it('clear action', () => {
         const state: AppState = {
             output: {
@@ -97,7 +98,7 @@ describe('Reducers', () => {
         expect(result).toBeDefined()
     })
 
-    it.each(availableEditorThemes)('should switch editor theme', theme => {
+    it.each(availableEditorThemes)('should switch editor theme', (theme) => {
         // arrange
         const previousState = {
             app: {
@@ -116,7 +117,7 @@ describe('Reducers', () => {
         expect(result.userSettings.editorTheme).toEqual(theme)
     })
 
-    it.each(availableGeneralThemes)('should switch general theme', theme => {
+    it.each(availableGeneralThemes)('should switch general theme', (theme) => {
         // arrange
         const previousState = {
             app: {
@@ -369,6 +370,7 @@ describe('Reducers', () => {
         // assert
         expect(result.app.present.output?.errorMessage).toBeDefined()
     })
+
     it('should toggle on Output Table Modal', () => {
         // arrange
         const previousState = {
@@ -391,6 +393,7 @@ describe('Reducers', () => {
         expect(result.app.present.error).toBeUndefined()
         expect(result.app.present.output?.table?.isModalOpen).toEqual(true)
     })
+
     it('should toggle off Output Table Modal', () => {
         // arrange
         const previousState = {
@@ -482,6 +485,7 @@ describe('Reducers', () => {
         expect(result.app.present.error).toBeUndefined()
         expect(result.app.present.output?.table?.groupBy).toEqual(['foo'])
     })
+
     it('should update output table group by with displayed columns', () => {
         // arrange
         const previousState = {
@@ -574,6 +578,7 @@ describe('Reducers', () => {
         expect(result.app.present.error).toBeUndefined()
         expect(result.app.present.output?.table?.displayedColumns).toEqual(['field2', 'foo'])
     })
+
     it('should map correctly displayed columns for non object array item', () => {
         // arrange
         const previousState = {
@@ -662,7 +667,7 @@ describe('Reducers', () => {
                     field10Array: [{ field11: 'toto' }, { field12: { field13: 'éà' } }],
                 },
             },
-            'toto'
+            'toto',
         )
 
         expect(match).toBeTruthy()
@@ -694,7 +699,7 @@ describe('Reducers', () => {
                     field8Momo: { a: 42 },
                 },
             },
-            'toto'
+            'toto',
         )
 
         expect(match).toBeFalsy()
