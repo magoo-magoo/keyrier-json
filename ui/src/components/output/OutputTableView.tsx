@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import { useFilters, useSortBy, useTable } from 'react-table'
 import { itemType, RootState } from 'state/State'
 import { getColumns, getdisplayedColumns, getGroupBy, getOutputarray } from 'store/selectors'
+
 import { DefaultColumnFilter } from './DefaultColumnFilter'
 import TableAdvancedOptions from './TableAdvancedOptions'
 import { TableCellComponent } from './TableCellComponent'

@@ -1,4 +1,5 @@
 import { tokenMatcher } from 'chevrotain'
+
 import { lex, tokenVocabulary } from './lexer'
 
 describe('Lexer', () => {

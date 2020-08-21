@@ -1,3 +1,5 @@
+import './OutputTable.scss'
+
 import Actions from 'actions/actions'
 import { withErrorBoundary } from 'components/common/ErrorBoundary'
 import { withPerformance } from 'core/logging/performance'
@@ -7,7 +9,7 @@ import { connect } from 'react-redux'
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 import { RootState } from 'state/State'
 import { getisOutputTableModalOpen, getOutputObject } from 'store/selectors'
-import './OutputTable.scss'
+
 import View from './OutputTableView'
 
 interface Props {

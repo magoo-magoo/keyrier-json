@@ -10,12 +10,13 @@ module.exports = {
             version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
         },
     },
+    plugins: ['simple-import-sort', 'import'],
     extends: [
         'plugin:react/recommended',
         'plugin:@typescript-eslint/recommended',
         'prettier/@typescript-eslint',
         'react-app',
-        // 'prettier',
+        'plugin:promise/recommended',
         'plugin:jsx-a11y/recommended',
         'plugin:import/typescript',
         'plugin:import/warnings',
@@ -29,6 +30,11 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/explicit-module-boundary-types': 0,
         'react/prop-types': 0,
+        'simple-import-sort/sort': 'error',
+        'sort-imports': 'off',
+        'import/first': 'error',
+        'import/newline-after-import': 'error',
+        'import/no-duplicates': 'error',
     },
     overrides: [
         {

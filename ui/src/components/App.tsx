@@ -1,14 +1,16 @@
+import 'react-grid-layout/css/styles.css'
+
 import Actions from 'actions/actions'
 import { configuration } from 'config'
 import { withPerformance } from 'core/logging/performance'
 import * as React from 'react'
 import { FC, lazy, Suspense } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
-import 'react-grid-layout/css/styles.css'
 import { connect } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import { QueryMode } from 'state/State'
 import { getLayouts, getQueryMode } from 'store/selectors'
+
 import appStyles from './App.module.scss'
 import { GrabbleHeader } from './common/GrabbleHeader'
 import grabbleStyles from './common/GrabbleHeader.module.scss'

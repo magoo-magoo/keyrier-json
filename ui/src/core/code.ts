@@ -1,4 +1,5 @@
 import { sqlQuery as sqlEvaluation } from '@keyrier/core'
+
 import { QueryMode } from '../state/State'
 
 export const codeEvaluation = (sourceString: string, queryString: string, mode: QueryMode) => {

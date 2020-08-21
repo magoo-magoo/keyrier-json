@@ -2,6 +2,7 @@ import * as React from 'react'
 import { FC, ReactElement } from 'react'
 import { useMeasure } from 'react-use'
 import { CardHeader } from 'reactstrap'
+
 import styles from './GrabbleHeader.module.scss'
 
 type Props = {
