@@ -54,6 +54,9 @@ jobs:
             - name: make CLI script executable
               run: chmod +x cli/dist/index.js # make the script executable for tests
 
+            - name: lint
+              run: yarn lerna run lint --parallel
+
             - name: test
               run: yarn lerna run test --parallel -- -- --coverage --watchAll=false
 
@@ -69,7 +72,7 @@ jobs:
               if: github.ref == 'refs/heads/master'
               run: |
                   git config --local user.email "magoo@magoo.dev"
-                  git config --local user.name "Maël GOUACIDE"
+                  git config --local user.name "Maï¿½l GOUACIDE"
                   echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
                   yarn lerna publish patch --yes --message "publish %s - ci skip" --no-push --create-release github --conventional-commits
               env:

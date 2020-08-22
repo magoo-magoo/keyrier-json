@@ -213,7 +213,7 @@ const toCsv = (data: any) => {
     return json2csvParser.parse(data)
 }
 
-;(async function run() {
+void (async function run() {
     logDebug({ cli })
 
     if (cli.input.length !== 1) {

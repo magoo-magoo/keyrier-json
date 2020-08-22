@@ -2,16 +2,16 @@ import { logDebug, logError, logEvents, logPerf, logWarning } from './logger'
 
 describe('logger', () => {
     beforeEach(() => {
-        ;(window as any).__DEBUG__ = true
+        window.__DEBUG__ = true
     })
 
     afterEach(() => {
-        ;(window as any).__DEBUG__ = false
+        window.__DEBUG__ = false
         jest.restoreAllMocks()
     })
 
     it('should not log performance event', () => {
-        ;(window as any).__DEBUG__ = false
+        window.__DEBUG__ = false
 
         logPerf('should not log', 42)
 
