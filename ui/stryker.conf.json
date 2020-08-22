@@ -9,6 +9,12 @@
     },
     "coverageAnalysis": "off",
     "jest": {
+        "config": {
+            "testEnvironment": "jest-environment-jsdom-sixteen",
+            "moduleNameMapper": {
+                "ace-builds": "<rootDir>/../../../node_modules/ace-builds"
+            }
+        },
         "projectType": "create-react-app"
     }
 }
