@@ -159,8 +159,8 @@ describe('actions-visitor', () => {
     it('should parse sub query statement', () => {
         const tree = toAst('SELECT column1 FROM table1 where column1 in ( select column2 from table2 )')
         expect(tree).toBeDefined()
-        expect(tree.where!.conditions!.left!.value!).toEqual('column1')
-        expect(tree.where!.conditions!.operation).toEqual('in')
+        expect(tree.where!.conditions.left.value!).toEqual('column1')
+        expect(tree.where!.conditions.operation).toEqual('in')
         expect(tree.where!.conditions.right.value).toBeDefined()
     })
 

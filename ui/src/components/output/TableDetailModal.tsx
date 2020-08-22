@@ -1,7 +1,7 @@
 import Loading from 'components/common/Loading'
 import * as React from 'react'
 import { FC, Suspense } from 'react'
-import { Modal, ModalBody, ModalHeader, ModalProps } from 'reactstrap'
+import { Modal, ModalBody, ModalHeader } from 'reactstrap'
 import { itemType } from 'state/State'
 
 const ReactJson = React.lazy(() => import(/* webpackChunkName: "react-json-view" */ 'react-json-view'))
@@ -12,7 +12,7 @@ export type DetailModalProps = {
 }
 
 export const TableDetailModal: FC<DetailModalProps> = ({ value, onClose }) => (
-    <Modal<ModalProps> isOpen={!!value} toggle={onClose} size="lg">
+    <Modal isOpen={!!value} toggle={onClose} size="lg">
         <ModalHeader>Details</ModalHeader>
         <ModalBody>
             {typeof value === 'object' ? (

@@ -77,16 +77,7 @@ describe('Keyrier CLI', () => {
     })
 
     it('should return an error if file doesnt file', async () => {
-        // arrange
-        let err = null
-        // act
-        try {
-            await keyrier('select * from fake/dir/fake.csv')
-        } catch (e) {
-            err = e
-        }
-        // assert
-        expect(err.message).toContain('no such file or directory')
+        await expect(keyrier('select * from fake/dir/fake.csv')).rejects.toBeInstanceOf(Error)
     })
 
     it('should write result to CSV file', async () => {

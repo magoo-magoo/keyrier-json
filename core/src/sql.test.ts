@@ -161,7 +161,7 @@ describe('sql interpreter', () => {
         it('should return an error with bad SQL query - bad table', () => {
             const result = sqlQuery('{"a": 1}', 'select * from nonexsiting')
             expect(result).toBeInstanceOf(Error)
-            expect((result as any).message).toContain('nonexsiting')
+            expect(result.message).toContain('nonexsiting')
         })
 
         it('should accept json as a source name', () => {

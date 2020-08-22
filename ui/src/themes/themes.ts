@@ -1,6 +1,6 @@
 import { logError } from '../core/logging/logger'
 
-export const themeDeps = new Map([
+export const themeDeps = new Map<GeneralTheme, () => Promise<unknown>>([
     ['materia', () => import(/* webpackChunkName: "bootswatch/dist/materia" */ 'bootswatch/dist/materia/bootstrap.min.css')],
     ['darkly', () => import(/* webpackChunkName: "bootswatch/dist/darkly" */ 'bootswatch/dist/darkly/bootstrap.min.css')],
     ['sandstone', () => import(/* webpackChunkName: "bootswatch/dist/sandstone" */ 'bootswatch/dist/sandstone/bootstrap.min.css')],
@@ -22,7 +22,7 @@ export const themeDeps = new Map([
     ['yeti', () => import(/* webpackChunkName: "bootswatch/dist/yeti" */ 'bootswatch/dist/yeti/bootstrap.min.css')],
 ] as const)
 
-export const importThemeStyleCustom = (theme: GeneralTheme | null) => {
+export const importThemeStyleCustom = (theme: GeneralTheme | null): unknown => {
     if (theme) {
         const themeLoader = themeDeps.get(theme)
         if (themeLoader) {

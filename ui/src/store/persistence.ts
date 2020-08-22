@@ -7,11 +7,11 @@ import { StateWithHistory } from 'redux-undo'
 import { AppState, getDefaultAppState, getDefaultUserSettingsState, UserSettingsState } from 'state/State'
 
 const persistAppState = (appstate: StateWithHistory<AppState>): void => {
-    persist(configuration.storageKey.appState, appstate)
+    void persist(configuration.storageKey.appState, appstate)
 }
 
 const persistUserSettings = (userSettings: UserSettingsState): void => {
-    persist(configuration.storageKey.userSettings, userSettings)
+    void persist(configuration.storageKey.userSettings, userSettings)
 }
 
 const getUserSettings = (): Promise<UserSettingsState> => loadUserSettings(configuration.storageKey.userSettings)
