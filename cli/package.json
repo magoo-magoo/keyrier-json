@@ -41,17 +41,17 @@
         "xlsx": "0.16.2"
     },
     "devDependencies": {
-        "@types/jest": "^26.0.3",
-        "@types/node": "^14.0.14",
+        "@types/jest": "26.0.10",
+        "@types/node": "14.6.0",
         "@types/update-notifier": "4.1.0",
-        "eslint": "^7.0.0",
-        "eslint-config-prettier": "^6.11.0",
+        "eslint": "7.7.0",
+        "eslint-config-prettier": "6.11.0",
         "execa": "4.0.3",
         "jest": "26.1.0",
-        "prettier": "^2.0.5",
-        "ts-jest": "^26.2.0",
-        "tsdx": "^0.13.2",
-        "typescript": "^3.9.5"
+        "prettier": "2.0.5",
+        "ts-jest": "26.2.0",
+        "tsdx": "0.13.2",
+        "typescript": "3.9.7"
     },
     "gitHead": "ca6cf54996f96a78aca4ed57a92c760778ec1fc4",
     "readme": "./README.md"
