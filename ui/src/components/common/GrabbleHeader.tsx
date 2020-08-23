@@ -32,6 +32,7 @@ export const GrabbleHeader: FC<Props> = ({ title, children }) => {
                         overflowY: 'auto',
                         overflowX: 'hidden',
                     }}
+                    className="d-flex flex-column"
                 >
                     {children}
                 </div>

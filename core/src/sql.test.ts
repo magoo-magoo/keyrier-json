@@ -159,7 +159,7 @@ describe('sql interpreter', () => {
         })
 
         it('should return an error with bad SQL query - bad table', () => {
-            const result = sqlQuery('{"a": 1}', 'select * from nonexsiting')
+            const result: any = sqlQuery('{"a": 1}', 'select * from nonexsiting')
             expect(result).toBeInstanceOf(Error)
             expect(result.message).toContain('nonexsiting')
         })
@@ -369,7 +369,7 @@ describe('sql interpreter', () => {
         })
 
         it('should return an error for an invalid function', () => {
-            const result = sqlQuery('[{"name": "John Doe"}]', 'select nonexistentfunction(name) from data')
+            const result: any = sqlQuery('[{"name": "John Doe"}]', 'select nonexistentfunction(name) from data')
             expect(result).toBeInstanceOf(Error)
             expect(result.message).toContain('Unsupported function: nonexistentfunction')
         })

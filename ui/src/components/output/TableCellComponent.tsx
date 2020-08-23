@@ -2,7 +2,7 @@ import * as React from 'react'
 import { FC } from 'react'
 import { Cell } from 'react-table'
 
-import { customToString } from '../../core/converters/string'
+import { customToString, takeFirst } from '../../core/converters/string'
 import { itemType } from '../../state/State'
 
 type CellProps = {
@@ -14,7 +14,7 @@ export const TableCellComponent: FC<CellProps> = ({ cell, onClick }) => {
     if (!cell) {
         return null
     }
-    const stringValue = customToString(cell.value)
+    const stringValue = takeFirst(customToString(cell.value), 50)
     const onCellClick = () => {
         onClick(cell.value)
     }

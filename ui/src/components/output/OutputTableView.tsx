@@ -53,66 +53,58 @@ const OutputTableView: FC<Props> = ({ data, displayedColumns }) => {
     }
 
     return (
-        <>
-            <div className="row">
-                <div className="col">
-                    <TableAdvancedOptions />
-                </div>
+        <div className="d-flex flex-column overflow-hidden">
+            <div className="d-flex">
+                <TableAdvancedOptions />
             </div>
-            <div className="row">
-                <div className="col">
-                    <Suspense fallback={<Loading componentName="ReactTable" />}>
-                        <table role="grid" className="table table-bordered table-hover table-responsive data-test-id-output-table">
-                            <thead>
-                                {headerGroups.map((headerGroup, hi) => (
-                                    <tr key={hi}>
-                                        <th scope="col" className="shadow-sm text-capitalize text-center data-test-id-column-name"></th>
-                                        {headerGroup.headers.map((column, ci) => (
-                                            <th
-                                                key={ci}
-                                                scope="col"
-                                                className="shadow-sm text-capitalize text-center data-test-id-column-name min-vw-10"
-                                                style={{ minWidth: '20vh' }}
-                                            >
-                                                <div {...column.getHeaderProps((column as any).getSortByToggleProps())}>
-                                                    {column.render('header')}
-                                                    <span>
-                                                        {(column as any).isSorted ? ((column as any).isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                                                    </span>
-                                                </div>
+            <Suspense fallback={<Loading componentName="ReactTable" />}>
+                <table role="grid" className="table table-bordered table-hover table-responsive data-test-id-output-table">
+                    <thead>
+                        {headerGroups.map((headerGroup, hi) => (
+                            <tr key={hi}>
+                                <th scope="col" className="shadow-sm text-capitalize text-center data-test-id-column-name"></th>
+                                {headerGroup.headers.map((column, ci) => (
+                                    <th
+                                        key={ci}
+                                        scope="col"
+                                        className="shadow-sm text-capitalize text-center data-test-id-column-name min-vw-10"
+                                        style={{ minWidth: '20vh' }}
+                                    >
+                                        <div {...column.getHeaderProps((column as any).getSortByToggleProps())}>
+                                            {column.render('header')}
+                                            <span>{(column as any).isSorted ? ((column as any).isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                                        </div>
 
-                                                {column.render('Filter')}
-                                            </th>
-                                        ))}
-                                    </tr>
+                                        {column.render('Filter')}
+                                    </th>
                                 ))}
-                            </thead>
-                            <tbody>
-                                {rows.map((row, i) => {
-                                    prepareRow(row)
-                                    return (
-                                        <tr key={i}>
-                                            <th scope="row">
-                                                <button onClick={() => setDetailsCellValue(row.original)} className="btn btn-link">
-                                                    <i className="material-icons">open_in_browser</i>
-                                                </button>
-                                            </th>
-                                            {row.cells.map((cell) => (
-                                                <TableCellComponent key={cell.column.id} cell={cell} onClick={setDetailsCellValue} />
-                                            ))}
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </Suspense>
-                </div>
-            </div>
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody>
+                        {rows.map((row, i) => {
+                            prepareRow(row)
+                            return (
+                                <tr key={i}>
+                                    <th scope="row">
+                                        <button onClick={() => setDetailsCellValue(row.original)} className="btn btn-link">
+                                            <i className="material-icons">open_in_browser</i>
+                                        </button>
+                                    </th>
+                                    {row.cells.map((cell) => (
+                                        <TableCellComponent key={cell.column.id} cell={cell} onClick={setDetailsCellValue} />
+                                    ))}
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </Suspense>
             <div id="data-test-id-output-table-length" className="mx-3 align-items-center justify-content-end d-flex">
                 <h4>Number of elements: {tableData.length}</h4>
             </div>
             <TableDetailModal value={detailsCellValue} onClose={onCloseDetailModal} />
-        </>
+        </div>
     )
 }
 
