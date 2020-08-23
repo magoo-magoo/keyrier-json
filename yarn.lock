@@ -4671,10 +4671,12 @@ boolean@^3.0.0, boolean@^3.0.1:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-bootswatch@4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/bootswatch/-/bootswatch-4.5.0.tgz#1f4ea460118d0da8113418f1627ca755697d7e0f"
-  integrity sha512-kAfYTTWIsgUOA5nybJNM4yvOpwxm37eIb1DFZlD5jLgPttK+bLJTt9UpKWAoMQZRBQbWfC1O1w1P5PGU7lz83Q==
+bootswatch@4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/bootswatch/-/bootswatch-4.5.2.tgz#da2d7b5cf37b07763e2e86c67bc30256821522a4"
+  integrity sha512-Dfco9gxVtBhh8CVXkMjGLm/vNr2xjSK74agSvPVr3rrVhxFuvB/VELaLAqNH8sLeKVWBMNGwHUJS1gT3J2NYDQ==
+  dependencies:
+    websocket-driver "^0.7.4"
 
 bowser@^1.7.3:
   version "1.9.4"
@@ -17867,7 +17869,7 @@ websocket-driver@0.6.5:
   dependencies:
     websocket-extensions ">=0.1.1"
 
-websocket-driver@>=0.5.1:
+websocket-driver@>=0.5.1, websocket-driver@^0.7.4:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/websocket-driver/-/websocket-driver-0.7.4.tgz#89ad5295bbf64b480abcba31e4953aca706f5760"
   integrity sha512-b17KeDIQVjvb0ssuSDF2cYXSg2iztliJ4B9WdsuB6J952qCPKmnVq4DyW5motImXHDC1cBT/1UezrJVsKw5zjg==
