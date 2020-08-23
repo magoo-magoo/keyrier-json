@@ -5,6 +5,7 @@ import { EditorTheme, GeneralTheme } from 'themes/themes'
 const Actions = {
     resetEditor: createAction('RESET_EDITOR'),
     clearEditor: createAction('CLEAR_EDITOR'),
+    execQuery: createAction('EXECUTE_QUERY'),
     updateSource: createAction<string, 'UPDATE_SOURCE_TEXT'>('UPDATE_SOURCE_TEXT'),
     updateAutoFormatSource: createAction<boolean, 'UPDATE_AUTOFORMAT_SOURCE'>('UPDATE_AUTOFORMAT_SOURCE'),
     updateQueryMode: createAction<QueryMode, 'UPDATE_QUERY_MODE'>('UPDATE_QUERY_MODE'),
