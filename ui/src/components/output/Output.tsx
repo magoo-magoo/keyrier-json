@@ -70,10 +70,10 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                         </ul>
                     </div>
                 </div>
-                <TabContent activeTab={activeTab}>
+                <TabContent className="h-100" activeTab={activeTab}>
                     {activeTab === 'RawJson' && (
-                        <TabPane tabId="RawJson">
-                            <div className="row">
+                        <TabPane className="h-100" tabId="RawJson">
+                            <div className="row h-100">
                                 <div className="col-sm-2 pt-5">
                                     <h3>
                                         <Badge id="badgeSize" color="info" pill={true}>
@@ -87,7 +87,9 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                             </div>
                         </TabPane>
                     )}
-                    <TabPane tabId="Table">{activeTab === 'Table' && <OutputTable />}</TabPane>
+                    <TabPane className="h-100" tabId="Table">
+                        {activeTab === 'Table' && <OutputTable />}
+                    </TabPane>
                 </TabContent>
             </>
         </>

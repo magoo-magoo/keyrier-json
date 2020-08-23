@@ -59,37 +59,35 @@ const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGro
     const columnOptions = columns.map((k) => ({ value: k, label: k }))
 
     return (
-        <div className="row py-1 justify-content-center">
-            <div className={`${optionsCollapsed ? 'col-5' : 'col-3'}`}>
-                <Button className={'float-left col my-1'} color="primary" block={true} onClick={switchOptionsCollapsed}>
-                    {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
+        <div className="d-flex py-1 justify-content-center mw-50">
+            <Button className={'float-left  my-1'} color="primary" block={true} onClick={switchOptionsCollapsed}>
+                {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
+            </Button>
+            <Collapse isOpen={optionsCollapsed}>
+                <select className="form-control-lg form-control" name="select" id="groupingSelect" onBlur={handleGroupChange}>
+                    <option key={'Group by...'}>Group by...</option>
+                    {displayedColumns.map((key) => (
+                        <option key={key}>{key}</option>
+                    ))}
+                </select>
+                <Button className="col my-1" color={'success'} onClick={handleExport}>
+                    Export to Excel (.xlsx)
                 </Button>
-                <Collapse isOpen={optionsCollapsed}>
-                    <select className="form-control-lg form-control" name="select" id="groupingSelect" onBlur={handleGroupChange}>
-                        <option key={'Group by...'}>Group by...</option>
-                        {displayedColumns.map((key) => (
-                            <option key={key}>{key}</option>
-                        ))}
-                    </select>
-                    <Button className="col my-1" color={'success'} onClick={handleExport}>
-                        Export to Excel (.xlsx)
-                    </Button>
-                    <Button className="col my-1" block={true} color="dark" outline={true} onClick={toggleModal}>
-                        Display results table fullscreen
-                    </Button>
-                    <Suspense fallback={<Loading componentName="ReactSelect" />}>
-                        <ReactSelect
-                            options={columnOptions}
-                            value={displayedColumns.map((k) => ({
-                                value: k,
-                                label: k,
-                            }))}
-                            isMulti={true}
-                            onChange={handleColumnChange}
-                        />
-                    </Suspense>
-                </Collapse>
-            </div>
+                <Button className="col my-1" block={true} color="dark" outline={true} onClick={toggleModal}>
+                    Display results table fullscreen
+                </Button>
+                <Suspense fallback={<Loading componentName="ReactSelect" />}>
+                    <ReactSelect
+                        options={columnOptions}
+                        value={displayedColumns.map((k) => ({
+                            value: k,
+                            label: k,
+                        }))}
+                        isMulti={true}
+                        onChange={handleColumnChange}
+                    />
+                </Suspense>
+            </Collapse>
         </div>
     )
 }

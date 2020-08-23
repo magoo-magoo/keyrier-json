@@ -19,7 +19,7 @@ interface Props {
 
 const OutputTable: FC<Props> = ({ toggleModal, isModalOpen }) => {
     return (
-        <div className="output-table">
+        <div className="output-table d-flex">
             <Modal isOpen={isModalOpen} toggle={toggleModal} className="mw-100">
                 <ModalHeader toggle={toggleModal}>Table view</ModalHeader>
                 <ModalBody>
@@ -32,11 +32,7 @@ const OutputTable: FC<Props> = ({ toggleModal, isModalOpen }) => {
                 </ModalFooter>
             </Modal>
 
-            <div className="row">
-                <div className="col">
-                    <View />
-                </div>
-            </div>
+            <View />
         </div>
     )
 }
