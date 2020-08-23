@@ -39,38 +39,36 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                     </div>
                 </div>
             )}
-            <>
-                <div className="row">
-                    <div className="col">
-                        <ul className="nav nav-tabs">
-                            <li className="nav-item">
-                                <Button
-                                    className={classNames({
-                                        active: activeTab === 'RawJson',
-                                        'nav-link': true,
-                                        [styles.pointer]: true,
-                                    })}
-                                    onClick={handleActiveRawJson}
-                                >
-                                    View raw JSON
-                                </Button>
-                            </li>
-                            <li className="nav-item" hidden={!isArray}>
-                                <Button
-                                    className={classNames({
-                                        active: activeTab === 'Table',
-                                        'nav-link': true,
-                                        [styles.pointer]: true,
-                                    })}
-                                    onClick={handleActiveTable}
-                                >
-                                    View table
-                                </Button>
-                            </li>
-                        </ul>
-                    </div>
+            <div className="d-flex flex-column h-100">
+                <div className="d-flex">
+                    <ul className="nav nav-tabs">
+                        <li className="nav-item">
+                            <Button
+                                className={classNames({
+                                    active: activeTab === 'RawJson',
+                                    'nav-link': true,
+                                    [styles.pointer]: true,
+                                })}
+                                onClick={handleActiveRawJson}
+                            >
+                                View raw JSON
+                            </Button>
+                        </li>
+                        <li className="nav-item" hidden={!isArray}>
+                            <Button
+                                className={classNames({
+                                    active: activeTab === 'Table',
+                                    'nav-link': true,
+                                    [styles.pointer]: true,
+                                })}
+                                onClick={handleActiveTable}
+                            >
+                                View table
+                            </Button>
+                        </li>
+                    </ul>
                 </div>
-                <TabContent className="h-100" activeTab={activeTab}>
+                <TabContent className="d-flex flex-column flex-grow-1" activeTab={activeTab}>
                     {activeTab === 'RawJson' && (
                         <TabPane className="h-100" tabId="RawJson">
                             <div className="row h-100">
@@ -91,7 +89,7 @@ const Output: FC<Props> = ({ isArray, errorMessage, activeTab, setActiveTab, obj
                         {activeTab === 'Table' && <OutputTable />}
                     </TabPane>
                 </TabContent>
-            </>
+            </div>
         </>
     )
 }

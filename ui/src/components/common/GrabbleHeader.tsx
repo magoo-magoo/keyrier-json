@@ -16,7 +16,7 @@ export const GrabbleHeader: FC<Props> = ({ title, children }) => {
     const height = parentHeight - headerHeight * 2 - 2
 
     return (
-        <div ref={parentref} className={`${styles.draggable} h-100 `}>
+        <div ref={parentref} className={`${styles.draggable} h-100 d-flex flex-column`}>
             <div className="px-2">
                 <CardHeader className="border-0 pr-0" style={{ background: 'transparent' }}>
                     <div ref={headerRef}>
@@ -32,7 +32,7 @@ export const GrabbleHeader: FC<Props> = ({ title, children }) => {
                         overflowY: 'auto',
                         overflowX: 'hidden',
                     }}
-                    className="d-flex flex-column"
+                    className="px-2"
                 >
                     {children}
                 </div>
