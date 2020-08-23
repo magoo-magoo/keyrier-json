@@ -15,7 +15,9 @@ export const appReducer = createReducer<State.AppState>(State.getDefaultAppState
     builder
         .addCase(actions.clearEditor, () => State.emptyState)
         .addMatcher<Action>(
-            (action): action is Exclude<Action, ReturnType<typeof actions.clearEditor>> => action.type !== 'CLEAR_EDITOR',
+            (action): action is Exclude<Action, ReturnType<typeof actions.clearEditor>> => {
+                return action.type !== 'CLEAR_EDITOR' && Object.values(actions).some((x) => x.type === action.type)
+            },
             (draft, action) => {
                 if (draft.query) {
                     draft.query = query(draft.query, action)
@@ -29,6 +31,7 @@ export const appReducer = createReducer<State.AppState>(State.getDefaultAppState
                     case 'UPDATE_SOURCE_TEXT':
                     case 'RESET_EDITOR':
                     case 'UPDATE_QUERY_MODE':
+                    case 'EXECUTE_QUERY':
                         draft.output = computeOutput(
                             draft.output,
                             draft.source?.text ? draft.source.text : '',

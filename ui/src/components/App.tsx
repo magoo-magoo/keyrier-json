@@ -4,7 +4,7 @@ import Actions from 'actions/actions'
 import { configuration } from 'config'
 import { withPerformance } from 'core/logging/performance'
 import * as React from 'react'
-import { FC, lazy, Suspense } from 'react'
+import { FC, lazy, Suspense, useEffect } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import { connect } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
@@ -26,8 +26,12 @@ type Props = {
     mode: QueryMode
     layouts: ReactGridLayout.Layouts
     updateGridLayouts: typeof Actions.updateLayouts
+    execQuery: typeof Actions.execQuery
 }
-const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
+const App: FC<Props> = ({ mode, layouts, updateGridLayouts, execQuery }) => {
+    useEffect(() => {
+        execQuery()
+    }, [execQuery])
     const onLayoutChange = (_: ReactGridLayout.Layout[], newLayouts: ReactGridLayout.Layouts) => updateGridLayouts(newLayouts)
 
     return (
@@ -85,4 +89,5 @@ const App: FC<Props> = ({ mode, layouts, updateGridLayouts }) => {
 
 export default connect((state) => ({ mode: getQueryMode(state), layouts: getLayouts(state) }), {
     updateGridLayouts: Actions.updateLayouts,
+    execQuery: Actions.execQuery,
 })(withPerformance(App, 'App'))
