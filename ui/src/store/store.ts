@@ -1,4 +1,5 @@
 import { configureStore as conf, getDefaultMiddleware } from '@reduxjs/toolkit'
+import Actions from 'actions/actions'
 import { createLogger } from 'redux-logger'
 
 import rootReducers from '../reducers/reducers'
@@ -20,7 +21,14 @@ export const configureStore = async () => {
         predicate: () => process.env.NODE_ENV !== 'test',
         duration: true,
     })
-    const middleware = [...getDefaultMiddleware(), logger]
+    const middleware = [
+        ...getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [Actions.clearEditor.type],
+            },
+        }),
+        logger,
+    ]
 
     const store = conf({
         reducer: rootReducers,

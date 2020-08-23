@@ -2710,11 +2710,6 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@scarf/scarf@^1.0.4":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.1.0.tgz#b84b4a91cd938a688d36245b7a7db6fbc476a499"
-  integrity sha512-b2iE8kjjzzUo2WZ0xuE2N77kfnTds7ClrDxcz3Atz7h2XrNVoAPUoT75i7CY0st5x++70V91Y+c6RpBX9MX7Jg==
-
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
@@ -3233,10 +3228,10 @@
     "@types/react-dom" "*"
     "@types/react-transition-group" "*"
 
-"@types/react-table@7.0.19":
-  version "7.0.19"
-  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.0.19.tgz#a70603ac0ffdeaf399fc6919aacb32fc42e9dd40"
-  integrity sha512-RYyEY7Yry6F2JsKhHeFsGdzuFF1hMqBStQrrazDzpBl4m/ECGHJxFVQjLBRzRwK+47ZKNPm79f7qEpHirbiCLA==
+"@types/react-table@7.0.22":
+  version "7.0.22"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.0.22.tgz#5dd97d7c2b1978338ed3f3f634da0d5b0362998d"
+  integrity sha512-RAzjB7Udv23QPuIuNNRn8VBldmcFobqpNqLWXh0FXVVyIye76muzfn01WZdcTIEfmQjHts7bjJSQQVabLQgTcA==
   dependencies:
     "@types/react" "*"
 
@@ -14632,12 +14627,10 @@ react-select@3.1.0:
     react-input-autosize "^2.2.2"
     react-transition-group "^4.3.0"
 
-react-table@7.2.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.2.0.tgz#a2d8a84efa610be541103b3c714cacbb15df9d1a"
-  integrity sha512-hcBwPimjwOKQZoaeoQnUYyQNCg3NhjA1xAhKmuxam03sKsxE5NfI4GZ1qJcBQ8CJVj78e1o/lOKCh1AGuPmcnQ==
-  dependencies:
-    "@scarf/scarf" "^1.0.4"
+react-table@7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.5.0.tgz#87326d92cdffbbf970f49b395bcafc3f84989ddf"
+  integrity sha512-hLsbNqLJkkYiATVteM8mthP8y5vnLPB2qdi9FeGZjsvb2m5vxj6cavIgk35oulvBmYD6Kox0HFfI332HPZpC7w==
 
 react-textarea-autosize@^6.1.0:
   version "6.1.0"

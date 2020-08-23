@@ -37,7 +37,7 @@ const AceEditor: FC<Props> = ({ mode, theme, name, value, onChange }) => {
             fontSize={16}
             highlightActiveLine={true}
             value={value}
-            minLines={30}
+            minLines={24}
             maxLines={Infinity}
             showPrintMargin={false}
             showGutter={false}

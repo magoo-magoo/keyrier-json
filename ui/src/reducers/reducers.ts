@@ -27,6 +27,8 @@ export const appReducer = createReducer<State.AppState>(State.getDefaultAppState
                 switch (action.type) {
                     case 'UPDATE_QUERY':
                     case 'UPDATE_SOURCE_TEXT':
+                    case 'RESET_EDITOR':
+                    case 'UPDATE_QUERY_MODE':
                         draft.output = computeOutput(
                             draft.output,
                             draft.source?.text ? draft.source.text : '',

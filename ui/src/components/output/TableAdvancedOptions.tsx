@@ -59,12 +59,12 @@ const TableAdvancedOptions: FC<Props> = ({ onColumnsChange, columns, setTableGro
     const columnOptions = columns.map((k) => ({ value: k, label: k }))
 
     return (
-        <div className="d-flex py-1 justify-content-center mw-50">
-            <Button className={'float-left  my-1'} color="primary" block={true} onClick={switchOptionsCollapsed}>
+        <div className="d-flex flex-column py-1 justify-content-center w-100">
+            <Button className={'float-left  my-1 w-100'} color="primary" block={true} onClick={switchOptionsCollapsed}>
                 {optionsCollapsed ? 'Hide advanced options' : 'Advanced options'}
             </Button>
             <Collapse isOpen={optionsCollapsed}>
-                <select className="form-control-lg form-control" name="select" id="groupingSelect" onBlur={handleGroupChange}>
+                <select hidden={true} className="form-control-lg form-control" name="select" id="groupingSelect" onBlur={handleGroupChange}>
                     <option key={'Group by...'}>Group by...</option>
                     {displayedColumns.map((key) => (
                         <option key={key}>{key}</option>
