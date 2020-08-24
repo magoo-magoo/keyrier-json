@@ -39,7 +39,7 @@ const getDefault = (key: string) => {
 const loadAppState = async (key: string): Promise<StateWithHistory<AppState>> => {
     const present = merge({}, getDefault(key))
     try {
-        const savedState = await localForage.getItem<StateWithHistory<AppState>>(key)
+        const savedState = (await localForage.getItem<any>(key)) ?? {}
         return merge({ present }, savedState ?? {})
     } catch (error) {
         logError(error)
