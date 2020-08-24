@@ -1,6 +1,6 @@
 {
     "name": "@keyrier/ui",
-    "version": "1.1.35",
+    "version": "1.1.36",
     "private": true,
     "description": "Keyrier JSON",
     "homepage": "./",
@@ -70,7 +70,7 @@
         ]
     },
     "dependencies": {
-        "@keyrier/core": "^1.1.35",
+        "@keyrier/core": "^1.1.36",
         "@reduxjs/toolkit": "1.4.0",
         "bootswatch": "4.5.0",
         "chevrotain": "7.0.1",
