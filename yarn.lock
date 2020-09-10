@@ -14544,16 +14544,16 @@ react-error-overlay@7.0.0-next.77+3d74b79d:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-7.0.0-next.77.tgz#589ab0c63af93f129231b113458fb4c5a7a00e28"
   integrity sha512-/+CUFVM+LwK1t6f6LSgoB4QcMzRyN0abJk8QG3Hpv0Pqs0sc7UZIsa1nY4AGahlweYKQP+6QCbS1BFrD4dwqqQ==
 
-react-grid-layout@0.18.3:
-  version "0.18.3"
-  resolved "https://registry.yarnpkg.com/react-grid-layout/-/react-grid-layout-0.18.3.tgz#4f9540199f35211077eae0aa5bc83096a672c39c"
-  integrity sha512-lHkrk941Tk5nTwZPa9uj6ttHBT0VehSHwEhWbINBJKvM1GRaFNOefvjcuxSyuCI5JWjVUP+Qm3ARt2470AlxMA==
+react-grid-layout@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-grid-layout/-/react-grid-layout-1.1.1.tgz#2643f84b95298e9c23d5e66ef86d7098a7184759"
+  integrity sha512-qrFzp94nG9NWWLcmZMvgqfi0TyOZ9JwjlvAc+2uywg8rYtZm/fLp33Io8XHJCfYOHzQrtZgXzEQBUvjO9XtL+g==
   dependencies:
     classnames "2.x"
     lodash.isequal "^4.0.0"
     prop-types "^15.0.0"
     react-draggable "^4.0.0"
-    react-resizable "^1.9.0"
+    react-resizable "^1.10.0"
 
 react-input-autosize@^2.2.2:
   version "2.2.2"
@@ -14616,10 +14616,10 @@ react-refresh@^0.8.3:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
-react-resizable@^1.9.0:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/react-resizable/-/react-resizable-1.10.1.tgz#f0c2cf1d83b3470b87676ce6d6b02bbe3f4d8cd4"
-  integrity sha512-Jd/bKOKx6+19NwC4/aMLRu/J9/krfxlDnElP41Oc+oLiUWs/zwV1S9yBfBZRnqAwQb6vQ/HRSk3bsSWGSgVbpw==
+react-resizable@^1.10.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/react-resizable/-/react-resizable-1.11.0.tgz#0b237c4aff16937b7663de1045861749683227ad"
+  integrity sha512-VoGz2ddxUFvildS8r8/29UZJeyiM3QJnlmRZSuXm+FpTqq/eIrMPc796Y9XQLg291n2hFZJtIoP1xC3hSTw/jg==
   dependencies:
     prop-types "15.x"
     react-draggable "^4.0.3"
