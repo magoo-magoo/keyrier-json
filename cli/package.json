@@ -41,8 +41,8 @@
         "xlsx": "0.16.8"
     },
     "devDependencies": {
-        "@types/jest": "26.0.10",
-        "@types/node": "14.6.0",
+        "@types/jest": "26.0.15",
+        "@types/node": "14.14.5",
         "@types/update-notifier": "4.1.1",
         "eslint": "7.7.0",
         "eslint-config-prettier": "6.11.0",
