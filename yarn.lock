@@ -3148,10 +3148,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.162.tgz#65d78c397e0d883f44afbf1f7ba9867022411470"
   integrity sha512-alvcho1kRUnnD1Gcl4J+hK0eencvzq9rmzvFPRmP5rPHx9VVsJj6bKLTATPVf9ktgv4ujzh7T+XWKp+jhuODig==
 
-"@types/match-sorter@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/match-sorter/-/match-sorter-4.0.0.tgz#8a7286019d4e328c09422bb2af2403a94b7038fd"
-  integrity sha512-JK7HNHXZA7i/nEp6fbNAxoX/1j1ysZXmv2/nlkt2UpX1LiUWKLtyt/dMmDTlMPR6t6PkwMmIr2W2AAyu6oELNw==
+"@types/match-sorter@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/match-sorter/-/match-sorter-5.0.0.tgz#7a66f7f45d22621e79920b3919e5b3d3e746184d"
+  integrity sha512-25KmtRqBKBH5Uo5e6QAV+5zKuE+cksAJ9R8GMMYtt0+jV+HxQj1Yg8ciui/T4AaoCmq3D65m1tgNcabkOLHe1Q==
 
 "@types/minimatch@*", "@types/minimatch@^3.0.3":
   version "3.0.3"
@@ -3217,10 +3217,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-grid-layout@0.17.2":
-  version "0.17.2"
-  resolved "https://registry.yarnpkg.com/@types/react-grid-layout/-/react-grid-layout-0.17.2.tgz#43d59d2c342988966d2567b95a2c52b4f38b8f08"
-  integrity sha512-iLKQ5rI9KyPGs/BlWmeBfoikRnoOmTuddK8V5mOCgJ46e2JaecZuPhuIX1kV0mkQSk6X3XoEZALVW0XQbz9g5Q==
+"@types/react-grid-layout@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@types/react-grid-layout/-/react-grid-layout-1.1.1.tgz#1eb322fa88cd1475bdc60ecca9676f6853e18887"
+  integrity sha512-bvPkITzwGGOZKjp01nVSgPrdfGm/uTa5t8Odd8vQRXJsLj7uZLZXSXgWr+TiXBAkUsmHPxhsyswXQCiFeDuZnQ==
   dependencies:
     "@types/react" "*"
 
@@ -3345,10 +3345,10 @@
   dependencies:
     source-map "^0.6.1"
 
-"@types/update-notifier@4.1.1":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@types/update-notifier/-/update-notifier-4.1.1.tgz#370a2159db6ca85a0c7bb1ed08e4346c7b12ea46"
-  integrity sha512-iPySyshoFAgiPMj6MC41X1rbNjkTGBhCQju9xAldSGe1Y6utyWG2Fbdr7OXuuqcH96KMZbuJjviu9bXgfVbJUg==
+"@types/update-notifier@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/update-notifier/-/update-notifier-5.0.0.tgz#7765369626e9f8c21ba0cf9a59e4a6eddf47997f"
+  integrity sha512-8CdLLv5ytMXEWfjSmWiuuZEffJJAsfNxSQbShZTmZD5picoci18VV1YqhKNTzlZvNCzt5WsnDQLyPSsj6xGuug==
   dependencies:
     "@types/configstore" "*"
     boxen "^4.2.0"
