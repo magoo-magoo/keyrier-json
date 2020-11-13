@@ -35,7 +35,7 @@
         "@types/json2csv": "5.0.1",
         "csv-parse": "4.12.0",
         "easy-table": "1.1.1",
-        "json2csv": "5.0.1",
+        "json2csv": "5.0.4",
         "meow": "7.1.1",
         "update-notifier": "4.1.1",
         "xlsx": "0.16.8"
