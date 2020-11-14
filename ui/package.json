@@ -84,7 +84,7 @@
         "perfume.js": "5.0.2",
         "react": "17.0.1",
         "react-ace": "9.2.0",
-        "react-debounce-input": "3.2.2",
+        "react-debounce-input": "3.2.3",
         "react-dom": "17.0.1",
         "react-grid-layout": "1.2.0",
         "react-json-view": "1.19.1",
