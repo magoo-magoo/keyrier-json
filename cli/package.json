@@ -38,7 +38,7 @@
         "json2csv": "5.0.5",
         "meow": "8.0.0",
         "update-notifier": "5.0.1",
-        "xlsx": "0.16.8"
+        "xlsx": "0.16.9"
     },
     "devDependencies": {
         "@types/jest": "26.0.15",
