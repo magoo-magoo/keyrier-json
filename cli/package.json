@@ -36,7 +36,7 @@
         "csv-parse": "4.14.1",
         "easy-table": "1.1.1",
         "json2csv": "5.0.5",
-        "meow": "8.0.0",
+        "meow": "8.1.2",
         "update-notifier": "5.0.1",
         "xlsx": "0.16.9"
     },
