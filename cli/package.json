@@ -33,7 +33,7 @@
         "@keyrier/core": "^1.1.38",
         "@types/easy-table": "0.0.32",
         "@types/json2csv": "5.0.1",
-        "csv-parse": "4.14.1",
+        "csv-parse": "4.15.4",
         "easy-table": "1.1.1",
         "json2csv": "5.0.5",
         "meow": "8.1.2",
