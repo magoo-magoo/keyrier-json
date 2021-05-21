@@ -5257,10 +5257,10 @@ check-types@^11.1.1:
   resolved "https://registry.yarnpkg.com/check-types/-/check-types-11.1.2.tgz#86a7c12bf5539f6324eb0e70ca8896c0e38f3e2f"
   integrity sha512-tzWzvgePgLORb9/3a0YenggReLKAIb2owL03H2Xdoe5pKcUyWRSEQ8xfCar8t2SIAuEDwtmx2da1YB52YuHQMQ==
 
-chevrotain@7.0.3:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-7.0.3.tgz#f9621971a726eba804f7763edace2183d157c5d7"
-  integrity sha512-G634q7M5EiqNNv+0MKcQES2jmqabbi4PvUDpzjG2t+i1XQFaMCz0o8BZ8lbQbZex4RqkzJ3pOy+UwNLFlQm4eg==
+chevrotain@7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-7.1.2.tgz#40e634c0b74fcb552118bf67f42f5820b84881fd"
+  integrity sha512-9bQsXVQ7UAvzMs7iUBBJ9Yv//exOy7bIR3PByOEk4M64vIE/LsiOiX7VIkMF/vEMlrSStwsaE884Bp9CpjtC5g==
   dependencies:
     regexp-to-ast "0.5.0"
 
