@@ -3,11 +3,7 @@
     "packageRules": [
         {
             "packagePatterns": ["^electron"],
-            "groupName": "typings packages"
-        },
-        {
-            "packagePatterns": ["^@types/"],
-            "groupName": "typings packages"
+            "groupName": "electron packages"
         },
         {
             "excludePackagePatterns": ["^@types/"],
