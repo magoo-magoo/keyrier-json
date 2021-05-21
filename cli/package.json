@@ -32,10 +32,10 @@
     "dependencies": {
         "@keyrier/core": "^1.1.38",
         "@types/easy-table": "0.0.32",
-        "@types/json2csv": "5.0.1",
+        "@types/json2csv": "5.0.2",
         "csv-parse": "4.15.4",
         "easy-table": "1.1.1",
-        "json2csv": "5.0.5",
+        "json2csv": "5.0.6",
         "meow": "8.1.2",
         "update-notifier": "5.0.1",
         "xlsx": "0.16.9"
