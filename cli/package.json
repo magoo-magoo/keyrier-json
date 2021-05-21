@@ -32,7 +32,7 @@
     "dependencies": {
         "@keyrier/core": "^1.1.38",
         "@types/easy-table": "0.0.32",
-        "@types/json2csv": "5.0.1",
+        "@types/json2csv": "5.0.2",
         "csv-parse": "4.15.4",
         "easy-table": "1.1.1",
         "json2csv": "5.0.5",
@@ -41,8 +41,8 @@
         "xlsx": "0.16.9"
     },
     "devDependencies": {
-        "@types/jest": "26.0.15",
-        "@types/node": "14.14.5",
+        "@types/jest": "26.0.23",
+        "@types/node": "14.17.0",
         "@types/update-notifier": "5.0.0",
         "eslint": "7.7.0",
         "eslint-config-prettier": "6.11.0",
