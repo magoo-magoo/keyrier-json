@@ -27,7 +27,7 @@
     "dependencies": {
         "chevrotain": "7.1.2",
         "lodash": "4.17.21",
-        "lodash-es": "4.17.15",
+        "lodash-es": "4.17.21",
         "utility-types": "^3.10.0"
     },
     "devDependencies": {
