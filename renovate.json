@@ -2,6 +2,10 @@
     "extends": ["config:base"],
     "packageRules": [
         {
+            "matchPackagePatterns": ["eslint"],
+            "groupName": "eslint packages"
+        },
+        {
             "packagePatterns": ["^electron"],
             "groupName": "electron packages"
         },
@@ -15,7 +19,7 @@
             "excludePackagePatterns": ["^@types/"],
             "depTypeList": ["devDependencies"],
             "updateTypes": ["major"],
-            "groupName": "devDependencies"
+            "groupName": "devDependencies major"
         }
     ]
 }
