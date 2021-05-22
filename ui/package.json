@@ -109,7 +109,7 @@
         "@types/jest": "26.0.23",
         "@types/lodash-es": "4.17.4",
         "@types/match-sorter": "5.0.0",
-        "@types/node": "14.14.5",
+        "@types/node": "14.17.0",
         "@types/react": "17.0.6",
         "@types/react-dom": "17.0.0",
         "@types/react-grid-layout": "1.1.1",
