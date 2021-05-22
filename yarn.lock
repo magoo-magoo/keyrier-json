@@ -3289,13 +3289,12 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/reactstrap@8.5.2":
-  version "8.5.2"
-  resolved "https://registry.yarnpkg.com/@types/reactstrap/-/reactstrap-8.5.2.tgz#298680dd74886b12a0e2026ece873ef988cd4635"
-  integrity sha512-rmY0YTIivt8nbF9imjqTenuA7QtRwMKT+foETEs96LQhYhsVUeoUCnZiuTipdTa7dRGuXYFMQD7W3XWP3U1WTA==
+"@types/reactstrap@8.7.1":
+  version "8.7.1"
+  resolved "https://registry.yarnpkg.com/@types/reactstrap/-/reactstrap-8.7.1.tgz#d97554f21c3aa4f55d40af4a791d442b6c57accf"
+  integrity sha512-IgJRzJUhkzCj/J714FSbLnGTfaSk7n7QPytaJeBgvlN6AEkIYJEPbEB0dPqCsQ4mChKySgUm0P3OWSuuK///+g==
   dependencies:
-    "@types/react" "*"
-    popper.js "^1.14.1"
+    reactstrap "*"
 
 "@types/redux-logger@3.0.8":
   version "3.0.8"
@@ -6339,10 +6338,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.2.tgz#ee5ff8f208c8cd613b389f7b222c9801ca62b3f7"
   integrity sha512-ofovWglpqoqbfLNOTBNZLSbMuGrblAf1efvvArGKOZMBrIoJeu5UsAipQolkijtyQx5MtAzT/J9IHj/CEY1mJw==
 
-csv-parse@4.14.1:
-  version "4.14.1"
-  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.14.1.tgz#b6b3736508fb94682fa6d450fe1755237221d291"
-  integrity sha512-4wmcO7QbWtDAncGFaBwlWFPhEN4Akr64IbM4zvDwEOFekI8blLc04Nw7XjQjtSNy+3AUAgBgtUa9nWo5Cq89Xg==
+csv-parse@4.15.4:
+  version "4.15.4"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.15.4.tgz#ad1ec62aaf71a642982dfcb81f1848184d691db5"
+  integrity sha512-OdBbFc0yZhOm17lSxqkirrHlFFVpKRT0wp4DAGoJelsP3LbGzV9LNr7XmM/lrr0uGkCtaqac9UhP8PDHXOAbMg==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -13424,7 +13423,7 @@ pnp-webpack-plugin@1.6.4:
   dependencies:
     ts-pnp "^1.1.6"
 
-popper.js@^1.14.1, popper.js@^1.14.4:
+popper.js@^1.14.4:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
   integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
@@ -14827,7 +14826,7 @@ react@17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
-reactstrap@8.9.0:
+reactstrap@*, reactstrap@8.9.0:
   version "8.9.0"
   resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-8.9.0.tgz#bca4afa3f5cd18899ef9b33d877a141886d5abae"
   integrity sha512-pmf33YjpNZk1IfrjqpWCUMq9hk6GzSnMWBAofTBNIRJQB1zQ0Au2kzv3lPUAFsBYgWEuI9iYa/xKXHaboSiMkQ==
