@@ -98,7 +98,7 @@
         "redux-logger": "3.0.6",
         "redux-undo": "1.0.1",
         "utility-types": "3.10.0",
-        "xlsx": "0.16.9"
+        "xlsx": "0.17.0"
     },
     "devDependencies": {
         "@stryker-mutator/core": "3.3.1",
