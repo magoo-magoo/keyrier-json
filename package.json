@@ -25,14 +25,14 @@
         ]
     },
     "devDependencies": {
-        "concurrently": "5.3.0",
+        "concurrently": "6.2.0",
         "eslint": "7.7.0",
-        "husky": "4.2.5",
-        "jest": "26.1.0",
-        "lerna": "3.22.1",
+        "husky": "7.0.1",
+        "jest": "27.0.6",
+        "lerna": "4.0.0",
         "prettier": "2.0.5",
-        "pretty-quick": "2.0.1",
+        "pretty-quick": "3.1.1",
         "source-map-explorer": "2.5.0",
-        "wait-on": "5.2.0"
+        "wait-on": "6.0.0"
     }
 }
