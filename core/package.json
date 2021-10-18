@@ -25,7 +25,7 @@
         "stryker:run": "stryker run"
     },
     "dependencies": {
-        "chevrotain": "9.0.1",
+        "chevrotain": "9.1.0",
         "lodash": "4.17.21",
         "lodash-es": "4.17.21",
         "utility-types": "^3.10.0"
