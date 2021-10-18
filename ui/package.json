@@ -106,7 +106,7 @@
         "@stryker-mutator/typescript": "3.3.1",
         "@testing-library/react": "10.4.9",
         "@types/classnames": "2.3.0",
-        "@types/jest": "26.0.23",
+        "@types/jest": "26.0.24",
         "@types/lodash-es": "4.17.4",
         "@types/match-sorter": "5.0.0",
         "@types/node": "14.17.0",

@@ -34,7 +34,7 @@
         "@stryker-mutator/core": "3.3.1",
         "@stryker-mutator/jest-runner": "3.3.1",
         "@stryker-mutator/typescript": "3.3.1",
-        "@types/jest": "26.0.23",
+        "@types/jest": "26.0.24",
         "@types/lodash": "4.14.170",
         "@types/node": "14.17.0",
         "eslint-config-prettier": "6.11.0",
