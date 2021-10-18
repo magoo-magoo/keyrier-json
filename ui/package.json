@@ -73,7 +73,7 @@
         "@keyrier/core": "^1.2.1",
         "@reduxjs/toolkit": "1.5.1",
         "bootswatch": "4.6.0",
-        "chevrotain": "9.0.1",
+        "chevrotain": "9.1.0",
         "classnames": "2.3.1",
         "electron-log": "4.2.4",
         "electron-updater": "4.3.5",
