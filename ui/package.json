@@ -111,7 +111,7 @@
         "@types/match-sorter": "5.0.0",
         "@types/node": "14.17.0",
         "@types/react": "17.0.6",
-        "@types/react-dom": "17.0.5",
+        "@types/react-dom": "17.0.18",
         "@types/react-grid-layout": "1.1.1",
         "@types/react-loadable": "5.5.5",
         "@types/react-redux": "7.1.16",
