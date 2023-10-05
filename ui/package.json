@@ -71,7 +71,7 @@
     },
     "dependencies": {
         "@keyrier/core": "^1.2.1",
-        "@reduxjs/toolkit": "1.5.1",
+        "@reduxjs/toolkit": "1.9.7",
         "bootswatch": "4.6.0",
         "chevrotain": "9.0.1",
         "classnames": "2.3.1",
