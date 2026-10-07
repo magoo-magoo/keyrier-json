@@ -37,11 +37,11 @@
         "@types/jest": "26.0.23",
         "@types/lodash": "4.14.170",
         "@types/node": "14.17.0",
-        "eslint-config-prettier": "6.11.0",
-        "prettier": "2.0.5",
-        "ts-jest": "26.2.0",
-        "tsdx": "0.13.2",
-        "typescript": "3.9.7"
+        "eslint-config-prettier": "6.15.0",
+        "prettier": "2.8.8",
+        "ts-jest": "26.5.6",
+        "tsdx": "0.14.1",
+        "typescript": "3.9.10"
     },
     "engines": {
         "node": ">=10"
